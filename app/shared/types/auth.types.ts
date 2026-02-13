@@ -9,6 +9,8 @@ export interface LoginCredentials {
 export interface AuthResponse {
   token: string;
   user: {
+    name: string;
+    email: string;
     role: string;
     [key: string]: any;
   };
