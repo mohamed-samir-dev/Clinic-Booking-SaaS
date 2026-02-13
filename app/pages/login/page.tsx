@@ -8,9 +8,12 @@ import UserTypeToggle from '@/app/shared/components/UserTypeToggle';
 import GoogleSignInButton from '@/app/shared/components/GoogleSignInButton';
 import LoginForm from './components/LoginForm';
 import { loginUser, saveAuthData, getRedirectRoute } from './utils/authService';
+import { useAppDispatch } from '@/app/store/hooks';
+import { setCredentials } from '@/app/store/slices/authSlice';
 
 export default function LoginPage() {
   const router = useRouter();
+  const dispatch = useAppDispatch();
   const [userType, setUserType] = useState<UserType>('patient');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -22,6 +25,7 @@ export default function LoginPage() {
     try {
       const data = await loginUser(userType, { email, password, businessId });
       saveAuthData(data.token, data.user);
+      dispatch(setCredentials({ user: data.user, token: data.token }));
       router.push(getRedirectRoute(data.user.role));
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Connection error. Please try again.');
