@@ -15,9 +15,12 @@ import { PasswordField } from './components/PasswordField';
 import { PasswordStrengthIndicator } from './components/PasswordStrengthIndicator';
 import { PasswordRequirements } from './components/PasswordRequirements';
 import { UserIcon, EmailIcon, PhoneIcon } from './components/Icons';
+import { useAppDispatch } from '@/app/store/hooks';
+import { setCredentials } from '@/app/store/slices/authSlice';
 
 export default function RegisterPage() {
   const router = useRouter();
+  const dispatch = useAppDispatch();
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -42,6 +45,7 @@ export default function RegisterPage() {
       });
       
       saveAuthData(result.token, result.user);
+      dispatch(setCredentials({ user: result.user, token: result.token }));
       
       toast.success('Registration successful', {
         duration: 3000,
