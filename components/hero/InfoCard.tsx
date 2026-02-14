@@ -18,7 +18,7 @@ export default function InfoCard({ icon: Icon, iconColor, iconBgColor, label, va
             <Icon className={`${iconColor} text-lg md:text-xl`} />
           </div>
           <div className="flex-1">
-            <p className="text-xs md:text-sm text-gray-500">{label}</p>
+            <p className="text-xs md:text-sm font-semibold text-gray-900">{label}</p>
             <p className="font-semibold text-sm md:text-base lg:text-lg text-gray-900">{value}</p>
           </div>
         </div>
