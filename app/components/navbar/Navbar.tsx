@@ -1,0 +1,94 @@
+'use client';
+
+import { useState } from 'react';
+import Link from 'next/link';
+import { usePathname, useRouter } from 'next/navigation';
+import { FaBars, FaTimes } from 'react-icons/fa';
+import { Moon, Sun } from 'lucide-react';
+import { useAppSelector, useAppDispatch } from '@/app/store/hooks';
+import { logout } from '@/app/store/slices/authSlice';
+import Logo from './Logo';
+import NavLinks from './NavLinks';
+import UserMenu from './UserMenu';
+import MobileMenu from './MobileMenu';
+import { Language, Theme } from '../../types/index';
+
+export default function Navbar() {
+  const [lang, setLang] = useState<Language>('EN');
+  const [theme, setTheme] = useState<Theme>('light');
+  const [showDropdown, setShowDropdown] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const pathname = usePathname();
+  const router = useRouter();
+  const dispatch = useAppDispatch();
+  const authUser = useAppSelector((state) => state.auth.user);
+  const user = authUser?.role !== 'owner' ? authUser : null;
+
+  const handleLogout = () => {
+    dispatch(logout());
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    router.push('/');
+  };
+
+  return (
+    <nav className="bg-white shadow-sm">
+      <div className="w-full px-4 md:px-8 py-3">
+        <div className="flex items-center justify-between">
+          <Logo />
+          <NavLinks pathname={pathname} />
+
+          <div className="flex items-center gap-2 xl:gap-4">
+            <Link
+              href="/book"
+              className="hidden min-[500px]:block px-4 md:px-7 py-2 md:py-2.5 bg-[#2D8BDA] rounded-full text-white hover:bg-[#1F70B2] transition-colors font-semibold shadow-md hover:shadow-lg text-sm md:text-base"
+            >
+              Book Now
+            </Link>
+
+            <button
+              onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}
+              className="hidden min-[350px]:flex w-9 h-9 md:w-10 md:h-10 rounded-full bg-gray-100 hover:bg-gray-200 items-center justify-center text-gray-700 transition-all hover:scale-105"
+            >
+              {theme === 'light' ? <Moon size={18} /> : <Sun size={18} />}
+            </button>
+
+            <button
+              onClick={() => setLang(lang === 'EN' ? 'AR' : 'EN')}
+              className="hidden min-[350px]:flex px-3 py-2 rounded-full bg-gray-100 hover:bg-gray-200 transition-all hover:scale-105 text-sm font-semibold text-gray-700 min-w-[50px]"
+            >
+              {lang === 'EN' ? 'EN' : 'عربي'}
+            </button>
+
+            <UserMenu
+              user={user}
+              showDropdown={showDropdown}
+              setShowDropdown={setShowDropdown}
+              handleLogout={handleLogout}
+            />
+
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="xl:hidden w-9 h-9 md:w-10 md:h-10 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-gray-700 transition-all"
+            >
+              {mobileMenuOpen ? <FaTimes className="text-lg" /> : <FaBars className="text-lg" />}
+            </button>
+          </div>
+        </div>
+
+        {mobileMenuOpen && (
+          <MobileMenu
+            pathname={pathname}
+            user={user}
+            lang={lang}
+            theme={theme}
+            setLang={setLang}
+            setTheme={setTheme}
+            setMobileMenuOpen={setMobileMenuOpen}
+            handleLogout={handleLogout}
+          />
+        )}
+      </div>
+    </nav>
+  );
+}
