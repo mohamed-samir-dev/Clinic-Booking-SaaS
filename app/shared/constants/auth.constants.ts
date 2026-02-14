@@ -11,10 +11,10 @@ export const AUTH_ENDPOINTS: Record<UserType, string> = {
 };
 
 export const ROLE_ROUTES: Record<string, string> = {
-  owner: '/owner',
-  manager: '/manager',
-  doctor: '/doctor',
-  staff: '/staff',
+  owner: '/pages/owner',
+  manager: '/pages/manager',
+  doctor: '/pages/doctor',
+  staff: '/pages/staff',
   patient: '/'
 };
 
