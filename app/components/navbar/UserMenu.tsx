@@ -1,0 +1,43 @@
+import Link from 'next/link';
+import { FaUser } from 'react-icons/fa';
+import { UserMenuProps } from '../../types/index';
+
+
+
+export default function UserMenu({ user, showDropdown, setShowDropdown, handleLogout }: UserMenuProps) {
+  if (!user) {
+    return (
+      <Link
+        href="/pages/login"
+        className="hidden xl:block px-7 py-2.5 bg-[#2D8BDA] rounded-full text-white hover:bg-[#1F70B2] transition-colors font-semibold shadow-md hover:shadow-lg"
+      >
+        Log In
+      </Link>
+    );
+  }
+
+  return (
+    <div className="relative hidden xl:block">
+      <button
+        onClick={() => setShowDropdown(!showDropdown)}
+        className="w-10 h-10 rounded-full bg-linear-to-br from-teal-500 to-teal-600 flex items-center justify-center text-white font-semibold shadow-md hover:shadow-lg transition-all hover:scale-105"
+      >
+        {user.name?.charAt(0).toUpperCase() || <FaUser />}
+      </button>
+      {showDropdown && (
+        <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2 z-50">
+          <div className="px-4 py-2 border-b border-gray-100">
+            <p className="text-sm font-semibold text-gray-900">{user.name}</p>
+            <p className="text-xs text-gray-500">{user.email}</p>
+          </div>
+          <button
+            onClick={handleLogout}
+            className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors"
+          >
+            Logout
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}
