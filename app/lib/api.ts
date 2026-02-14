@@ -1,4 +1,4 @@
-const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
+const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
 
 interface FetchOptions extends RequestInit {
   requireAuth?: boolean;
@@ -33,12 +33,12 @@ async function fetchAPI<T>(endpoint: string, options: FetchOptions = {}): Promis
 
 export const api = {
   doctors: {
-    getTop: () => fetchAPI('/doctors/top'),
-    getAll: () => fetchAPI('/owner/doctors', { requireAuth: true }),
-    delete: (id: string) => fetchAPI(`/owner/doctors/${id}`, { method: 'DELETE', requireAuth: true }),
+    getTop: () => fetchAPI('/api/doctors/top'),
+    getAll: () => fetchAPI('/api/owner/doctors', { requireAuth: true }),
+    delete: (id: string) => fetchAPI(`/api/owner/doctors/${id}`, { method: 'DELETE', requireAuth: true }),
   },
   reviews: {
-    getAll: () => fetchAPI('/reviews'),
-    getStats: () => fetchAPI('/reviews/stats'),
+    getAll: () => fetchAPI('/api/reviews'),
+    getStats: () => fetchAPI('/api/reviews/stats'),
   },
 };

@@ -1,9 +1,11 @@
+'use client';
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/app/components/navbar/Navbar";
 import Footer from "@/app/components/footer/Footer";
 import { ReduxProvider } from "./store/ReduxProvider";
+import { usePathname } from "next/navigation";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -15,16 +17,16 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-export const metadata: Metadata = {
-  title: "CareSync",
-  description: "Professional healthcare services",
-};
+
 
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const pathname = usePathname();
+  const isOwnerPage = pathname?.startsWith('/pages/owner');
+
   return (
     <html lang="en">
       <body
@@ -33,7 +35,7 @@ export default function RootLayout({
         <ReduxProvider>
           <Navbar />
           {children}
-          <Footer />
+          {!isOwnerPage && <Footer />}
         </ReduxProvider>
       </body>
     </html>
