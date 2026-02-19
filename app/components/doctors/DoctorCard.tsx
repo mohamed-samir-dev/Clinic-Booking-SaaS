@@ -1,6 +1,7 @@
 'use client';
 
 import Image from 'next/image';
+import Link from 'next/link';
 import { FaUserMd, FaCalendarCheck, FaCalendarTimes, FaBriefcase, FaClock } from 'react-icons/fa';
 import {DoctorCardProps}from '../../types/index'
 
@@ -39,6 +40,7 @@ const getNextAvailableDay = (availability?: Array<{ day: string; slots?: Array<{
 };
 
 export default function DoctorCard({  
+  id,
   name, 
   specialty, 
   experienceYears, 
@@ -99,13 +101,17 @@ export default function DoctorCard({
           </div>
         )}
         
-        <div className="w-full space-y-2">
-          <button className="w-full px-4 sm:px-5 md:px-6 py-2.5 sm:py-3 bg-linear-to-r from-teal-500 to-teal-600 text-white rounded-full hover:from-teal-600 hover:to-teal-700 transition-all font-semibold shadow-md hover:shadow-lg transform hover:-translate-y-0.5 text-sm sm:text-base">
-            Book Appointment
-          </button>
-          <button className="w-full px-4 sm:px-5 md:px-6 py-2.5 sm:py-3 border-2 border-teal-500 text-teal-600 rounded-full hover:bg-teal-50 transition-all font-semibold text-sm sm:text-base">
-            View Profile
-          </button>
+        <div className="w-full space-y-2 ">
+          <Link href={`/pages/doctors/${id}`}>
+            <button className="w-full mb-3 px-4 sm:px-5 md:px-6 py-2.5 sm:py-3 bg-linear-to-r from-teal-500 to-teal-600 text-white rounded-full hover:from-teal-600 hover:to-teal-700 transition-all font-semibold shadow-md hover:shadow-lg transform hover:-translate-y-0.5 text-sm sm:text-base">
+              Book Appointment
+            </button>
+          </Link>
+          <Link href={`/pages/doctors/${id}`}>
+            <button className="w-full px-4 sm:px-5 md:px-6 py-2.5 sm:py-3 border-2 border-teal-500 text-teal-600 rounded-full hover:bg-teal-50 transition-all font-semibold text-sm sm:text-base">
+              View Profile
+            </button>
+          </Link>
         </div>
       </div>
     </div>
