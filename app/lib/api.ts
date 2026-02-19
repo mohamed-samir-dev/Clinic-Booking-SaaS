@@ -42,6 +42,7 @@ export const api = {
       if (filters?.minExperience) params.append('minExperience', String(filters.minExperience));
       return fetchAPI(`/api/doctors/all?${params.toString()}`);
     },
+    getById: (id: string) => fetchAPI(`/api/doctors/${id}`),
     getFilters: () => fetchAPI('/api/doctors/filters'),
     delete: (id: string) => fetchAPI(`/api/owner/doctors/${id}`, { method: 'DELETE', requireAuth: true }),
   },
