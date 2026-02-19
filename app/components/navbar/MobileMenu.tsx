@@ -28,7 +28,7 @@ export default function MobileMenu({
 
       <div className="flex flex-col gap-2 mt-4">
         {NAV_ITEMS.map((item) => {
-          const href = item === 'Home' ? '/' : item === 'Services' ? '/pages/services' : item === 'About Us' ? '/pages/about' : `/${item.toLowerCase().replace(' ', '-')}`;
+          const href = item === 'Home' ? '/' : item === 'Services' ? '/pages/services' : item === 'About Us' ? '/pages/about' : item === 'Doctors' ? '/pages/doctors' : item === 'Contact' ? '/pages/contact' : `/${item.toLowerCase().replace(' ', '-')}`;
           const isActive = pathname === href;
           return (
             <Link
