@@ -18,6 +18,11 @@ export interface InfoCardProps {
     experienceYears: number;
     photoUrl: string;
     isAvailableToday: boolean;
+    availability?: Array<{
+      day: string;
+      slots: Array<{ from: string; to: string }>;
+      workingHours?: { from: string; to: string };
+    }>;
   }
 // 
   export interface Doctor {
@@ -27,6 +32,15 @@ export interface InfoCardProps {
     experienceYears: number;
     photoUrl: string;
     isAvailableToday: boolean;
+    gender?: string;
+    fees?: number;
+    ratingAvg?: number;
+    ratingCount?: number;
+    availability?: Array<{
+      day: string;
+      slots: Array<{ from: string; to: string }>;
+      workingHours?: { from: string; to: string };
+    }>;
   }
   
 //   Review Section
