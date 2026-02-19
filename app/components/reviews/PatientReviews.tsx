@@ -22,7 +22,6 @@ export default function PatientReviews() {
         setReviews((reviewsData as { data: Review[] }).data || []);
         setStats((statsData as { data: ReviewStats }).data || null);
       } catch (error) {
-        console.error('Error fetching reviews:', error);
       } finally {
         setLoading(false);
       }
