@@ -7,6 +7,7 @@ import { useIsMobile } from './hooks/useIsMobile';
 import { paginateData, getTotalPages } from './utils/pagination';
 import PageHeader from './components/PageHeader';
 import DoctorFilters from './components/DoctorFilters';
+import AvailabilityLegend from './components/AvailabilityLegend';
 import LoadingSkeleton from './components/LoadingSkeleton';
 import EmptyState from './components/EmptyState';
 import DoctorsList from './components/DoctorsList';
@@ -58,6 +59,8 @@ export default function DoctorsPage() {
           setShowFilters={setShowFilters}
           resetFilters={resetFilters}
         />
+
+        <AvailabilityLegend />
 
         {loading ? (
           <LoadingSkeleton />

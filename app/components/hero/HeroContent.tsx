@@ -24,7 +24,7 @@ export default function HeroContent() {
           Book Appointment
         </Link>
         <Link
-          href="/contact"
+          href="/pages/contact"
           className="px-6 sm:px-8 py-3 sm:py-4 bg-white/10 backdrop-blur-sm text-white border-2 border-white rounded-full font-semibold text-sm sm:text-base hover:bg-white/20 transition-all"
         >
           Contact Us
