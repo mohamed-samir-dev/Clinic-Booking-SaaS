@@ -9,7 +9,7 @@ export default function UserMenu({ user, showDropdown, setShowDropdown, handleLo
     return (
       <Link
         href="/pages/login"
-        className="hidden xl:block px-7 py-2.5 bg-[#2D8BDA] rounded-full text-white hover:bg-[#1F70B2] transition-colors font-semibold shadow-md hover:shadow-lg"
+        className="hidden xl:block px-7 py-2.5 bg-teal-600 rounded-full text-white hover:bg-teal-800 transition-colors font-semibold shadow-md hover:shadow-lg"
       >
         Log In
       </Link>
