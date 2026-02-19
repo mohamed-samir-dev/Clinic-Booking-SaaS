@@ -1,17 +1,53 @@
 'use client';
 
 import Image from 'next/image';
-import { FaUserMd, FaCalendarCheck, FaCalendarTimes, FaBriefcase } from 'react-icons/fa';
+import { FaUserMd, FaCalendarCheck, FaCalendarTimes, FaBriefcase, FaClock } from 'react-icons/fa';
 import {DoctorCardProps}from '../../types/index'
 
+const getNextAvailableDay = (availability?: Array<{ day: string; slots?: Array<{ from: string; to: string }>; workingHours?: { from: string; to: string } }>) => {
+  if (!availability || availability.length === 0) return null;
+  
+  const daysOrder = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+  const today = new Date().getDay();
+  
+  for (let i = 0; i < 7; i++) {
+    const dayIndex = (today + i) % 7;
+    const dayName = daysOrder[dayIndex];
+    const daySchedule = availability.find(a => a.day === dayName);
+    
+    if (daySchedule) {
+      let hours = daySchedule.workingHours;
+      
+      if (!hours && daySchedule.slots && daySchedule.slots.length > 0) {
+        const validSlot = daySchedule.slots.find(slot => slot.from && slot.to);
+        if (validSlot) {
+          hours = validSlot;
+        }
+      }
+      
+      if (hours && hours.from && hours.to) {
+        return {
+          day: dayName,
+          isToday: i === 0,
+          workingHours: hours
+        };
+      }
+    }
+  }
+  
+  return null;
+};
 
 export default function DoctorCard({  
   name, 
   specialty, 
   experienceYears, 
   photoUrl, 
-  isAvailableToday 
+  isAvailableToday,
+  availability
 }: DoctorCardProps) {
+  const nextAvailable = getNextAvailableDay(availability);
+  
   return (
     <div className="bg-white mb-8 sm:mb-10 rounded-2xl sm:rounded-3xl shadow-md hover:shadow-2xl transition-all duration-500 p-5 sm:p-6 md:p-8 group border border-gray-100">
       <div className="flex flex-col items-center">
@@ -43,10 +79,25 @@ export default function DoctorCard({
           <span className="text-sm sm:text-base">{specialty.en}</span>
         </div>
         
-        <div className="flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 bg-teal-50 rounded-full mb-4 sm:mb-6">
+        <div className="flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 bg-teal-50 rounded-full mb-3">
           <FaBriefcase className="text-teal-600 text-xs sm:text-sm" />
           <span className="text-xs sm:text-sm font-bold text-gray-700">{experienceYears} Years Experience</span>
         </div>
+        
+        {nextAvailable && (
+          <div className="w-full mb-4 px-3 py-2 bg-linear-to-r from-green-50 to-emerald-50 rounded-lg border border-green-200">
+            <div className="flex items-center gap-2 justify-center">
+              <FaClock className="text-green-600 text-sm" />
+              <span className="text-xs sm:text-sm font-semibold text-gray-700">
+                Next Available: {nextAvailable.isToday ? 'Today' : nextAvailable.day.charAt(0).toUpperCase() + nextAvailable.day.slice(1)}
+                {' '}
+                <span className="text-green-600">
+                  {nextAvailable.workingHours.from} - {nextAvailable.workingHours.to}
+                </span>
+              </span>
+            </div>
+          </div>
+        )}
         
         <div className="w-full space-y-2">
           <button className="w-full px-4 sm:px-5 md:px-6 py-2.5 sm:py-3 bg-linear-to-r from-teal-500 to-teal-600 text-white rounded-full hover:from-teal-600 hover:to-teal-700 transition-all font-semibold shadow-md hover:shadow-lg transform hover:-translate-y-0.5 text-sm sm:text-base">
