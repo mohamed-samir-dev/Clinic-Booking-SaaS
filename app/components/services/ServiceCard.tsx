@@ -1,5 +1,6 @@
 import { IconType } from 'react-icons';
 import { IoInformationCircle } from 'react-icons/io5';
+import Link from 'next/link';
 
 interface ServiceCardProps {
   icon: IconType;
@@ -8,6 +9,8 @@ interface ServiceCardProps {
 }
 
 export default function ServiceCard({ icon: Icon, title, description }: ServiceCardProps) {
+  const slug = title.toLowerCase().replace(/\s+/g, '-');
+  
   return (
     <div className="bg-white/20 mb-10 backdrop-blur-md p-[3px] rounded-xl shadow-xl border border-white/30 hover:border-white/50 transition-all">
       <div className="bg-white/95 backdrop-blur-sm p-6 rounded-lg h-full relative">
@@ -21,9 +24,11 @@ export default function ServiceCard({ icon: Icon, title, description }: ServiceC
         </div>
         <h3 className="text-base md:text-lg font-bold text-gray-900 mb-2">{title}</h3>
         <p className="text-gray-600 font-semibold text-xs md:text-sm mb-4 leading-relaxed">{description}</p>
-        <button className="bg-teal-500 hover:bg-teal-600 text-white px-5 py-2 rounded-lg transition-colors text-xs md:text-sm font-semibold">
-          More Details
-        </button>
+        <Link href={`/pages/services/${slug}`}>
+          <button className="bg-teal-500 hover:bg-teal-600 text-white px-5 py-2 rounded-lg transition-colors text-xs md:text-sm font-semibold">
+            More Details
+          </button>
+        </Link>
       </div>
     </div>
   );
