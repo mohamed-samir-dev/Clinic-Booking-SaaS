@@ -19,8 +19,7 @@ export default function TopDoctors() {
       try {
         const data = await api.doctors.getTop();
         setDoctors(Array.isArray(data) ? data.slice(0, 7) : []);
-      } catch (error) {
-        console.error('Error fetching doctors:', error);
+      } catch {
         setDoctors([]);
       } finally {
         setLoading(false);
