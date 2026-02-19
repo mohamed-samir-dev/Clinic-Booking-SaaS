@@ -28,7 +28,7 @@ export default function MobileMenu({
 
       <div className="flex flex-col gap-2 mt-4">
         {NAV_ITEMS.map((item) => {
-          const href = item === 'Home' ? '/' : `/${item.toLowerCase().replace(' ', '-')}`;
+          const href = item === 'Home' ? '/' : item === 'Services' ? '/pages/services' : item === 'About Us' ? '/pages/about' : `/${item.toLowerCase().replace(' ', '-')}`;
           const isActive = pathname === href;
           return (
             <Link
@@ -82,7 +82,7 @@ export default function MobileMenu({
         <Link
           href="/pages/login"
           onClick={() => setMobileMenuOpen(false)}
-          className="mt-4 block px-6 py-2.5 bg-[#2D8BDA] rounded-full text-white hover:bg-[#1F70B2] transition-colors font-semibold shadow-md text-center"
+          className="mt-4 block px-6 py-2.5 bg-teal-600 rounded-full text-white hover:bg-teal-800 transition-colors font-semibold shadow-md text-center"
         >
           Log In
         </Link>
