@@ -48,7 +48,7 @@ export default function ReviewsTab({ doctor }: ReviewsTabProps) {
               <div key={star} className="flex items-center gap-2 sm:gap-3">
                 <span className="text-xs sm:text-sm font-medium text-gray-700 w-6 sm:w-8">{star} ★</span>
                 <div className="flex-1 h-2 sm:h-2.5 bg-gray-200 rounded-full overflow-hidden">
-                  <div className="h-full bg-gradient-to-r from-teal-500 to-cyan-500 transition-all" style={{ width: `${percentage}%` }} />
+                  <div className="h-full bg-linear-to-r from-teal-500 to-cyan-500 transition-all" style={{ width: `${percentage}%` }} />
                 </div>
                 <span className="text-xs sm:text-sm text-gray-600 w-8 sm:w-10 text-right">{count}</span>
               </div>
