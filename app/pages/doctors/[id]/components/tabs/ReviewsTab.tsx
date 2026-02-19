@@ -5,6 +5,7 @@ interface Review {
   patientName?: string;
   comment?: string;
   date: string;
+  isVerified?: boolean;
 }
 
 interface Doctor {
@@ -88,10 +89,12 @@ export default function ReviewsTab({ doctor }: ReviewsTabProps) {
                               year: 'numeric'
                             })}
                           </span>
-                          <span className="inline-flex items-center gap-1 text-xs text-teal-600 bg-teal-50 px-2 py-1 rounded-full">
-                            <FaCheckCircle />
-                            Verified
-                          </span>
+                          {review.isVerified && (
+                            <span className="inline-flex items-center gap-1 text-xs text-teal-600 bg-teal-50 px-2 py-1 rounded-full">
+                              <FaCheckCircle />
+                              Verified
+                            </span>
+                          )}
                         </div>
                       </div>
                     </div>

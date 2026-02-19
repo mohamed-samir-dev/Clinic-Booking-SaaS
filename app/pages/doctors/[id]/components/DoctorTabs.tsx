@@ -73,18 +73,21 @@ export default function DoctorTabs({ doctor }: DoctorTabsProps) {
               {/* About Section */}
               <div className="bg-gray-50 rounded-lg sm:rounded-xl p-4 sm:p-6 border-b-2 border-gray-200">
                 <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-2 sm:mb-3">About</h3>
-                <p className="text-sm sm:text-base text-gray-600 leading-relaxed">
-                  {showFullAbout || doctorAbout.length <= 150 ? doctorAbout : `${aboutPreview}...`}
-                  {doctorAbout.length > 150 && (
-                    <button
-                      onClick={() => setShowFullAbout(!showFullAbout)}
-                      className="text-teal-600 hover:text-teal-700 font-semibold ml-2 inline-flex items-center"
-                    >
-                      {showFullAbout ? 'Show Less' : 'Read More'}
-                    </button>
-                  )}
-                </p>
-                {!doctorAbout && <p className="text-sm sm:text-base text-gray-600 leading-relaxed">No information available</p>}
+                {doctorAbout ? (
+                  <p className="text-sm sm:text-base text-gray-600 leading-relaxed">
+                    {showFullAbout || doctorAbout.length <= 150 ? doctorAbout : `${aboutPreview}...`}
+                    {doctorAbout.length > 150 && (
+                      <button
+                        onClick={() => setShowFullAbout(!showFullAbout)}
+                        className="text-teal-600 hover:text-teal-700 font-semibold ml-2 inline-flex items-center"
+                      >
+                        {showFullAbout ? 'Show Less' : 'Read More'}
+                      </button>
+                    )}
+                  </p>
+                ) : (
+                  <p className="text-sm sm:text-base text-gray-600 leading-relaxed">No information available</p>
+                )}
               </div>
 
               {/* Education & Languages */}

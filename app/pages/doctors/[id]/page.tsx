@@ -16,6 +16,10 @@ export default function DoctorProfilePage() {
     const fetchDoctor = async () => {
       try {
         const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'}/api/doctors/${params.id}`);
+        if (!response.ok) {
+          setDoctor(null);
+          return;
+        }
         const data = await response.json();
         setDoctor(data.doctor || data);
       } catch (error) {
