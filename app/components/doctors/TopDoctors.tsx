@@ -57,7 +57,7 @@ export default function TopDoctors() {
             Meet our most experienced medical professionals
           </p>
           <Link 
-            href="/doctors" 
+            href="/pages/doctors" 
             className="inline-block text-teal-600 hover:text-teal-700 font-semibold text-sm sm:text-base transition-colors"
           >
             View All Doctors →
@@ -87,6 +87,7 @@ export default function TopDoctors() {
                 experienceYears={doctor.experienceYears}
                 photoUrl={doctor.photoUrl}
                 isAvailableToday={doctor.isAvailableToday}
+                availability={doctor.availability}
               />
             </SwiperSlide>
           ))}
