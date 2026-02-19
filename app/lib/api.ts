@@ -34,7 +34,15 @@ async function fetchAPI<T>(endpoint: string, options: FetchOptions = {}): Promis
 export const api = {
   doctors: {
     getTop: () => fetchAPI('/api/doctors/top'),
-    getAll: () => fetchAPI('/api/owner/doctors', { requireAuth: true }),
+    getAll: (filters?: { specialty?: string; gender?: string; isAvailableToday?: boolean; minExperience?: number }) => {
+      const params = new URLSearchParams();
+      if (filters?.specialty) params.append('specialty', filters.specialty);
+      if (filters?.gender) params.append('gender', filters.gender);
+      if (filters?.isAvailableToday !== undefined) params.append('isAvailableToday', String(filters.isAvailableToday));
+      if (filters?.minExperience) params.append('minExperience', String(filters.minExperience));
+      return fetchAPI(`/api/doctors/all?${params.toString()}`);
+    },
+    getFilters: () => fetchAPI('/api/doctors/filters'),
     delete: (id: string) => fetchAPI(`/api/owner/doctors/${id}`, { method: 'DELETE', requireAuth: true }),
   },
   reviews: {
