@@ -17,13 +17,20 @@ export async function GET(request: NextRequest) {
     );
 
     if (!response.ok) {
-      return NextResponse.json([], { status: 200 });
+      console.error('Upstream API error:', response.status);
+      return NextResponse.json(
+        { error: 'Failed to fetch doctors', data: [] },
+        { status: response.status >= 500 ? 502 : response.status }
+      );
     }
 
     const data = await response.json();
     return NextResponse.json(data, { status: 200 });
   } catch (error) {
     console.error('Error fetching top doctors:', error);
-    return NextResponse.json([], { status: 200 });
+    return NextResponse.json(
+      { error: 'Internal server error', data: [] },
+      { status: 500 }
+    );
   }
 }
