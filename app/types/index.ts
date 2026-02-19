@@ -29,13 +29,36 @@ export interface InfoCardProps {
     _id: string;
     name: { en: string; ar: string };
     specialty: { en: string; ar: string };
+    brief?: { en: string; ar: string };
+    aboutUs?: string;
     experienceYears: number;
     photoUrl: string;
     isAvailableToday: boolean;
     gender?: string;
+    bloodType?: string;
     fees?: number;
     ratingAvg?: number;
     ratingCount?: number;
+    phone?: string;
+    email?: string;
+    languages?: string[];
+    specializations?: string[];
+    education?: Array<{
+      degree?: string;
+      institution?: string;
+      year?: string;
+    }>;
+    location?: {
+      address?: string;
+      city?: string;
+      mapsLink?: string;
+    };
+    reviews?: Array<{
+      patientName?: string;
+      rating: number;
+      comment?: string;
+      date: string;
+    }>;
     availability?: Array<{
       day: string;
       slots: Array<{ from: string; to: string }>;
