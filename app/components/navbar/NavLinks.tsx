@@ -9,7 +9,7 @@ export default function NavLinks({ pathname }: NavLinksProps) {
   return (
     <div className="hidden xl:flex items-center gap-2">
       {NAV_ITEMS.map((item) => {
-        const href = item === 'Home' ? '/' : `/${item.toLowerCase().replace(' ', '-')}`;
+        const href = item === 'Home' ? '/' : item === 'Services' ? '/pages/services' : item === 'About Us' ? '/pages/about' : `/${item.toLowerCase().replace(' ', '-')}`;
         const isActive = pathname === href;
         return (
           <Link
