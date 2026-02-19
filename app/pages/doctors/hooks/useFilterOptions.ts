@@ -13,7 +13,6 @@ export const useFilterOptions = () => {
         const data = await api.doctors.getFilters() as { specialties: string[]; genders: string[] };
         setFilterOptions(data);
       } catch (error) {
-        console.error('Error fetching filter options:', error);
       }
     };
 

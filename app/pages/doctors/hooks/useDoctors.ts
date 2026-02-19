@@ -20,8 +20,7 @@ export const useDoctors = (filters: Filters) => {
 
         const data = await api.doctors.getAll(filterParams);
         setDoctors(Array.isArray(data) ? data : []);
-      } catch (error) {
-        console.error('Error fetching doctors:', error);
+      } catch {
         setDoctors([]);
       } finally {
         setLoading(false);
