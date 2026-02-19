@@ -102,15 +102,17 @@ export default function DoctorCard({
         )}
         
         <div className="w-full space-y-2 ">
-          <Link href={`/pages/doctors/${id}`}>
-            <button className="w-full mb-3 px-4 sm:px-5 md:px-6 py-2.5 sm:py-3 bg-linear-to-r from-teal-500 to-teal-600 text-white rounded-full hover:from-teal-600 hover:to-teal-700 transition-all font-semibold shadow-md hover:shadow-lg transform hover:-translate-y-0.5 text-sm sm:text-base">
-              Book Appointment
-            </button>
+          <Link 
+            href={`/doctors/${id}/book`}
+            className="block w-full mb-3 px-4 sm:px-5 md:px-6 py-2.5 sm:py-3 bg-linear-to-r from-teal-500 to-teal-600 text-white rounded-full hover:from-teal-600 hover:to-teal-700 transition-all font-semibold shadow-md hover:shadow-lg transform hover:-translate-y-0.5 text-sm sm:text-base text-center"
+          >
+            Book Appointment
           </Link>
-          <Link href={`/pages/doctors/${id}`}>
-            <button className="w-full px-4 sm:px-5 md:px-6 py-2.5 sm:py-3 border-2 border-teal-500 text-teal-600 rounded-full hover:bg-teal-50 transition-all font-semibold text-sm sm:text-base">
-              View Profile
-            </button>
+          <Link 
+            href={`/pages/doctors/${id}`}
+            className="block w-full px-4 sm:px-5 md:px-6 py-2.5 sm:py-3 border-2 border-teal-500 text-teal-600 rounded-full hover:bg-teal-50 transition-all font-semibold text-sm sm:text-base text-center"
+          >
+            View Profile
           </Link>
         </div>
       </div>
