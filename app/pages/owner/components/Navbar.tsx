@@ -30,7 +30,6 @@ export default function Navbar() {
           setOwnerData(data);
         }
       } catch (error) {
-        console.error('Error fetching owner data:', error);
       }
     };
 

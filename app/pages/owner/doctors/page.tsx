@@ -42,7 +42,6 @@ export default function ManageDoctorsPage() {
       const data = await api.doctors.getAll();
       setDoctors(data);
     } catch (error) {
-      console.error('Error fetching doctors:', error);
     }
   };
 
@@ -53,7 +52,6 @@ export default function ManageDoctorsPage() {
       await api.doctors.delete(id);
       fetchDoctors();
     } catch (error) {
-      console.error('Error deleting doctor:', error);
     }
   };
 
@@ -193,9 +191,12 @@ export default function ManageDoctorsPage() {
                       </span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                      <button className="text-blue-600 hover:text-blue-900 mr-4">
+                      <Link 
+                        href={`/pages/owner/doctors/edit/${doctor._id}`}
+                        className="text-blue-600 hover:text-blue-900 mr-4 inline-block"
+                      >
                         <Edit size={18} />
-                      </button>
+                      </Link>
                       <button 
                         onClick={() => handleDelete(doctor._id)}
                         className="text-red-600 hover:text-red-900"

@@ -33,7 +33,6 @@ export default function DashboardPage() {
           setStats(data);
         }
       } catch (error) {
-        console.error('Error fetching stats:', error);
       }
     };
 
