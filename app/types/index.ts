@@ -24,7 +24,7 @@ export interface InfoCardProps {
       workingHours?: { from: string; to: string };
     }>;
   }
-// 
+
   export interface Doctor {
     _id: string;
     name: { en: string; ar: string };
@@ -43,6 +43,10 @@ export interface InfoCardProps {
     email?: string;
     languages?: string[];
     specializations?: string[];
+    clinicId?: {
+      _id: string;
+      name: { en: string; ar: string };
+    };
     education?: Array<{
       degree?: string;
       institution?: string;
