@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import { FaCheckCircle, FaStar, FaUserInjured, FaStethoscope, FaCalendarAlt } from 'react-icons/fa';
+import { FaCheckCircle, FaStar, FaUserInjured, FaStethoscope, FaCalendarAlt, FaArrowRight } from 'react-icons/fa';
 import { Doctor } from '../../../../types';
 
 interface DoctorProfileCardProps {
@@ -10,6 +10,7 @@ export default function DoctorProfileCard({ doctor }: DoctorProfileCardProps) {
   const doctorName = typeof doctor.name === 'string' ? doctor.name : doctor.name?.en || 'Doctor';
   const doctorSpecialty = typeof doctor.specialty === 'string' ? doctor.specialty : doctor.specialty?.en || 'Specialist';
   const doctorBrief = typeof doctor.brief === 'string' ? doctor.brief : doctor.brief?.en || '';
+  const clinicName = doctor.clinicId?.name?.en || '';
 
   return (
     <div className="relative bg-white rounded-2xl sm:rounded-3xl overflow-hidden mb-6 sm:mb-8 border border-gray-100">
@@ -23,7 +24,7 @@ export default function DoctorProfileCard({ doctor }: DoctorProfileCardProps) {
           {/* Doctor Image */}
           <div className="relative shrink-0 group">
             <div className="absolute inset-0 bg-linear-to-br from-yellow-400 to-pink-400 rounded-2xl sm:rounded-3xl blur-lg opacity-50 group-hover:opacity-75 transition-opacity" />
-            <div className="relative w-28 h-28 sm:w-36 sm:h-36 md:w-44 md:h-44 ring-4 ring-white/50 rounded-2xl sm:rounded-3xl overflow-hidden shadow-2xl">
+            <div className="relative w-28 h-36 sm:w-36 sm:h-48 md:w-44 md:h-56 ring-4 ring-white/50 rounded-2xl sm:rounded-3xl overflow-hidden shadow-2xl">
               <Image
                 src={doctor.photoUrl}
                 alt={doctorName}
@@ -44,11 +45,20 @@ export default function DoctorProfileCard({ doctor }: DoctorProfileCardProps) {
             </div>
             <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white drop-shadow-lg">Dr. {doctorName}</h1>
             <p className="text-teal-50 text-sm sm:text-base md:text-lg max-w-2xl leading-relaxed">{doctorBrief}</p>
-            <button className="inline-flex items-center gap-2 bg-white text-teal-600 px-5 sm:px-8 py-2.5 sm:py-3.5 rounded-lg sm:rounded-xl font-bold text-base sm:text-lg shadow-xl hover:shadow-2xl transition-all hover:scale-105 mt-2">
-              <FaCalendarAlt className="text-lg sm:text-xl" />
-              <span className="hidden sm:inline">Book Appointment</span>
-              <span className="sm:hidden">Book Now</span>
-            </button>
+            <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-4">
+              {clinicName && (
+                <button className="flex items-center gap-3 bg-white/20 backdrop-blur-sm px-5 py-3 rounded-xl border border-white/30 shadow-lg hover:bg-white/30 transition-all group">
+                  <div className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse" />
+                  <span className="text-white font-semibold text-base sm:text-lg">Clinic: {clinicName}</span>
+                  <FaArrowRight className="text-white text-sm group-hover:translate-x-1 transition-transform" />
+                </button>
+              )}
+              <button className="inline-flex items-center gap-2 bg-white text-teal-600 px-5 sm:px-8 py-2.5 sm:py-3.5 rounded-lg sm:rounded-xl font-bold text-base sm:text-lg shadow-xl hover:shadow-2xl transition-all hover:scale-105">
+                <FaCalendarAlt className="text-lg sm:text-xl" />
+                <span className="hidden sm:inline">Book Appointment</span>
+                <span className="sm:hidden">Book Now</span>
+              </button>
+            </div>
           </div>
         </div>
       </div>
