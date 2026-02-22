@@ -21,7 +21,7 @@ export default function PatientReviews() {
 
         setReviews((reviewsData as { data: Review[] }).data || []);
         setStats((statsData as { data: ReviewStats }).data || null);
-      } catch (error) {
+      } catch {
       } finally {
         setLoading(false);
       }
@@ -125,13 +125,13 @@ export default function PatientReviews() {
                   <div className="flex items-start gap-3 sm:gap-4">
                     <div className="shrink-0">
                       <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-linear-to-br from-teal-400 to-teal-600 flex items-center justify-center text-white font-bold text-base sm:text-lg shadow-md">
-                        {review.patientId.name.charAt(0).toUpperCase()}
+                        {review.patientId?.name?.charAt(0).toUpperCase() || 'A'}
                       </div>
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center justify-between mb-2 gap-2">
                         <h4 className="font-bold text-sm sm:text-base text-gray-900 truncate">
-                          {review.patientId.name}
+                          {review.patientId?.name || 'Anonymous'}
                         </h4>
                         <div className="flex gap-0.5 shrink-0">
                           {renderStars(review.rating)}
