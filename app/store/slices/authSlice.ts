@@ -3,6 +3,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 interface User {
   name: string;
   email: string;
+  phone?: string;
   role: string;
   clinicId?: string;
   specialty?: {
@@ -21,6 +22,38 @@ const initialState: AuthState = {
   token: null,
 };
 
+const linkGuestAppointments = async (token: string, user: User) => {
+  const guestId = localStorage.getItem('guestId');
+  if (!guestId || user.role !== 'patient') return;
+
+  try {
+    console.log('Linking guest appointments:', { guestId, email: user.email, phone: user.phone });
+    
+    const response = await fetch('http://localhost:5000/api/appointments/link-guest', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify({
+        guestId,
+        email: user.email,
+        phone: user.phone
+      })
+    });
+
+    const result = await response.json();
+    console.log('Link result:', result);
+
+    if (response.ok) {
+      localStorage.removeItem('guestId');
+      console.log('Guest appointments linked successfully');
+    }
+  } catch (error) {
+    console.error('Failed to link guest appointments:', error);
+  }
+};
+
 const authSlice = createSlice({
   name: 'auth',
   initialState,
@@ -31,6 +64,7 @@ const authSlice = createSlice({
       if (typeof window !== 'undefined') {
         localStorage.setItem('user', JSON.stringify(action.payload.user));
         localStorage.setItem('token', action.payload.token);
+        linkGuestAppointments(action.payload.token, action.payload.user);
       }
     },
     logout: (state) => {
