@@ -1,5 +1,4 @@
 'use client';
-import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/app/components/navbar/Navbar";
@@ -26,16 +25,20 @@ export default function RootLayout({
 }>) {
   const pathname = usePathname();
   const isOwnerPage = pathname?.startsWith('/pages/owner');
+  const isDoctorPage = pathname?.startsWith('/pages/doctor/') || pathname === '/pages/doctor';
 
   return (
     <html lang="en">
+      <head>
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <ReduxProvider>
-          <Navbar />
+          {!isDoctorPage && <Navbar />}
           {children}
-          {!isOwnerPage && <Footer />}
+          {!isOwnerPage && !isDoctorPage && <Footer />}
         </ReduxProvider>
       </body>
     </html>
