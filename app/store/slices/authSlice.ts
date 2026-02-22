@@ -4,6 +4,11 @@ interface User {
   name: string;
   email: string;
   role: string;
+  clinicId?: string;
+  specialty?: {
+    en: string;
+    ar?: string;
+  };
 }
 
 interface AuthState {
