@@ -5,8 +5,8 @@ import {NavigationButtonsProps}from '../types/type'
 export default function NavigationButtons({
   currentStep, selectedService, setSelectedService,
   selectedDoctor, setSelectedDoctor, selectedTime,
-  doctors, handleBack, handleNext
-}: NavigationButtonsProps) {
+  doctors, handleBack, handleNext, onFinishBooking, isSubmitting, canSubmit
+}: NavigationButtonsProps & { onFinishBooking?: () => void; isSubmitting?: boolean; canSubmit?: boolean }) {
   return (
     <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-4 shadow-lg">
       <div className="max-w-full mx-auto px-4">
@@ -14,8 +14,9 @@ export default function NavigationButtons({
           {currentStep > 1 ? (
             <button
               onClick={handleBack}
-              className="px-6 py-3 rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold transition-all text-sm"
+              className="flex items-center gap-2 px-6 py-3 rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold transition-all text-sm"
             >
+              <span className="material-icons text-lg">arrow_back</span>
               Back
             </button>
           ) : <div></div>}
@@ -62,15 +63,26 @@ export default function NavigationButtons({
           })()}
           
           <button
-            onClick={handleNext}
+            onClick={currentStep === 4 ? onFinishBooking : handleNext}
             disabled={
               (currentStep === 1 && !selectedService) ||
               (currentStep === 2 && !selectedDoctor) ||
-              (currentStep === 3 && !selectedTime)
+              (currentStep === 3 && !selectedTime) ||
+              (currentStep === 4 && (!canSubmit || isSubmitting))
             }
-            className="px-6 py-3 rounded-xl bg-linear-to-r from-teal-500 via-teal-600 to-cyan-600 hover:from-teal-600 hover:via-teal-700 hover:to-cyan-700 text-white font-semibold transition-all disabled:opacity-50 disabled:cursor-not-allowed text-sm"
+            className="px-6 py-3 rounded-xl bg-linear-to-r from-teal-500 via-teal-600 to-cyan-600 hover:from-teal-600 hover:via-teal-700 hover:to-cyan-700 text-white font-semibold transition-all disabled:opacity-50 disabled:cursor-not-allowed text-sm flex items-center gap-2"
           >
-            {currentStep === 4 ? 'Confirm Booking' : 'Continue'}
+            {currentStep === 4 && isSubmitting ? (
+              <>
+                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                Processing...
+              </>
+            ) : (
+              <>
+                {currentStep === 4 && <span className="material-icons text-lg">check_circle</span>}
+                {currentStep === 4 ? 'Confirm & Finish Booking' : 'Continue'}
+              </>
+            )}
           </button>
         </div>
       </div>
