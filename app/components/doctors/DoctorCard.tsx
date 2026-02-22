@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { FaUserMd, FaCalendarCheck, FaCalendarTimes, FaBriefcase, FaClock } from 'react-icons/fa';
+import { FaUserMd, FaCalendarCheck, FaCalendarTimes, FaBriefcase, FaClock, FaHospital } from 'react-icons/fa';
 import {DoctorCardProps}from '../../types/index'
 
 const getNextAvailableDay = (availability?: Array<{ day: string; slots?: Array<{ from: string; to: string }>; workingHours?: { from: string; to: string } }>) => {
@@ -46,8 +46,10 @@ export default function DoctorCard({
   experienceYears, 
   photoUrl, 
   isAvailableToday,
-  availability
-}: DoctorCardProps) {
+  availability,
+  clinicName,
+  hideBookButton = false
+}: DoctorCardProps & { hideBookButton?: boolean }) {
   const nextAvailable = getNextAvailableDay(availability);
   
   return (
@@ -76,10 +78,17 @@ export default function DoctorCard({
         
         <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-gray-900 mb-1 text-center">{name.en}</h3>
         
-        <div className="flex items-center gap-1.5 sm:gap-2 text-teal-600 font-semibold mb-3 sm:mb-4">
+        <div className="flex items-center gap-1.5 sm:gap-2 text-teal-600 font-semibold mb-2">
           <FaUserMd className="text-base sm:text-lg" />
           <span className="text-sm sm:text-base">{specialty.en}</span>
         </div>
+        
+        {clinicName && (
+          <div className="flex items-center gap-1.5 sm:gap-2 text-teal-600 mb-3 sm:mb-4">
+            <FaHospital className="text-sm sm:text-base" />
+            <span className="text-xs sm:text-sm font-semibold">{clinicName.en}</span>
+          </div>
+        )}
         
         <div className="flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 bg-teal-50 rounded-full mb-3">
           <FaBriefcase className="text-teal-600 text-xs sm:text-sm" />
@@ -102,12 +111,14 @@ export default function DoctorCard({
         )}
         
         <div className="w-full space-y-2 ">
-          <Link 
-            href={`/doctors/${id}/book`}
-            className="block w-full mb-3 px-4 sm:px-5 md:px-6 py-2.5 sm:py-3 bg-linear-to-r from-teal-500 to-teal-600 text-white rounded-full hover:from-teal-600 hover:to-teal-700 transition-all font-semibold shadow-md hover:shadow-lg transform hover:-translate-y-0.5 text-sm sm:text-base text-center"
-          >
-            Book Appointment
-          </Link>
+          {!hideBookButton && (
+            <Link 
+              href={`/doctors/${id}/book`}
+              className="block w-full mb-3 px-4 sm:px-5 md:px-6 py-2.5 sm:py-3 bg-linear-to-r from-teal-500 to-teal-600 text-white rounded-full hover:from-teal-600 hover:to-teal-700 transition-all font-semibold shadow-md hover:shadow-lg transform hover:-translate-y-0.5 text-sm sm:text-base text-center"
+            >
+              Book Appointment
+            </Link>
+          )}
           <Link 
             href={`/pages/doctors/${id}`}
             className="block w-full px-4 sm:px-5 md:px-6 py-2.5 sm:py-3 border-2 border-teal-500 text-teal-600 rounded-full hover:bg-teal-50 transition-all font-semibold text-sm sm:text-base text-center"
