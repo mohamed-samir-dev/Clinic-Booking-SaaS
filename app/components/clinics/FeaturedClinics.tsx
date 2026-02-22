@@ -23,13 +23,9 @@ export default function FeaturedClinics() {
     const fetchClinics = async () => {
       try {
         const response = await fetch('http://localhost:5000/api/clinics');
-        console.log('Clinics API response status:', response.status);
         if (response.ok) {
           const data = await response.json();
-          console.log('Clinics data:', data);
           setClinics(Array.isArray(data) ? data : []);
-        } else {
-          console.error('Failed to fetch clinics, status:', response.status);
         }
       } catch (error) {
         console.error('Failed to fetch clinics:', error);
