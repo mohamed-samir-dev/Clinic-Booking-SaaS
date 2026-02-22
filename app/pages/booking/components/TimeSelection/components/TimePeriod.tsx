@@ -8,6 +8,7 @@ interface TimePeriodProps {
   setSelectedTime: (time: string) => void;
   showAll: boolean;
   setShowAll: (show: boolean) => void;
+  bookedSlots: string[];
 }
 
 export default function TimePeriod({
@@ -19,7 +20,8 @@ export default function TimePeriod({
   selectedTime,
   setSelectedTime,
   showAll,
-  setShowAll
+  setShowAll,
+  bookedSlots
 }: TimePeriodProps) {
   if (slots.length === 0) return null;
 
@@ -33,19 +35,25 @@ export default function TimePeriod({
         )}
       </div>
       <div className="grid grid-cols-2 gap-2">
-        {displayedSlots.map(time => (
-          <button
-            key={time}
-            onClick={() => setSelectedTime(time)}
-            className={`py-2 px-3 rounded-lg text-sm font-medium transition-all ${
-              selectedTime === time
-                ? 'bg-teal-500 text-white'
-                : 'bg-gray-50 text-gray-700 hover:bg-gray-100 border border-gray-200'
-            }`}
-          >
-            {time}
-          </button>
-        ))}
+        {displayedSlots.map(time => {
+          const isBooked = bookedSlots.includes(time);
+          return (
+            <button
+              key={time}
+              onClick={() => !isBooked && setSelectedTime(time)}
+              disabled={isBooked}
+              className={`py-2 px-3 rounded-lg text-sm font-medium transition-all ${
+                isBooked
+                  ? 'bg-gray-200 text-gray-400 cursor-not-allowed opacity-50'
+                  : selectedTime === time
+                  ? 'bg-teal-500 text-white'
+                  : 'bg-gray-50 text-gray-700 hover:bg-gray-100 border border-gray-200'
+              }`}
+            >
+              {time}
+            </button>
+          );
+        })}
       </div>
       {slots.length > 4 && (
         <button
