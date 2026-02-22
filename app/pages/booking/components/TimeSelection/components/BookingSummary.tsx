@@ -84,13 +84,14 @@ export default function BookingSummary({
         <div className="flex items-start gap-3 p-4 bg-linear-to-r from-blue-50 to-indigo-50 rounded-xl mt-4 border border-blue-100">
           <span className="material-icons text-blue-500 text-lg mt-0.5">info</span>
           <div className="flex-1 space-y-2">
-            <p className="text-xs leading-relaxed text-gray-700">
+            <p className="text-xs font-semibold text-blue-700">Booking Information</p>
+            <p className="text-xs font-semibold leading-relaxed text-gray-700">
               You can reschedule or cancel your appointment up to 24 hours before the scheduled time.
             </p>
-            <p className="text-xs leading-relaxed text-gray-700">
+            <p className="text-xs font-semibold leading-relaxed text-gray-700">
               To modify or cancel your booking, you must be logged in or have an account on the website.
             </p>
-            <p className="text-xs leading-relaxed text-gray-600 italic">
+            <p className="text-xs font-semibold  leading-relaxed text-gray-600 italic">
               Creating an account is not required when making your initial booking, but it is required to manage or follow up on your appointments later.
             </p>
           </div>
