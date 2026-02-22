@@ -11,6 +11,7 @@ interface CalendarProps {
   doctorObject: Doctor | null;
   canGoPrevious: boolean;
   canGoNext: boolean;
+  blockedDates: string[];
 }
 
 export default function Calendar({
@@ -21,7 +22,8 @@ export default function Calendar({
   days,
   doctorObject,
   canGoPrevious,
-  canGoNext
+  canGoNext,
+  blockedDates
 }: CalendarProps) {
   return (
     <div className="bg-white rounded-2xl shadow-sm p-6">
@@ -73,14 +75,19 @@ export default function Calendar({
         {DAY_NAMES.map(day => (
           <div key={day} className="text-center text-xs font-semibold text-gray-500 py-2">{day}</div>
         ))}
-        {days.map((d, idx) => (
+        {days.map((d, idx) => {
+          const dateStr = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), d.day).toISOString().split('T')[0];
+          const isBlocked = blockedDates.includes(dateStr);
+          
+          return (
           <div key={idx} className="flex flex-col items-center">
             <button
-              onClick={() => d.isCurrentMonth && d.isAvailable && !d.isPast && setSelectedDate(new Date(currentMonth.getFullYear(), currentMonth.getMonth(), d.day))}
-              disabled={!d.isCurrentMonth || !d.isAvailable || d.isPast}
+              onClick={() => d.isCurrentMonth && d.isAvailable && !d.isPast && !isBlocked && setSelectedDate(new Date(currentMonth.getFullYear(), currentMonth.getMonth(), d.day))}
+              disabled={!d.isCurrentMonth || !d.isAvailable || d.isPast || isBlocked}
               className={`w-full aspect-square rounded-lg text-sm font-medium transition-all relative ${
                 !d.isCurrentMonth ? 'text-gray-300 cursor-not-allowed' :
                 d.isPast ? 'text-gray-400 cursor-not-allowed line-through' :
+                isBlocked ? 'text-red-400 cursor-not-allowed bg-red-50' :
                 !d.isAvailable ? 'text-gray-400 cursor-not-allowed' :
                 selectedDate?.getDate() === d.day && selectedDate?.getMonth() === currentMonth.getMonth() 
                   ? 'bg-teal-500 text-white' 
@@ -90,10 +97,10 @@ export default function Calendar({
               {d.day}
             </button>
             {d.isCurrentMonth && doctorObject && !d.isPast && (
-              <div className={`w-1.5 h-1.5 rounded-full mt-1 ${d.isAvailable ? 'bg-green-500' : 'bg-red-500'}`} />
+              <div className={`w-1.5 h-1.5 rounded-full mt-1 ${isBlocked ? 'bg-red-500' : d.isAvailable ? 'bg-green-500' : 'bg-red-500'}`} />
             )}
           </div>
-        ))}
+        )})}
       </div>
     </div>
   );
