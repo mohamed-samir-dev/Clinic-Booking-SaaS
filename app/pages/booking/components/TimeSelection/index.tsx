@@ -1,26 +1,35 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { Doctor } from '@/app/types/index';
 import { useDoctorData } from './hooks/useDoctorData';
 import { generateTimeSlots, categorizeTimeSlots, getDaysInMonth } from './utils/timeUtils';
 import Calendar from './components/Calendar';
 import TimeSlots from './components/TimeSlots';
 import BookingSummary from './components/BookingSummary';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/app/store/store';
+import Toast from '@/app/components/Toast';
 
 interface TimeSelectionProps {
   selectedTime: string;
   setSelectedTime: (time: string) => void;
   selectedDoctor?: Doctor | string;
   selectedService: string;
+  selectedDate: Date | null;
+  setSelectedDate: (date: Date | null) => void;
 }
 
-export default function TimeSelection({ selectedTime, setSelectedTime, selectedDoctor, selectedService }: TimeSelectionProps) {
+export default function TimeSelection({ selectedTime, setSelectedTime, selectedDoctor, selectedService, selectedDate, setSelectedDate }: TimeSelectionProps) {
   const [currentMonth, setCurrentMonth] = useState(new Date());
-  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [showAllMorning, setShowAllMorning] = useState(false);
   const [showAllAfternoon, setShowAllAfternoon] = useState(false);
   const [showAllEvening, setShowAllEvening] = useState(false);
+  const [bookedSlots, setBookedSlots] = useState<string[]>([]);
+  const [blockedDates, setBlockedDates] = useState<string[]>([]);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  const { token } = useSelector((state: RootState) => state.auth);
 
   const doctorId = useMemo(() => 
     typeof selectedDoctor === 'string' ? selectedDoctor : selectedDoctor?._id,
@@ -30,6 +39,91 @@ export default function TimeSelection({ selectedTime, setSelectedTime, selectedD
   const { availability, consultationDuration, loading, doctorData } = useDoctorData(doctorId, selectedDoctor);
   
   const doctorObject = typeof selectedDoctor === 'object' ? selectedDoctor : doctorData;
+
+  useEffect(() => {
+    const fetchBlockedDates = async () => {
+      if (!doctorId) return;
+      
+      const guestId = localStorage.getItem('guestId');
+      if (!guestId && !token) return;
+
+      const params = new URLSearchParams({ doctorId });
+      if (guestId) params.append('guestId', guestId);
+      
+      const url = `http://localhost:5000/api/appointments/blocked-dates?${params.toString()}`;
+      const headers: Record<string, string> = {};
+      if (token) {
+        headers['Authorization'] = `Bearer ${token}`;
+      }
+
+      try {
+        const response = await fetch(url, { headers });
+        if (!response.ok) return;
+        const data = await response.json();
+        if (data.blockedDates) {
+          setBlockedDates(data.blockedDates);
+        }
+      } catch (error) {
+        console.error('Error fetching blocked dates:', error);
+      }
+    };
+
+    fetchBlockedDates();
+  }, [token, doctorId]);
+
+  const handleDateSelect = (date: Date | null) => {
+    if (!date) {
+      setSelectedDate(null);
+      return;
+    }
+    const dateStr = date.toISOString().split('T')[0];
+    if (blockedDates.includes(dateStr)) {
+      setErrorMessage('You already have an appointment with this doctor on this day.');
+      return;
+    }
+    setSelectedDate(date);
+  };
+
+  useEffect(() => {
+    const fetchBookedSlots = async () => {
+      if (!selectedDate || !doctorId) {
+        setBookedSlots([]);
+        return;
+      }
+
+      const year = selectedDate.getFullYear();
+      const month = String(selectedDate.getMonth() + 1).padStart(2, '0');
+      const day = String(selectedDate.getDate()).padStart(2, '0');
+      const dateStr = `${year}-${month}-${day}`;
+      
+      const url = `http://localhost:5000/api/appointments/booked-slots?doctorId=${doctorId}&date=${dateStr}`;
+
+      try {
+        const response = await fetch(url);
+        if (!response.ok) {
+          setBookedSlots([]);
+          return;
+        }
+        const data = await response.json();
+        
+        if (data.bookedSlots) {
+          const slots = data.bookedSlots.map((slot: { startTime: string }) => {
+            const [hours, minutes] = slot.startTime.split(':');
+            const hour = parseInt(hours);
+            const period = hour >= 12 ? 'PM' : 'AM';
+            const displayHour = hour > 12 ? hour - 12 : hour === 0 ? 12 : hour;
+            return `${displayHour.toString().padStart(2, '0')}:${minutes} ${period}`;
+          });
+          setBookedSlots(slots);
+        }
+      } catch (error) {
+        console.error('Error fetching booked slots:', error);
+        setBookedSlots([]);
+      }
+    };
+
+    fetchBookedSlots();
+  }, [selectedDate, doctorId]);
 
   const availableSlots = useMemo(() => 
     generateTimeSlots(selectedDate, availability, consultationDuration),
@@ -67,11 +161,12 @@ export default function TimeSelection({ selectedTime, setSelectedTime, selectedD
             currentMonth={currentMonth}
             setCurrentMonth={setCurrentMonth}
             selectedDate={selectedDate}
-            setSelectedDate={setSelectedDate}
+            setSelectedDate={handleDateSelect}
             days={days}
             doctorObject={doctorObject}
             canGoPrevious={canGoPrevious}
             canGoNext={canGoNext}
+            blockedDates={blockedDates}
           />
           <TimeSlots
             loading={loading}
@@ -91,6 +186,7 @@ export default function TimeSelection({ selectedTime, setSelectedTime, selectedD
             setShowAllAfternoon={setShowAllAfternoon}
             showAllEvening={showAllEvening}
             setShowAllEvening={setShowAllEvening}
+            bookedSlots={bookedSlots}
           />
         </div>
       </div>
@@ -102,6 +198,14 @@ export default function TimeSelection({ selectedTime, setSelectedTime, selectedD
         selectedDate={selectedDate}
         selectedTime={selectedTime}
       />
+
+      {errorMessage && (
+        <Toast
+          message={errorMessage}
+          type="error"
+          onClose={() => setErrorMessage(null)}
+        />
+      )}
     </div>
   );
 }

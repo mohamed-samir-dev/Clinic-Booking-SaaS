@@ -20,6 +20,7 @@ interface TimeSlotsProps {
   setShowAllAfternoon: (show: boolean) => void;
   showAllEvening: boolean;
   setShowAllEvening: (show: boolean) => void;
+  bookedSlots: string[];
 }
 
 export default function TimeSlots({
@@ -39,7 +40,8 @@ export default function TimeSlots({
   showAllAfternoon,
   setShowAllAfternoon,
   showAllEvening,
-  setShowAllEvening
+  setShowAllEvening,
+  bookedSlots
 }: TimeSlotsProps) {
   if (loading) {
     return (
@@ -99,6 +101,7 @@ export default function TimeSlots({
           setSelectedTime={setSelectedTime}
           showAll={showAllMorning}
           setShowAll={setShowAllMorning}
+          bookedSlots={bookedSlots}
         />
         <TimePeriod
           title={TIME_PERIODS.AFTERNOON.label}
@@ -110,6 +113,7 @@ export default function TimeSlots({
           setSelectedTime={setSelectedTime}
           showAll={showAllAfternoon}
           setShowAll={setShowAllAfternoon}
+          bookedSlots={bookedSlots}
         />
         <TimePeriod
           title={TIME_PERIODS.EVENING.label}
@@ -121,6 +125,7 @@ export default function TimeSlots({
           setSelectedTime={setSelectedTime}
           showAll={showAllEvening}
           setShowAll={setShowAllEvening}
+          bookedSlots={bookedSlots}
         />
       </div>
     </div>
