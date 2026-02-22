@@ -87,6 +87,7 @@ export default function TopDoctors() {
                 photoUrl={doctor.photoUrl}
                 isAvailableToday={doctor.isAvailableToday}
                 availability={doctor.availability}
+                clinicName={doctor.clinicId?.name}
               />
             </SwiperSlide>
           ))}
