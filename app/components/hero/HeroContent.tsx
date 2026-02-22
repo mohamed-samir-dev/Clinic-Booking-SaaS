@@ -18,7 +18,7 @@ export default function HeroContent() {
 
       <div className="flex flex-col sm:flex-row flex-wrap gap-3 sm:gap-4 justify-center lg:justify-start">
         <Link
-          href="/book"
+          href="/pages/booking"
           className="px-6 sm:px-8 py-3 sm:py-4 bg-teal-600 text-white rounded-full font-semibold text-sm sm:text-base hover:bg-teal-700 transition-all shadow-lg hover:shadow-xl hover:scale-105"
         >
           Book Appointment
