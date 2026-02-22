@@ -12,7 +12,7 @@ interface DoctorTabsProps {
 export default function DoctorTabs({ doctor }: DoctorTabsProps) {
   const [activeTab, setActiveTab] = useState('overview');
   const [showFullAbout, setShowFullAbout] = useState(false);
-  const doctorAbout = doctor.aboutUs || '';
+  const doctorAbout = typeof doctor.aboutUs === 'string' ? doctor.aboutUs : '';
   const aboutPreview = doctorAbout.slice(0, 150);
 
   return (

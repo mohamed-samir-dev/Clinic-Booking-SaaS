@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import Link from 'next/link';
 import { FaCheckCircle, FaStar, FaUserInjured, FaStethoscope, FaCalendarAlt, FaArrowRight } from 'react-icons/fa';
 import { Doctor } from '../../../../types';
 
@@ -11,6 +12,7 @@ export default function DoctorProfileCard({ doctor }: DoctorProfileCardProps) {
   const doctorSpecialty = typeof doctor.specialty === 'string' ? doctor.specialty : doctor.specialty?.en || 'Specialist';
   const doctorBrief = typeof doctor.brief === 'string' ? doctor.brief : doctor.brief?.en || '';
   const clinicName = doctor.clinicId?.name?.en || '';
+  const clinicId = doctor.clinicId?._id || '';
 
   return (
     <div className="relative bg-white rounded-2xl sm:rounded-3xl overflow-hidden mb-6 sm:mb-8 border border-gray-100">
@@ -46,12 +48,12 @@ export default function DoctorProfileCard({ doctor }: DoctorProfileCardProps) {
             <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white drop-shadow-lg">Dr. {doctorName}</h1>
             <p className="text-teal-50 text-sm sm:text-base md:text-lg max-w-2xl leading-relaxed">{doctorBrief}</p>
             <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-4">
-              {clinicName && (
-                <button className="flex items-center gap-3 bg-white/20 backdrop-blur-sm px-5 py-3 rounded-xl border border-white/30 shadow-lg hover:bg-white/30 transition-all group">
+              {clinicName && clinicId && (
+                <Link href={`/pages/clinics/${clinicId}`} className="flex items-center gap-3 bg-white/20 backdrop-blur-sm px-5 py-3 rounded-xl border border-white/30 shadow-lg hover:bg-white/30 transition-all group">
                   <div className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse" />
                   <span className="text-white font-semibold text-base sm:text-lg">Clinic: {clinicName}</span>
                   <FaArrowRight className="text-white text-sm group-hover:translate-x-1 transition-transform" />
-                </button>
+                </Link>
               )}
               <button className="inline-flex items-center gap-2 bg-white text-teal-600 px-5 sm:px-8 py-2.5 sm:py-3.5 rounded-lg sm:rounded-xl font-bold text-base sm:text-lg shadow-xl hover:shadow-2xl transition-all hover:scale-105">
                 <FaCalendarAlt className="text-lg sm:text-xl" />

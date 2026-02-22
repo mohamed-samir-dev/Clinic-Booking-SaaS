@@ -18,6 +18,7 @@ export default function DoctorsList({ doctors }: DoctorsListProps) {
           photoUrl={doctor.photoUrl}
           isAvailableToday={doctor.isAvailableToday}
           availability={doctor.availability}
+          clinicName={doctor.clinicId?.name}
         />
       ))}
     </div>
