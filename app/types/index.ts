@@ -18,6 +18,7 @@ export interface InfoCardProps {
     experienceYears: number;
     photoUrl: string;
     isAvailableToday: boolean;
+    clinicName?: { en: string; ar: string };
     availability?: Array<{
       day: string;
       slots: Array<{ from: string; to: string }>;
