@@ -5,7 +5,7 @@ import StepsHeader from './components/StepsHeader';
 import ServiceSelection from './components/ServiceSelection';
 import DoctorSelection from './components/DoctorSelection';
 import TimeSelection from './components/TimeSelection';
-import DetailsForm from './components/DetailsForm';
+import DetailsForm from './components/DetailsForm/DetailsForm';
 import NavigationButtons from './components/NavigationButtons';
 import { useDoctors } from './hooks/useDoctors';
 import { useFilters } from './hooks/useFilters';
@@ -17,8 +17,12 @@ export default function BookingPage() {
   const [selectedService, setSelectedService] = useState('');
   const [selectedDoctor, setSelectedDoctor] = useState('');
   const [selectedTime, setSelectedTime] = useState('');
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [isPending, startTransition] = useTransition();
+  const [bookingHandler, setBookingHandler] = useState<(() => void) | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [canSubmit, setCanSubmit] = useState(false);
 
   const { allDoctors, loadingDoctors } = useDoctors(selectedService, currentStep);
   const filterProps = useFilters(allDoctors);
@@ -51,6 +55,12 @@ export default function BookingPage() {
     }
   };
 
+  const handleBookingSubmit = (handler: () => void, submitting: boolean, canSubmitForm: boolean) => {
+    setBookingHandler(() => handler);
+    setIsSubmitting(submitting);
+    setCanSubmit(canSubmitForm);
+  };
+
   return (
     <div className="min-h-screen bg-gray-50 py-12 px-4 pb-24">
       {isPending && (
@@ -65,7 +75,7 @@ export default function BookingPage() {
       <div className="max-w-full mx-auto px-4">
         <StepsHeader currentStep={currentStep} />
 
-        <div className="p-6" onClick={() => setSelectedService('')}>
+        <div className="p-6">
           {currentStep === 1 && (
             <ServiceSelection
               selectedService={selectedService}
@@ -93,10 +103,20 @@ export default function BookingPage() {
               setSelectedTime={setSelectedTime}
               selectedDoctor={filterProps.doctors.find(d => d._id === selectedDoctor)}
               selectedService={selectedService}
+              selectedDate={selectedDate}
+              setSelectedDate={setSelectedDate}
             />
           )}
 
-          {currentStep === 4 && <DetailsForm />}
+          {currentStep === 4 && (
+            <DetailsForm
+              selectedDoctor={filterProps.doctors.find(d => d._id === selectedDoctor)}
+              selectedService={selectedService}
+              selectedDate={selectedDate}
+              selectedTime={selectedTime}
+              onBookingSubmit={handleBookingSubmit}
+            />
+          )}
         </div>
         
         <NavigationButtons
@@ -109,6 +129,9 @@ export default function BookingPage() {
           doctors={filterProps.doctors}
           handleBack={handleBack}
           handleNext={handleNext}
+          onFinishBooking={() => bookingHandler?.()}
+          isSubmitting={isSubmitting}
+          canSubmit={canSubmit}
         />
       </div>
     </div>
