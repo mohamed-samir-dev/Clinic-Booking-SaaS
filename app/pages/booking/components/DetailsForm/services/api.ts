@@ -61,7 +61,7 @@ export const createAppointment = async ({
   const data = await response.json();
 
   if (!response.ok) {
-    const errorMessage = data.message || data.messageEn || 'Failed to create appointment';
+    const errorMessage = data.messageEn || data.message || 'Failed to create appointment';
     throw new Error(errorMessage);
   }
 
