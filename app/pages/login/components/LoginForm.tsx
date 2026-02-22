@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { FaArrowRight } from 'react-icons/fa';
 import { UserType } from '@/app/shared/types/auth.types';
 import PasswordInput from '@/app/shared/components/PasswordInput';
@@ -13,10 +13,43 @@ interface LoginFormProps {
   error: string;
 }
 
+interface Business {
+  _id: string;
+  name: {
+    ar: string;
+    en: string;
+  };
+  businessId: string;
+}
+
 export default function LoginForm({ userType, onSubmit, loading, error }: LoginFormProps) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [businessId, setBusinessId] = useState('');
+  const [businesses, setBusinesses] = useState<Business[]>([]);
+  const [loadingBusinesses, setLoadingBusinesses] = useState(false);
+
+  useEffect(() => {
+    if (ROLES_REQUIRING_BUSINESS_ID.includes(userType)) {
+      fetchBusinesses();
+    }
+  }, [userType]);
+
+  const fetchBusinesses = async () => {
+    setLoadingBusinesses(true);
+    try {
+      const response = await fetch('http://localhost:5000/api/v1/auth/businesses');
+      const data = await response.json();
+      if (data.success) {
+        console.log('Clinics data:', data.data);
+        setBusinesses(data.data);
+      }
+    } catch (error) {
+      console.error('Error fetching businesses:', error);
+    } finally {
+      setLoadingBusinesses(false);
+    }
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -34,17 +67,26 @@ export default function LoginForm({ userType, onSubmit, loading, error }: LoginF
       {ROLES_REQUIRING_BUSINESS_ID.includes(userType) && (
         <div>
           <label htmlFor="businessId" className="block text-sm font-semibold text-gray-700 mb-2">
-            Business ID
+            Select Clinic
           </label>
-          <input
-            type="text"
+          <select
             id="businessId"
             value={businessId}
-            onChange={(e) => setBusinessId(e.target.value)}
+            onChange={(e) => {
+              console.log('Selected value:', e.target.value);
+              setBusinessId(e.target.value);
+            }}
             className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none transition text-gray-900"
-            placeholder="Enter your business ID"
             required
-          />
+            disabled={loadingBusinesses}
+          >
+            <option value="">Select Clinic</option>
+            {businesses.map((business) => (
+              <option key={business._id} value={business._id}>
+                {business.name.en}
+              </option>
+            ))}
+          </select>
         </div>
       )}
 
