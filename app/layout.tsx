@@ -4,6 +4,7 @@ import "./globals.css";
 import Navbar from "@/app/components/navbar/Navbar";
 import Footer from "@/app/components/footer/Footer";
 import { ReduxProvider } from "./store/ReduxProvider";
+import { ThemeProvider } from "./contexts/ThemeContext";
 import { usePathname } from "next/navigation";
 
 const geistSans = Geist({
@@ -36,9 +37,11 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <ReduxProvider>
-          {!isDoctorPage && <Navbar />}
-          {children}
-          {!isOwnerPage && !isDoctorPage && <Footer />}
+          <ThemeProvider>
+            {!isDoctorPage && <Navbar />}
+            {children}
+            {!isOwnerPage && !isDoctorPage && <Footer />}
+          </ThemeProvider>
         </ReduxProvider>
       </body>
     </html>
