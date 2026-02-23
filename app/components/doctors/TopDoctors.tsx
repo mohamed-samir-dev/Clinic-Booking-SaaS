@@ -88,6 +88,7 @@ export default function TopDoctors() {
                 isAvailableToday={doctor.isAvailableToday}
                 availability={doctor.availability}
                 clinicName={doctor.clinicId?.name}
+                quickBook={true}
               />
             </SwiperSlide>
           ))}

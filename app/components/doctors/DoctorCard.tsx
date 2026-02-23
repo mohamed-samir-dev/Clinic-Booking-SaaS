@@ -2,8 +2,44 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { FaUserMd, FaCalendarCheck, FaCalendarTimes, FaBriefcase, FaClock, FaHospital } from 'react-icons/fa';
 import {DoctorCardProps}from '../../types/index'
+import { saveQuickBookingData } from '../../pages/booking/utils/quickBooking';
+
+const checkIsAvailableNow = (availability?: Array<{ day: string; slots?: Array<{ from: string; to: string }>; workingHours?: { from: string; to: string } }>) => {
+  if (!availability || availability.length === 0) return false;
+  
+  const now = new Date();
+  const daysOrder = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+  const currentDay = daysOrder[now.getDay()];
+  const currentTime = now.getHours() * 60 + now.getMinutes();
+  
+  const todaySchedule = availability.find(a => a.day === currentDay);
+  if (!todaySchedule) return false;
+  
+  let hours = todaySchedule.workingHours;
+  if (!hours && todaySchedule.slots && todaySchedule.slots.length > 0) {
+    const validSlot = todaySchedule.slots.find(slot => slot.from && slot.to);
+    if (validSlot) hours = validSlot;
+  }
+  
+  if (!hours || !hours.from || !hours.to) return false;
+  
+  const parseTime = (timeStr: string) => {
+    const [time, period] = timeStr.split(' ');
+    const [h, m] = time.split(':').map(Number);
+    let hrs = h;
+    if (period === 'PM' && hrs !== 12) hrs += 12;
+    if (period === 'AM' && hrs === 12) hrs = 0;
+    return hrs * 60 + m;
+  };
+  
+  const startTime = parseTime(hours.from);
+  const endTime = parseTime(hours.to);
+  
+  return currentTime >= startTime && currentTime <= endTime;
+};
 
 const getNextAvailableDay = (availability?: Array<{ day: string; slots?: Array<{ from: string; to: string }>; workingHours?: { from: string; to: string } }>) => {
   if (!availability || availability.length === 0) return null;
@@ -45,12 +81,25 @@ export default function DoctorCard({
   specialty, 
   experienceYears, 
   photoUrl, 
-  isAvailableToday,
   availability,
   clinicName,
-  hideBookButton = false
-}: DoctorCardProps & { hideBookButton?: boolean }) {
+  hideBookButton = false,
+  quickBook = false
+}: DoctorCardProps & { hideBookButton?: boolean; quickBook?: boolean }) {
+  const router = useRouter();
   const nextAvailable = getNextAvailableDay(availability);
+  const isCurrentlyAvailable = checkIsAvailableNow(availability);
+
+  const handleQuickBook = () => {
+    saveQuickBookingData({
+      doctorId: id,
+      doctorName: name.en,
+      specialty: specialty.en,
+      serviceId: specialty.en,
+      skipSteps: true
+    });
+    router.push('/pages/booking?quick=true');
+  };
   
   return (
     <div className="bg-white mb-8 sm:mb-10 rounded-2xl sm:rounded-3xl shadow-md hover:shadow-2xl transition-all duration-500 p-5 sm:p-6 md:p-8 group border border-gray-100">
@@ -66,9 +115,9 @@ export default function DoctorCard({
             />
           </div>
           <div className={`absolute -bottom-1 -right-1 w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center shadow-lg ${
-            isAvailableToday ? 'bg-green-500' : 'bg-red-500'
+            isCurrentlyAvailable ? 'bg-green-500' : 'bg-red-500'
           }`}>
-            {isAvailableToday ? (
+            {isCurrentlyAvailable ? (
               <FaCalendarCheck className="text-white text-xs sm:text-sm" />
             ) : (
               <FaCalendarTimes className="text-white text-xs sm:text-sm" />
@@ -112,12 +161,21 @@ export default function DoctorCard({
         
         <div className="w-full space-y-2 ">
           {!hideBookButton && (
-            <Link 
-              href={`/doctors/${id}/book`}
-              className="block w-full mb-3 px-4 sm:px-5 md:px-6 py-2.5 sm:py-3 bg-linear-to-r from-teal-500 to-teal-600 text-white rounded-full hover:from-teal-600 hover:to-teal-700 transition-all font-semibold shadow-md hover:shadow-lg transform hover:-translate-y-0.5 text-sm sm:text-base text-center"
-            >
-              Book Appointment
-            </Link>
+            quickBook ? (
+              <button
+                onClick={handleQuickBook}
+                className="block w-full mb-3 px-4 sm:px-5 md:px-6 py-2.5 sm:py-3 bg-linear-to-r from-teal-500 to-teal-600 text-white rounded-full hover:from-teal-600 hover:to-teal-700 transition-all font-semibold shadow-md hover:shadow-lg transform hover:-translate-y-0.5 text-sm sm:text-base text-center"
+              >
+                Book Appointment
+              </button>
+            ) : (
+              <Link 
+                href={`/doctors/${id}/book`}
+                className="block w-full mb-3 px-4 sm:px-5 md:px-6 py-2.5 sm:py-3 bg-linear-to-r from-teal-500 to-teal-600 text-white rounded-full hover:from-teal-600 hover:to-teal-700 transition-all font-semibold shadow-md hover:shadow-lg transform hover:-translate-y-0.5 text-sm sm:text-base text-center"
+              >
+                Book Appointment
+              </Link>
+            )
           )}
           <Link 
             href={`/pages/doctors/${id}`}
