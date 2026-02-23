@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import ClinicCard from './ClinicCard';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Keyboard, Mousewheel, Pagination } from 'swiper/modules';
+import { useTheme } from '@/app/contexts/ThemeContext';
 import 'swiper/css';
 import 'swiper/css/pagination';
 
@@ -16,6 +17,7 @@ interface Clinic {
 }
 
 export default function FeaturedClinics() {
+  const { theme } = useTheme();
   const [clinics, setClinics] = useState<Clinic[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -39,12 +41,12 @@ export default function FeaturedClinics() {
 
   if (loading) {
     return (
-      <section className="py-12 sm:py-16 md:py-20 bg-gray-50">
+      <section className={`py-12 sm:py-16 md:py-20 ${theme === 'dark' ? 'bg-gray-900' : 'bg-gray-50'}`}>
         <div className="w-full px-4 md:px-8">
           <div className="text-center">
             <div className="animate-pulse">
-              <div className="h-8 bg-gray-200 rounded w-64 mx-auto mb-4"></div>
-              <div className="h-4 bg-gray-200 rounded w-96 mx-auto"></div>
+              <div className={`h-8 rounded w-64 mx-auto mb-4 ${theme === 'dark' ? 'bg-gray-700' : 'bg-gray-200'}`}></div>
+              <div className={`h-4 rounded w-96 mx-auto ${theme === 'dark' ? 'bg-gray-700' : 'bg-gray-200'}`}></div>
             </div>
           </div>
         </div>
@@ -53,21 +55,21 @@ export default function FeaturedClinics() {
   }
 
   return (
-    <section className="py-12 sm:py-16 md:py-20 bg-gray-50">
+    <section className={`py-12 sm:py-16 md:py-20 ${theme === 'dark' ? 'bg-gray-900' : 'bg-gray-50'}`}>
       <div className="w-full px-4 md:px-8">
         <div className="mb-8 sm:mb-10 md:mb-14 text-center">
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-2 sm:mb-3">
-            <span className="text-gray-900">Our </span>
+            <span className={theme === 'dark' ? 'text-white' : 'text-gray-900'}>Our </span>
             <span className="text-teal-600">Clinics</span>
           </h2>
-          <p className="text-sm sm:text-base md:text-lg text-gray-600 max-w-2xl mx-auto px-4">
+          <p className={`text-sm sm:text-base md:text-lg max-w-2xl mx-auto px-4 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>
             Discover our network of trusted medical facilities
           </p>
         </div>
 
         {clinics.length === 0 ? (
           <div className="text-center py-12">
-            <p className="text-gray-500">No clinics available at the moment</p>
+            <p className={theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}>No clinics available at the moment</p>
           </div>
         ) : (
           <Swiper
