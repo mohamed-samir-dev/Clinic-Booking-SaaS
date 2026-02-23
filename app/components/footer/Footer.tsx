@@ -3,8 +3,10 @@ import Link from 'next/link';
 import { FaHeartbeat, FaEnvelope, FaPhone, FaMapMarkerAlt } from 'react-icons/fa';
 import { FaXTwitter, FaFacebook, FaInstagram, FaLinkedin, FaGithub, FaWhatsapp } from 'react-icons/fa6';
 import { useState } from 'react';
+import { useTheme } from '../../contexts/ThemeContext';
 
 export default function Footer() {
+  const { theme } = useTheme();
   const [showPopup, setShowPopup] = useState(false);
 
   return (
@@ -106,63 +108,63 @@ export default function Footer() {
       {/* Developer Popup */}
       {showPopup && (
         <div className="fixed inset-0 backdrop-blur-sm bg-black/30 flex items-center justify-center z-50 p-4" onClick={() => setShowPopup(false)}>
-          <div className="bg-linear-to-br from-teal-600 to-teal-800 rounded-2xl shadow-2xl max-w-md w-full p-8 relative" onClick={(e) => e.stopPropagation()}>
+          <div className={`rounded-2xl shadow-2xl max-w-md w-full p-8 relative ${theme === 'dark' ? 'bg-linear-to-br from-gray-800 to-gray-900' : 'bg-linear-to-br from-teal-600 to-teal-800'}`} onClick={(e) => e.stopPropagation()}>
             <button
               onClick={() => setShowPopup(false)}
-              className="absolute top-4 right-4 text-white hover:text-gray-200 text-2xl font-bold"
+              className={`absolute top-4 right-4 text-2xl font-bold ${theme === 'dark' ? 'text-gray-300 hover:text-white' : 'text-white hover:text-gray-200'}`}
             >
               ×
             </button>
             
-            <div className="text-center text-white">
-              <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center mx-auto mb-4">
-                <FaHeartbeat className="text-teal-600 text-3xl" />
+            <div className={`text-center ${theme === 'dark' ? 'text-white' : 'text-white'}`}>
+              <div className={`w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 ${theme === 'dark' ? 'bg-teal-600' : 'bg-white'}`}>
+                <FaHeartbeat className={`text-3xl ${theme === 'dark' ? 'text-white' : 'text-teal-600'}`} />
               </div>
               
               <h3 className="text-2xl font-bold mb-3">Demo Project</h3>
-              <p className="text-teal-50 mb-6 leading-relaxed">
+              <p className={`mb-6 leading-relaxed ${theme === 'dark' ? 'text-gray-300' : 'text-teal-50'}`}>
                 This is a demonstration project showcasing full-stack development capabilities. 
                 Built with modern technologies to deliver exceptional user experiences.
               </p>
               
-              <div className="bg-white bg-opacity-10 rounded-lg p-4 mb-6">
-                <p className="text-sm text-teal-700 font-semibold mb-3">Developed by Mohammed Samier Mouawad</p>
+              <div className={`rounded-lg p-4 mb-6 ${theme === 'dark' ? 'bg-gray-700' : 'bg-white bg-opacity-10'}`}>
+                <p className={`text-sm font-semibold mb-3 ${theme === 'dark' ? 'text-teal-400' : 'text-teal-700'}`}>Developed by Mohammed Samier Mouawad</p>
                 <div className="flex justify-center gap-3">
                   <a
                     href="https://my-newfrontend-portfolio.vercel.app/"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-12 h-12 bg-white rounded-full flex items-center justify-center hover:scale-110 transition-transform"
+                    className={`w-12 h-12 rounded-full flex items-center justify-center hover:scale-110 transition-transform ${theme === 'dark' ? 'bg-teal-600' : 'bg-white'}`}
                     title="Portfolio"
                   >
-                    <FaHeartbeat className="text-teal-600 text-xl" />
+                    <FaHeartbeat className={`text-xl ${theme === 'dark' ? 'text-white' : 'text-teal-600'}`} />
                   </a>
                   <a
                     href="https://www.linkedin.com/in/mohammed-samier-mouawad/"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-12 h-12 bg-white rounded-full flex items-center justify-center hover:scale-110 transition-transform"
+                    className={`w-12 h-12 rounded-full flex items-center justify-center hover:scale-110 transition-transform ${theme === 'dark' ? 'bg-teal-600' : 'bg-white'}`}
                     title="LinkedIn"
                   >
-                    <FaLinkedin className="text-teal-600 text-xl" />
+                    <FaLinkedin className={`text-xl ${theme === 'dark' ? 'text-white' : 'text-teal-600'}`} />
                   </a>
                   <a
                     href="https://github.com/mohamed-samir-dev"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-12 h-12 bg-white rounded-full flex items-center justify-center hover:scale-110 transition-transform"
+                    className={`w-12 h-12 rounded-full flex items-center justify-center hover:scale-110 transition-transform ${theme === 'dark' ? 'bg-teal-600' : 'bg-white'}`}
                     title="GitHub"
                   >
-                    <FaGithub className="text-teal-600 text-xl" />
+                    <FaGithub className={`text-xl ${theme === 'dark' ? 'text-white' : 'text-teal-600'}`} />
                   </a>
                   <a
                     href="https://api.whatsapp.com/send/?phone=201012486445&text&type=phone_number&app_absent=0"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-12 h-12 bg-white rounded-full flex items-center justify-center hover:scale-110 transition-transform"
+                    className={`w-12 h-12 rounded-full flex items-center justify-center hover:scale-110 transition-transform ${theme === 'dark' ? 'bg-teal-600' : 'bg-white'}`}
                     title="WhatsApp"
                   >
-                    <FaWhatsapp className="text-teal-600 text-xl" />
+                    <FaWhatsapp className={`text-xl ${theme === 'dark' ? 'text-white' : 'text-teal-600'}`} />
                   </a>
                 </div>
               </div>
@@ -171,7 +173,7 @@ export default function Footer() {
                 href="https://my-newfrontend-portfolio.vercel.app/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-block bg-white text-teal-700 px-6 py-3 rounded-lg font-semibold hover:bg-teal-50 transition-colors"
+                className={`inline-block px-6 py-3 rounded-lg font-semibold transition-colors ${theme === 'dark' ? 'bg-teal-600 text-white hover:bg-teal-700' : 'bg-white text-teal-700 hover:bg-teal-50'}`}
               >
                 View Portfolio
               </a>
