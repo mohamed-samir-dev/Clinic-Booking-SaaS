@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
+import { useTheme } from '@/app/contexts/ThemeContext';
 
 interface PrivacyPolicyProps {
   agreeToPolicy: boolean;
@@ -8,6 +9,7 @@ interface PrivacyPolicyProps {
 }
 
 export default function PrivacyPolicy({ agreeToPolicy, setAgreeToPolicy }: PrivacyPolicyProps) {
+  const { theme } = useTheme();
   const [showPrivacyModal, setShowPrivacyModal] = useState(false);
   const [showCancellationModal, setShowCancellationModal] = useState(false);
   const [hasReadPrivacy, setHasReadPrivacy] = useState(false);
@@ -43,7 +45,7 @@ export default function PrivacyPolicy({ agreeToPolicy, setAgreeToPolicy }: Priva
 
   return (
     <>
-      <div className="p-3 sm:p-4 bg-gray-50 rounded-xl">
+      <div className={`p-3 sm:p-4 rounded-xl ${theme === 'dark' ? 'bg-gray-700' : 'bg-gray-50'}`}>
         <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-3 flex-wrap">
           <div className="flex items-center gap-2">
             <input
@@ -54,7 +56,7 @@ export default function PrivacyPolicy({ agreeToPolicy, setAgreeToPolicy }: Priva
               disabled={!canAgree}
               className="w-4 h-4 text-teal-600 border-gray-300 rounded focus:ring-teal-500 disabled:opacity-50 disabled:cursor-not-allowed flex-shrink-0"
             />
-            <label htmlFor="privacy-policy" className="text-xs sm:text-sm text-gray-900 font-medium">
+            <label htmlFor="privacy-policy" className={`text-xs sm:text-sm font-medium ${theme === 'dark' ? 'text-gray-200' : 'text-gray-900'}`}>
               I agree to the policies:
             </label>
           </div>
@@ -82,21 +84,21 @@ export default function PrivacyPolicy({ agreeToPolicy, setAgreeToPolicy }: Priva
           </button>
         </div>
         {!canAgree && (
-          <p className="text-[10px] sm:text-xs text-amber-600 mt-2 font-medium">⚠ Please read both policies to the end before agreeing</p>
+          <p className={`text-[10px] sm:text-xs mt-2 font-medium ${theme === 'dark' ? 'text-amber-400' : 'text-amber-600'}`}>⚠ Please read both policies to the end before agreeing</p>
         )}
       </div>
 
       {/* Privacy Policy Modal */}
       {showPrivacyModal && (
         <div className="fixed inset-0 backdrop-blur-sm flex items-center justify-center z-50 p-3 sm:p-4">
-          <div className="bg-white rounded-2xl max-w-2xl w-full max-h-[85vh] sm:max-h-[80vh] flex flex-col">
-            <div className="p-4 sm:p-6 border-b border-gray-200">
-              <h3 className="text-xl sm:text-2xl font-bold text-gray-900">Privacy Policy</h3>
+          <div className={`rounded-2xl max-w-2xl w-full max-h-[85vh] sm:max-h-[80vh] flex flex-col ${theme === 'dark' ? 'bg-gray-800' : 'bg-white'}`}>
+            <div className={`p-4 sm:p-6 border-b ${theme === 'dark' ? 'border-gray-700' : 'border-gray-200'}`}>
+              <h3 className={`text-xl sm:text-2xl font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Privacy Policy</h3>
             </div>
             <div 
               ref={privacyScrollRef}
               onScroll={handlePrivacyScroll}
-              className="p-4 sm:p-6 overflow-y-auto flex-1 text-gray-700 leading-relaxed text-sm sm:text-base"
+              className={`p-4 sm:p-6 overflow-y-auto flex-1 leading-relaxed text-sm sm:text-base ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}
             >
               <h4 className="font-bold text-lg mb-3">1. Information Collection</h4>
               <p className="mb-4">We collect personal information including your name, contact details, date of birth, and medical history to provide you with quality healthcare services. This information is essential for appointment scheduling, medical consultations, and maintaining accurate health records.</p>
@@ -124,7 +126,7 @@ export default function PrivacyPolicy({ agreeToPolicy, setAgreeToPolicy }: Priva
 
               <div className="h-20"></div>
             </div>
-            <div className="p-4 sm:p-6 border-t border-gray-200 flex flex-col sm:flex-row justify-between items-center gap-2">
+            <div className={`p-4 sm:p-6 border-t flex flex-col sm:flex-row justify-between items-center gap-2 ${theme === 'dark' ? 'border-gray-700' : 'border-gray-200'}`}>
               {!hasReadPrivacy && (
                 <p className="text-xs sm:text-sm text-amber-600 font-medium">↓ Scroll to the bottom to continue</p>
               )}
@@ -146,14 +148,14 @@ export default function PrivacyPolicy({ agreeToPolicy, setAgreeToPolicy }: Priva
       {/* Cancellation & Rescheduling Policy Modal */}
       {showCancellationModal && (
         <div className="fixed inset-0 backdrop-blur flex items-center justify-center z-50 p-3 sm:p-4">
-          <div className="bg-white rounded-2xl max-w-2xl w-full max-h-[85vh] sm:max-h-[80vh] flex flex-col">
-            <div className="p-4 sm:p-6 border-b border-gray-200">
-              <h3 className="text-xl sm:text-2xl font-bold text-gray-900">Cancellation & Rescheduling Policy</h3>
+          <div className={`rounded-2xl max-w-2xl w-full max-h-[85vh] sm:max-h-[80vh] flex flex-col ${theme === 'dark' ? 'bg-gray-800' : 'bg-white'}`}>
+            <div className={`p-4 sm:p-6 border-b ${theme === 'dark' ? 'border-gray-700' : 'border-gray-200'}`}>
+              <h3 className={`text-xl sm:text-2xl font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Cancellation & Rescheduling Policy</h3>
             </div>
             <div 
               ref={cancellationScrollRef}
               onScroll={handleCancellationScroll}
-              className="p-4 sm:p-6 overflow-y-auto flex-1 text-gray-700 leading-relaxed text-sm sm:text-base"
+              className={`p-4 sm:p-6 overflow-y-auto flex-1 leading-relaxed text-sm sm:text-base ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}
             >
               <h4 className="font-bold text-lg mb-3">1. Cancellation Notice Period</h4>
               <p className="mb-4">Appointments must be cancelled at least 24 hours in advance to avoid cancellation fees. We understand that emergencies occur, but advance notice helps us serve other patients who may be waiting for appointments.</p>
@@ -184,7 +186,7 @@ export default function PrivacyPolicy({ agreeToPolicy, setAgreeToPolicy }: Priva
 
               <div className="h-20"></div>
             </div>
-            <div className="p-4 sm:p-6 border-t border-gray-200 flex flex-col sm:flex-row justify-between items-center gap-2">
+            <div className={`p-4 sm:p-6 border-t flex flex-col sm:flex-row justify-between items-center gap-2 ${theme === 'dark' ? 'border-gray-700' : 'border-gray-200'}`}>
               {!hasReadCancellation && (
                 <p className="text-xs sm:text-sm text-amber-600 font-medium">↓ Scroll to the bottom to continue</p>
               )}
