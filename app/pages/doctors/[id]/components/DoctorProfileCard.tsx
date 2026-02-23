@@ -1,18 +1,34 @@
+'use client';
+
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { FaCheckCircle, FaStar, FaUserInjured, FaStethoscope, FaCalendarAlt, FaArrowRight } from 'react-icons/fa';
 import { Doctor } from '../../../../types';
+import { saveQuickBookingData } from '../../../booking/utils/quickBooking';
 
 interface DoctorProfileCardProps {
   doctor: Doctor;
 }
 
 export default function DoctorProfileCard({ doctor }: DoctorProfileCardProps) {
+  const router = useRouter();
   const doctorName = typeof doctor.name === 'string' ? doctor.name : doctor.name?.en || 'Doctor';
   const doctorSpecialty = typeof doctor.specialty === 'string' ? doctor.specialty : doctor.specialty?.en || 'Specialist';
   const doctorBrief = typeof doctor.brief === 'string' ? doctor.brief : doctor.brief?.en || '';
   const clinicName = doctor.clinicId?.name?.en || '';
   const clinicId = doctor.clinicId?._id || '';
+
+  const handleQuickBook = () => {
+    saveQuickBookingData({
+      doctorId: doctor._id,
+      doctorName: doctorName,
+      specialty: doctorSpecialty,
+      serviceId: doctorSpecialty,
+      skipSteps: true
+    });
+    router.push('/pages/booking?quick=true');
+  };
 
   return (
     <div className="relative bg-white rounded-2xl sm:rounded-3xl overflow-hidden mb-6 sm:mb-8 border border-gray-100">
@@ -55,7 +71,10 @@ export default function DoctorProfileCard({ doctor }: DoctorProfileCardProps) {
                   <FaArrowRight className="text-white text-sm group-hover:translate-x-1 transition-transform" />
                 </Link>
               )}
-              <button className="inline-flex items-center gap-2 bg-white text-teal-600 px-5 sm:px-8 py-2.5 sm:py-3.5 rounded-lg sm:rounded-xl font-bold text-base sm:text-lg shadow-xl hover:shadow-2xl transition-all hover:scale-105">
+              <button 
+                onClick={handleQuickBook}
+                className="inline-flex items-center gap-2 bg-white text-teal-600 px-5 sm:px-8 py-2.5 sm:py-3.5 rounded-lg sm:rounded-xl font-bold text-base sm:text-lg shadow-xl hover:shadow-2xl transition-all hover:scale-105"
+              >
                 <FaCalendarAlt className="text-lg sm:text-xl" />
                 <span className="hidden sm:inline">Book Appointment</span>
                 <span className="sm:hidden">Book Now</span>

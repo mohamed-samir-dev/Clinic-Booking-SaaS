@@ -19,6 +19,7 @@ export default function DoctorsList({ doctors }: DoctorsListProps) {
           isAvailableToday={doctor.isAvailableToday}
           availability={doctor.availability}
           clinicName={doctor.clinicId?.name}
+          quickBook={true}
         />
       ))}
     </div>
