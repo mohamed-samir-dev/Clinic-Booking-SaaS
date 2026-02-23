@@ -110,9 +110,9 @@ export interface Review {
   export interface MobileMenuProps {
     pathname: string;
     user: User | null;
-    lang: Language;
+    locale: 'en' | 'ar';
     theme: Theme;
-    setLang: (lang: Language) => void;
+    toggleLanguage: () => void;
     setTheme: () => void;
     setMobileMenuOpen: (open: boolean) => void;
     handleLogout: () => void;
