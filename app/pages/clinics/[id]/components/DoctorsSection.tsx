@@ -1,13 +1,17 @@
 import { useState } from 'react';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import { Stethoscope, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Doctor } from '../types';
+import { saveQuickBookingData } from '../../../booking/utils/quickBooking';
 
 interface DoctorsSectionProps {
   doctors: Doctor[];
+  theme: 'light' | 'dark';
 }
 
-export default function DoctorsSection({ doctors }: DoctorsSectionProps) {
+export default function DoctorsSection({ doctors, theme }: DoctorsSectionProps) {
+  const router = useRouter();
   const [currentPage, setCurrentPage] = useState(1);
   const doctorsPerPage = 8;
 
@@ -19,14 +23,14 @@ export default function DoctorsSection({ doctors }: DoctorsSectionProps) {
   const totalPages = Math.ceil(doctors.length / doctorsPerPage);
 
   return (
-    <div className="bg-white rounded-xl shadow p-4 sm:p-6">
-      <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-3 sm:mb-4 flex items-center gap-2">
+    <div className={`rounded-xl shadow p-4 sm:p-6 ${theme === 'dark' ? 'bg-gray-800' : 'bg-white'}`}>
+      <h2 className={`text-xl sm:text-2xl font-bold mb-3 sm:mb-4 flex items-center gap-2 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
         <Stethoscope className="text-teal-600" size={20} />
         Our Doctors
       </h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
         {currentDoctors.map((doctor) => (
-          <div key={doctor._id} className="bg-white rounded-xl shadow-md hover:shadow-lg transition-all duration-300 p-3 sm:p-4 border border-gray-100">
+          <div key={doctor._id} className={`rounded-xl shadow-md hover:shadow-lg transition-all duration-300 p-3 sm:p-4 ${theme === 'dark' ? 'bg-gray-700 border-gray-600' : 'bg-white border-gray-100'} border`}>
             <div className="flex items-center gap-3 sm:gap-4">
               <div className="relative w-16 h-16 sm:w-20 sm:h-20 shrink-0">
                 <div className="relative w-full h-full rounded-full overflow-hidden border-2 border-teal-500">
@@ -39,15 +43,27 @@ export default function DoctorsSection({ doctors }: DoctorsSectionProps) {
                 </div>
               </div>
               <div className="flex-1 min-w-0">
-                <h3 className="text-base sm:text-lg font-bold text-gray-900 mb-1 truncate">{doctor.name.en}</h3>
+                <h3 className={`text-base sm:text-lg font-bold mb-1 truncate ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{doctor.name.en}</h3>
                 <p className="text-teal-600 font-semibold text-xs sm:text-sm mb-1 truncate">{doctor.specialty.en}</p>
-                <p className="text-gray-600 text-xs">{doctor.experienceYears} Years Experience</p>
+                <p className={`text-xs ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>{doctor.experienceYears} Years Experience</p>
               </div>
             </div>
             <div className="mt-3 flex flex-col sm:flex-row gap-2">
-              <a href={`/doctors/${doctor._id}/book`} className="flex-1 px-3 py-2 bg-teal-500 text-white rounded-lg hover:bg-teal-600 transition-all font-semibold text-xs sm:text-sm text-center">
+              <button 
+                onClick={() => {
+                  saveQuickBookingData({
+                    doctorId: doctor._id,
+                    doctorName: typeof doctor.name === 'string' ? doctor.name : doctor.name?.en || 'Doctor',
+                    specialty: typeof doctor.specialty === 'string' ? doctor.specialty : doctor.specialty?.en || 'Specialist',
+                    serviceId: typeof doctor.specialty === 'string' ? doctor.specialty : doctor.specialty?.en || 'Specialist',
+                    skipSteps: true
+                  });
+                  router.push('/pages/booking?quick=true');
+                }}
+                className="flex-1 px-3 py-2 bg-teal-500 text-white rounded-lg hover:bg-teal-600 transition-all font-semibold text-xs sm:text-sm text-center"
+              >
                 Book Now
-              </a>
+              </button>
               <a href={`/pages/doctors/${doctor._id}`} className="flex-1 px-3 py-2 border-2 border-teal-500 text-teal-600 rounded-lg hover:bg-teal-50 transition-all font-semibold text-xs sm:text-sm text-center">
                 View Profile
               </a>
@@ -60,17 +76,17 @@ export default function DoctorsSection({ doctors }: DoctorsSectionProps) {
           <button
             onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
             disabled={currentPage === 1}
-            className="p-2 rounded-lg border border-gray-300 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+            className={`p-2 rounded-lg border hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed ${theme === 'dark' ? 'border-gray-600 hover:bg-gray-700' : 'border-gray-300'}`}
           >
             <ChevronLeft size={18} className="sm:w-5 sm:h-5" />
           </button>
-          <span className="text-xs sm:text-sm text-gray-600">
+          <span className={`text-xs sm:text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>
             Page {currentPage} of {totalPages}
           </span>
           <button
             onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
             disabled={currentPage === totalPages}
-            className="p-2 rounded-lg border border-gray-300 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+            className={`p-2 rounded-lg border hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed ${theme === 'dark' ? 'border-gray-600 hover:bg-gray-700' : 'border-gray-300'}`}
           >
             <ChevronRight size={18} className="sm:w-5 sm:h-5" />
           </button>
