@@ -3,35 +3,24 @@
 import { useState } from 'react';
 import { FaPlus, FaMinus } from 'react-icons/fa';
 import { useTheme } from '@/app/contexts/ThemeContext';
-
-const faqData = [
-  {
-    question: 'Do you accept health insurance?',
-    answer: 'Yes, we work with major insurance providers. Please contact us with your provider details to confirm coverage for specific treatments.'
-  },
-  {
-    question: 'How can I reschedule my appointment?',
-    answer: 'You can reschedule your appointment through your patient portal or by calling our clinic directly at least 24 hours in advance.'
-  },
-  {
-    question: 'What should I bring for my first visit?',
-    answer: 'Please bring a valid ID, your insurance card, a list of current medications, and any relevant medical records or test results.'
-  }
-];
+import { useLanguage } from '@/app/contexts/LanguageContext';
+import translations from '@/messages/translations';
 
 export default function FAQ() {
   const { theme } = useTheme();
+  const { locale } = useLanguage();
+  const t = translations[locale].services.faq;
   const [openFaq, setOpenFaq] = useState<number | null>(null);
 
   return (
     <div className={`py-12 sm:py-16 px-4 ${theme === 'dark' ? 'bg-gray-900' : 'bg-gray-50'}`}>
       <div className="max-w-4xl mx-auto">
         <h2 className={`text-2xl sm:text-3xl md:text-4xl font-bold mb-6 sm:mb-8 text-center px-2 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
-          Frequently Asked Questions
+          {t.title}
         </h2>
 
         <div className="space-y-3 sm:space-y-4">
-          {faqData.map((faq, index) => (
+          {t.questions.map((faq, index) => (
             <div key={index} className={`rounded-lg shadow-sm ${theme === 'dark' ? 'bg-gray-800' : 'bg-white'}`}>
               <button
                 onClick={() => setOpenFaq(openFaq === index ? null : index)}
