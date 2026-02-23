@@ -146,17 +146,17 @@ export default function TimeSelection({ selectedTime, setSelectedTime, selectedD
   const canGoNext = currentMonth < new Date(maxMonth.getFullYear(), maxMonth.getMonth(), 1);
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
       <div className="lg:col-span-2">
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-2xl font-bold text-gray-900">Select Date & Time</h2>
-          <div className="flex items-center gap-2 text-sm text-gray-600">
-            <span className="material-icons text-lg">public</span>
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-4 sm:mb-6 gap-2">
+          <h2 className="text-xl sm:text-2xl font-bold text-gray-900">Select Date & Time</h2>
+          <div className="flex items-center gap-2 text-xs sm:text-sm text-gray-600">
+            <span className="material-icons text-base sm:text-lg">public</span>
             <span>Cairo Time (GMT+3)</span>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
           <Calendar
             currentMonth={currentMonth}
             setCurrentMonth={setCurrentMonth}
