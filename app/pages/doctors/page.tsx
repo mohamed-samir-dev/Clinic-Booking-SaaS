@@ -5,6 +5,8 @@ import { useDoctors } from './hooks/useDoctors';
 import { useFilterOptions } from './hooks/useFilterOptions';
 import { useIsMobile } from './hooks/useIsMobile';
 import { useTheme } from '@/app/contexts/ThemeContext';
+import { useLanguage } from '@/app/contexts/LanguageContext';
+import translations from '@/messages/translations';
 import { paginateData, getTotalPages } from './utils/pagination';
 import PageHeader from './components/PageHeader';
 import DoctorFilters from './components/DoctorFilters';
@@ -16,6 +18,8 @@ import Pagination from './components/Pagination';
 
 export default function DoctorsPage() {
   const { theme } = useTheme();
+  const { locale } = useLanguage();
+  const t = translations[locale].doctors.page;
   const [currentPage, setCurrentPage] = useState(1);
   const [filters, setFilters] = useState({
     specialty: '',
@@ -72,10 +76,10 @@ export default function DoctorsPage() {
           <>
             <div className="mb-4 sm:mb-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-0">
               <p className={`text-sm sm:text-base font-semibold ${theme === 'dark' ? 'text-gray-200' : 'text-gray-700'}`}>
-                Found <span className="text-teal-600">{doctors.length}</span> doctor{doctors.length !== 1 ? 's' : ''}
+                {t.found} <span className="text-teal-600">{doctors.length}</span> {doctors.length !== 1 ? t.doctors : t.doctor}
               </p>
               <p className={`text-xs sm:text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>
-                Page {currentPage} of {totalPages}
+                {t.page} {currentPage} {t.of} {totalPages}
               </p>
             </div>
             <DoctorsList doctors={currentDoctors} />
