@@ -3,6 +3,8 @@ import { IconType } from 'react-icons';
 import { IoInformationCircle } from 'react-icons/io5';
 import Link from 'next/link';
 import { useTheme } from '@/app/contexts/ThemeContext';
+import { useLanguage } from '@/app/contexts/LanguageContext';
+import translations from '@/messages/translations';
 
 interface ServiceCardProps {
   icon: IconType;
@@ -13,14 +15,17 @@ interface ServiceCardProps {
 
 export default function ServiceCard({ icon: Icon, title, description, isSelected = false }: ServiceCardProps) {
   const { theme } = useTheme();
+  const { locale } = useLanguage();
+  const t = translations[locale].services;
   const slug = title.toLowerCase().replace(/\s+/g, '-');
+  const isRTL = locale === 'ar';
   
   return (
     <div className={`mb-10 backdrop-blur-md p-[3px] rounded-xl shadow-xl transition-all ${
       isSelected ? 'border-2 border-teal-500' : theme === 'dark' ? 'bg-gray-800/40 border border-gray-700/50 hover:border-gray-600' : 'bg-white/20 border border-white/30 hover:border-white/50'
     }`}>
       <div className={`backdrop-blur-sm p-6 rounded-lg h-full relative ${theme === 'dark' ? 'bg-gray-800/95' : 'bg-white/95'}`}>
-        <div className="absolute top-4 right-4">
+        <div className={`absolute top-4 ${isRTL ? 'left-4' : 'right-4'}`}>
           <IoInformationCircle className="text-teal-500 text-2xl" />
         </div>
         <div className="mb-3">
@@ -32,7 +37,7 @@ export default function ServiceCard({ icon: Icon, title, description, isSelected
         <p className={`font-semibold text-xs md:text-sm mb-4 leading-relaxed ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>{description}</p>
         <Link href={`/pages/services/${slug}`}>
           <button className="bg-teal-500 hover:bg-teal-600 text-white px-5 py-2 rounded-lg transition-colors text-xs md:text-sm font-semibold">
-            More Details
+            {t.viewMore}
           </button>
         </Link>
       </div>
