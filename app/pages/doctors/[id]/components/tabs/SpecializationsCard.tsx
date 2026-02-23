@@ -30,7 +30,7 @@ export default function SpecializationsCard({ specializations }: Specializations
   if (!specializations || specializations.length === 0) return null;
 
   return (
-    <div className={`rounded-xl sm:rounded-2xl shadow-lg border p-5 sm:p-6 md:p-8 mt-4 sm:mt-6 ${theme === 'dark' ? 'bg-gradient-to-br from-gray-800 via-gray-700 to-gray-800 border-teal-700' : 'bg-linear-to-br from-teal-50 via-cyan-50 to-blue-50 border-teal-200'}`}>
+    <div className={`rounded-xl sm:rounded-2xl shadow-lg border p-5 sm:p-6 md:p-8 mt-4 sm:mt-6 ${theme === 'dark' ? 'bg-linear-to-br from-gray-800 via-gray-700 to-gray-800 border-teal-700' : 'bg-linear-to-br from-teal-50 via-cyan-50 to-blue-50 border-teal-200'}`}>
       <div className="flex items-center gap-2 sm:gap-3 mb-4 sm:mb-6">
         <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl bg-linear-to-br from-teal-500 to-cyan-500 flex items-center justify-center shadow-md">
           <FaStethoscope className="text-white text-lg sm:text-xl" />
