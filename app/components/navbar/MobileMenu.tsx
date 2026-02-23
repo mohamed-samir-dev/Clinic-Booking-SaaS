@@ -21,7 +21,7 @@ export default function MobileMenu({
       <Link
         href="/book"
         onClick={() => setMobileMenuOpen(false)}
-        className="min-[500px]:hidden mt-4 block px-6 py-2.5 bg-[#2D8BDA] rounded-full text-white hover:bg-[#1F70B2] transition-colors font-semibold shadow-md text-center"
+        className="min-[500px]:hidden mt-4 block px-6 py-2.5 bg-teal-600 rounded-full text-white hover:bg-teal-800 transition-colors font-semibold shadow-md text-center"
       >
         Book Now
       </Link>
@@ -36,7 +36,7 @@ export default function MobileMenu({
               href={href}
               onClick={() => setMobileMenuOpen(false)}
               className={`px-4 py-2 rounded-lg transition-all font-medium ${
-                isActive ? 'text-teal-600 bg-teal-50' : 'text-gray-700 hover:text-teal-700 hover:bg-gray-50'
+                isActive ? 'text-teal-600 bg-teal-50' : theme === 'dark' ? 'text-gray-200 hover:text-teal-400 hover:bg-gray-800' : 'text-gray-700 hover:text-teal-700 hover:bg-gray-50'
               }`}
             >
               {item}
@@ -47,7 +47,7 @@ export default function MobileMenu({
 
       <div className="min-[350px]:hidden flex items-center gap-2 mt-4 px-4 py-3 bg-gray-50 rounded-lg">
         <button
-          onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}
+          onClick={setTheme}
           className="flex-1 py-2 rounded-lg bg-white hover:bg-gray-100 flex items-center justify-center text-gray-700 transition-all"
         >
           {theme === 'light' ? <Moon size={18} /> : <Sun size={18} />}
