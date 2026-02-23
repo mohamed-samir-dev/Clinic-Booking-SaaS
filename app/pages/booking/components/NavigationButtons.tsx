@@ -1,20 +1,26 @@
 import Image from 'next/image';
 import { getDoctorName, getDoctorSpecialty } from '../utils/doctorHelpers';
 import {NavigationButtonsProps}from '../types/type'
+import { useTheme } from '@/app/contexts/ThemeContext';
 
 export default function NavigationButtons({
   currentStep, selectedService, setSelectedService,
   selectedDoctor, setSelectedDoctor, selectedTime,
   doctors, handleBack, handleNext, onFinishBooking, isSubmitting, canSubmit
 }: NavigationButtonsProps & { onFinishBooking?: () => void; isSubmitting?: boolean; canSubmit?: boolean }) {
+  const { theme } = useTheme();
   return (
-    <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-2 sm:p-4 shadow-lg z-40">
+    <div className={`fixed bottom-0 left-0 right-0 border-t p-2 sm:p-4 shadow-lg z-40 ${
+      theme === 'dark' ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'
+    }`}>
       <div className="max-w-full mx-auto px-2 sm:px-4">
         <div className="flex justify-between items-center gap-2 sm:gap-4">
           {currentStep > 1 ? (
             <button
               onClick={handleBack}
-              className="flex items-center gap-1 sm:gap-2 px-3 sm:px-6 py-2 sm:py-3 rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold transition-all text-xs sm:text-sm"
+              className={`flex items-center gap-1 sm:gap-2 px-3 sm:px-6 py-2 sm:py-3 rounded-xl font-semibold transition-all text-xs sm:text-sm ${
+                theme === 'dark' ? 'bg-gray-700 hover:bg-gray-600 text-gray-200' : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
+              }`}
             >
               <span className="material-icons text-base sm:text-lg">arrow_back</span>
               <span className="hidden sm:inline">Back</span>
@@ -22,12 +28,16 @@ export default function NavigationButtons({
           ) : <div></div>}
           
           {currentStep === 1 && selectedService && (
-            <div className="flex items-center bg-linear-to-r from-teal-50 to-cyan-50 border-2 border-teal-200 rounded-xl px-2 sm:px-5 py-2 sm:py-3 shadow-sm max-w-[200px] sm:max-w-none">
+            <div className={`flex items-center border-2 rounded-xl px-2 sm:px-5 py-2 sm:py-3 shadow-sm max-w-[200px] sm:max-w-none ${
+              theme === 'dark' ? 'bg-teal-900/30 border-teal-700' : 'bg-linear-to-r from-teal-50 to-cyan-50 border-teal-200'
+            }`}>
               <div className="w-2 h-2 bg-teal-500 rounded-full mr-2 sm:mr-3 shrink-0"></div>
-              <span className="text-teal-800 font-semibold text-xs sm:text-sm truncate">{selectedService}</span>
+              <span className={`font-semibold text-xs sm:text-sm truncate ${theme === 'dark' ? 'text-teal-300' : 'text-teal-800'}`}>{selectedService}</span>
               <button
                 onClick={() => setSelectedService('')}
-                className="ml-2 sm:ml-3 w-5 h-5 sm:w-6 sm:h-6 bg-teal-100 hover:bg-teal-200 rounded-full flex items-center justify-center text-teal-600 hover:text-teal-800 transition-all duration-200 text-xs font-bold shrink-0"
+                className={`ml-2 sm:ml-3 w-5 h-5 sm:w-6 sm:h-6 rounded-full flex items-center justify-center transition-all duration-200 text-xs font-bold shrink-0 ${
+                  theme === 'dark' ? 'bg-teal-800 hover:bg-teal-700 text-teal-300 hover:text-teal-200' : 'bg-teal-100 hover:bg-teal-200 text-teal-600 hover:text-teal-800'
+                }`}
               >
                 ✕
               </button>
@@ -40,7 +50,9 @@ export default function NavigationButtons({
             const doctorName = getDoctorName(doctor.name);
             const doctorSpecialty = getDoctorSpecialty(doctor.specialty);
             return (
-              <div className="flex items-center bg-linear-to-r from-teal-50 to-cyan-50 border-2 border-teal-200 rounded-xl px-2 sm:px-4 py-2 shadow-sm max-w-[250px] sm:max-w-none">
+              <div className={`flex items-center border-2 rounded-xl px-2 sm:px-4 py-2 shadow-sm max-w-[250px] sm:max-w-none ${
+                theme === 'dark' ? 'bg-teal-900/30 border-teal-700' : 'bg-linear-to-r from-teal-50 to-cyan-50 border-teal-200'
+              }`}>
                 <Image
                   src={doctor.photoUrl}
                   alt={doctorName}
@@ -49,12 +61,14 @@ export default function NavigationButtons({
                   className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg object-cover shrink-0"
                 />
                 <div className="flex-1 ml-2 sm:ml-3 min-w-0">
-                  <p className="font-semibold text-gray-900 text-xs sm:text-sm truncate">{doctorName}</p>
-                  <p className="text-[10px] sm:text-xs text-gray-600 truncate">{doctorSpecialty}</p>
+                  <p className={`font-semibold text-xs sm:text-sm truncate ${theme === 'dark' ? 'text-gray-200' : 'text-gray-900'}`}>{doctorName}</p>
+                  <p className={`text-[10px] sm:text-xs truncate ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>{doctorSpecialty}</p>
                 </div>
                 <button
                   onClick={() => setSelectedDoctor('')}
-                  className="w-5 h-5 sm:w-6 sm:h-6 bg-teal-100 hover:bg-teal-200 rounded-full flex items-center justify-center text-teal-600 hover:text-teal-800 transition-all text-xs font-bold ml-2 shrink-0"
+                  className={`w-5 h-5 sm:w-6 sm:h-6 rounded-full flex items-center justify-center transition-all text-xs font-bold ml-2 shrink-0 ${
+                    theme === 'dark' ? 'bg-teal-800 hover:bg-teal-700 text-teal-300 hover:text-teal-200' : 'bg-teal-100 hover:bg-teal-200 text-teal-600 hover:text-teal-800'
+                  }`}
                 >
                   ✕
                 </button>
