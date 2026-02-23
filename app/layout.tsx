@@ -5,6 +5,7 @@ import Navbar from "@/app/components/navbar/Navbar";
 import Footer from "@/app/components/footer/Footer";
 import { ReduxProvider } from "./store/ReduxProvider";
 import { ThemeProvider } from "./contexts/ThemeContext";
+import { LanguageProvider } from "./contexts/LanguageContext";
 import { usePathname } from "next/navigation";
 
 const geistSans = Geist({
@@ -37,11 +38,13 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <ReduxProvider>
-          <ThemeProvider>
-            {!isDoctorPage && <Navbar />}
-            {children}
-            {!isOwnerPage && !isDoctorPage && <Footer />}
-          </ThemeProvider>
+          <LanguageProvider>
+            <ThemeProvider>
+              {!isDoctorPage && <Navbar />}
+              {children}
+              {!isOwnerPage && !isDoctorPage && <Footer />}
+            </ThemeProvider>
+          </LanguageProvider>
         </ReduxProvider>
       </body>
     </html>
