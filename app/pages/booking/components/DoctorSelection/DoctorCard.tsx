@@ -12,64 +12,64 @@ export default function DoctorCard({ doctor, selectedDoctor, onSelect }: DoctorC
 
   return (
     <div
-      className={`bg-white rounded-xl shadow-md hover:shadow-lg transition-all p-4 border-2 ${
+      className={`bg-white rounded-xl shadow-md hover:shadow-lg transition-all p-3 sm:p-4 border-2 ${
         selectedDoctor === doctor._id ? 'border-teal-500' : 'border-gray-200'
       }`}
     >
-      <div className="flex gap-4">
+      <div className="flex gap-3 sm:gap-4">
         <div className="shrink-0">
           <Image
             src={doctor.photoUrl}
             alt={doctorName}
             width={128}
             height={128}
-            className="w-32 h-32 rounded-lg object-cover"
+            className="w-20 h-20 sm:w-24 sm:h-24 lg:w-28 lg:h-28 xl:w-32 xl:h-32 rounded-lg object-cover"
           />
         </div>
         
-        <div className="flex-1 flex flex-col justify-between">
+        <div className="flex-1 flex flex-col justify-between min-w-0">
           <div>
-            <div className="flex items-center justify-between mb-1">
-              <h3 className="text-xl font-bold text-gray-900">{doctorName}</h3>
-              <span className="text-lg font-bold text-teal-600">${doctor.fees}</span>
+            <div className="flex items-center justify-between mb-1 gap-2">
+              <h3 className="text-base sm:text-lg lg:text-xl font-bold text-gray-900 truncate">{doctorName}</h3>
+              <span className="text-sm sm:text-base lg:text-lg font-bold text-teal-600 shrink-0">${doctor.fees}</span>
             </div>
-            <p className="text-gray-600 text-sm mb-2">{doctorSpecialty}</p>
-            <div className="flex items-center gap-4 mb-2">
+            <p className="text-gray-600 text-xs sm:text-sm mb-2 truncate">{doctorSpecialty}</p>
+            <div className="flex items-center gap-3 sm:gap-4 mb-2">
               <div className="flex items-center gap-1">
-                <span className="text-yellow-500">★</span>
-                <span className="text-sm font-semibold text-gray-700">4.8</span>
+                <span className="text-yellow-500 text-sm">★</span>
+                <span className="text-xs sm:text-sm font-semibold text-gray-700">4.8</span>
               </div>
               <div className="flex items-center gap-1">
-                <span className="text-teal-600 text-sm font-semibold">{doctor.experienceYears} Years</span>
+                <span className="text-teal-600 text-xs sm:text-sm font-semibold">{doctor.experienceYears} Years</span>
               </div>
             </div>
           </div>
           
           <div className="space-y-2">
             {nextAvailable ? (
-              <div className="bg-green-50 border border-green-200 rounded-lg px-3 py-2">
-                <p className="text-xs text-gray-600 mb-0.5">Next Available</p>
-                <p className="text-sm font-semibold text-green-700">
+              <div className="bg-green-50 border border-green-200 rounded-lg px-2 sm:px-3 py-1.5 sm:py-2">
+                <p className="text-[10px] sm:text-xs text-gray-600 mb-0.5">Next Available</p>
+                <p className="text-xs sm:text-sm font-semibold text-green-700 truncate">
                   {nextAvailable.isToday ? 'Today' : nextAvailable.day.charAt(0).toUpperCase() + nextAvailable.day.slice(1)}
                   {' '}{nextAvailable.workingHours.from} - {nextAvailable.workingHours.to}
                 </p>
               </div>
             ) : (
-              <div className="bg-gray-50 border border-gray-200 rounded-lg px-3 py-2">
-                <p className="text-sm text-gray-500">No availability</p>
+              <div className="bg-gray-50 border border-gray-200 rounded-lg px-2 sm:px-3 py-1.5 sm:py-2">
+                <p className="text-xs sm:text-sm text-gray-500">No availability</p>
               </div>
             )}
             
             <div className="flex gap-2">
               <Link href={`/pages/doctors/${doctor._id}`} className="flex-1">
-                <button className="w-full px-3 py-2 rounded-lg font-semibold transition-all bg-gray-100 text-gray-700 hover:bg-gray-200 flex items-center justify-center gap-1">
-                  <Eye className="w-4 h-4" />
-                  View
+                <button className="w-full px-2 sm:px-3 py-1.5 sm:py-2 rounded-lg font-semibold transition-all bg-gray-100 text-gray-700 hover:bg-gray-200 flex items-center justify-center gap-1 text-xs sm:text-sm">
+                  <Eye className="w-3 h-3 sm:w-4 sm:h-4" />
+                  <span className="hidden sm:inline">View</span>
                 </button>
               </Link>
               <button
                 onClick={() => onSelect(doctor._id)}
-                className={`flex-1 px-3 py-2 rounded-lg font-semibold transition-all ${
+                className={`flex-1 px-2 sm:px-3 py-1.5 sm:py-2 rounded-lg font-semibold transition-all text-xs sm:text-sm ${
                   selectedDoctor === doctor._id
                     ? 'bg-teal-500 text-white'
                     : 'bg-gray-100 text-gray-700 hover:bg-teal-50 hover:text-teal-600'
