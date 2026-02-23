@@ -1,16 +1,18 @@
-
 import {PasswordStrengthIndicatorProps} from '../types/register';
+import { useTheme } from '@/app/contexts/ThemeContext';
+
 export const PasswordStrengthIndicator = ({ password, passwordStrength, getStrengthColor, getStrengthLabel }: PasswordStrengthIndicatorProps) => {
+  const { theme } = useTheme();
   if (!password) return null;
 
   return (
-    <div className="mt-3">
-      <div className="flex gap-1.5 mb-2">
+    <div className="mt-2 sm:mt-3">
+      <div className="flex gap-1 sm:gap-1.5 mb-1.5 sm:mb-2">
         {[1, 2, 3, 4].map((level) => (
           <div
             key={level}
-            className={`h-1.5 flex-1 rounded-full transition-all duration-300 ${
-              level <= passwordStrength ? getStrengthColor() : 'bg-gray-200'
+            className={`h-1 sm:h-1.5 flex-1 rounded-full transition-all duration-300 ${
+              level <= passwordStrength ? getStrengthColor() : theme === 'dark' ? 'bg-gray-600' : 'bg-gray-200'
             }`}
           />
         ))}
