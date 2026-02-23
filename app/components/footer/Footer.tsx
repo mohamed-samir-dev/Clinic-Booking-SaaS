@@ -4,9 +4,13 @@ import { FaHeartbeat, FaEnvelope, FaPhone, FaMapMarkerAlt } from 'react-icons/fa
 import { FaXTwitter, FaFacebook, FaInstagram, FaLinkedin, FaGithub, FaWhatsapp } from 'react-icons/fa6';
 import { useState } from 'react';
 import { useTheme } from '../../contexts/ThemeContext';
+import { useLanguage } from '../../contexts/LanguageContext';
+import translations from '@/messages/translations';
 
 export default function Footer() {
   const { theme } = useTheme();
+  const { locale } = useLanguage();
+  const t = translations[locale].footer;
   const [showPopup, setShowPopup] = useState(false);
 
   return (
@@ -26,30 +30,30 @@ export default function Footer() {
               </span>
             </Link>
             <p className="text-sm sm:text-base text-gray-400 leading-relaxed font-medium">
-              Your trusted healthcare partner. Book appointments with top doctors and manage your health seamlessly.
+              {t.about}
             </p>
           </div>
 
           {/* Quick Links */}
           <div>
-            <h4 className="text-white font-bold mb-3 sm:mb-4 text-base sm:text-lg">Quick Links</h4>
+            <h4 className="text-white font-bold mb-3 sm:mb-4 text-base sm:text-lg">{t.quickLinks}</h4>
             <ul className="space-y-1.5 sm:space-y-2">
-              <li><Link href="/" className="text-sm sm:text-base hover:text-teal-500 transition-colors font-medium">Home</Link></li>
-              <li><Link href="/pages/services" className="text-sm sm:text-base hover:text-teal-500 transition-colors font-medium">Services</Link></li>
-              <li><Link href="/pages/doctors" className="text-sm sm:text-base hover:text-teal-500 transition-colors font-medium">Doctors</Link></li>
-              <li><Link href="/pages/about" className="text-sm sm:text-base hover:text-teal-500 transition-colors font-medium">About Us</Link></li>
-              <li><Link href="/pages/contact" className="text-sm sm:text-base hover:text-teal-500 transition-colors font-medium">Contact</Link></li>
-              <li><Link href="/pages/booking" className="text-sm sm:text-base hover:text-teal-500 transition-colors font-medium">Book Appointment</Link></li>
+              <li><Link href="/" className="text-sm sm:text-base hover:text-teal-500 transition-colors font-medium">{t.home}</Link></li>
+              <li><Link href="/pages/services" className="text-sm sm:text-base hover:text-teal-500 transition-colors font-medium">{t.services}</Link></li>
+              <li><Link href="/pages/doctors" className="text-sm sm:text-base hover:text-teal-500 transition-colors font-medium">{t.doctors}</Link></li>
+              <li><Link href="/pages/about" className="text-sm sm:text-base hover:text-teal-500 transition-colors font-medium">{t.aboutUs}</Link></li>
+              <li><Link href="/pages/contact" className="text-sm sm:text-base hover:text-teal-500 transition-colors font-medium">{t.contact}</Link></li>
+              <li><Link href="/pages/booking" className="text-sm sm:text-base hover:text-teal-500 transition-colors font-medium">{t.bookAppointment}</Link></li>
             </ul>
           </div>
 
           {/* Contact */}
           <div>
-            <h4 className="text-white font-bold mb-3 sm:mb-4 text-base sm:text-lg">Contact Us</h4>
+            <h4 className="text-white font-bold mb-3 sm:mb-4 text-base sm:text-lg">{t.contactUs}</h4>
             <ul className="space-y-2 sm:space-y-3">
               <li className="flex items-start gap-2 text-sm sm:text-base font-medium">
                 <FaMapMarkerAlt className="text-teal-500 mt-1 shrink-0 text-sm sm:text-base" />
-                <span>123 Mansoura, Egypt</span>
+                <span>{t.address}</span>
               </li>
               <li className="flex items-center gap-2 text-sm sm:text-base font-medium">
                 <FaPhone className="text-teal-500 shrink-0 text-sm sm:text-base" />
@@ -64,7 +68,7 @@ export default function Footer() {
 
           {/* Social */}
           <div>
-            <h4 className="text-white font-bold mb-3 sm:mb-4 text-base sm:text-lg">Follow Us</h4>
+            <h4 className="text-white font-bold mb-3 sm:mb-4 text-base sm:text-lg">{t.followUs}</h4>
             <div className="flex gap-2.5 sm:gap-3">
               {[
                 { icon: FaFacebook },
@@ -89,16 +93,16 @@ export default function Footer() {
       <div className="border-t border-gray-800">
         <div className="w-full px-4 sm:px-6 md:px-8 py-4 sm:py-5 md:py-6">
           <div className="flex flex-col md:flex-row justify-between items-center gap-3 sm:gap-4 text-sm sm:text-base text-gray-400">
-            <p className="font-medium text-center md:text-left">&copy; 2026 CareSync. All rights reserved.</p>
+            <p className="font-medium text-center md:text-left">&copy; {t.copyright}</p>
             <div className="flex flex-wrap justify-center gap-4 sm:gap-6">
               <Link href="/privacy" className="hover:text-teal-500 transition-colors font-medium">
-                Privacy Policy
+                {t.privacyPolicy}
               </Link>
               <Link href="/terms" className="hover:text-teal-500 transition-colors font-medium">
-                Terms of Service
+                {t.termsOfService}
               </Link>
               <Link href="/cookies" className="hover:text-teal-500 transition-colors font-medium">
-                Cookie Policy
+                {t.cookiePolicy}
               </Link>
             </div>
           </div>
@@ -121,14 +125,13 @@ export default function Footer() {
                 <FaHeartbeat className={`text-3xl ${theme === 'dark' ? 'text-white' : 'text-teal-600'}`} />
               </div>
               
-              <h3 className="text-2xl font-bold mb-3">Demo Project</h3>
+              <h3 className="text-2xl font-bold mb-3">{t.demoProject}</h3>
               <p className={`mb-6 leading-relaxed ${theme === 'dark' ? 'text-gray-300' : 'text-teal-50'}`}>
-                This is a demonstration project showcasing full-stack development capabilities. 
-                Built with modern technologies to deliver exceptional user experiences.
+                {t.demoDescription}
               </p>
               
               <div className={`rounded-lg p-4 mb-6 ${theme === 'dark' ? 'bg-gray-700' : 'bg-white bg-opacity-10'}`}>
-                <p className={`text-sm font-semibold mb-3 ${theme === 'dark' ? 'text-teal-400' : 'text-teal-700'}`}>Developed by Mohammed Samier Mouawad</p>
+                <p className={`text-sm font-semibold mb-3 ${theme === 'dark' ? 'text-teal-400' : 'text-teal-700'}`}>{t.developedBy}</p>
                 <div className="flex justify-center gap-3">
                   <a
                     href="https://my-newfrontend-portfolio.vercel.app/"
@@ -175,7 +178,7 @@ export default function Footer() {
                 rel="noopener noreferrer"
                 className={`inline-block px-6 py-3 rounded-lg font-semibold transition-colors ${theme === 'dark' ? 'bg-teal-600 text-white hover:bg-teal-700' : 'bg-white text-teal-700 hover:bg-teal-50'}`}
               >
-                View Portfolio
+                {t.viewPortfolio}
               </a>
             </div>
           </div>
