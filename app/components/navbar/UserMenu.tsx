@@ -1,17 +1,23 @@
 import Link from 'next/link';
 import { FaUser } from 'react-icons/fa';
 import { UserMenuProps } from '../../types/index';
+import { useLanguage } from '@/app/contexts/LanguageContext';
+import messages from '@/messages/en.json';
+import messagesAr from '@/messages/ar.json';
 
 
 
 export default function UserMenu({ user, showDropdown, setShowDropdown, handleLogout }: UserMenuProps) {
+  const { locale } = useLanguage();
+  const t = locale === 'ar' ? messagesAr.navbar : messages.navbar;
+
   if (!user) {
     return (
       <Link
         href="/pages/login"
         className="hidden xl:block px-7 py-2.5 bg-teal-600 rounded-full text-white hover:bg-teal-800 transition-colors font-semibold shadow-md hover:shadow-lg"
       >
-        Log In
+        {t.login}
       </Link>
     );
   }
@@ -34,7 +40,7 @@ export default function UserMenu({ user, showDropdown, setShowDropdown, handleLo
             onClick={handleLogout}
             className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors"
           >
-            Logout
+            {t.logout}
           </button>
         </div>
       )}
