@@ -3,18 +3,20 @@ import Link from 'next/link';
 import { Eye } from 'lucide-react';
 import { getNextAvailableDay, getDoctorName, getDoctorSpecialty } from '../../utils/doctorHelpers';
 import {DoctorCardProps}from '../../types/type'
+import { useTheme } from '@/app/contexts/ThemeContext';
 
 
 export default function DoctorCard({ doctor, selectedDoctor, onSelect }: DoctorCardProps) {
+  const { theme } = useTheme();
   const nextAvailable = getNextAvailableDay(doctor.availability || []);
   const doctorName = getDoctorName(doctor.name);
   const doctorSpecialty = getDoctorSpecialty(doctor.specialty);
 
   return (
     <div
-      className={`bg-white rounded-xl shadow-md hover:shadow-lg transition-all p-3 sm:p-4 border-2 ${
-        selectedDoctor === doctor._id ? 'border-teal-500' : 'border-gray-200'
-      }`}
+      className={`rounded-xl shadow-md hover:shadow-lg transition-all p-3 sm:p-4 border-2 ${
+        selectedDoctor === doctor._id ? 'border-teal-500' : theme === 'dark' ? 'border-gray-700' : 'border-gray-200'
+      } ${theme === 'dark' ? 'bg-gray-800' : 'bg-white'}`}
     >
       <div className="flex gap-3 sm:gap-4">
         <div className="shrink-0">
@@ -30,14 +32,14 @@ export default function DoctorCard({ doctor, selectedDoctor, onSelect }: DoctorC
         <div className="flex-1 flex flex-col justify-between min-w-0">
           <div>
             <div className="flex items-center justify-between mb-1 gap-2">
-              <h3 className="text-base sm:text-lg lg:text-xl font-bold text-gray-900 truncate">{doctorName}</h3>
+              <h3 className={`text-base sm:text-lg lg:text-xl font-bold truncate ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{doctorName}</h3>
               <span className="text-sm sm:text-base lg:text-lg font-bold text-teal-600 shrink-0">${doctor.fees}</span>
             </div>
-            <p className="text-gray-600 text-xs sm:text-sm mb-2 truncate">{doctorSpecialty}</p>
+            <p className={`text-xs sm:text-sm mb-2 truncate ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>{doctorSpecialty}</p>
             <div className="flex items-center gap-3 sm:gap-4 mb-2">
               <div className="flex items-center gap-1">
                 <span className="text-yellow-500 text-sm">★</span>
-                <span className="text-xs sm:text-sm font-semibold text-gray-700">4.8</span>
+                <span className={`text-xs sm:text-sm font-semibold ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>4.8</span>
               </div>
               <div className="flex items-center gap-1">
                 <span className="text-teal-600 text-xs sm:text-sm font-semibold">{doctor.experienceYears} Years</span>
@@ -55,14 +57,18 @@ export default function DoctorCard({ doctor, selectedDoctor, onSelect }: DoctorC
                 </p>
               </div>
             ) : (
-              <div className="bg-gray-50 border border-gray-200 rounded-lg px-2 sm:px-3 py-1.5 sm:py-2">
-                <p className="text-xs sm:text-sm text-gray-500">No availability</p>
+              <div className={`border rounded-lg px-2 sm:px-3 py-1.5 sm:py-2 ${
+                theme === 'dark' ? 'bg-gray-700 border-gray-600' : 'bg-gray-50 border-gray-200'
+              }`}>
+                <p className={`text-xs sm:text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>No availability</p>
               </div>
             )}
             
             <div className="flex gap-2">
               <Link href={`/pages/doctors/${doctor._id}`} className="flex-1">
-                <button className="w-full px-2 sm:px-3 py-1.5 sm:py-2 rounded-lg font-semibold transition-all bg-gray-100 text-gray-700 hover:bg-gray-200 flex items-center justify-center gap-1 text-xs sm:text-sm">
+                <button className={`w-full px-2 sm:px-3 py-1.5 sm:py-2 rounded-lg font-semibold transition-all flex items-center justify-center gap-1 text-xs sm:text-sm ${
+                  theme === 'dark' ? 'bg-gray-700 text-gray-200 hover:bg-gray-600' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                }`}>
                   <Eye className="w-3 h-3 sm:w-4 sm:h-4" />
                   <span className="hidden sm:inline">View</span>
                 </button>
@@ -72,7 +78,7 @@ export default function DoctorCard({ doctor, selectedDoctor, onSelect }: DoctorC
                 className={`flex-1 px-2 sm:px-3 py-1.5 sm:py-2 rounded-lg font-semibold transition-all text-xs sm:text-sm ${
                   selectedDoctor === doctor._id
                     ? 'bg-teal-500 text-white'
-                    : 'bg-gray-100 text-gray-700 hover:bg-teal-50 hover:text-teal-600'
+                    : theme === 'dark' ? 'bg-gray-700 text-gray-200 hover:bg-teal-900/50 hover:text-teal-300' : 'bg-gray-100 text-gray-700 hover:bg-teal-50 hover:text-teal-600'
                 }`}
               >
                 {selectedDoctor === doctor._id ? 'Selected' : 'Select'}
