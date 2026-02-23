@@ -4,6 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { FaUserMd, FaCalendarCheck, FaCalendarTimes, FaBriefcase, FaClock, FaHospital } from 'react-icons/fa';
+import { useTheme } from '@/app/contexts/ThemeContext';
 import {DoctorCardProps}from '../../types/index'
 import { saveQuickBookingData } from '../../pages/booking/utils/quickBooking';
 
@@ -86,6 +87,7 @@ export default function DoctorCard({
   hideBookButton = false,
   quickBook = false
 }: DoctorCardProps & { hideBookButton?: boolean; quickBook?: boolean }) {
+  const { theme } = useTheme();
   const router = useRouter();
   const nextAvailable = getNextAvailableDay(availability);
   const isCurrentlyAvailable = checkIsAvailableNow(availability);
@@ -102,7 +104,7 @@ export default function DoctorCard({
   };
   
   return (
-    <div className="bg-white mb-8 sm:mb-10 rounded-2xl sm:rounded-3xl shadow-md hover:shadow-2xl transition-all duration-500 p-5 sm:p-6 md:p-8 group border border-gray-100">
+    <div className={`mb-8 sm:mb-10 rounded-2xl sm:rounded-3xl shadow-md hover:shadow-2xl transition-all duration-500 p-5 sm:p-6 md:p-8 group ${theme === 'dark' ? 'bg-gray-700 border-gray-600' : 'bg-white border-gray-100'} border`}>
       <div className="flex flex-col items-center">
         <div className="relative w-24 h-24 sm:w-28 sm:h-28 md:w-32 md:h-32 mb-4 sm:mb-5">
           <div className="absolute inset-0 bg-linear-to-br from-teal-400 to-teal-600 rounded-full animate-pulse opacity-20"></div>
@@ -111,6 +113,7 @@ export default function DoctorCard({
               src={photoUrl}
               alt={name.en}
               fill
+              sizes="(max-width: 640px) 96px, (max-width: 768px) 112px, 128px"
               className="object-cover"
             />
           </div>
@@ -125,7 +128,7 @@ export default function DoctorCard({
           </div>
         </div>
         
-        <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-gray-900 mb-1 text-center">{name.en}</h3>
+        <h3 className={`text-lg sm:text-xl md:text-2xl font-bold mb-1 text-center ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{name.en}</h3>
         
         <div className="flex items-center gap-1.5 sm:gap-2 text-teal-600 font-semibold mb-2">
           <FaUserMd className="text-base sm:text-lg" />
@@ -139,16 +142,16 @@ export default function DoctorCard({
           </div>
         )}
         
-        <div className="flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 bg-teal-50 rounded-full mb-3">
+        <div className={`flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full mb-3 ${theme === 'dark' ? 'bg-teal-900/30' : 'bg-teal-50'}`}>
           <FaBriefcase className="text-teal-600 text-xs sm:text-sm" />
-          <span className="text-xs sm:text-sm font-bold text-gray-700">{experienceYears} Years Experience</span>
+          <span className={`text-xs sm:text-sm font-bold ${theme === 'dark' ? 'text-gray-200' : 'text-gray-700'}`}>{experienceYears} Years Experience</span>
         </div>
         
         {nextAvailable && (
-          <div className="w-full mb-4 px-3 py-2 bg-linear-to-r from-green-50 to-emerald-50 rounded-lg border border-green-200">
+          <div className={`w-full mb-4 px-3 py-2 rounded-lg border ${theme === 'dark' ? 'bg-green-900/20 border-green-700' : 'bg-linear-to-r from-green-50 to-emerald-50 border-green-200'}`}>
             <div className="flex items-center gap-2 justify-center">
               <FaClock className="text-green-600 text-sm" />
-              <span className="text-xs sm:text-sm font-semibold text-gray-700">
+              <span className={`text-xs sm:text-sm font-semibold ${theme === 'dark' ? 'text-gray-200' : 'text-gray-700'}`}>
                 Next Available: {nextAvailable.isToday ? 'Today' : nextAvailable.day.charAt(0).toUpperCase() + nextAvailable.day.slice(1)}
                 {' '}
                 <span className="text-green-600">
