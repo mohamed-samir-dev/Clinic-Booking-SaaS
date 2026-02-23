@@ -1,9 +1,11 @@
 'use client';
 import Link from 'next/link';
 import { FaHeartbeat, FaEnvelope, FaPhone, FaMapMarkerAlt } from 'react-icons/fa';
-import { FaXTwitter, FaFacebook, FaInstagram, FaLinkedin } from 'react-icons/fa6';
+import { FaXTwitter, FaFacebook, FaInstagram, FaLinkedin, FaGithub, FaWhatsapp } from 'react-icons/fa6';
+import { useState } from 'react';
 
 export default function Footer() {
+  const [showPopup, setShowPopup] = useState(false);
 
   return (
     <footer className="bg-gray-900 text-gray-300">
@@ -30,16 +32,12 @@ export default function Footer() {
           <div>
             <h4 className="text-white font-bold mb-3 sm:mb-4 text-base sm:text-lg">Quick Links</h4>
             <ul className="space-y-1.5 sm:space-y-2">
-              {['Home', 'Services', 'Doctors', 'About Us', 'Contact', 'Book Appointment', 'Emergency Care'].map((item) => (
-                <li key={item}>
-                  <Link
-                    href={item === 'Home' ? '/' : `/${item.toLowerCase().replace(' ', '-')}`}
-                    className="text-sm sm:text-base hover:text-teal-500 transition-colors font-medium"
-                  >
-                    {item}
-                  </Link>
-                </li>
-              ))}
+              <li><Link href="/" className="text-sm sm:text-base hover:text-teal-500 transition-colors font-medium">Home</Link></li>
+              <li><Link href="/pages/services" className="text-sm sm:text-base hover:text-teal-500 transition-colors font-medium">Services</Link></li>
+              <li><Link href="/pages/doctors" className="text-sm sm:text-base hover:text-teal-500 transition-colors font-medium">Doctors</Link></li>
+              <li><Link href="/pages/about" className="text-sm sm:text-base hover:text-teal-500 transition-colors font-medium">About Us</Link></li>
+              <li><Link href="/pages/contact" className="text-sm sm:text-base hover:text-teal-500 transition-colors font-medium">Contact</Link></li>
+              <li><Link href="/pages/booking" className="text-sm sm:text-base hover:text-teal-500 transition-colors font-medium">Book Appointment</Link></li>
             </ul>
           </div>
 
@@ -49,11 +47,11 @@ export default function Footer() {
             <ul className="space-y-2 sm:space-y-3">
               <li className="flex items-start gap-2 text-sm sm:text-base font-medium">
                 <FaMapMarkerAlt className="text-teal-500 mt-1 shrink-0 text-sm sm:text-base" />
-                <span>123 Medical Street, Healthcare City</span>
+                <span>123 Mansoura, Egypt</span>
               </li>
               <li className="flex items-center gap-2 text-sm sm:text-base font-medium">
                 <FaPhone className="text-teal-500 shrink-0 text-sm sm:text-base" />
-                <span>+1 (555) 123-4567</span>
+                <span>+201012486445</span>
               </li>
               <li className="flex items-center gap-2 text-sm sm:text-base font-medium">
                 <FaEnvelope className="text-teal-500 shrink-0 text-sm sm:text-base" />
@@ -67,18 +65,18 @@ export default function Footer() {
             <h4 className="text-white font-bold mb-3 sm:mb-4 text-base sm:text-lg">Follow Us</h4>
             <div className="flex gap-2.5 sm:gap-3">
               {[
-                { icon: FaFacebook, href: '#' },
-                { icon: FaXTwitter, href: '#' },
-                { icon: FaInstagram, href: '#' },
-                { icon: FaLinkedin, href: '#' },
+                { icon: FaFacebook },
+                { icon: FaXTwitter },
+                { icon: FaInstagram },
+                { icon: FaLinkedin },
               ].map((social, idx) => (
-                <a
+                <button
                   key={idx}
-                  href={social.href}
+                  onClick={() => setShowPopup(true)}
                   className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-gray-800 hover:bg-teal-600 flex items-center justify-center transition-all hover:scale-110"
                 >
                   <social.icon className="text-base sm:text-lg" />
-                </a>
+                </button>
               ))}
             </div>
           </div>
@@ -104,6 +102,83 @@ export default function Footer() {
           </div>
         </div>
       </div>
+
+      {/* Developer Popup */}
+      {showPopup && (
+        <div className="fixed inset-0 backdrop-blur-sm bg-black/30 flex items-center justify-center z-50 p-4" onClick={() => setShowPopup(false)}>
+          <div className="bg-linear-to-br from-teal-600 to-teal-800 rounded-2xl shadow-2xl max-w-md w-full p-8 relative" onClick={(e) => e.stopPropagation()}>
+            <button
+              onClick={() => setShowPopup(false)}
+              className="absolute top-4 right-4 text-white hover:text-gray-200 text-2xl font-bold"
+            >
+              ×
+            </button>
+            
+            <div className="text-center text-white">
+              <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center mx-auto mb-4">
+                <FaHeartbeat className="text-teal-600 text-3xl" />
+              </div>
+              
+              <h3 className="text-2xl font-bold mb-3">Demo Project</h3>
+              <p className="text-teal-50 mb-6 leading-relaxed">
+                This is a demonstration project showcasing full-stack development capabilities. 
+                Built with modern technologies to deliver exceptional user experiences.
+              </p>
+              
+              <div className="bg-white bg-opacity-10 rounded-lg p-4 mb-6">
+                <p className="text-sm text-teal-700 font-semibold mb-3">Developed by Mohammed Samier Mouawad</p>
+                <div className="flex justify-center gap-3">
+                  <a
+                    href="https://my-newfrontend-portfolio.vercel.app/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-12 h-12 bg-white rounded-full flex items-center justify-center hover:scale-110 transition-transform"
+                    title="Portfolio"
+                  >
+                    <FaHeartbeat className="text-teal-600 text-xl" />
+                  </a>
+                  <a
+                    href="https://www.linkedin.com/in/mohammed-samier-mouawad/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-12 h-12 bg-white rounded-full flex items-center justify-center hover:scale-110 transition-transform"
+                    title="LinkedIn"
+                  >
+                    <FaLinkedin className="text-teal-600 text-xl" />
+                  </a>
+                  <a
+                    href="https://github.com/mohamed-samir-dev"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-12 h-12 bg-white rounded-full flex items-center justify-center hover:scale-110 transition-transform"
+                    title="GitHub"
+                  >
+                    <FaGithub className="text-teal-600 text-xl" />
+                  </a>
+                  <a
+                    href="https://api.whatsapp.com/send/?phone=201012486445&text&type=phone_number&app_absent=0"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-12 h-12 bg-white rounded-full flex items-center justify-center hover:scale-110 transition-transform"
+                    title="WhatsApp"
+                  >
+                    <FaWhatsapp className="text-teal-600 text-xl" />
+                  </a>
+                </div>
+              </div>
+              
+              <a
+                href="https://my-newfrontend-portfolio.vercel.app/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-block bg-white text-teal-700 px-6 py-3 rounded-lg font-semibold hover:bg-teal-50 transition-colors"
+              >
+                View Portfolio
+              </a>
+            </div>
+          </div>
+        </div>
+      )}
     </footer>
   );
 }
