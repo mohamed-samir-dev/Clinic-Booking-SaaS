@@ -11,9 +11,9 @@ export default function ContactInfo() {
           </div>
           <h3 className="text-lg sm:text-xl font-bold text-gray-900">Our Location</h3>
         </div>
-        <p className="text-sm sm:text-base text-gray-700 mb-3 sm:mb-4">123 Medical Plaza, New Cairo, Egypt</p>
+        <p className="text-sm sm:text-base text-gray-700 mb-3 sm:mb-4">Mansoura, Egypt</p>
         <a
-          href="https://maps.google.com"
+          href="https://maps.app.goo.gl/5FhvVGNUQqxF7Ncc8"
           target="_blank"
           rel="noopener noreferrer"
           className="text-sm sm:text-base text-teal-600 hover:text-teal-700 font-semibold flex items-center gap-2"
@@ -44,7 +44,7 @@ export default function ContactInfo() {
           <h3 className="text-lg sm:text-xl font-bold text-gray-900">Email Address</h3>
         </div>
         <a href="mailto:support@alnoorclinic.com" className="text-sm sm:text-base text-teal-600 hover:text-teal-700 font-semibold break-all">
-          support@alnoorclinic.com
+          support@CareSync.com
         </a>
       </div>
 
