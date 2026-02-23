@@ -1,15 +1,17 @@
 import { motion } from 'framer-motion';
+import { useTheme } from '@/app/contexts/ThemeContext';
 
 interface TreatmentProcessProps {
   steps: { title: string; description: string }[];
 }
 
 export default function TreatmentProcess({ steps }: TreatmentProcessProps) {
+  const { theme } = useTheme();
   return (
-    <div className="bg-linear-to-b from-white to-teal-50 py-12 sm:py-16 md:py-20">
+    <div className={`bg-linear-to-b ${theme === 'dark' ? 'from-gray-800 to-gray-900' : 'from-white to-teal-50'} py-12 sm:py-16 md:py-20`}>
       <div className="max-w-5xl mx-auto px-4 md:px-8">
         <div className="text-center mb-10 sm:mb-16">
-          <h3 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-3 px-2">The Treatment Process</h3>
+          <h3 className={`text-2xl sm:text-3xl md:text-4xl font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-900'} mb-3 px-2`}>The Treatment Process</h3>
           <div className="w-16 sm:w-20 h-1 bg-teal-500 mx-auto rounded-full"></div>
         </div>
 
@@ -29,12 +31,12 @@ export default function TreatmentProcess({ steps }: TreatmentProcessProps) {
                 <div className="flex-1">
                   <motion.div
                     whileHover={{ scale: 1.02, y: -5 }}
-                    className="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-6 shadow-lg hover:shadow-2xl transition-all border border-teal-100"
+                    className={`${theme === 'dark' ? 'bg-gray-700 border-gray-600' : 'bg-white border-teal-100'} rounded-xl sm:rounded-2xl p-4 sm:p-6 shadow-lg hover:shadow-2xl transition-all border`}
                   >
-                    <h4 className="text-lg sm:text-xl font-bold text-gray-900 mb-2 sm:mb-3 flex items-center gap-2 sm:gap-3">
+                    <h4 className={`text-lg sm:text-xl font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-900'} mb-2 sm:mb-3 flex items-center gap-2 sm:gap-3`}>
                       <span className="text-teal-500">{step.title}</span>
                     </h4>
-                    <p className="text-sm sm:text-base text-gray-600 leading-relaxed">{step.description}</p>
+                    <p className={`text-sm sm:text-base ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'} leading-relaxed`}>{step.description}</p>
                   </motion.div>
                 </div>
 
