@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { FaThList } from 'react-icons/fa';
 import { services } from '@/app/components/services/servicesdata';
+import { useTheme } from '@/app/contexts/ThemeContext';
 import Banner from './components/Banner';
 import FilterBar from './components/FilterBar';
 import ServicesGrid from './components/ServicesGrid';
@@ -10,6 +11,7 @@ import WhyChoose from './components/WhyChoose';
 import FAQ from './components/FAQ';
 
 export default function ServicesPage() {
+  const { theme } = useTheme();
   const [activeFilter, setActiveFilter] = useState('All');
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -30,7 +32,7 @@ export default function ServicesPage() {
   });
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className={`min-h-screen ${theme === 'dark' ? 'bg-gray-900' : 'bg-gray-50'}`}>
       <Banner 
         searchQuery={searchQuery}
         onSearchChange={setSearchQuery}
