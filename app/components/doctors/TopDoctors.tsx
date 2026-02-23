@@ -6,6 +6,8 @@ import DoctorCard from './DoctorCard';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Keyboard, Mousewheel, Pagination } from 'swiper/modules';
 import { useTheme } from '@/app/contexts/ThemeContext';
+import { useLanguage } from '@/app/contexts/LanguageContext';
+import translations from '@/messages/translations';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import {Doctor}from '../../types/index'
@@ -13,6 +15,9 @@ import { api } from '../../lib/api';
 
 export default function TopDoctors() {
   const { theme } = useTheme();
+  const { locale } = useLanguage();
+  const t = translations[locale].doctors;
+  const isRTL = locale === 'ar';
   const [doctors, setDoctors] = useState<Doctor[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -51,17 +56,17 @@ export default function TopDoctors() {
       <div className="w-full px-4 md:px-8">
         <div className="mb-8 sm:mb-10 md:mb-14 text-center">
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-2 sm:mb-3">
-            <span className={theme === 'dark' ? 'text-white' : 'text-gray-900'}>Our Top </span>
-            <span className="text-teal-600">Doctors</span>
+            <span className={theme === 'dark' ? 'text-white' : 'text-gray-900'}>{t.title} </span>
+            <span className="text-teal-600">{t.titleHighlight}</span>
           </h2>
           <p className={`text-sm sm:text-base md:text-lg max-w-2xl mx-auto px-4 mb-4 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>
-            Meet our most experienced medical professionals
+            {t.description}
           </p>
           <Link 
             href="/pages/doctors" 
             className="inline-block text-teal-600 hover:text-teal-700 font-semibold text-sm sm:text-base transition-colors"
           >
-            View All Doctors →
+            {t.viewAllDoctors}
           </Link>
         </div>
 
@@ -72,6 +77,8 @@ export default function TopDoctors() {
           keyboard={{ enabled: true }}
           mousewheel={{ forceToAxis: true }}
           pagination={{ clickable: true }}
+          dir={isRTL ? 'rtl' : 'ltr'}
+          key={locale}
           breakpoints={{
             640: { slidesPerView: 2, spaceBetween: 20 },
             1024: { slidesPerView: 3, spaceBetween: 24 },
