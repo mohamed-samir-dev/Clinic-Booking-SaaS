@@ -1,4 +1,7 @@
+'use client';
+
 import { FaStethoscope, FaHeartbeat, FaBrain, FaBone, FaEye, FaTooth, FaChild, FaAllergies, FaHospital, FaPrescriptionBottle, FaVirus, FaLungs, FaXRay, FaTint } from 'react-icons/fa';
+import { useTheme } from '../../../../../contexts/ThemeContext';
 
 interface SpecializationsCardProps {
   specializations: string[];
@@ -23,15 +26,16 @@ const getIconForSpecialization = (specialization: string) => {
 };
 
 export default function SpecializationsCard({ specializations }: SpecializationsCardProps) {
+  const { theme } = useTheme();
   if (!specializations || specializations.length === 0) return null;
 
   return (
-    <div className="bg-linear-to-br from-teal-50 via-cyan-50 to-blue-50 rounded-xl sm:rounded-2xl shadow-lg border border-teal-200 p-5 sm:p-6 md:p-8 mt-4 sm:mt-6">
+    <div className={`rounded-xl sm:rounded-2xl shadow-lg border p-5 sm:p-6 md:p-8 mt-4 sm:mt-6 ${theme === 'dark' ? 'bg-gradient-to-br from-gray-800 via-gray-700 to-gray-800 border-teal-700' : 'bg-linear-to-br from-teal-50 via-cyan-50 to-blue-50 border-teal-200'}`}>
       <div className="flex items-center gap-2 sm:gap-3 mb-4 sm:mb-6">
         <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl bg-linear-to-br from-teal-500 to-cyan-500 flex items-center justify-center shadow-md">
           <FaStethoscope className="text-white text-lg sm:text-xl" />
         </div>
-        <h3 className="text-xl sm:text-2xl font-bold text-gray-900">Specializations</h3>
+        <h3 className={`text-xl sm:text-2xl font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Specializations</h3>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 md:gap-5">
         {specializations.map((spec, index) => {
@@ -40,12 +44,12 @@ export default function SpecializationsCard({ specializations }: Specializations
           return (
             <div 
               key={index} 
-              className="group flex items-center gap-2 sm:gap-3 px-4 sm:px-5 md:px-6 py-3 sm:py-4 bg-white border-2 border-teal-400 rounded-lg sm:rounded-xl hover:border-teal-600 hover:shadow-lg transition-all duration-300 hover:-translate-y-1"
+              className={`group flex items-center gap-2 sm:gap-3 px-4 sm:px-5 md:px-6 py-3 sm:py-4 border-2 rounded-lg sm:rounded-xl hover:shadow-lg transition-all duration-300 hover:-translate-y-1 ${theme === 'dark' ? 'bg-gray-800 border-teal-600 hover:border-teal-400' : 'bg-white border-teal-400 hover:border-teal-600'}`}
             >
               <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg bg-linear-to-br from-teal-500 to-cyan-500 flex items-center justify-center group-hover:scale-110 transition-transform">
                 <Icon className="text-white text-base sm:text-lg" />
               </div>
-              <span className="text-gray-800 font-bold text-sm sm:text-base">{spec}</span>
+              <span className={`font-bold text-sm sm:text-base ${theme === 'dark' ? 'text-gray-200' : 'text-gray-800'}`}>{spec}</span>
             </div>
           );
         })}
