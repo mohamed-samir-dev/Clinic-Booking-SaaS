@@ -5,6 +5,7 @@ import { FaArrowRight } from 'react-icons/fa';
 import { UserType } from '@/app/shared/types/auth.types';
 import PasswordInput from '@/app/shared/components/PasswordInput';
 import { ROLES_REQUIRING_BUSINESS_ID } from '@/app/shared/constants/auth.constants';
+import { useTheme } from '@/app/contexts/ThemeContext';
 
 interface LoginFormProps {
   userType: UserType;
@@ -23,6 +24,7 @@ interface Business {
 }
 
 export default function LoginForm({ userType, onSubmit, loading, error }: LoginFormProps) {
+  const { theme } = useTheme();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [businessId, setBusinessId] = useState('');
@@ -57,16 +59,16 @@ export default function LoginForm({ userType, onSubmit, loading, error }: LoginF
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-5">
+    <form onSubmit={handleSubmit} className="space-y-3 xs:space-y-4 sm:space-y-5">
       {error && (
-        <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
+        <div className="bg-red-50 border border-red-200 text-red-700 px-2.5 xs:px-3 sm:px-4 py-2 sm:py-3 rounded-lg text-sm">
           {error}
         </div>
       )}
 
       {ROLES_REQUIRING_BUSINESS_ID.includes(userType) && (
         <div>
-          <label htmlFor="businessId" className="block text-sm font-semibold text-gray-700 mb-2">
+          <label htmlFor="businessId" className={`block text-xs sm:text-sm font-semibold mb-1.5 sm:mb-2 ${theme === 'dark' ? 'text-gray-200' : 'text-gray-700'}`}>
             Select Clinic
           </label>
           <select
@@ -76,7 +78,7 @@ export default function LoginForm({ userType, onSubmit, loading, error }: LoginF
               console.log('Selected value:', e.target.value);
               setBusinessId(e.target.value);
             }}
-            className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none transition text-gray-900"
+            className={`w-full px-2.5 xs:px-3 sm:px-4 py-2 xs:py-2.5 sm:py-3 text-sm sm:text-base border-2 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none transition ${theme === 'dark' ? 'bg-gray-700 border-gray-600 text-white' : 'border-gray-300 text-gray-900'}`}
             required
             disabled={loadingBusinesses}
           >
@@ -91,7 +93,7 @@ export default function LoginForm({ userType, onSubmit, loading, error }: LoginF
       )}
 
       <div>
-        <label htmlFor="email" className="block text-sm font-semibold text-gray-700 mb-2">
+        <label htmlFor="email" className={`block text-xs sm:text-sm font-semibold mb-1.5 sm:mb-2 ${theme === 'dark' ? 'text-gray-200' : 'text-gray-700'}`}>
           Email Address
         </label>
         <input
@@ -99,7 +101,7 @@ export default function LoginForm({ userType, onSubmit, loading, error }: LoginF
           id="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none transition text-gray-900"
+          className={`w-full px-2.5 xs:px-3 sm:px-4 py-2 xs:py-2.5 sm:py-3 text-sm sm:text-base border-2 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none transition ${theme === 'dark' ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' : 'border-gray-300 text-gray-900'}`}
           placeholder="example@email.com"
           required
         />
@@ -117,10 +119,10 @@ export default function LoginForm({ userType, onSubmit, loading, error }: LoginF
       <button
         type="submit"
         disabled={loading}
-        className="w-full cursor-pointer bg-teal-500 hover:bg-teal-600 disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-semibold py-3 rounded-lg transition-colors flex items-center justify-center gap-2"
+        className="w-full cursor-pointer bg-teal-500 hover:bg-teal-600 disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-semibold py-2 xs:py-2.5 sm:py-3 text-sm sm:text-base rounded-lg transition-colors flex items-center justify-center gap-2"
       >
         {loading ? 'Signing in...' : 'Sign In'}
-        {!loading && <FaArrowRight className="text-sm" />}
+        {!loading && <FaArrowRight className="text-xs sm:text-sm" />}
       </button>
     </form>
   );
