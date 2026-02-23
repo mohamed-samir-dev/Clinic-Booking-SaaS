@@ -1,6 +1,7 @@
 'use client';
 
 import { FaSearch } from 'react-icons/fa';
+import { useTheme } from '@/app/contexts/ThemeContext';
 
 interface BannerProps {
   searchQuery: string;
@@ -9,13 +10,14 @@ interface BannerProps {
 }
 
 export default function Banner({ searchQuery, onSearchChange, onFilterReset }: BannerProps) {
+  const { theme } = useTheme();
   return (
-    <div className="bg-[#D5F5F0] py-12 sm:py-16 md:py-20 lg:py-24 px-4">
+    <div className={`py-12 sm:py-16 md:py-20 lg:py-24 px-4 ${theme === 'dark' ? 'bg-gray-800' : 'bg-[#D5F5F0]'}`}>
       <div className="max-w-7xl mx-auto text-center">
-        <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-3 sm:mb-4 leading-tight">
+        <h1 className={`text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-3 sm:mb-4 leading-tight ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
           Comprehensive Care for You and <br className="hidden sm:block" />Your Family
         </h1>
-        <p className="text-base sm:text-lg text-gray-700 mb-6 sm:mb-8 max-w-2xl mx-auto px-2">
+        <p className={`text-base sm:text-lg mb-6 sm:mb-8 max-w-2xl mx-auto px-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
           Expert medical services tailored to your needs. Search our specialties or browse through our full range of treatments.
         </p>
         
@@ -29,7 +31,7 @@ export default function Banner({ searchQuery, onSearchChange, onFilterReset }: B
               onSearchChange(e.target.value);
               onFilterReset();
             }}
-            className="w-full pl-10 sm:pl-12 pr-4 py-3 sm:py-4 rounded-lg bg-white border border-gray-300 focus:outline-none focus:ring-2 focus:ring-teal-500 text-gray-900 text-sm sm:text-base"
+            className={`w-full pl-10 sm:pl-12 pr-4 py-3 sm:py-4 rounded-lg border focus:outline-none focus:ring-2 focus:ring-teal-500 text-sm sm:text-base ${theme === 'dark' ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' : 'bg-white border-gray-300 text-gray-900'}`}
           />
         </div>
       </div>
