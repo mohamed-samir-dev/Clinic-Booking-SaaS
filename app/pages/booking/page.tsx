@@ -2,6 +2,7 @@
 
 import { useState, useTransition, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
+import { useTheme } from '@/app/contexts/ThemeContext';
 import StepsHeader from './components/StepsHeader';
 import ServiceSelection from './components/ServiceSelection';
 import DoctorSelection from './components/DoctorSelection';
@@ -75,13 +76,15 @@ export default function BookingPage() {
     setCanSubmit(canSubmitForm);
   };
 
+  const { theme } = useTheme();
+
   return (
-    <div className="min-h-screen bg-gray-50 py-4 sm:py-8 md:py-12 px-2 sm:px-4 pb-20 sm:pb-24">
+    <div className={`min-h-screen py-4 sm:py-8 md:py-12 px-2 sm:px-4 pb-20 sm:pb-24 ${theme === 'dark' ? 'bg-gray-900' : 'bg-gray-50'}`}>
       {isPending && (
         <div className="fixed inset-0 bg-black/20 backdrop-blur-sm z-50 flex items-center justify-center">
-          <div className="bg-white rounded-2xl p-4 sm:p-6 shadow-2xl flex flex-col items-center gap-3">
+          <div className={`rounded-2xl p-4 sm:p-6 shadow-2xl flex flex-col items-center gap-3 ${theme === 'dark' ? 'bg-gray-800' : 'bg-white'}`}>
             <div className="w-10 h-10 sm:w-12 sm:h-12 border-4 border-teal-500 border-t-transparent rounded-full animate-spin"></div>
-            <p className="text-sm sm:text-base text-gray-700 font-semibold">Loading...</p>
+            <p className={`text-sm sm:text-base font-semibold ${theme === 'dark' ? 'text-gray-200' : 'text-gray-700'}`}>Loading...</p>
           </div>
         </div>
       )}
