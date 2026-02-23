@@ -1,6 +1,7 @@
 'use client';
 
-import { useState, useTransition } from 'react';
+import { useState, useTransition, useEffect } from 'react';
+import { useSearchParams } from 'next/navigation';
 import StepsHeader from './components/StepsHeader';
 import ServiceSelection from './components/ServiceSelection';
 import DoctorSelection from './components/DoctorSelection';
@@ -10,12 +11,17 @@ import NavigationButtons from './components/NavigationButtons';
 import { useDoctors } from './hooks/useDoctors';
 import { useFilters } from './hooks/useFilters';
 import { getNextAvailableDay } from './utils/doctorHelpers';
+import { getQuickBookingData, clearQuickBookingData } from './utils/quickBooking';
 import { Doctor } from '@/app/types/index';
 
 export default function BookingPage() {
-  const [currentStep, setCurrentStep] = useState(1);
-  const [selectedService, setSelectedService] = useState('');
-  const [selectedDoctor, setSelectedDoctor] = useState('');
+  const searchParams = useSearchParams();
+  const isQuickBooking = searchParams.get('quick') === 'true';
+  const quickData = isQuickBooking ? getQuickBookingData() : null;
+  
+  const [currentStep, setCurrentStep] = useState(quickData ? 3 : 1);
+  const [selectedService, setSelectedService] = useState(quickData?.serviceId || '');
+  const [selectedDoctor, setSelectedDoctor] = useState(quickData?.doctorId || '');
   const [selectedTime, setSelectedTime] = useState('');
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
@@ -24,7 +30,15 @@ export default function BookingPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [canSubmit, setCanSubmit] = useState(false);
 
-  const { allDoctors, loadingDoctors } = useDoctors(selectedService, currentStep);
+  useEffect(() => {
+    return () => {
+      if (isQuickBooking) {
+        clearQuickBookingData();
+      }
+    };
+  }, [isQuickBooking]);
+
+  const { allDoctors, loadingDoctors } = useDoctors(selectedService, currentStep, isQuickBooking);
   const filterProps = useFilters(allDoctors);
 
   const handleNext = () => {
@@ -62,20 +76,20 @@ export default function BookingPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12 px-4 pb-24">
+    <div className="min-h-screen bg-gray-50 py-4 sm:py-8 md:py-12 px-2 sm:px-4 pb-20 sm:pb-24">
       {isPending && (
         <div className="fixed inset-0 bg-black/20 backdrop-blur-sm z-50 flex items-center justify-center">
-          <div className="bg-white rounded-2xl p-6 shadow-2xl flex flex-col items-center gap-3">
-            <div className="w-12 h-12 border-4 border-teal-500 border-t-transparent rounded-full animate-spin"></div>
-            <p className="text-gray-700 font-semibold">Loading...</p>
+          <div className="bg-white rounded-2xl p-4 sm:p-6 shadow-2xl flex flex-col items-center gap-3">
+            <div className="w-10 h-10 sm:w-12 sm:h-12 border-4 border-teal-500 border-t-transparent rounded-full animate-spin"></div>
+            <p className="text-sm sm:text-base text-gray-700 font-semibold">Loading...</p>
           </div>
         </div>
       )}
       
-      <div className="max-w-full mx-auto px-4">
+      <div className="max-w-full mx-auto px-2 sm:px-4">
         <StepsHeader currentStep={currentStep} />
 
-        <div className="p-6">
+        <div className="p-2 sm:p-4 md:p-6">
           {currentStep === 1 && (
             <ServiceSelection
               selectedService={selectedService}
