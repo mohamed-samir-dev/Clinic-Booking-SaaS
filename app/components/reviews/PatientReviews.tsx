@@ -3,6 +3,8 @@
 import { useEffect, useState } from 'react';
 import { FaStar, FaQuoteLeft, FaPlus } from 'react-icons/fa';
 import { useTheme } from '@/app/contexts/ThemeContext';
+import { useLanguage } from '@/app/contexts/LanguageContext';
+import translations from '@/messages/translations';
 import {Review,ReviewStats}from '../../types/index'
 import { api } from '../../lib/api';
 import GeneralReviewModal from './GeneralReviewModal';
@@ -10,6 +12,8 @@ import GeneralReviewModal from './GeneralReviewModal';
 
 export default function PatientReviews() {
   const { theme } = useTheme();
+  const { locale } = useLanguage();
+  const t = translations[locale].reviews;
   const [reviews, setReviews] = useState<Review[]>([]);
   const [stats, setStats] = useState<ReviewStats | null>(null);
   const [loading, setLoading] = useState(true);
@@ -79,11 +83,11 @@ export default function PatientReviews() {
           <div className="mb-8 sm:mb-10 md:mb-14">
             <div className="text-center mb-4">
               <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-2 sm:mb-3">
-                <span className={theme === 'dark' ? 'text-white' : 'text-gray-900'}>Patient </span>
-                <span className="text-teal-600">Reviews</span>
+                <span className={theme === 'dark' ? 'text-white' : 'text-gray-900'}>{t.title} </span>
+                <span className="text-teal-600">{t.titleHighlight}</span>
               </h2>
               <p className={`text-sm sm:text-base md:text-lg max-w-2xl mx-auto px-4 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>
-                Real experiences from our valued patients
+                {t.description}
               </p>
             </div>
             <div className="flex justify-center">
@@ -92,7 +96,7 @@ export default function PatientReviews() {
                 className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-teal-500 to-cyan-500 text-white rounded-lg font-semibold hover:from-teal-600 hover:to-cyan-600 transition-all shadow-md hover:shadow-lg"
               >
                 <FaPlus className="text-sm" />
-                Write Review
+                {t.writeReview}
               </button>
             </div>
           </div>
@@ -108,7 +112,7 @@ export default function PatientReviews() {
                 {renderStars(Math.round(stats?.averageRating || 0))}
               </div>
               <p className={`text-sm sm:text-base font-medium ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>
-                Based on {stats?.totalReviews || 0} reviews
+                {t.basedOn} {stats?.totalReviews || 0} {t.reviewsCount}
               </p>
             </div>
 
@@ -168,7 +172,7 @@ export default function PatientReviews() {
                         </p>
                       </div>
                       <p className={`text-xs mt-2 sm:mt-3 ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'}`}>
-                        {new Date(review.createdAt).toLocaleDateString('en-US', {
+                        {new Date(review.createdAt).toLocaleDateString(locale === 'ar' ? 'ar-EG' : 'en-US', {
                           year: 'numeric',
                           month: 'long',
                           day: 'numeric',
