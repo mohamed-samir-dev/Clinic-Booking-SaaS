@@ -13,20 +13,20 @@ export default function ServiceSelection({ selectedService, setSelectedService, 
 
   return (
     <div>
-      <div className="text-center mb-8">
-        <h2 className="text-3xl font-bold text-gray-900 mb-8">Select Service</h2>
+      <div className="text-center mb-6 sm:mb-8">
+        <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-4 sm:mb-8">Select Service</h2>
         <div className="max-w-2xl mx-auto relative">
-          <FaSearch className="absolute left-6 top-1/2 transform -translate-y-1/2 text-gray-400 text-xl" />
+          <FaSearch className="absolute left-4 sm:left-6 top-1/2 transform -translate-y-1/2 text-gray-400 text-base sm:text-xl" />
           <input
             type="text"
             placeholder="Search for services..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-12 pr-4 py-4 rounded-lg bg-white border border-gray-300 focus:outline-none focus:ring-2 focus:ring-teal-500 text-gray-900 text-base"
+            className="w-full pl-10 sm:pl-12 pr-4 py-3 sm:py-4 rounded-lg bg-white border border-gray-300 focus:outline-none focus:ring-2 focus:ring-teal-500 text-gray-900 text-sm sm:text-base"
           />
         </div>
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
         {filteredServices.map((service, index) => (
           <div
             key={index}
@@ -47,7 +47,7 @@ export default function ServiceSelection({ selectedService, setSelectedService, 
       </div>
       {filteredServices.length === 0 && (
         <div className="text-center py-12">
-          <p className="text-gray-500 text-lg">No services found matching your search.</p>
+          <p className="text-gray-500 text-base sm:text-lg">No services found matching your search.</p>
         </div>
       )}
     </div>
