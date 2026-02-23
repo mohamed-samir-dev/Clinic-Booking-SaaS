@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useDoctors } from './hooks/useDoctors';
 import { useFilterOptions } from './hooks/useFilterOptions';
 import { useIsMobile } from './hooks/useIsMobile';
+import { useTheme } from '@/app/contexts/ThemeContext';
 import { paginateData, getTotalPages } from './utils/pagination';
 import PageHeader from './components/PageHeader';
 import DoctorFilters from './components/DoctorFilters';
@@ -14,6 +15,7 @@ import DoctorsList from './components/DoctorsList';
 import Pagination from './components/Pagination';
 
 export default function DoctorsPage() {
+  const { theme } = useTheme();
   const [currentPage, setCurrentPage] = useState(1);
   const [filters, setFilters] = useState({
     specialty: '',
@@ -44,7 +46,7 @@ export default function DoctorsPage() {
   const hasActiveFilters = !!(filters.specialty || filters.gender || filters.isAvailableToday || filters.minExperience > 0);
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className={`min-h-screen ${theme === 'dark' ? 'bg-gray-900' : 'bg-gray-50'}`}>
       <PageHeader />
 
       <div className="container mx-auto px-4 sm:px-6 py-6 sm:py-8">
@@ -69,10 +71,10 @@ export default function DoctorsPage() {
         ) : (
           <>
             <div className="mb-4 sm:mb-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-0">
-              <p className="text-sm sm:text-base text-gray-700 font-semibold">
+              <p className={`text-sm sm:text-base font-semibold ${theme === 'dark' ? 'text-gray-200' : 'text-gray-700'}`}>
                 Found <span className="text-teal-600">{doctors.length}</span> doctor{doctors.length !== 1 ? 's' : ''}
               </p>
-              <p className="text-xs sm:text-sm text-gray-600">
+              <p className={`text-xs sm:text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>
                 Page {currentPage} of {totalPages}
               </p>
             </div>
