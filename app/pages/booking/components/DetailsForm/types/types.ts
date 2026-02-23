@@ -59,8 +59,9 @@ export interface BasicInformationProps {
 export interface MedicalContextProps {
   reason: string;
   setReason: (value: string) => void;
-  file: File | null;
+  files: File[];
   handleFileChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  handleFileRemove: (index: number) => void;
 }
 export interface PatientDemographicsProps {
   dateOfBirth: string;

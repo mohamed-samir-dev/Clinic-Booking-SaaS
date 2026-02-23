@@ -56,3 +56,11 @@ export interface FiltersSidebarProps {
     searchQuery: string;
     setSearchQuery: (query: string) => void;
   }
+
+  export  interface QuickBookingData {
+    doctorId: string;
+    doctorName: string;
+    specialty: string;
+    serviceId: string;
+    skipSteps: boolean;
+  }
