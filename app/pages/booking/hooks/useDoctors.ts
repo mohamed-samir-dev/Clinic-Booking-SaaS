@@ -7,12 +7,12 @@ interface DoctorsResponse {
   data?: Doctor[];
 }
 
-export const useDoctors = (selectedService: string, currentStep: number) => {
+export const useDoctors = (selectedService: string, currentStep: number, forceLoad = false) => {
   const [allDoctors, setAllDoctors] = useState<Doctor[]>([]);
   const [loadingDoctors, setLoadingDoctors] = useState(false);
 
   useEffect(() => {
-    if (!selectedService || currentStep !== 2) return;
+    if (!selectedService || (currentStep !== 2 && !forceLoad)) return;
 
     const fetchDoctors = async () => {
       setLoadingDoctors(true);
@@ -33,7 +33,7 @@ export const useDoctors = (selectedService: string, currentStep: number) => {
     };
 
     fetchDoctors();
-  }, [selectedService, currentStep]);
+  }, [selectedService, currentStep, forceLoad]);
 
   return { allDoctors, loadingDoctors };
 };

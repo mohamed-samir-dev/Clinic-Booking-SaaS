@@ -11,7 +11,7 @@ export const useBooking = ({ selectedDoctor, selectedService, selectedDate, sele
   const [dateOfBirth, setDateOfBirth] = useState('');
   const [gender, setGender] = useState('');
   const [reason, setReason] = useState('');
-  const [file, setFile] = useState<File | null>(null);
+  const [files, setFiles] = useState<File[]>([]);
   const [agreeToPolicy, setAgreeToPolicy] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [bookingData, setBookingData] = useState<BookingData | null>(null);
@@ -20,9 +20,13 @@ export const useBooking = ({ selectedDoctor, selectedService, selectedDate, sele
   const { user, token } = useSelector((state: RootState) => state.auth);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      setFile(e.target.files[0]);
+    if (e.target.files) {
+      setFiles(prev => [...prev, ...Array.from(e.target.files!)]);
     }
+  };
+
+  const handleFileRemove = (index: number) => {
+    setFiles(prev => prev.filter((_, i) => i !== index));
   };
 
   const handleFinishBooking = useCallback(async () => {
@@ -35,6 +39,23 @@ export const useBooking = ({ selectedDoctor, selectedService, selectedDate, sele
 
     if (!fullName || !phone || !email || !dateOfBirth || !gender || !reason) {
       setError('Please fill all required fields');
+      return;
+    }
+
+    if (phone.length !== 10) {
+      setError('Phone number must be exactly 10 digits');
+      return;
+    }
+
+    if (!email.endsWith('@gmail.com')) {
+      setError('Email must be a valid Gmail address (@gmail.com)');
+      return;
+    }
+
+    const birthDate = new Date(dateOfBirth);
+    const today = new Date();
+    if (birthDate > today) {
+      setError('Date of birth cannot be in the future');
       return;
     }
 
@@ -67,7 +88,7 @@ export const useBooking = ({ selectedDoctor, selectedService, selectedDate, sele
     }
   }, [agreeToPolicy, fullName, phone, email, dateOfBirth, gender, reason, selectedDoctor, selectedDate, selectedTime, selectedService, user, token]);
 
-  const canSubmit = agreeToPolicy && !!fullName && !!phone && !!email && !!dateOfBirth && !!gender && !!reason;
+  const canSubmit = agreeToPolicy && !!fullName && phone.length === 10 && email.endsWith('@gmail.com') && !!dateOfBirth && !!gender && !!reason;
 
   return {
     fullName, setFullName,
@@ -76,7 +97,7 @@ export const useBooking = ({ selectedDoctor, selectedService, selectedDate, sele
     dateOfBirth, setDateOfBirth,
     gender, setGender,
     reason, setReason,
-    file, handleFileChange,
+    files, handleFileChange, handleFileRemove,
     agreeToPolicy, setAgreeToPolicy,
     isSubmitting,
     bookingData,
