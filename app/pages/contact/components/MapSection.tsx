@@ -1,19 +1,24 @@
 'use client';
 
+import { useLanguage } from '@/app/contexts/LanguageContext';
 import { FaMapMarkerAlt, FaArrowRight } from 'react-icons/fa';
 import { useTheme } from '@/app/contexts/ThemeContext';
+import translations from '@/messages/translations';
 
 export default function MapSection() {
   const { theme } = useTheme();
+  const { locale } = useLanguage();
+  const t = translations[locale].contact.map;
+  const tInfo = translations[locale].contact.info;
   return (
     <div className={`rounded-xl shadow-lg p-4 sm:p-6 border-2 ${theme === 'dark' ? 'bg-gray-800 border-gray-700' : 'bg-white border-teal-100'}`}>
-      <h3 className={`text-xl sm:text-2xl font-bold mb-4 sm:mb-6 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Find Us</h3>
+      <h3 className={`text-xl sm:text-2xl font-bold mb-4 sm:mb-6 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{t.title}</h3>
       <div className="space-y-3 sm:space-y-4">
         <div className="flex items-start gap-3">
           <FaMapMarkerAlt className="text-teal-500 text-lg sm:text-xl mt-1 shrink-0" />
           <div>
-            <p className={`text-sm sm:text-base font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>CareSync Clinic</p>
-            <p className={`text-sm sm:text-base ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>Mansoura, Egypt</p>
+            <p className={`text-sm sm:text-base font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{t.clinicName}</p>
+            <p className={`text-sm sm:text-base ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>{tInfo.locationAddress}</p>
           </div>
         </div>
         <a
@@ -22,7 +27,7 @@ export default function MapSection() {
           rel="noopener noreferrer"
           className="inline-flex items-center gap-2 text-sm sm:text-base text-teal-600 hover:text-teal-700 font-semibold"
         >
-          Get Directions
+          {t.getDirections}
           <FaArrowRight className="text-xs sm:text-sm" />
         </a>
       </div>
