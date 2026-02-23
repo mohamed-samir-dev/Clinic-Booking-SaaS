@@ -8,14 +8,16 @@ import { Moon, Sun } from 'lucide-react';
 import { useAppSelector, useAppDispatch } from '@/app/store/hooks';
 import { logout } from '@/app/store/slices/authSlice';
 import { useTheme } from '@/app/contexts/ThemeContext';
+import { useLanguage } from '@/app/contexts/LanguageContext';
 import Logo from './Logo';
 import NavLinks from './NavLinks';
 import UserMenu from './UserMenu';
 import MobileMenu from './MobileMenu';
-import { Language } from '../../types/index';
+import messages from '@/messages/en.json';
+import messagesAr from '@/messages/ar.json';
 
 export default function Navbar() {
-  const [lang, setLang] = useState<Language>('EN');
+  const { locale, toggleLanguage } = useLanguage();
   const { theme, toggleTheme } = useTheme();
   const [showDropdown, setShowDropdown] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -24,6 +26,8 @@ export default function Navbar() {
   const dispatch = useAppDispatch();
   const authUser = useAppSelector((state) => state.auth.user);
   const user = authUser?.role !== 'owner' ? authUser : null;
+
+  const t = locale === 'ar' ? messagesAr.navbar : messages.navbar;
 
   const handleLogout = () => {
     dispatch(logout());
@@ -44,7 +48,7 @@ export default function Navbar() {
               href="/pages/booking"
               className="hidden min-[500px]:block px-4 md:px-7 py-2 md:py-2.5 bg-teal-600 rounded-full text-white hover:bg-teal-800 transition-colors font-semibold shadow-md hover:shadow-lg text-sm md:text-base"
             >
-              Book Now
+              {t.bookNow}
             </Link>
 
             <button
@@ -57,12 +61,12 @@ export default function Navbar() {
             </button>
 
             <button
-              onClick={() => setLang(lang === 'EN' ? 'AR' : 'EN')}
+              onClick={toggleLanguage}
               className={`hidden min-[350px]:flex px-3 py-2 rounded-full transition-all hover:scale-105 text-sm font-semibold min-w-[50px] ${
                 theme === 'dark' ? 'bg-gray-800 hover:bg-gray-700 text-gray-200' : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
               }`}
             >
-              {lang === 'EN' ? 'EN' : 'عربي'}
+              {locale === 'en' ? 'EN' : 'عربي'}
             </button>
 
             <UserMenu
@@ -87,9 +91,9 @@ export default function Navbar() {
           <MobileMenu
             pathname={pathname}
             user={user}
-            lang={lang}
+            locale={locale}
             theme={theme}
-            setLang={setLang}
+            toggleLanguage={toggleLanguage}
             setTheme={toggleTheme}
             setMobileMenuOpen={setMobileMenuOpen}
             handleLogout={handleLogout}
