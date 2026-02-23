@@ -2,8 +2,10 @@
 
 import { useState } from 'react';
 import { FaChevronRight, FaChevronDown } from 'react-icons/fa';
+import { useTheme } from '@/app/contexts/ThemeContext';
 
 export default function FAQSection() {
+  const { theme } = useTheme();
   const [openFaq, setOpenFaq] = useState<number | null>(null);
 
   const faqs = [
@@ -26,16 +28,16 @@ export default function FAQSection() {
   ];
 
   return (
-    <div className="bg-white rounded-xl shadow-lg p-4 sm:p-6 md:p-8 border-2 border-teal-100">
-      <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4 sm:mb-6">Common Questions</h3>
+    <div className={`rounded-xl shadow-lg p-4 sm:p-6 md:p-8 border-2 ${theme === 'dark' ? 'bg-gray-800 border-gray-700' : 'bg-white border-teal-100'}`}>
+      <h3 className={`text-xl sm:text-2xl font-bold mb-4 sm:mb-6 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Common Questions</h3>
       <div className="space-y-3 sm:space-y-4">
         {faqs.map((faq, index) => (
-          <div key={index} className="border-2 border-gray-200 rounded-lg overflow-hidden">
+          <div key={index} className={`border-2 rounded-lg overflow-hidden ${theme === 'dark' ? 'border-gray-700' : 'border-gray-200'}`}>
             <button
               onClick={() => setOpenFaq(openFaq === index ? null : index)}
-              className="w-full flex items-center justify-between p-3 sm:p-4 bg-gray-50 hover:bg-teal-50 transition-all text-left gap-3"
+              className={`w-full flex items-center justify-between p-3 sm:p-4 transition-all text-left gap-3 ${theme === 'dark' ? 'bg-gray-700 hover:bg-gray-600' : 'bg-gray-50 hover:bg-teal-50'}`}
             >
-              <span className="text-sm sm:text-base text-gray-900 font-semibold">{faq.question}</span>
+              <span className={`text-sm sm:text-base font-semibold ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{faq.question}</span>
               {openFaq === index ? (
                 <FaChevronDown className="text-teal-500 transition-transform shrink-0" />
               ) : (
@@ -43,8 +45,8 @@ export default function FAQSection() {
               )}
             </button>
             {openFaq === index && (
-              <div className="p-3 sm:p-4 bg-white border-t-2 border-gray-200">
-                <p className="text-sm sm:text-base text-gray-700">{faq.answer}</p>
+              <div className={`p-3 sm:p-4 border-t-2 ${theme === 'dark' ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'}`}>
+                <p className={`text-sm sm:text-base ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>{faq.answer}</p>
               </div>
             )}
           </div>

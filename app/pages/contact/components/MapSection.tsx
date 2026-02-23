@@ -1,15 +1,19 @@
+'use client';
+
 import { FaMapMarkerAlt, FaArrowRight } from 'react-icons/fa';
+import { useTheme } from '@/app/contexts/ThemeContext';
 
 export default function MapSection() {
+  const { theme } = useTheme();
   return (
-    <div className="bg-white rounded-xl shadow-lg p-4 sm:p-6 border-2 border-teal-100">
-      <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4 sm:mb-6">Find Us</h3>
+    <div className={`rounded-xl shadow-lg p-4 sm:p-6 border-2 ${theme === 'dark' ? 'bg-gray-800 border-gray-700' : 'bg-white border-teal-100'}`}>
+      <h3 className={`text-xl sm:text-2xl font-bold mb-4 sm:mb-6 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Find Us</h3>
       <div className="space-y-3 sm:space-y-4">
         <div className="flex items-start gap-3">
           <FaMapMarkerAlt className="text-teal-500 text-lg sm:text-xl mt-1 shrink-0" />
           <div>
-            <p className="text-sm sm:text-base font-bold text-gray-900">CareSync Clinic</p>
-            <p className="text-sm sm:text-base text-gray-700">Mansoura, Egypt</p>
+            <p className={`text-sm sm:text-base font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>CareSync Clinic</p>
+            <p className={`text-sm sm:text-base ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>Mansoura, Egypt</p>
           </div>
         </div>
         <a

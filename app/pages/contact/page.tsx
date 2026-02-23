@@ -1,13 +1,17 @@
+'use client';
+
 import HeroSection from './components/HeroSection';
 import ContactForm from './components/ContactForm';
 import ContactInfo from './components/ContactInfo';
 import MapSection from './components/MapSection';
 import WorkingHours from './components/WorkingHours';
 import FAQSection from './components/FAQSection';
+import { useTheme } from '@/app/contexts/ThemeContext';
 
 export default function ContactPage() {
+  const { theme } = useTheme();
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className={`min-h-screen ${theme === 'dark' ? 'bg-gray-900' : 'bg-gray-50'}`}>
       <HeroSection />
 
       <div className="w-full px-4 md:px-8 py-8 sm:py-12">
