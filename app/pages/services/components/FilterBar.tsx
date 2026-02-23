@@ -14,8 +14,8 @@ export default function FilterBar({ categories, activeFilter, onFilterChange, ge
   const { theme } = useTheme();
   return (
     <div className={`border-b sticky top-0 z-10 shadow-sm ${theme === 'dark' ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'}`}>
-      <div className="max-w-7xl mx-auto px-2 sm:px-4 py-4 sm:py-6">
-        <div className="flex overflow-x-auto gap-2 sm:gap-3 justify-start sm:justify-center pb-2 sm:pb-0 scrollbar-hide">
+      <div className="w-full px-4 sm:px-6 py-4 sm:py-6">
+        <div className="flex overflow-x-auto gap-2 sm:gap-3 pb-2 scrollbar-hide" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
           {categories.map((category) => {
             const Icon = getIcon(category);
             return (
