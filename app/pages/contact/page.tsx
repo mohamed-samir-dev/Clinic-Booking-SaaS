@@ -10,7 +10,7 @@ export default function ContactPage() {
     <div className="min-h-screen bg-gray-50">
       <HeroSection />
 
-      <div className="container mx-auto px-4 sm:px-6 py-8 sm:py-12">
+      <div className="w-full px-4 md:px-8 py-8 sm:py-12">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
           <div className="lg:col-span-2">
             <ContactForm />
