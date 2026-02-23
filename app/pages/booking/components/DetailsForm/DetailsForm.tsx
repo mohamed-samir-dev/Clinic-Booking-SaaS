@@ -6,7 +6,6 @@ import BookingSummary from '../TimeSelection/components/BookingSummary';
 import BookingConfirmationPopup from '../BookingConfirmationPopup';
 import Toast from '@/app/components/Toast';
 import { 
-  PatientTypeSelector, 
   BasicInformation, 
   PatientDemographics, 
   MedicalContext, 
@@ -23,7 +22,6 @@ interface DetailsFormProps {
 }
 
 export default function DetailsForm({ selectedDoctor, selectedService, selectedDate, selectedTime, onBookingSubmit }: DetailsFormProps) {
-  const [patientType, setPatientType] = useState<'new' | 'returning'>('new');
   const [showConfirmation, setShowConfirmation] = useState(false);
 
   const {
@@ -33,7 +31,7 @@ export default function DetailsForm({ selectedDoctor, selectedService, selectedD
     dateOfBirth, setDateOfBirth,
     gender, setGender,
     reason, setReason,
-    file, handleFileChange,
+    files, handleFileChange, handleFileRemove,
     agreeToPolicy, setAgreeToPolicy,
     isSubmitting,
     bookingData,
@@ -55,13 +53,11 @@ export default function DetailsForm({ selectedDoctor, selectedService, selectedD
   }, [onFinish, isSubmitting, canSubmit, onBookingSubmit]);
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
       <div className="lg:col-span-2">
-        <div className="bg-white rounded-2xl shadow-sm p-6">
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">Patient Details</h2>
-          <p className="text-gray-600 mb-6">Step 4 of 4: Please provide your personal and medical information.</p>
-
-          <PatientTypeSelector patientType={patientType} setPatientType={setPatientType} />
+        <div className="bg-white rounded-2xl shadow-sm p-4 sm:p-6">
+          <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-1 sm:mb-2">Patient Details</h2>
+          <p className="text-gray-600 mb-4 sm:mb-6 text-sm sm:text-base">Step 4 of 4: Please provide your personal and medical information.</p>
 
           <BasicInformation 
             fullName={fullName} 
@@ -82,8 +78,9 @@ export default function DetailsForm({ selectedDoctor, selectedService, selectedD
           <MedicalContext 
             reason={reason}
             setReason={setReason}
-            file={file}
+            files={files}
             handleFileChange={handleFileChange}
+            handleFileRemove={handleFileRemove}
           />
 
           <PrivacyPolicy agreeToPolicy={agreeToPolicy} setAgreeToPolicy={setAgreeToPolicy} />
