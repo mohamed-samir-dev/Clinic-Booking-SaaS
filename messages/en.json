@@ -1,0 +1,300 @@
+{
+  "navbar": {
+    "home": "Home",
+    "services": "Services",
+    "doctors": "Doctors",
+    "about": "About Us",
+    "contact": "Contact",
+    "bookNow": "Book Now",
+    "login": "Login",
+    "logout": "Logout",
+    "profile": "Profile",
+    "myAppointments": "My Appointments"
+  },
+  "hero": {
+    "badge": "CareSync",
+    "title": "Your Health,",
+    "titleHighlight": " Our Priority",
+    "description": "Experience modern healthcare with professional medical services in a comfortable environment.",
+    "bookAppointment": "Book Appointment",
+    "contactUs": "Contact Us",
+    "openNow": "Open Now",
+    "hours": "8AM - 8PM",
+    "avgWaitTime": "Avg. Wait Time",
+    "waitTime": "15 Minutes",
+    "insuranceLabel": "Insurance Accepted:",
+    "insuranceValue": "Major plan & Network"
+  },
+  "services": {
+    "title": "Our",
+    "titleHighlight": " Medical Services",
+    "description": "Comprehensive healthcare services from trusted clinics near you.",
+    "viewMore": "More Details",
+    "all": "All",
+    "generalMedicine": {
+      "title": "General Medicine",
+      "description": "Primary care consultations and routine health check-ups."
+    },
+    "pediatrics": {
+      "title": "Pediatrics",
+      "description": "Specialized care for infants, children, and adolescents."
+    },
+    "dermatology": {
+      "title": "Dermatology",
+      "description": "Skin treatments, acne care, and cosmetic procedures."
+    },
+    "dentistry": {
+      "title": "Dentistry",
+      "description": "Teeth cleaning, fillings, orthodontics, and oral surgery."
+    },
+    "gynecology": {
+      "title": "Gynecology",
+      "description": "Women's health services and pregnancy follow-ups."
+    },
+    "orthopedics": {
+      "title": "Orthopedics",
+      "description": "Bone, joint, and muscle treatments."
+    },
+    "cardiology": {
+      "title": "Cardiology",
+      "description": "Heart check-ups and cardiovascular care."
+    },
+    "ent": {
+      "title": "ENT",
+      "description": "Ear, nose, and throat consultations."
+    },
+    "banner": {
+      "title": "Comprehensive Care for You and Your Family",
+      "description": "Expert medical services tailored to your needs. Search our specialties or browse through our full range of treatments.",
+      "searchPlaceholder": "Search for services..."
+    },
+    "whyChoose": {
+      "title": "Why Choose CareSync?",
+      "description": "We provide high-quality medical care through a patient-centered approach, ensuring your health and comfort are our top priority.",
+      "expertDoctors": {
+        "title": "Expert Doctors",
+        "description": "Our medical professionals are highly trained, vetted, and dedicated to your well-being."
+      },
+      "modernTechnology": {
+        "title": "Modern Technology",
+        "description": "Equipped with the latest diagnostic and treatment tools for accurate and efficient care."
+      },
+      "comfortableEnvironment": {
+        "title": "Comfortable Environment",
+        "description": "A clean, modern, and soothing clinic designed to make your visit stress-free and pleasant."
+      }
+    },
+    "faq": {
+      "title": "Frequently Asked Questions",
+      "questions": [
+        {
+          "question": "Do you accept health insurance?",
+          "answer": "Yes, we work with major insurance providers. Please contact us with your provider details to confirm coverage for specific treatments."
+        },
+        {
+          "question": "How can I reschedule my appointment?",
+          "answer": "You can reschedule your appointment through your patient portal or by calling our clinic directly at least 24 hours in advance."
+        },
+        {
+          "question": "What should I bring for my first visit?",
+          "answer": "Please bring a valid ID, your insurance card, a list of current medications, and any relevant medical records or test results."
+        }
+      ]
+    }
+  },
+  "doctors": {
+    "title": "Our Top",
+    "titleHighlight": "Doctors",
+    "description": "Meet our most experienced medical professionals",
+    "viewAllDoctors": "View All Doctors →",
+    "yearsExperience": "Years Experience",
+    "nextAvailable": "Next Available:",
+    "today": "Today",
+    "bookAppointment": "Book Appointment",
+    "viewProfile": "View Profile",
+    "page": {
+      "title": "Our Doctors",
+      "subtitle": "Find the best medical professionals for your needs",
+      "filterTitle": "Filter Doctors",
+      "filterSubtitle": "Refine your search to find the perfect doctor",
+      "hide": "Hide",
+      "show": "Show",
+      "specialty": "Specialty",
+      "allSpecialties": "All Specialties",
+      "gender": "Gender",
+      "allGenders": "All Genders",
+      "male": "Male",
+      "female": "Female",
+      "minExperience": "Min Experience",
+      "years": "Years",
+      "availableToday": "Available Today",
+      "clearAll": "Clear All",
+      "found": "Found",
+      "doctor": "doctor",
+      "doctors": "doctors",
+      "page": "Page",
+      "of": "of",
+      "noDoctorsFound": "No Doctors Found",
+      "adjustFilters": "Try adjusting your filters to see more results",
+      "clearAllFilters": "Clear All Filters",
+      "availabilityStatus": "Availability Status:",
+      "availableTodayStatus": "Available Today",
+      "notAvailableToday": "Not Available Today"
+    }
+  },
+  "clinics": {
+    "title": "Our",
+    "titleHighlight": "Clinics",
+    "description": "Discover our network of trusted medical facilities",
+    "noLogo": "No Logo",
+    "viewDetails": "View Details",
+    "noClinics": "No clinics available at the moment"
+  },
+  "reviews": {
+    "title": "Patient",
+    "titleHighlight": "Reviews",
+    "description": "Real experiences from our valued patients",
+    "writeReview": "Write Review",
+    "basedOn": "Based on",
+    "reviewsCount": "reviews",
+    "stars": "stars",
+    "modal": {
+      "title": "Write a Review",
+      "yourName": "Your Name (Optional)",
+      "enterName": "Enter your name",
+      "rating": "Rating",
+      "yourReview": "Your Review",
+      "shareExperience": "Share your experience...",
+      "characters": "characters (minimum 10)",
+      "selectRating": "Please select a rating",
+      "commentMinLength": "Comment must be at least 10 characters",
+      "submitting": "Submitting...",
+      "submitReview": "Submit Review"
+    }
+  },
+  "footer": {
+    "about": "Your trusted healthcare partner. Book appointments with top doctors and manage your health seamlessly.",
+    "quickLinks": "Quick Links",
+    "home": "Home",
+    "services": "Services",
+    "doctors": "Doctors",
+    "aboutUs": "About Us",
+    "contact": "Contact",
+    "bookAppointment": "Book Appointment",
+    "contactUs": "Contact Us",
+    "address": "123 Mansoura, Egypt",
+    "followUs": "Follow Us",
+    "copyright": "2026 CareSync. All rights reserved.",
+    "privacyPolicy": "Privacy Policy",
+    "termsOfService": "Terms of Service",
+    "cookiePolicy": "Cookie Policy",
+    "demoProject": "Demo Project",
+    "demoDescription": "This is a demonstration project showcasing full-stack development capabilities. Built with modern technologies to deliver exceptional user experiences.",
+    "developedBy": "Developed by Mohammed Samier Mouawad",
+    "viewPortfolio": "View Portfolio"
+  },
+  "about": {
+    "established": "Established 2013",
+    "heroTitle": "Dedicated to Your",
+    "heroTitleHighlight": "Health",
+    "heroDescription": "Providing compassionate, world-class healthcare to our community for over a decade. We combine medical expertise with a human touch.",
+    "meetDoctors": "Meet Our Doctors",
+    "ourHistory": "Our History",
+    "ourStory": "Our Story",
+    "storyPart1": "CareSync began with a simple yet profound vision: to bridge the gap between high-end medical technology and personalized, patient-centric care. Founded in 2013, we started as a small family practice and have grown into a comprehensive healthcare hub.",
+    "storyPart2": "Every patient who walks through our doors is treated with the same respect and attention we would give our own family. Our journey has been defined by continuous learning and an unwavering commitment to the well-being of our community.",
+    "quote": "Healing is an art that requires both clinical precision and deep empathy. At CareSync, we practice both",
+    "quoteAuthor": "- Mohammed Samir, Founder",
+    "timeline1Title": "2013: The Beginning",
+    "timeline1Desc": "Opened our first facility with 3 consulting rooms and a dream to redefine healthcare.",
+    "timeline2Title": "2017: Specialization",
+    "timeline2Desc": "Expanded to include Cardiology and Pediatrics departments with state-of-the-art diagnostic tools.",
+    "timeline3Title": "2021: Digital Transformation",
+    "timeline3Desc": "Introduced AI-assisted diagnostics and a fully integrated telemedicine platform.",
+    "timeline4Title": "Present Day",
+    "timeline4Desc": "Serving over 5,000 patients monthly with a team of 20+ specialized practitioners.",
+    "yearsExperience": "Years Experience",
+    "happyPatients": "Happy Patients",
+    "specializedDoctors": "Specialized Doctors",
+    "coreValues": "Our Core Values",
+    "coreValuesDesc": "The principles that guide every diagnosis, every treatment, and every patient interaction.",
+    "compassion": "Compassion",
+    "compassionDesc": "We treat every patient with the empathy and kindness they deserve, ensuring a safe and supportive environment.",
+    "innovation": "Innovation",
+    "innovationDesc": "We embrace the latest medical advancements and technology to provide the most effective and efficient care possible.",
+    "excellence": "Excellence",
+    "excellenceDesc": "Our standards are set by international board-certified protocols, ensuring quality medical outcomes for all.",
+    "ctaTitle": "Ready to experience",
+    "ctaTitleHighlight": "better care",
+    "ctaDescription": "Schedule your consultation today and join thousands of patients who trust CareSync with their well-being.",
+    "bookOnline": "Book Online Now",
+    "callUs": "Call +201012486445"
+  },
+  "contact": {
+    "hero": {
+      "title": "Get in Touch with",
+      "titleHighlight": "Medical Excellence",
+      "description": "Have questions or need to schedule a consultation? Our team is here to provide you with the care and support you deserve."
+    },
+    "form": {
+      "title": "Send us a Message",
+      "fullName": "Full Name",
+      "fullNamePlaceholder": "John Doe",
+      "email": "Email Address",
+      "emailPlaceholder": "john@example.com",
+      "phone": "Phone Number",
+      "phonePlaceholder": "+20 123 456 789",
+      "subject": "Subject",
+      "subjectPlaceholder": "Select a subject",
+      "subjectGeneral": "General Inquiry",
+      "subjectAppointment": "Appointment Request",
+      "subjectFeedback": "Feedback",
+      "subjectComplaint": "Complaint",
+      "message": "Your Message",
+      "messagePlaceholder": "How can we help you today?",
+      "sendButton": "SEND MESSAGE",
+      "sending": "SENDING...",
+      "successMessage": "Message sent successfully! We will get back to you soon.",
+      "errorMessage": "Failed to send message. Please try again.",
+      "networkError": "Network error. Please check your connection and try again."
+    },
+    "info": {
+      "location": "Our Location",
+      "locationAddress": "Mansoura, Egypt",
+      "viewOnMap": "View on Map",
+      "phone": "Phone Number",
+      "phoneAvailability": "Available Sun-Thu, 9am - 9pm",
+      "email": "Email Address",
+      "whatsappTitle": "Need Instant Help?",
+      "whatsappDescription": "Our patient coordinators are online and ready to assist you via WhatsApp.",
+      "whatsappButton": "Chat with us on WhatsApp"
+    },
+    "map": {
+      "title": "Find Us",
+      "clinicName": "CareSync Clinic",
+      "getDirections": "Get Directions"
+    },
+    "hours": {
+      "title": "Working Hours",
+      "sunday": "Sunday",
+      "monday": "Monday",
+      "tuesday": "Tuesday",
+      "wednesday": "Wednesday",
+      "thursday": "Thursday",
+      "friday": "Friday",
+      "saturday": "Saturday",
+      "closed": "Closed"
+    },
+    "faq": {
+      "title": "Common Questions",
+      "q1": "Do you accept international insurance?",
+      "a1": "Yes, we accept most international insurance plans. Please contact our billing department with your insurance details, and we will verify your coverage before your appointment.",
+      "q2": "How can I book a same-day appointment?",
+      "a2": "You can book a same-day appointment by calling our hotline at +20 123 456 789 or using our WhatsApp service. Subject to doctor availability.",
+      "q3": "What documents do I need for my first visit?",
+      "a3": "Please bring a valid ID, insurance card (if applicable), any previous medical records, and a list of current medications you are taking.",
+      "q4": "Where is the nearest parking area?",
+      "a4": "We have a dedicated parking area in the building basement with 2 hours of free parking for patients. Additional parking is available on the street."
+    }
+  }
+}
