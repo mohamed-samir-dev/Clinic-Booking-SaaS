@@ -1,29 +1,45 @@
+'use client';
 
 import {PatientDemographicsProps}from '../types/types'
 export default function PatientDemographics({ dateOfBirth, setDateOfBirth, gender, setGender }: PatientDemographicsProps) {
+  const today = new Date().toISOString().split('T')[0];
+  const minDate = new Date(new Date().getFullYear() - 120, 0, 1).toISOString().split('T')[0];
+  
+  const isDateValid = dateOfBirth && new Date(dateOfBirth) <= new Date(today);
+
   return (
-    <div className="mb-6">
-      <div className="flex items-center gap-2 mb-4">
-        <span className="material-icons text-teal-600">personal_injury</span>
-        <h3 className="text-lg font-bold text-gray-900">Patient Demographics</h3>
+    <div className="mb-4 sm:mb-6">
+      <div className="flex items-center gap-2 mb-3 sm:mb-4">
+        <span className="material-icons text-teal-600 text-lg sm:text-xl">personal_injury</span>
+        <h3 className="text-base sm:text-lg font-bold text-gray-900">Patient Demographics</h3>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
         <div>
-          <label className="block text-sm font-bold text-gray-900 mb-2">Date of Birth</label>
+          <label className="block text-xs sm:text-sm font-bold text-gray-900 mb-1.5 sm:mb-2">Date of Birth</label>
           <input
             type="date"
             value={dateOfBirth}
             onChange={(e) => setDateOfBirth(e.target.value)}
-            className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-teal-500 focus:outline-none text-gray-900 text-base"
+            max={today}
+            min={minDate}
+            className={`w-full px-3 sm:px-4 py-2 sm:py-3 rounded-xl border-2 focus:outline-none text-gray-900 text-sm sm:text-base ${
+              dateOfBirth && !isDateValid ? 'border-red-500 focus:border-red-500' : 'border-gray-200 focus:border-teal-500'
+            }`}
             placeholder="mm/dd/yyyy"
           />
+          {dateOfBirth && !isDateValid && (
+            <p className="text-[10px] sm:text-xs text-red-500 mt-1">⚠ Date of birth cannot be in the future</p>
+          )}
+          {(!dateOfBirth || isDateValid) && (
+            <p className="text-[10px] sm:text-xs text-gray-500 mt-1">Select your date of birth</p>
+          )}
         </div>
         <div>
-          <label className="block text-sm font-bold text-gray-900 mb-2">Gender</label>
+          <label className="block text-xs sm:text-sm font-bold text-gray-900 mb-1.5 sm:mb-2">Gender</label>
           <select
             value={gender}
             onChange={(e) => setGender(e.target.value)}
-            className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-teal-500 focus:outline-none text-gray-900 text-base"
+            className="w-full px-3 sm:px-4 py-2 sm:py-3 rounded-xl border-2 border-gray-200 focus:border-teal-500 focus:outline-none text-gray-900 text-sm sm:text-base"
           >
             <option value="">Select gender</option>
             <option value="male">Male</option>
