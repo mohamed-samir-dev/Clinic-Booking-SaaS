@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { FaGraduationCap, FaLanguage, FaMapMarkerAlt, FaPhone, FaEnvelope, FaTint } from 'react-icons/fa';
 import { Doctor } from '../../../../types';
 import { ReviewsTab, ScheduleTab, SpecializationsCard } from './tabs';
+import { useTheme } from '../../../../contexts/ThemeContext';
 
 interface DoctorTabsProps {
   doctor: Doctor;
@@ -12,18 +13,19 @@ interface DoctorTabsProps {
 export default function DoctorTabs({ doctor }: DoctorTabsProps) {
   const [activeTab, setActiveTab] = useState('overview');
   const [showFullAbout, setShowFullAbout] = useState(false);
+  const { theme } = useTheme();
   const doctorAbout = typeof doctor.aboutUs === 'string' ? doctor.aboutUs : '';
   const aboutPreview = doctorAbout.slice(0, 150);
 
   return (
     <>
-      <div className="bg-white rounded-xl sm:rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+      <div className={`rounded-xl sm:rounded-2xl shadow-sm border overflow-hidden ${theme === 'dark' ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-100'}`}>
         {/* Tabs */}
-        <div className="flex gap-4 sm:gap-6 md:gap-8 px-4 sm:px-6 md:px-8 pt-4 sm:pt-6 border-b border-gray-200 overflow-x-auto">
+        <div className={`flex gap-4 sm:gap-6 md:gap-8 px-4 sm:px-6 md:px-8 pt-4 sm:pt-6 border-b overflow-x-auto ${theme === 'dark' ? 'border-gray-700' : 'border-gray-200'}`}>
           <button
             onClick={() => setActiveTab('overview')}
             className={`pb-3 sm:pb-4 px-1 sm:px-2 font-semibold text-sm sm:text-base whitespace-nowrap transition-colors relative ${
-              activeTab === 'overview' ? 'text-teal-600' : 'text-gray-500 hover:text-gray-700'
+              activeTab === 'overview' ? 'text-teal-600' : theme === 'dark' ? 'text-gray-400 hover:text-gray-200' : 'text-gray-500 hover:text-gray-700'
             }`}
           >
             Overview
@@ -34,7 +36,7 @@ export default function DoctorTabs({ doctor }: DoctorTabsProps) {
           <button
             onClick={() => setActiveTab('locations')}
             className={`pb-3 sm:pb-4 px-1 sm:px-2 font-semibold text-sm sm:text-base whitespace-nowrap transition-colors relative ${
-              activeTab === 'locations' ? 'text-teal-600' : 'text-gray-500 hover:text-gray-700'
+              activeTab === 'locations' ? 'text-teal-600' : theme === 'dark' ? 'text-gray-400 hover:text-gray-200' : 'text-gray-500 hover:text-gray-700'
             }`}
           >
             Locations
@@ -45,7 +47,7 @@ export default function DoctorTabs({ doctor }: DoctorTabsProps) {
           <button
             onClick={() => setActiveTab('reviews')}
             className={`pb-3 sm:pb-4 px-1 sm:px-2 font-semibold text-sm sm:text-base whitespace-nowrap transition-colors relative ${
-              activeTab === 'reviews' ? 'text-teal-600' : 'text-gray-500 hover:text-gray-700'
+              activeTab === 'reviews' ? 'text-teal-600' : theme === 'dark' ? 'text-gray-400 hover:text-gray-200' : 'text-gray-500 hover:text-gray-700'
             }`}
           >
             Reviews
@@ -56,7 +58,7 @@ export default function DoctorTabs({ doctor }: DoctorTabsProps) {
           <button
             onClick={() => setActiveTab('schedule')}
             className={`pb-3 sm:pb-4 px-1 sm:px-2 font-semibold text-sm sm:text-base whitespace-nowrap transition-colors relative ${
-              activeTab === 'schedule' ? 'text-teal-600' : 'text-gray-500 hover:text-gray-700'
+              activeTab === 'schedule' ? 'text-teal-600' : theme === 'dark' ? 'text-gray-400 hover:text-gray-200' : 'text-gray-500 hover:text-gray-700'
             }`}
           >
             Schedule
@@ -71,10 +73,10 @@ export default function DoctorTabs({ doctor }: DoctorTabsProps) {
           {activeTab === 'overview' && (
             <div className="space-y-4 sm:space-y-6">
               {/* About Section */}
-              <div className="bg-gray-50 rounded-lg sm:rounded-xl p-4 sm:p-6 border-b-2 border-gray-200">
-                <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-2 sm:mb-3">About</h3>
+              <div className={`rounded-lg sm:rounded-xl p-4 sm:p-6 border-b-2 ${theme === 'dark' ? 'bg-gray-700 border-gray-600' : 'bg-gray-50 border-gray-200'}`}>
+                <h3 className={`text-lg sm:text-xl font-bold mb-2 sm:mb-3 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>About</h3>
                 {doctorAbout ? (
-                  <p className="text-sm sm:text-base text-gray-600 leading-relaxed">
+                  <p className={`text-sm sm:text-base leading-relaxed ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>
                     {showFullAbout || doctorAbout.length <= 150 ? doctorAbout : `${aboutPreview}...`}
                     {doctorAbout.length > 150 && (
                       <button
@@ -86,7 +88,7 @@ export default function DoctorTabs({ doctor }: DoctorTabsProps) {
                     )}
                   </p>
                 ) : (
-                  <p className="text-sm sm:text-base text-gray-600 leading-relaxed">No information available</p>
+                  <p className={`text-sm sm:text-base leading-relaxed ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>No information available</p>
                 )}
               </div>
 
@@ -95,42 +97,42 @@ export default function DoctorTabs({ doctor }: DoctorTabsProps) {
                 {/* Education */}
                 <div className="rounded-lg sm:rounded-xl p-4 sm:p-6">
                   <div className="flex items-center gap-2 sm:gap-3 mb-3 sm:mb-4">
-                    <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg bg-teal-50 flex items-center justify-center">
+                    <div className={`w-8 h-8 sm:w-10 sm:h-10 rounded-lg flex items-center justify-center ${theme === 'dark' ? 'bg-teal-900/50' : 'bg-teal-50'}`}>
                       <FaGraduationCap className="text-teal-600 text-base sm:text-lg" />
                     </div>
-                    <h3 className="text-base sm:text-lg font-bold text-gray-900">Education</h3>
+                    <h3 className={`text-base sm:text-lg font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Education</h3>
                   </div>
                   <div className="space-y-3 sm:space-y-4">
                     {doctor.education && doctor.education.length > 0 ? (
                       doctor.education.map((edu, index) => (
                         <div key={index} className="flex items-start gap-2 sm:gap-3">
-                          <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-teal-100 flex items-center justify-center shrink-0 mt-1">
+                          <div className={`w-7 h-7 sm:w-8 sm:h-8 rounded-lg flex items-center justify-center shrink-0 mt-1 ${theme === 'dark' ? 'bg-teal-900/30' : 'bg-teal-100'}`}>
                             <FaGraduationCap className="text-teal-600 text-xs sm:text-sm" />
                           </div>
                           <div>
-                            <p className="font-bold text-sm sm:text-base text-gray-900">{edu.institution || 'Institution'}</p>
-                            <p className="text-xs sm:text-sm text-gray-600">
+                            <p className={`font-bold text-sm sm:text-base ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{edu.institution || 'Institution'}</p>
+                            <p className={`text-xs sm:text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>
                               {edu.degree || 'Degree'}{edu.year && ` • ${edu.year}`}
                             </p>
                           </div>
                         </div>
                       ))
                     ) : (
-                      <p className="text-sm sm:text-base text-gray-500">No education information available</p>
+                      <p className={`text-sm sm:text-base ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>No education information available</p>
                     )}
                   </div>
                 </div>
 
                 {/* Divider */}
-                <div className="hidden md:block absolute left-1/2 top-0 bottom-0 w-px bg-gray-200" />
+                <div className={`hidden md:block absolute left-1/2 top-0 bottom-0 w-px ${theme === 'dark' ? 'bg-gray-700' : 'bg-gray-200'}`} />
 
                 {/* Languages */}
                 <div className="rounded-lg sm:rounded-xl p-4 sm:p-6">
                   <div className="flex items-center gap-2 sm:gap-3 mb-3 sm:mb-4">
-                    <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg bg-cyan-50 flex items-center justify-center">
+                    <div className={`w-8 h-8 sm:w-10 sm:h-10 rounded-lg flex items-center justify-center ${theme === 'dark' ? 'bg-cyan-900/50' : 'bg-cyan-50'}`}>
                       <FaLanguage className="text-cyan-600 text-base sm:text-lg" />
                     </div>
-                    <h3 className="text-base sm:text-lg font-bold text-gray-900">Languages</h3>
+                    <h3 className={`text-base sm:text-lg font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Languages</h3>
                   </div>
                   <div className="flex flex-wrap gap-2 sm:gap-3">
                     {doctor.languages && doctor.languages.length > 0 ? (
@@ -143,7 +145,7 @@ export default function DoctorTabs({ doctor }: DoctorTabsProps) {
                         </span>
                       ))
                     ) : (
-                      <p className="text-sm sm:text-base text-gray-500">No language information available</p>
+                      <p className={`text-sm sm:text-base ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>No language information available</p>
                     )}
                   </div>
                 </div>
@@ -151,13 +153,13 @@ export default function DoctorTabs({ doctor }: DoctorTabsProps) {
 
               {/* Blood Type */}
               {doctor.bloodType && (
-                <div className="rounded-lg sm:rounded-xl p-4 sm:p-6 border border-gray-100">
+                <div className={`rounded-lg sm:rounded-xl p-4 sm:p-6 border ${theme === 'dark' ? 'border-gray-700' : 'border-gray-100'}`}>
                   <div className="flex items-center gap-3 sm:gap-4">
-                    <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg bg-red-50 flex items-center justify-center">
+                    <div className={`w-10 h-10 sm:w-12 sm:h-12 rounded-lg flex items-center justify-center ${theme === 'dark' ? 'bg-red-900/50' : 'bg-red-50'}`}>
                       <FaTint className="text-red-600 text-lg sm:text-xl" />
                     </div>
                     <div>
-                      <p className="text-xs sm:text-sm text-gray-500 mb-1">Blood Type</p>
+                      <p className={`text-xs sm:text-sm mb-1 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>Blood Type</p>
                       <p className="text-xl sm:text-2xl font-bold text-red-600">{doctor.bloodType}</p>
                     </div>
                   </div>
@@ -169,18 +171,18 @@ export default function DoctorTabs({ doctor }: DoctorTabsProps) {
           {activeTab === 'locations' && (
             <div className="space-y-4 sm:space-y-6">
               {doctor.location && (doctor.location.address || doctor.location.city) ? (
-                <div className="bg-white rounded-lg sm:rounded-xl p-4 sm:p-6 border border-gray-100">
+                <div className={`rounded-lg sm:rounded-xl p-4 sm:p-6 border ${theme === 'dark' ? 'bg-gray-700 border-gray-600' : 'bg-white border-gray-100'}`}>
                   <div className="flex items-start gap-3 sm:gap-4">
-                    <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg bg-teal-50 flex items-center justify-center shrink-0">
+                    <div className={`w-10 h-10 sm:w-12 sm:h-12 rounded-lg flex items-center justify-center shrink-0 ${theme === 'dark' ? 'bg-teal-900/50' : 'bg-teal-50'}`}>
                       <FaMapMarkerAlt className="text-teal-600 text-lg sm:text-xl" />
                     </div>
                     <div className="flex-1">
-                      <h3 className="text-base sm:text-lg font-bold text-gray-900 mb-2">Clinic Location</h3>
+                      <h3 className={`text-base sm:text-lg font-bold mb-2 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Clinic Location</h3>
                       {doctor.location.address && (
-                        <p className="text-sm sm:text-base text-gray-600 mb-1">{doctor.location.address}</p>
+                        <p className={`text-sm sm:text-base mb-1 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>{doctor.location.address}</p>
                       )}
                       {doctor.location.city && (
-                        <p className="text-gray-500 text-xs sm:text-sm mb-3">{doctor.location.city}</p>
+                        <p className={`text-xs sm:text-sm mb-3 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>{doctor.location.city}</p>
                       )}
                       {doctor.location.mapsLink && (
                         <a
@@ -197,7 +199,7 @@ export default function DoctorTabs({ doctor }: DoctorTabsProps) {
                   </div>
                 </div>
               ) : (
-                <div className="text-center py-8 text-gray-500">
+                <div className={`text-center py-8 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
                   No location information available
                 </div>
               )}
@@ -205,27 +207,27 @@ export default function DoctorTabs({ doctor }: DoctorTabsProps) {
               {/* Contact Info */}
               <div className="grid sm:grid-cols-2 gap-3 sm:gap-4">
                 {doctor.phone && (
-                  <div className="bg-gray-50 rounded-lg sm:rounded-xl p-4 sm:p-5">
+                  <div className={`rounded-lg sm:rounded-xl p-4 sm:p-5 ${theme === 'dark' ? 'bg-gray-700' : 'bg-gray-50'}`}>
                     <div className="flex items-center gap-2 sm:gap-3">
-                      <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg bg-blue-50 flex items-center justify-center">
+                      <div className={`w-8 h-8 sm:w-10 sm:h-10 rounded-lg flex items-center justify-center ${theme === 'dark' ? 'bg-blue-900/50' : 'bg-blue-50'}`}>
                         <FaPhone className="text-blue-600 text-sm sm:text-base" />
                       </div>
                       <div>
-                        <p className="text-xs text-gray-500 mb-1">Phone</p>
-                        <p className="font-semibold text-sm sm:text-base text-gray-900">{doctor.phone}</p>
+                        <p className={`text-xs mb-1 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>Phone</p>
+                        <p className={`font-semibold text-sm sm:text-base ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{doctor.phone}</p>
                       </div>
                     </div>
                   </div>
                 )}
                 {doctor.email && (
-                  <div className="bg-gray-50 rounded-lg sm:rounded-xl p-4 sm:p-5">
+                  <div className={`rounded-lg sm:rounded-xl p-4 sm:p-5 ${theme === 'dark' ? 'bg-gray-700' : 'bg-gray-50'}`}>
                     <div className="flex items-center gap-2 sm:gap-3">
-                      <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg bg-purple-50 flex items-center justify-center">
+                      <div className={`w-8 h-8 sm:w-10 sm:h-10 rounded-lg flex items-center justify-center ${theme === 'dark' ? 'bg-purple-900/50' : 'bg-purple-50'}`}>
                         <FaEnvelope className="text-purple-600 text-sm sm:text-base" />
                       </div>
                       <div>
-                        <p className="text-xs text-gray-500 mb-1">Email</p>
-                        <p className="font-semibold text-gray-900 text-xs sm:text-sm break-all">{doctor.email}</p>
+                        <p className={`text-xs mb-1 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>Email</p>
+                        <p className={`font-semibold text-xs sm:text-sm break-all ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{doctor.email}</p>
                       </div>
                     </div>
                   </div>
