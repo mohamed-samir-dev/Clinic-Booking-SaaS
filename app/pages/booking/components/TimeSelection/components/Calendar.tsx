@@ -26,54 +26,54 @@ export default function Calendar({
   blockedDates
 }: CalendarProps) {
   return (
-    <div className="bg-white rounded-2xl shadow-sm p-6">
-      <div className="flex items-center justify-between mb-4">
-        <h3 className="text-lg text-black font-semibold">{MONTH_NAMES[currentMonth.getMonth()]} {currentMonth.getFullYear()}</h3>
-        <div className="flex gap-2">
+    <div className="bg-white rounded-2xl shadow-sm p-4 sm:p-6">
+      <div className="flex items-center justify-between mb-3 sm:mb-4">
+        <h3 className="text-base sm:text-lg text-black font-semibold">{MONTH_NAMES[currentMonth.getMonth()]} {currentMonth.getFullYear()}</h3>
+        <div className="flex gap-1 sm:gap-2">
           <button 
             onClick={() => canGoPrevious && setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1))} 
             disabled={!canGoPrevious}
-            className={`p-2 rounded-lg ${canGoPrevious ? 'hover:bg-gray-100' : 'opacity-30 cursor-not-allowed'}`}
+            className={`p-1.5 sm:p-2 rounded-lg ${canGoPrevious ? 'hover:bg-gray-100' : 'opacity-30 cursor-not-allowed'}`}
           >
-            <span className="material-icons text-gray-600">chevron_left</span>
+            <span className="material-icons text-gray-600 text-lg sm:text-xl">chevron_left</span>
           </button>
           <button 
             onClick={() => canGoNext && setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1))} 
             disabled={!canGoNext}
-            className={`p-2 rounded-lg ${canGoNext ? 'hover:bg-gray-100' : 'opacity-30 cursor-not-allowed'}`}
+            className={`p-1.5 sm:p-2 rounded-lg ${canGoNext ? 'hover:bg-gray-100' : 'opacity-30 cursor-not-allowed'}`}
           >
-            <span className="material-icons text-gray-600">chevron_right</span>
+            <span className="material-icons text-gray-600 text-lg sm:text-xl">chevron_right</span>
           </button>
         </div>
       </div>
 
       {!doctorObject && (
-        <div className="mb-3 p-2 font-semibold bg-amber-50 rounded-lg text-xs text-amber-700 text-center">
+        <div className="mb-2 sm:mb-3 p-2 font-semibold bg-amber-50 rounded-lg text-[10px] sm:text-xs text-amber-700 text-center">
           Select a doctor to see available dates
         </div>
       )}
 
       {doctorObject && (
         <>
-          <div className="mb-3 flex items-center justify-center gap-4 text-xs">
+          <div className="mb-2 sm:mb-3 flex items-center justify-center gap-3 sm:gap-4 text-[10px] sm:text-xs">
             <div className="flex items-center gap-1">
-              <div className="w-2 h-2 rounded-full bg-green-500"></div>
+              <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-green-500"></div>
               <span className="text-gray-600 font-semibold">Available</span>
             </div>
             <div className="flex items-center gap-1">
-              <div className="w-2 h-2 rounded-full bg-red-500"></div>
+              <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-red-500"></div>
               <span className="text-gray-600 font-semibold">Not Available</span>
             </div>
           </div>
-          <div className="mb-3 p-2 font-semibold bg-blue-50 rounded-lg text-xs text-blue-700 text-center">
+          <div className="mb-2 sm:mb-3 p-2 font-semibold bg-blue-50 rounded-lg text-[10px] sm:text-xs text-blue-700 text-center">
             Booking available for the next 2 months
           </div>
         </>
       )}
 
-      <div className="grid grid-cols-7 gap-2">
+      <div className="grid grid-cols-7 gap-1 sm:gap-2">
         {DAY_NAMES.map(day => (
-          <div key={day} className="text-center text-xs font-semibold text-gray-500 py-2">{day}</div>
+          <div key={day} className="text-center text-[10px] sm:text-xs font-semibold text-gray-500 py-1 sm:py-2">{day}</div>
         ))}
         {days.map((d, idx) => {
           const dateStr = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), d.day).toISOString().split('T')[0];
@@ -84,7 +84,7 @@ export default function Calendar({
             <button
               onClick={() => d.isCurrentMonth && d.isAvailable && !d.isPast && !isBlocked && setSelectedDate(new Date(currentMonth.getFullYear(), currentMonth.getMonth(), d.day))}
               disabled={!d.isCurrentMonth || !d.isAvailable || d.isPast || isBlocked}
-              className={`w-full aspect-square rounded-lg text-sm font-medium transition-all relative ${
+              className={`w-full aspect-square rounded-lg text-xs sm:text-sm font-medium transition-all relative ${
                 !d.isCurrentMonth ? 'text-gray-300 cursor-not-allowed' :
                 d.isPast ? 'text-gray-400 cursor-not-allowed line-through' :
                 isBlocked ? 'text-red-400 cursor-not-allowed bg-red-50' :
@@ -97,7 +97,7 @@ export default function Calendar({
               {d.day}
             </button>
             {d.isCurrentMonth && doctorObject && !d.isPast && (
-              <div className={`w-1.5 h-1.5 rounded-full mt-1 ${isBlocked ? 'bg-red-500' : d.isAvailable ? 'bg-green-500' : 'bg-red-500'}`} />
+              <div className={`w-1 h-1 sm:w-1.5 sm:h-1.5 rounded-full mt-0.5 sm:mt-1 ${isBlocked ? 'bg-red-500' : d.isAvailable ? 'bg-green-500' : 'bg-red-500'}`} />
             )}
           </div>
         )})}

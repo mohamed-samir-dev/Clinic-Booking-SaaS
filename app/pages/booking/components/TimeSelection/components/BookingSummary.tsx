@@ -54,7 +54,7 @@ export default function BookingSummary({
                 <p className="font-semibold text-gray-900 text-xs sm:text-sm">{consultationDuration} Minutes</p>
               </div>
               <div className="flex justify-between items-start gap-2">
-                <p className="text-xs sm:text-sm text-gray-500 flex-shrink-0">Date</p>
+                <p className="text-xs sm:text-sm text-gray-500 shrink-0">Date</p>
                 <p className="font-semibold text-gray-900 text-right text-xs sm:text-sm">
                   {selectedDate ? selectedDate.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' }) : 'Select a date'}
                 </p>
@@ -82,7 +82,7 @@ export default function BookingSummary({
 
       {doctorObject && (
         <div className="flex items-start gap-2 sm:gap-3 p-3 sm:p-4 bg-linear-to-r from-blue-50 to-indigo-50 rounded-xl mt-3 sm:mt-4 border border-blue-100">
-          <span className="material-icons text-blue-500 text-base sm:text-lg mt-0.5 flex-shrink-0">info</span>
+          <span className="material-icons text-blue-500 text-base sm:text-lg mt-0.5 shrink-0">info</span>
           <div className="flex-1 space-y-1.5 sm:space-y-2">
             <p className="text-[10px] sm:text-xs font-semibold text-blue-700">Booking Information</p>
             <p className="text-[10px] sm:text-xs font-semibold leading-relaxed text-gray-700">
