@@ -27,14 +27,14 @@ export default function TimePeriod({
 
   return (
     <div>
-      <div className="flex items-center gap-2 mb-3">
-        <span className={`material-icons text-${iconColor}`}>{icon}</span>
-        <h4 className="font-semibold text-gray-900">{title}</h4>
+      <div className="flex items-center gap-1.5 sm:gap-2 mb-2 sm:mb-3">
+        <span className={`material-icons text-${iconColor} text-base sm:text-lg`}>{icon}</span>
+        <h4 className="font-semibold text-gray-900 text-sm sm:text-base">{title}</h4>
         {slots.length > 4 && (
-          <span className="text-xs text-gray-500">({slots.length} slots)</span>
+          <span className="text-[10px] sm:text-xs text-gray-500">({slots.length} slots)</span>
         )}
       </div>
-      <div className="grid grid-cols-2 gap-2">
+      <div className="grid grid-cols-2 gap-1.5 sm:gap-2">
         {displayedSlots.map(time => {
           const isBooked = bookedSlots.includes(time);
           return (
@@ -42,7 +42,7 @@ export default function TimePeriod({
               key={time}
               onClick={() => !isBooked && setSelectedTime(time)}
               disabled={isBooked}
-              className={`py-2 px-3 rounded-lg text-sm font-medium transition-all ${
+              className={`py-1.5 sm:py-2 px-2 sm:px-3 rounded-lg text-xs sm:text-sm font-medium transition-all ${
                 isBooked
                   ? 'bg-gray-200 text-gray-400 cursor-not-allowed opacity-50'
                   : selectedTime === time
@@ -58,10 +58,10 @@ export default function TimePeriod({
       {slots.length > 4 && (
         <button
           onClick={() => setShowAll(!showAll)}
-          className="w-full mt-2 py-2 text-sm text-teal-600 hover:text-teal-700 font-medium flex items-center justify-center gap-1"
+          className="w-full mt-1.5 sm:mt-2 py-1.5 sm:py-2 text-xs sm:text-sm text-teal-600 hover:text-teal-700 font-medium flex items-center justify-center gap-1"
         >
           <span>{showAll ? 'Show Less' : `Show ${slots.length - 4} More`}</span>
-          <span className="material-icons text-sm">{showAll ? 'expand_less' : 'expand_more'}</span>
+          <span className="material-icons text-xs sm:text-sm">{showAll ? 'expand_less' : 'expand_more'}</span>
         </button>
       )}
     </div>
