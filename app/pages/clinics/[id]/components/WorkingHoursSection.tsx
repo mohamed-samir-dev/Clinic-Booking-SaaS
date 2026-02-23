@@ -3,27 +3,28 @@ import { Clinic } from '../types';
 
 interface WorkingHoursSectionProps {
   workingHours: Clinic['workingHours'];
+  theme: 'light' | 'dark';
 }
 
-export default function WorkingHoursSection({ workingHours }: WorkingHoursSectionProps) {
+export default function WorkingHoursSection({ workingHours, theme }: WorkingHoursSectionProps) {
   if (!workingHours || Object.keys(workingHours).length === 0) return null;
 
   return (
-    <div className="bg-white rounded-xl shadow p-4 sm:p-6">
-      <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-3 sm:mb-4 flex items-center gap-2">
+    <div className={`rounded-xl shadow p-4 sm:p-6 ${theme === 'dark' ? 'bg-gray-800' : 'bg-white'}`}>
+      <h2 className={`text-xl sm:text-2xl font-bold mb-3 sm:mb-4 flex items-center gap-2 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
         <Clock className="text-teal-600" size={20} />
         Working Hours
       </h2>
       <div className="space-y-2">
         {Object.entries(workingHours).map(([day, hours]) => (
-          <div key={day} className="flex justify-between items-center p-2 sm:p-3 bg-gray-50 rounded-lg">
-            <span className="font-medium text-gray-900 capitalize text-sm sm:text-base">{day}</span>
+          <div key={day} className={`flex justify-between items-center p-2 sm:p-3 rounded-lg ${theme === 'dark' ? 'bg-gray-700' : 'bg-gray-50'}`}>
+            <span className={`font-medium capitalize text-sm sm:text-base ${theme === 'dark' ? 'text-gray-200' : 'text-gray-900'}`}>{day}</span>
             {hours && hours.isOpen && hours.openTime && hours.closeTime ? (
               <span className="text-teal-600 font-semibold text-xs sm:text-sm">
                 {hours.openTime} - {hours.closeTime}
               </span>
             ) : (
-              <span className="text-gray-400 text-xs sm:text-sm">Closed</span>
+              <span className={`text-xs sm:text-sm ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'}`}>Closed</span>
             )}
           </div>
         ))}
