@@ -2,6 +2,8 @@
 
 import { FaSearch } from 'react-icons/fa';
 import { useTheme } from '@/app/contexts/ThemeContext';
+import { useLanguage } from '@/app/contexts/LanguageContext';
+import translations from '@/messages/translations';
 
 interface BannerProps {
   searchQuery: string;
@@ -11,21 +13,24 @@ interface BannerProps {
 
 export default function Banner({ searchQuery, onSearchChange, onFilterReset }: BannerProps) {
   const { theme } = useTheme();
+  const { locale } = useLanguage();
+  const t = translations[locale].services.banner;
+
   return (
     <div className={`py-12 sm:py-16 md:py-20 lg:py-24 px-4 ${theme === 'dark' ? 'bg-gray-800' : 'bg-[#D5F5F0]'}`}>
       <div className="max-w-7xl mx-auto text-center">
         <h1 className={`text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-3 sm:mb-4 leading-tight ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
-          Comprehensive Care for You and <br className="hidden sm:block" />Your Family
+          {t.title}
         </h1>
         <p className={`text-base sm:text-lg mb-6 sm:mb-8 max-w-2xl mx-auto px-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
-          Expert medical services tailored to your needs. Search our specialties or browse through our full range of treatments.
+          {t.description}
         </p>
         
         <div className="max-w-2xl mx-auto relative px-2">
           <FaSearch className="absolute left-5 sm:left-6 top-1/2 transform -translate-y-1/2 text-gray-400 text-base sm:text-xl" />
           <input
             type="text"
-            placeholder="Search for services..."
+            placeholder={t.searchPlaceholder}
             value={searchQuery}
             onChange={(e) => {
               onSearchChange(e.target.value);
