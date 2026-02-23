@@ -12,8 +12,10 @@ import { serviceOverviews, serviceDetails } from './data/overviewData';
 import { treatmentProcess } from './data/treatmentData';
 import { preparationTips } from './data/preparationData';
 import { faqs } from './data/faqData';
+import { useTheme } from '@/app/contexts/ThemeContext';
 
 export default function ServiceDetailPage() {
+  const { theme } = useTheme();
   const params = useParams();
   const slug = params.slug as string;
   
@@ -21,8 +23,8 @@ export default function ServiceDetailPage() {
 
   if (!service) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <p className="text-xl text-gray-600">Service not found</p>
+      <div className={`min-h-screen flex items-center justify-center ${theme === 'dark' ? 'bg-gray-900' : 'bg-white'}`}>
+        <p className={`text-xl ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Service not found</p>
       </div>
     );
   }
@@ -34,7 +36,7 @@ export default function ServiceDetailPage() {
   const currentFaqs = faqs[service.title] || faqs['Dentistry'];
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className={`min-h-screen ${theme === 'dark' ? 'bg-gray-900' : 'bg-gray-50'}`}>
       <ServiceHero 
         service={service} 
         duration={currentDetails.duration} 

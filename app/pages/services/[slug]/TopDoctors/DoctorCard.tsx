@@ -1,7 +1,9 @@
 import { motion } from 'framer-motion';
-import { FaStar, FaUserMd } from 'react-icons/fa';
+import { FaStar, FaUserMd, FaUser } from 'react-icons/fa';
 import Image from 'next/image';
 import { Doctor } from '../../types/types';
+import { useTheme } from '@/app/contexts/ThemeContext';
+import { useRouter } from 'next/navigation';
 
 interface DoctorCardProps {
   doctor: Doctor;
@@ -9,6 +11,13 @@ interface DoctorCardProps {
 }
 
 export default function DoctorCard({ doctor, index }: DoctorCardProps) {
+  const { theme } = useTheme();
+  const router = useRouter();
+
+  const handleViewProfile = () => {
+    router.push(`/pages/doctors/${doctor._id}`);
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 30 }}
@@ -16,7 +25,7 @@ export default function DoctorCard({ doctor, index }: DoctorCardProps) {
       transition={{ duration: 0.4, delay: index * 0.1 }}
       viewport={{ once: true }}
       whileHover={{ y: -8, scale: 1.02 }}
-      className="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 border border-gray-100"
+      className={`${theme === 'dark' ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-100'} rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 border`}
     >
       <div className="relative h-64 sm:h-72 md:h-80 bg-linear-to-br from-teal-50 to-cyan-50">
         {doctor.photoUrl ? (
@@ -24,6 +33,7 @@ export default function DoctorCard({ doctor, index }: DoctorCardProps) {
             src={doctor.photoUrl}
             alt={doctor.name.en}
             fill
+            sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
             className="object-cover"
           />
         ) : (
@@ -42,7 +52,7 @@ export default function DoctorCard({ doctor, index }: DoctorCardProps) {
       </div>
 
       <div className="p-5 sm:p-6 md:p-8">
-        <h4 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2 sm:mb-3">
+        <h4 className={`text-xl sm:text-2xl font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-900'} mb-2 sm:mb-3`}>
           Dr. {doctor.name.en}
         </h4>
         
@@ -50,20 +60,28 @@ export default function DoctorCard({ doctor, index }: DoctorCardProps) {
           {doctor.specialty.en}
         </p>
 
-        <p className="text-gray-500 text-sm sm:text-base leading-relaxed mb-4 sm:mb-6 line-clamp-3">
+        <p className={`${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'} text-sm sm:text-base leading-relaxed mb-4 sm:mb-6 line-clamp-3`}>
           {doctor.bio?.en || `${doctor.experienceYears}+ years of experience in ${doctor.specialty.en}`}
         </p>
 
-        <div className="flex items-center justify-between pt-4 sm:pt-6 border-t border-gray-100">
+        <div className={`flex items-center justify-between pt-4 sm:pt-6 border-t ${theme === 'dark' ? 'border-gray-700' : 'border-gray-100'}`}>
           <div>
-            <p className="text-xs sm:text-sm text-gray-400 mb-1">Experience</p>
-            <p className="text-xl sm:text-2xl font-bold text-teal-600">{doctor.experienceYears}<span className="text-sm sm:text-base text-gray-400 ml-1">years</span></p>
+            <p className={`text-xs sm:text-sm ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'} mb-1`}>Experience</p>
+            <p className="text-xl sm:text-2xl font-bold text-teal-600">{doctor.experienceYears}<span className={`text-sm sm:text-base ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'} ml-1`}>years</span></p>
           </div>
           <div className="text-right">
-            <p className="text-xs sm:text-sm text-gray-400 mb-1">Reviews</p>
-            <p className="text-xl sm:text-2xl font-bold text-gray-900">{doctor.reviewsCount || 0}</p>
+            <p className={`text-xs sm:text-sm ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'} mb-1`}>Reviews</p>
+            <p className={`text-xl sm:text-2xl font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{doctor.reviewsCount || 0}</p>
           </div>
         </div>
+
+        <button
+          onClick={handleViewProfile}
+          className="w-full mt-4 sm:mt-6 flex items-center justify-center gap-2 bg-teal-500 hover:bg-teal-600 text-white px-4 py-2.5 rounded-lg font-semibold transition-all"
+        >
+          <FaUser className="text-sm" />
+          <span className="text-sm">View Profile</span>
+        </button>
       </div>
     </motion.div>
   );
