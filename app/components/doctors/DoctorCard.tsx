@@ -5,6 +5,8 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { FaUserMd, FaCalendarCheck, FaCalendarTimes, FaBriefcase, FaClock, FaHospital } from 'react-icons/fa';
 import { useTheme } from '@/app/contexts/ThemeContext';
+import { useLanguage } from '@/app/contexts/LanguageContext';
+import translations from '@/messages/translations';
 import {DoctorCardProps}from '../../types/index'
 import { saveQuickBookingData } from '../../pages/booking/utils/quickBooking';
 
@@ -42,10 +44,19 @@ const checkIsAvailableNow = (availability?: Array<{ day: string; slots?: Array<{
   return currentTime >= startTime && currentTime <= endTime;
 };
 
-const getNextAvailableDay = (availability?: Array<{ day: string; slots?: Array<{ from: string; to: string }>; workingHours?: { from: string; to: string } }>) => {
+const getNextAvailableDay = (availability?: Array<{ day: string; slots?: Array<{ from: string; to: string }>; workingHours?: { from: string; to: string } }>, locale: string = 'en') => {
   if (!availability || availability.length === 0) return null;
   
   const daysOrder = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+  const daysArabic: Record<string, string> = {
+    'sunday': 'الأحد',
+    'monday': 'الإثنين',
+    'tuesday': 'الثلاثاء',
+    'wednesday': 'الأربعاء',
+    'thursday': 'الخميس',
+    'friday': 'الجمعة',
+    'saturday': 'السبت'
+  };
   const today = new Date().getDay();
   
   for (let i = 0; i < 7; i++) {
@@ -66,6 +77,7 @@ const getNextAvailableDay = (availability?: Array<{ day: string; slots?: Array<{
       if (hours && hours.from && hours.to) {
         return {
           day: dayName,
+          dayDisplay: locale === 'ar' ? daysArabic[dayName] : dayName.charAt(0).toUpperCase() + dayName.slice(1),
           isToday: i === 0,
           workingHours: hours
         };
@@ -88,15 +100,21 @@ export default function DoctorCard({
   quickBook = false
 }: DoctorCardProps & { hideBookButton?: boolean; quickBook?: boolean }) {
   const { theme } = useTheme();
+  const { locale } = useLanguage();
+  const t = translations[locale].doctors;
   const router = useRouter();
-  const nextAvailable = getNextAvailableDay(availability);
+  const nextAvailable = getNextAvailableDay(availability, locale);
   const isCurrentlyAvailable = checkIsAvailableNow(availability);
+  
+  const displayName = locale === 'ar' && name.ar ? name.ar : name.en;
+  const displaySpecialty = locale === 'ar' && specialty.ar ? specialty.ar : specialty.en;
+  const displayClinicName = clinicName ? (locale === 'ar' && clinicName.ar ? clinicName.ar : clinicName.en) : '';
 
   const handleQuickBook = () => {
     saveQuickBookingData({
       doctorId: id,
-      doctorName: name.en,
-      specialty: specialty.en,
+      doctorName: displayName,
+      specialty: displaySpecialty,
       serviceId: specialty.en,
       skipSteps: true
     });
@@ -111,7 +129,7 @@ export default function DoctorCard({
           <div className="relative w-full h-full rounded-full overflow-hidden border-3 sm:border-4 border-teal-500 shadow-lg group-hover:scale-110 transition-transform duration-300">
             <Image
               src={photoUrl}
-              alt={name.en}
+              alt={displayName}
               fill
               sizes="(max-width: 640px) 96px, (max-width: 768px) 112px, 128px"
               className="object-cover"
@@ -128,23 +146,23 @@ export default function DoctorCard({
           </div>
         </div>
         
-        <h3 className={`text-lg sm:text-xl md:text-2xl font-bold mb-1 text-center ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{name.en}</h3>
+        <h3 className={`text-lg sm:text-xl md:text-2xl font-bold mb-1 text-center ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{displayName}</h3>
         
         <div className="flex items-center gap-1.5 sm:gap-2 text-teal-600 font-semibold mb-2">
           <FaUserMd className="text-base sm:text-lg" />
-          <span className="text-sm sm:text-base">{specialty.en}</span>
+          <span className="text-sm sm:text-base">{displaySpecialty}</span>
         </div>
         
-        {clinicName && (
+        {displayClinicName && (
           <div className="flex items-center gap-1.5 sm:gap-2 text-teal-600 mb-3 sm:mb-4">
             <FaHospital className="text-sm sm:text-base" />
-            <span className="text-xs sm:text-sm font-semibold">{clinicName.en}</span>
+            <span className="text-xs sm:text-sm font-semibold">{displayClinicName}</span>
           </div>
         )}
         
         <div className={`flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full mb-3 ${theme === 'dark' ? 'bg-teal-900/30' : 'bg-teal-50'}`}>
           <FaBriefcase className="text-teal-600 text-xs sm:text-sm" />
-          <span className={`text-xs sm:text-sm font-bold ${theme === 'dark' ? 'text-gray-200' : 'text-gray-700'}`}>{experienceYears} Years Experience</span>
+          <span className={`text-xs sm:text-sm font-bold ${theme === 'dark' ? 'text-gray-200' : 'text-gray-700'}`}>{experienceYears} {t.yearsExperience}</span>
         </div>
         
         {nextAvailable && (
@@ -152,7 +170,7 @@ export default function DoctorCard({
             <div className="flex items-center gap-2 justify-center">
               <FaClock className="text-green-600 text-sm" />
               <span className={`text-xs sm:text-sm font-semibold ${theme === 'dark' ? 'text-gray-200' : 'text-gray-700'}`}>
-                Next Available: {nextAvailable.isToday ? 'Today' : nextAvailable.day.charAt(0).toUpperCase() + nextAvailable.day.slice(1)}
+                {t.nextAvailable} {nextAvailable.isToday ? t.today : nextAvailable.dayDisplay}
                 {' '}
                 <span className="text-green-600">
                   {nextAvailable.workingHours.from} - {nextAvailable.workingHours.to}
@@ -169,14 +187,14 @@ export default function DoctorCard({
                 onClick={handleQuickBook}
                 className="block w-full mb-3 px-4 sm:px-5 md:px-6 py-2.5 sm:py-3 bg-linear-to-r from-teal-500 to-teal-600 text-white rounded-full hover:from-teal-600 hover:to-teal-700 transition-all font-semibold shadow-md hover:shadow-lg transform hover:-translate-y-0.5 text-sm sm:text-base text-center"
               >
-                Book Appointment
+                {t.bookAppointment}
               </button>
             ) : (
               <Link 
                 href={`/doctors/${id}/book`}
                 className="block w-full mb-3 px-4 sm:px-5 md:px-6 py-2.5 sm:py-3 bg-linear-to-r from-teal-500 to-teal-600 text-white rounded-full hover:from-teal-600 hover:to-teal-700 transition-all font-semibold shadow-md hover:shadow-lg transform hover:-translate-y-0.5 text-sm sm:text-base text-center"
               >
-                Book Appointment
+                {t.bookAppointment}
               </Link>
             )
           )}
@@ -184,7 +202,7 @@ export default function DoctorCard({
             href={`/pages/doctors/${id}`}
             className="block w-full px-4 sm:px-5 md:px-6 py-2.5 sm:py-3 border-2 border-teal-500 text-teal-600 rounded-full hover:bg-teal-50 transition-all font-semibold text-sm sm:text-base text-center"
           >
-            View Profile
+            {t.viewProfile}
           </Link>
         </div>
       </div>
