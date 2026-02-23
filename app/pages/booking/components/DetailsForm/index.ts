@@ -1,4 +1,3 @@
-export { default as PatientTypeSelector } from './components/PatientTypeSelector';
 export { default as BasicInformation } from './components/BasicInformation';
 export { default as PatientDemographics } from './components/PatientDemographics';
 export { default as MedicalContext } from './components/MedicalContext';
