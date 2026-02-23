@@ -10,8 +10,10 @@ import LoginForm from './components/LoginForm';
 import { loginUser, saveAuthData, getRedirectRoute } from './utils/authService';
 import { useAppDispatch } from '@/app/store/hooks';
 import { setCredentials } from '@/app/store/slices/authSlice';
+import { useTheme } from '@/app/contexts/ThemeContext';
 
 export default function LoginPage() {
+  const { theme } = useTheme();
   const router = useRouter();
   const dispatch = useAppDispatch();
   const [userType, setUserType] = useState<UserType>('patient');
@@ -35,15 +37,15 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-teal-50 to-cyan-50 flex items-center justify-center px-4 py-12">
-      <div className="w-full max-w-3xl">
-        <div className="bg-white rounded-3xl shadow-2xl overflow-hidden">
-          <div className="px-8 md:px-12 py-12">
-            <div className="mb-8">
-              <h1 className="text-4xl font-bold text-gray-900 mb-3">Welcome Back</h1>
-              <p className="text-gray-500">Please enter your details to sign in</p>
+    <div className={`min-h-screen flex items-center justify-center px-3 xs:px-4 sm:px-6 lg:px-8 py-6 xs:py-8 sm:py-12 ${theme === 'dark' ? 'bg-gray-900' : 'bg-linear-to-br from-teal-50 to-cyan-50'}`}>
+      <div className="w-full max-w-md sm:max-w-lg md:max-w-xl lg:max-w-2xl">
+        <div className={`rounded-2xl sm:rounded-3xl shadow-xl sm:shadow-2xl overflow-hidden ${theme === 'dark' ? 'bg-gray-800' : 'bg-white'}`}>
+          <div className="px-4 xs:px-6 sm:px-8 md:px-10 lg:px-12 py-6 xs:py-8 sm:py-10 md:py-12">
+            <div className="mb-6 sm:mb-8">
+              <h1 className={`text-2xl xs:text-3xl sm:text-3xl md:text-4xl font-bold mb-2 sm:mb-3 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Welcome Back</h1>
+              <p className={`text-sm xs:text-sm sm:text-base ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>Please enter your details to sign in</p>
             </div>
-            <div className="space-y-6">
+            <div className="space-y-4 sm:space-y-5 md:space-y-6">
                 <UserTypeToggle userType={userType} onUserTypeChange={setUserType} />
 
                 <LoginForm
@@ -53,21 +55,21 @@ export default function LoginPage() {
                   error={error}
                 />
 
-                <div className="relative my-6">
+                <div className="relative my-3 xs:my-4 sm:my-5 md:my-6">
                   <div className="absolute inset-0 flex items-center">
-                    <div className="w-full border-t border-gray-300"></div>
+                    <div className={`w-full border-t ${theme === 'dark' ? 'border-gray-700' : 'border-gray-300'}`}></div>
                   </div>
-                  <div className="relative flex justify-center text-sm">
-                    <span className="px-4 bg-white text-gray-500">Or</span>
+                  <div className="relative flex justify-center text-xs sm:text-sm">
+                    <span className={`px-2.5 xs:px-3 sm:px-4 ${theme === 'dark' ? 'bg-gray-800 text-gray-400' : 'bg-white text-gray-500'}`}>Or</span>
                   </div>
                 </div>
 
                 <GoogleSignInButton />
 
-              <div className="mt-6 text-center pt-4 border-t border-gray-100">
-                <p className="text-gray-600 text-sm font-semibold">
+              <div className={`mt-3 xs:mt-4 sm:mt-5 md:mt-6 text-center pt-3 sm:pt-4 border-t ${theme === 'dark' ? 'border-gray-700' : 'border-gray-100'}`}>
+                <p className={`text-xs sm:text-sm font-semibold ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>
                   Don&rsquo;t have an account?{' '}
-                  <Link href="/pages/register" className="text-teal-500 font-semibold hover:text-teal-600">
+                  <Link href="/pages/register" className="text-teal-500 font-semibold hover:text-teal-600 block sm:inline mt-1 sm:mt-0">
                     Sign Up for clinic account
                   </Link>
                 </p>
