@@ -1,6 +1,7 @@
 'use client';
 
 import ServiceCard from '@/app/components/services/ServiceCard';
+import { useTheme } from '@/app/contexts/ThemeContext';
 import { IconType } from 'react-icons';
 
 interface Service {
@@ -14,6 +15,7 @@ interface ServicesGridProps {
 }
 
 export default function ServicesGrid({ services }: ServicesGridProps) {
+  const { theme } = useTheme();
   return (
     <div className="max-w-7xl mx-auto px-3 sm:px-4 py-8 sm:py-12">
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
@@ -29,7 +31,7 @@ export default function ServicesGrid({ services }: ServicesGridProps) {
       
       {services.length === 0 && (
         <div className="text-center py-8 sm:py-12">
-          <p className="text-gray-500 text-base sm:text-lg px-4">No services found matching your search.</p>
+          <p className={`text-base sm:text-lg px-4 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>No services found matching your search.</p>
         </div>
       )}
     </div>
