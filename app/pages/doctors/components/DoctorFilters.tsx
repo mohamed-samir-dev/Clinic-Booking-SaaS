@@ -2,6 +2,8 @@
 
 import { FaFilter, FaTimes } from 'react-icons/fa';
 import { useTheme } from '@/app/contexts/ThemeContext';
+import { useLanguage } from '@/app/contexts/LanguageContext';
+import translations from '@/messages/translations';
 import {DoctorFiltersProps}from '../types/type'
 
 
@@ -14,6 +16,8 @@ export default function DoctorFilters({
   resetFilters
 }: DoctorFiltersProps) {
   const { theme } = useTheme();
+  const { locale } = useLanguage();
+  const t = translations[locale].doctors.page;
   const hasActiveFilters = filters.specialty || filters.gender || filters.isAvailableToday || filters.minExperience > 0;
 
   return (
@@ -24,15 +28,15 @@ export default function DoctorFilters({
             <FaFilter className="text-white text-lg" />
           </div>
           <div>
-            <h3 className={`text-lg sm:text-xl font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Filter Doctors</h3>
-            <p className={`text-xs sm:text-sm hidden sm:block ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Refine your search to find the perfect doctor</p>
+            <h3 className={`text-lg sm:text-xl font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{t.filterTitle}</h3>
+            <p className={`text-xs sm:text-sm hidden sm:block ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>{t.filterSubtitle}</p>
           </div>
         </div>
         <button
           onClick={() => setShowFilters(!showFilters)}
           className="px-4 py-2 text-teal-600 hover:bg-teal-50 rounded-lg transition-all font-semibold flex items-center gap-2 text-sm sm:text-base"
         >
-          {showFilters ? 'Hide' : 'Show'}
+          {showFilters ? t.hide : t.show}
         </button>
       </div>
 
@@ -40,39 +44,41 @@ export default function DoctorFilters({
         <div className="space-y-4 sm:space-y-6">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
             <div>
-              <label className={`block text-sm sm:text-base font-bold mb-2 sm:mb-3 ${theme === 'dark' ? 'text-gray-200' : 'text-gray-800'}`}>Specialty</label>
+              <label className={`block text-sm sm:text-base font-bold mb-2 sm:mb-3 ${theme === 'dark' ? 'text-gray-200' : 'text-gray-800'}`}>{t.specialty}</label>
               <select
                 value={filters.specialty}
                 onChange={(e) => setFilters({ ...filters, specialty: e.target.value })}
                 className={`w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base font-semibold border-2 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-all ${theme === 'dark' ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}
               >
-                <option value="" className="text-gray-900">All Specialties</option>
-                {filterOptions.specialties.map((spec) => (
-                  <option key={spec} value={spec} className="text-gray-900">{spec}</option>
+                <option value="" className={theme === 'dark' ? 'bg-gray-700 text-white' : 'text-gray-900'}>{t.allSpecialties}</option>
+                {filterOptions.specialties?.map((spec) => (
+                  <option key={spec.en} value={spec.en} className={theme === 'dark' ? 'bg-gray-700 text-white' : 'text-gray-900'}>
+                    {locale === 'ar' && spec.ar ? spec.ar : spec.en}
+                  </option>
                 ))}
               </select>
             </div>
 
             <div>
-              <label className={`block text-sm sm:text-base font-bold mb-2 sm:mb-3 ${theme === 'dark' ? 'text-gray-200' : 'text-gray-800'}`}>Gender</label>
+              <label className={`block text-sm sm:text-base font-bold mb-2 sm:mb-3 ${theme === 'dark' ? 'text-gray-200' : 'text-gray-800'}`}>{t.gender}</label>
               <select
                 value={filters.gender}
                 onChange={(e) => setFilters({ ...filters, gender: e.target.value })}
                 className={`w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base font-semibold border-2 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-all ${theme === 'dark' ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}
               >
-                <option value="" className="text-gray-900">All Genders</option>
+                <option value="" className={theme === 'dark' ? 'bg-gray-700 text-white' : 'text-gray-900'}>{t.allGenders}</option>
                 {filterOptions.genders.map((gender) => (
-                  <option key={gender} value={gender} className="text-gray-900">{gender === 'male' ? 'Male' : 'Female'}</option>
+                  <option key={gender} value={gender} className={theme === 'dark' ? 'bg-gray-700 text-white' : 'text-gray-900'}>{gender === 'male' ? t.male : t.female}</option>
                 ))}
               </select>
             </div>
 
             <div>
-              <label className={`block text-sm sm:text-base font-bold mb-2 sm:mb-3 ${theme === 'dark' ? 'text-gray-200' : 'text-gray-800'}`}>Min Experience</label>
+              <label className={`block text-sm sm:text-base font-bold mb-2 sm:mb-3 ${theme === 'dark' ? 'text-gray-200' : 'text-gray-800'}`}>{t.minExperience}</label>
               <input
                 type="number"
                 min="0"
-                placeholder="Years"
+                placeholder={t.years}
                 value={filters.minExperience || ''}
                 onChange={(e) => setFilters({ ...filters, minExperience: parseInt(e.target.value) || 0 })}
                 className={`w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base font-semibold border-2 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-all ${theme === 'dark' ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' : 'bg-white border-gray-300 text-gray-900 placeholder:text-gray-500'}`}
@@ -87,7 +93,7 @@ export default function DoctorFilters({
                   onChange={(e) => setFilters({ ...filters, isAvailableToday: e.target.checked })}
                   className="w-4 h-4 sm:w-5 sm:h-5 text-teal-600 border-gray-300 rounded focus:ring-teal-500 shrink-0"
                 />
-                <span className={`text-sm sm:text-base font-bold ${theme === 'dark' ? 'text-gray-200' : 'text-gray-800'}`}>Available Today</span>
+                <span className={`text-sm sm:text-base font-bold ${theme === 'dark' ? 'text-gray-200' : 'text-gray-800'}`}>{t.availableToday}</span>
               </label>
             </div>
           </div>
@@ -97,7 +103,12 @@ export default function DoctorFilters({
               <div className="flex flex-wrap gap-2 w-full sm:w-auto">
                 {filters.specialty && (
                   <div className="flex items-center gap-1 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 bg-teal-100 text-teal-800 rounded-full font-semibold text-xs sm:text-sm">
-                    <span className="truncate max-w-[150px] sm:max-w-none">Specialty: {filters.specialty}</span>
+                    <span className="truncate max-w-[150px] sm:max-w-none">
+                      {t.specialty}: {locale === 'ar' 
+                        ? filterOptions.specialties.find(s => s.en === filters.specialty)?.ar || filters.specialty
+                        : filters.specialty
+                      }
+                    </span>
                     <button
                       onClick={() => setFilters({ ...filters, specialty: '' })}
                       className="hover:bg-teal-200 rounded-full p-1 transition-colors shrink-0"
@@ -108,7 +119,7 @@ export default function DoctorFilters({
                 )}
                 {filters.gender && (
                   <div className="flex items-center gap-1 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 bg-teal-100 text-teal-800 rounded-full font-semibold text-xs sm:text-sm">
-                    <span>Gender: {filters.gender === 'male' ? 'Male' : 'Female'}</span>
+                    <span>{t.gender}: {filters.gender === 'male' ? t.male : t.female}</span>
                     <button
                       onClick={() => setFilters({ ...filters, gender: '' })}
                       className="hover:bg-teal-200 rounded-full p-1 transition-colors shrink-0"
@@ -119,7 +130,7 @@ export default function DoctorFilters({
                 )}
                 {filters.minExperience > 0 && (
                   <div className="flex items-center gap-1 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 bg-teal-100 text-teal-800 rounded-full font-semibold text-xs sm:text-sm">
-                    <span>Min Experience: {filters.minExperience} years</span>
+                    <span>{t.minExperience}: {filters.minExperience} {t.years}</span>
                     <button
                       onClick={() => setFilters({ ...filters, minExperience: 0 })}
                       className="hover:bg-teal-200 rounded-full p-1 transition-colors shrink-0"
@@ -130,7 +141,7 @@ export default function DoctorFilters({
                 )}
                 {filters.isAvailableToday && (
                   <div className="flex items-center gap-1 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 bg-teal-100 text-teal-800 rounded-full font-semibold text-xs sm:text-sm">
-                    <span>Available Today</span>
+                    <span>{t.availableToday}</span>
                     <button
                       onClick={() => setFilters({ ...filters, isAvailableToday: false })}
                       className="hover:bg-teal-200 rounded-full p-1 transition-colors shrink-0"
@@ -145,7 +156,7 @@ export default function DoctorFilters({
                 className="flex items-center gap-2 px-4 sm:px-6 py-2 sm:py-3 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-all font-bold shadow-md text-sm sm:text-base w-full sm:w-auto justify-center"
               >
                 <FaTimes className="text-sm sm:text-base" />
-                <span>Clear All</span>
+                <span>{t.clearAll}</span>
               </button>
             </div>
           )}
