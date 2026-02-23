@@ -3,6 +3,8 @@
 import { useState } from 'react';
 import { FaStar, FaTimes } from 'react-icons/fa';
 import { useTheme } from '../../contexts/ThemeContext';
+import { useLanguage } from '../../contexts/LanguageContext';
+import translations from '@/messages/translations';
 
 interface GeneralReviewModalProps {
   isOpen: boolean;
@@ -12,6 +14,8 @@ interface GeneralReviewModalProps {
 
 export default function GeneralReviewModal({ isOpen, onClose, onSuccess }: GeneralReviewModalProps) {
   const { theme } = useTheme();
+  const { locale } = useLanguage();
+  const t = translations[locale].reviews.modal;
   const [rating, setRating] = useState(0);
   const [hoveredRating, setHoveredRating] = useState(0);
   const [comment, setComment] = useState('');
@@ -23,12 +27,12 @@ export default function GeneralReviewModal({ isOpen, onClose, onSuccess }: Gener
     e.preventDefault();
     
     if (rating === 0) {
-      setError('Please select a rating');
+      setError(t.selectRating);
       return;
     }
 
     if (comment.trim().length < 10) {
-      setError('Comment must be at least 10 characters');
+      setError(t.commentMinLength);
       return;
     }
 
@@ -71,7 +75,7 @@ export default function GeneralReviewModal({ isOpen, onClose, onSuccess }: Gener
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4" onClick={onClose}>
       <div className={`rounded-2xl shadow-2xl max-w-md w-full p-6 ${theme === 'dark' ? 'bg-gray-800' : 'bg-white'}`} onClick={(e) => e.stopPropagation()}>
         <div className="flex justify-between items-center mb-6">
-          <h3 className={`text-2xl font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Write a Review</h3>
+          <h3 className={`text-2xl font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{t.title}</h3>
           <button onClick={onClose} className={`p-2 rounded-lg hover:bg-gray-100 ${theme === 'dark' ? 'hover:bg-gray-700' : ''}`}>
             <FaTimes className={theme === 'dark' ? 'text-gray-400' : 'text-gray-600'} />
           </button>
@@ -79,18 +83,18 @@ export default function GeneralReviewModal({ isOpen, onClose, onSuccess }: Gener
 
         <form onSubmit={handleSubmit} className="space-y-5">
           <div>
-            <label className={`block text-sm font-semibold mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>Your Name (Optional)</label>
+            <label className={`block text-sm font-semibold mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>{t.yourName}</label>
             <input
               type="text"
               value={patientName}
               onChange={(e) => setPatientName(e.target.value)}
-              placeholder="Enter your name"
+              placeholder={t.enterName}
               className={`w-full px-4 py-3 rounded-lg border focus:ring-2 focus:ring-teal-500 outline-none ${theme === 'dark' ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300'}`}
             />
           </div>
 
           <div>
-            <label className={`block text-sm font-semibold mb-3 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>Rating</label>
+            <label className={`block text-sm font-semibold mb-3 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>{t.rating}</label>
             <div className="flex gap-2 justify-center">
               {[1, 2, 3, 4, 5].map((star) => (
                 <button
@@ -108,11 +112,11 @@ export default function GeneralReviewModal({ isOpen, onClose, onSuccess }: Gener
           </div>
 
           <div>
-            <label className={`block text-sm font-semibold mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>Your Review</label>
+            <label className={`block text-sm font-semibold mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>{t.yourReview}</label>
             <textarea
               value={comment}
               onChange={(e) => setComment(e.target.value)}
-              placeholder="Share your experience..."
+              placeholder={t.shareExperience}
               rows={4}
               required
               minLength={10}
@@ -120,7 +124,7 @@ export default function GeneralReviewModal({ isOpen, onClose, onSuccess }: Gener
               className={`w-full px-4 py-3 rounded-lg border focus:ring-2 focus:ring-teal-500 outline-none resize-none ${theme === 'dark' ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300'}`}
             />
             <p className={`text-xs mt-1 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
-              {comment.length}/500 characters (minimum 10)
+              {comment.length}/500 {t.characters}
             </p>
           </div>
 
@@ -131,7 +135,7 @@ export default function GeneralReviewModal({ isOpen, onClose, onSuccess }: Gener
             disabled={loading || rating === 0 || comment.trim().length < 10}
             className="w-full py-3 bg-linear-to-r from-teal-500 to-cyan-500 text-white rounded-lg font-semibold hover:from-teal-600 hover:to-cyan-600 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {loading ? 'Submitting...' : 'Submit Review'}
+            {loading ? t.submitting : t.submitReview}
           </button>
         </form>
       </div>
