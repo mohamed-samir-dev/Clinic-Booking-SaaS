@@ -19,9 +19,9 @@ export default function ServicesGrid({ services }: ServicesGridProps) {
   return (
     <div className="max-w-7xl mx-auto px-3 sm:px-4 py-8 sm:py-12">
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
-        {services.map((service, index) => (
+        {services.map((service) => (
           <ServiceCard
-            key={index}
+            key={service.title}
             icon={service.icon}
             title={service.title}
             description={service.description}
