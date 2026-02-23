@@ -1,4 +1,7 @@
+'use client';
+
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
+import { useTheme } from '@/app/contexts/ThemeContext';
 
 interface PaginationProps {
   currentPage: number;
@@ -7,6 +10,7 @@ interface PaginationProps {
 }
 
 export default function Pagination({ currentPage, totalPages, onPageChange }: PaginationProps) {
+  const { theme } = useTheme();
   if (totalPages <= 1) return null;
 
   return (
@@ -14,19 +18,19 @@ export default function Pagination({ currentPage, totalPages, onPageChange }: Pa
       <button
         onClick={() => onPageChange(Math.max(1, currentPage - 1))}
         disabled={currentPage === 1}
-        className="px-3 sm:px-4 py-2 bg-white border-2 border-teal-500 text-teal-600 rounded-lg hover:bg-teal-50 disabled:opacity-50 disabled:cursor-not-allowed transition-all font-semibold flex items-center gap-1 sm:gap-2 text-sm sm:text-base"
+        className={`px-3 sm:px-4 py-2 border-2 border-teal-500 text-teal-600 rounded-lg hover:bg-teal-50 disabled:opacity-50 disabled:cursor-not-allowed transition-all font-semibold flex items-center gap-1 sm:gap-2 text-sm sm:text-base ${theme === 'dark' ? 'bg-gray-800 hover:bg-gray-700' : 'bg-white'}`}
       >
         <FaChevronLeft className="text-xs sm:text-sm" /> 
         <span className="hidden sm:inline">Previous</span>
         <span className="sm:hidden">Prev</span>
       </button>
-      <span className="px-3 sm:px-4 py-2 text-gray-700 font-semibold text-sm sm:text-base">
+      <span className={`px-3 sm:px-4 py-2 font-semibold text-sm sm:text-base ${theme === 'dark' ? 'text-gray-200' : 'text-gray-700'}`}>
         {currentPage} / {totalPages}
       </span>
       <button
         onClick={() => onPageChange(Math.min(totalPages, currentPage + 1))}
         disabled={currentPage === totalPages}
-        className="px-3 sm:px-4 py-2 bg-white border-2 border-teal-500 text-teal-600 rounded-lg hover:bg-teal-50 disabled:opacity-50 disabled:cursor-not-allowed transition-all font-semibold flex items-center gap-1 sm:gap-2 text-sm sm:text-base"
+        className={`px-3 sm:px-4 py-2 border-2 border-teal-500 text-teal-600 rounded-lg hover:bg-teal-50 disabled:opacity-50 disabled:cursor-not-allowed transition-all font-semibold flex items-center gap-1 sm:gap-2 text-sm sm:text-base ${theme === 'dark' ? 'bg-gray-800 hover:bg-gray-700' : 'bg-white'}`}
       >
         Next <FaChevronRight className="text-xs sm:text-sm" />
       </button>
