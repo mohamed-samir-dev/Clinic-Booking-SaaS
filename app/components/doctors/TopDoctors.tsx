@@ -5,12 +5,14 @@ import Link from 'next/link';
 import DoctorCard from './DoctorCard';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Keyboard, Mousewheel, Pagination } from 'swiper/modules';
+import { useTheme } from '@/app/contexts/ThemeContext';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import {Doctor}from '../../types/index'
 import { api } from '../../lib/api';
 
 export default function TopDoctors() {
+  const { theme } = useTheme();
   const [doctors, setDoctors] = useState<Doctor[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -31,12 +33,12 @@ export default function TopDoctors() {
 
   if (loading) {
     return (
-      <section className="py-12  sm:py-16 md:py-20 bg-white">
+      <section className={`py-12 sm:py-16 md:py-20 ${theme === 'dark' ? 'bg-gray-800' : 'bg-gray-50'}`}>
         <div className="w-full px-4 md:px-8">
           <div className="text-center">
             <div className="animate-pulse">
-              <div className="h-8 bg-gray-200 rounded w-64 mx-auto mb-4"></div>
-              <div className="h-4 bg-gray-200 rounded w-96 mx-auto"></div>
+              <div className={`h-8 rounded w-64 mx-auto mb-4 ${theme === 'dark' ? 'bg-gray-700' : 'bg-gray-200'}`}></div>
+              <div className={`h-4 rounded w-96 mx-auto ${theme === 'dark' ? 'bg-gray-700' : 'bg-gray-200'}`}></div>
             </div>
           </div>
         </div>
@@ -45,14 +47,14 @@ export default function TopDoctors() {
   }
 
   return (
-    <section className="py-12 sm:py-16 md:py-20 bg-white">
+    <section className={`py-12 sm:py-16 md:py-20 ${theme === 'dark' ? 'bg-gray-800' : 'bg-gray-50'}`}>
       <div className="w-full px-4 md:px-8">
         <div className="mb-8 sm:mb-10 md:mb-14 text-center">
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-2 sm:mb-3">
-            <span className="text-gray-900">Our Top </span>
+            <span className={theme === 'dark' ? 'text-white' : 'text-gray-900'}>Our Top </span>
             <span className="text-teal-600">Doctors</span>
           </h2>
-          <p className="text-sm sm:text-base md:text-lg text-gray-600 max-w-2xl mx-auto px-4 mb-4">
+          <p className={`text-sm sm:text-base md:text-lg max-w-2xl mx-auto px-4 mb-4 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>
             Meet our most experienced medical professionals
           </p>
           <Link 
