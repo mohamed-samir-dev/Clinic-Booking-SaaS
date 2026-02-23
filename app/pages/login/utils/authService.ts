@@ -23,10 +23,35 @@ export const loginUser = async (
   const data = await response.json();
 
   if (!response.ok) {
-    throw new Error(data.message || 'Login failed');
+    const errorMessage = getErrorMessage(data.message, response.status);
+    throw new Error(errorMessage);
   }
 
   return data;
+};
+
+const getErrorMessage = (message: string, status: number): string => {
+  if (message?.toLowerCase().includes('invalid credentials') || message?.toLowerCase().includes('incorrect')) {
+    return 'The email or password you entered is incorrect. Please try again.';
+  }
+  
+  if (status === 401) {
+    return 'Authentication failed. Please check your credentials and try again.';
+  }
+  
+  if (status === 404) {
+    return 'Account not found. Please verify your email address or sign up.';
+  }
+  
+  if (status === 403) {
+    return 'Access denied. Your account may be inactive or suspended.';
+  }
+  
+  if (status >= 500) {
+    return 'Server error. Please try again later or contact support.';
+  }
+  
+  return message || 'Unable to sign in. Please try again.';
 };
 
 export const saveAuthData = (token: string, user: AuthResponse['user']) => {
