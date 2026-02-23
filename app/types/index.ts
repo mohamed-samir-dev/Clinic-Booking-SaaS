@@ -113,7 +113,7 @@ export interface Review {
     lang: Language;
     theme: Theme;
     setLang: (lang: Language) => void;
-    setTheme: (theme: Theme) => void;
+    setTheme: () => void;
     setMobileMenuOpen: (open: boolean) => void;
     handleLogout: () => void;
   }
