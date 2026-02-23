@@ -45,9 +45,9 @@ export default function TimeSlots({
 }: TimeSlotsProps) {
   if (loading) {
     return (
-      <div className="bg-white rounded-2xl shadow-sm p-6">
-        <div className="flex items-center justify-center py-12">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-teal-500"></div>
+      <div className="bg-white rounded-2xl shadow-sm p-4 sm:p-6">
+        <div className="flex items-center justify-center py-8 sm:py-12">
+          <div className="animate-spin rounded-full h-6 w-6 sm:h-8 sm:w-8 border-b-2 border-teal-500"></div>
         </div>
       </div>
     );
@@ -55,10 +55,10 @@ export default function TimeSlots({
 
   if (!doctorObject) {
     return (
-      <div className="bg-white rounded-2xl shadow-sm p-6">
-        <div className="text-center py-12 text-gray-500">
-          <span className="material-icons text-4xl mb-2">person_search</span>
-          <p>Please select a doctor first</p>
+      <div className="bg-white rounded-2xl shadow-sm p-4 sm:p-6">
+        <div className="text-center py-8 sm:py-12 text-gray-500">
+          <span className="material-icons text-3xl sm:text-4xl mb-2">person_search</span>
+          <p className="text-sm sm:text-base">Please select a doctor first</p>
         </div>
       </div>
     );
@@ -66,10 +66,10 @@ export default function TimeSlots({
 
   if (!selectedDate) {
     return (
-      <div className="bg-white rounded-2xl shadow-sm p-6">
-        <div className="text-center py-12 text-gray-500">
-          <span className="material-icons text-4xl mb-2">event</span>
-          <p>Please select a date first</p>
+      <div className="bg-white rounded-2xl shadow-sm p-4 sm:p-6">
+        <div className="text-center py-8 sm:py-12 text-gray-500">
+          <span className="material-icons text-3xl sm:text-4xl mb-2">event</span>
+          <p className="text-sm sm:text-base">Please select a date first</p>
         </div>
       </div>
     );
@@ -79,18 +79,18 @@ export default function TimeSlots({
 
   if (!hasSlots) {
     return (
-      <div className="bg-white rounded-2xl shadow-sm p-6">
-        <div className="text-center py-12 text-gray-500">
-          <span className="material-icons text-4xl mb-2">event_busy</span>
-          <p>No available slots for this day</p>
+      <div className="bg-white rounded-2xl shadow-sm p-4 sm:p-6">
+        <div className="text-center py-8 sm:py-12 text-gray-500">
+          <span className="material-icons text-3xl sm:text-4xl mb-2">event_busy</span>
+          <p className="text-sm sm:text-base">No available slots for this day</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="bg-white rounded-2xl shadow-sm p-6">
-      <div className="space-y-6">
+    <div className="bg-white rounded-2xl shadow-sm p-4 sm:p-6">
+      <div className="space-y-4 sm:space-y-6">
         <TimePeriod
           title={TIME_PERIODS.MORNING.label}
           icon={TIME_PERIODS.MORNING.icon}
