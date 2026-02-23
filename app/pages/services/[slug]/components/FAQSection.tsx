@@ -1,18 +1,20 @@
 import { motion } from 'framer-motion';
 import { useState } from 'react';
+import { useTheme } from '@/app/contexts/ThemeContext';
 
 interface FAQSectionProps {
   faqs: { question: string; answer: string }[];
 }
 
 export default function FAQSection({ faqs }: FAQSectionProps) {
+  const { theme } = useTheme();
   const [openFaq, setOpenFaq] = useState<number | null>(null);
 
   return (
-    <div className="bg-linear-to-b from-teal-50 to-white py-12 sm:py-16 md:py-20">
+    <div className={`bg-linear-to-b ${theme === 'dark' ? 'from-gray-900 to-gray-800' : 'from-teal-50 to-white'} py-12 sm:py-16 md:py-20`}>
       <div className="max-w-4xl mx-auto px-4 md:px-8">
         <div className="text-center mb-10 sm:mb-16">
-          <h3 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-3 px-2">Common Questions</h3>
+          <h3 className={`text-2xl sm:text-3xl md:text-4xl font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-900'} mb-3 px-2`}>Common Questions</h3>
           <div className="w-16 sm:w-20 h-1 bg-teal-500 mx-auto rounded-full"></div>
         </div>
 
@@ -28,13 +30,13 @@ export default function FAQSection({ faqs }: FAQSectionProps) {
             >
               <motion.div
                 whileHover={{ scale: 1.01 }}
-                className="bg-white rounded-xl sm:rounded-2xl shadow-lg overflow-hidden border-l-4 border-teal-500"
+                className={`${theme === 'dark' ? 'bg-gray-700' : 'bg-white'} rounded-xl sm:rounded-2xl shadow-lg overflow-hidden border-l-4 border-teal-500`}
               >
                 <button
                   onClick={() => setOpenFaq(openFaq === index ? null : index)}
-                  className="w-full px-4 sm:px-8 py-4 sm:py-6 flex items-center justify-between text-left hover:bg-teal-50/50 transition-colors group"
+                  className={`w-full px-4 sm:px-8 py-4 sm:py-6 flex items-center justify-between text-left ${theme === 'dark' ? 'hover:bg-gray-600/50' : 'hover:bg-teal-50/50'} transition-colors group`}
                 >
-                  <span className="text-base sm:text-lg font-bold text-gray-900 pr-3 sm:pr-4 group-hover:text-teal-600 transition-colors">{faq.question}</span>
+                  <span className={`text-base sm:text-lg font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-900'} pr-3 sm:pr-4 group-hover:text-teal-600 transition-colors`}>{faq.question}</span>
                   <motion.div
                     animate={{ 
                       rotate: openFaq === index ? 45 : 0,
@@ -55,7 +57,7 @@ export default function FAQSection({ faqs }: FAQSectionProps) {
                   transition={{ duration: 0.3 }}
                   className="overflow-hidden"
                 >
-                  <div className="px-4 sm:px-8 pb-4 sm:pb-6 text-sm sm:text-base text-gray-600 leading-relaxed bg-linear-to-br from-teal-50/30 to-transparent">
+                  <div className={`px-4 sm:px-8 pb-4 sm:pb-6 text-sm sm:text-base ${theme === 'dark' ? 'text-gray-300 from-gray-600/30' : 'text-gray-600 from-teal-50/30'} leading-relaxed bg-linear-to-br to-transparent`}>
                     {faq.answer}
                   </div>
                 </motion.div>

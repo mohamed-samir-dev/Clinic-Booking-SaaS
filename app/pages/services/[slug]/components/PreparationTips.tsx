@@ -1,16 +1,18 @@
 import { motion } from 'framer-motion';
 import { IconType } from 'react-icons';
+import { useTheme } from '@/app/contexts/ThemeContext';
 
 interface PreparationTipsProps {
   tips: { icon: IconType; title: string; description: string }[];
 }
 
 export default function PreparationTips({ tips }: PreparationTipsProps) {
+  const { theme } = useTheme();
   return (
-    <div className="bg-white py-12 sm:py-16 md:py-20">
+    <div className={`${theme === 'dark' ? 'bg-gray-800' : 'bg-white'} py-12 sm:py-16 md:py-20`}>
       <div className="max-w-5xl mx-auto px-4 md:px-8">
         <div className="text-center mb-10 sm:mb-16">
-          <h3 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-3 px-2">Preparation For Your Visit</h3>
+          <h3 className={`text-2xl sm:text-3xl md:text-4xl font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-900'} mb-3 px-2`}>Preparation For Your Visit</h3>
           <div className="w-16 sm:w-20 h-1 bg-teal-500 mx-auto rounded-full"></div>
         </div>
 
@@ -41,10 +43,10 @@ export default function PreparationTips({ tips }: PreparationTipsProps) {
                   </motion.div>
                   <motion.div
                     whileHover={{ y: -5 }}
-                    className="bg-linear-to-br from-teal-50 to-cyan-50 rounded-xl sm:rounded-2xl p-4 sm:p-6 shadow-lg hover:shadow-2xl transition-all border border-teal-100"
+                    className={`${theme === 'dark' ? 'from-gray-700 to-gray-600 border-gray-600' : 'from-teal-50 to-cyan-50 border-teal-100'} bg-linear-to-br rounded-xl sm:rounded-2xl p-4 sm:p-6 shadow-lg hover:shadow-2xl transition-all border`}
                   >
                     <h4 className="text-lg sm:text-xl font-bold text-teal-600 mb-2 sm:mb-3">{tip.title}</h4>
-                    <p className="text-sm sm:text-base text-gray-600 leading-relaxed">{tip.description}</p>
+                    <p className={`text-sm sm:text-base ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'} leading-relaxed`}>{tip.description}</p>
                   </motion.div>
                 </motion.div>
               );
