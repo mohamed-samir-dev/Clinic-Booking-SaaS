@@ -1,4 +1,5 @@
 import { FaHeart, FaLightbulb, FaCheckCircle } from 'react-icons/fa';
+import Link from 'next/link';
 
 export default function AboutPage() {
   return (
@@ -12,9 +13,11 @@ export default function AboutPage() {
             Providing compassionate, world-class healthcare to our community for over a decade. 
             We combine medical expertise with a human touch.
           </p>
-          <button className="bg-white text-teal-700 px-8 py-3 rounded-lg font-semibold hover:bg-teal-50 transition">
-            Meet Our Doctors
-          </button>
+          <Link href="/pages/doctors">
+            <button className="bg-white cursor-pointer text-teal-700 px-8 py-3 rounded-lg font-semibold hover:bg-teal-50 transition">
+              Meet Our Doctors
+            </button>
+          </Link>
         </div>
       </section>
 
@@ -165,11 +168,13 @@ export default function AboutPage() {
             with their well-being.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <button className="bg-white text-teal-700 px-8 py-3 rounded-lg font-semibold hover:bg-teal-50 transition">
-              Book Online Now
-            </button>
+            <Link href="/pages/booking">
+              <button className="bg-white cursor-pointer text-teal-700 px-8 py-3 rounded-lg font-semibold hover:bg-teal-50 transition">
+                Book Online Now
+              </button>
+            </Link>
             <button className="bg-teal-700 text-white px-8 py-3 rounded-lg font-semibold hover:bg-teal-800 transition border-2 border-white">
-              Call +1 (555) 000-1234
+              Call +201012486445
             </button>
           </div>
         </div>
