@@ -1,6 +1,9 @@
+'use client';
 import Link from 'next/link';
+import { useTheme } from '@/app/contexts/ThemeContext';
 
 export default function HeroContent() {
+  const { theme } = useTheme();
   return (
     <div className="space-y-4 sm:space-y-5 md:space-y-6 max-w-2xl text-center lg:text-left">
       <div className="inline-block px-3 sm:px-4 py-1.5 sm:py-2 bg-teal-600/90 backdrop-blur-sm rounded-full">
@@ -9,10 +12,10 @@ export default function HeroContent() {
       
       <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight">
         Your Health,
-        <span className="text-teal-400"> Our Priority</span>
+        <span className={`${theme === 'dark' ? 'text-teal-300' : 'text-teal-400'}`}> Our Priority</span>
       </h1>
       
-      <p className="text-base sm:text-lg md:text-xl text-gray-200 leading-relaxed px-2 sm:px-0">
+      <p className={`text-base sm:text-lg md:text-xl leading-relaxed px-2 sm:px-0 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-200'}`}>
         Experience modern healthcare with professional medical services in a comfortable environment.
       </p>
 
