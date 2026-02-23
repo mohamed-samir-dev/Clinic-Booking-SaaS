@@ -1,6 +1,8 @@
 import { Check } from 'lucide-react';
+import { useTheme } from '@/app/contexts/ThemeContext';
 
 export default function StepsHeader({ currentStep }: { currentStep: number }) {
+  const { theme } = useTheme();
   const steps = [
     { number: 1, title: 'Services' },
     { number: 2, title: 'Doctor' },
@@ -24,7 +26,7 @@ export default function StepsHeader({ currentStep }: { currentStep: number }) {
                 {currentStep > step.number ? <Check className="w-4 h-4 sm:w-5 sm:h-5" /> : step.number}
               </div>
               <span className={`mt-1 sm:mt-2 text-[10px] sm:text-xs font-semibold ${
-                currentStep >= step.number ? 'text-teal-600' : 'text-gray-400'
+                currentStep >= step.number ? 'text-teal-600' : theme === 'dark' ? 'text-gray-500' : 'text-gray-400'
               }`}>
                 {step.title}
               </span>
