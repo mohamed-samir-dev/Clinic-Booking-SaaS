@@ -1,3 +1,5 @@
+import { useTheme } from '@/app/contexts/ThemeContext';
+
 interface TimePeriodProps {
   title: string;
   icon: string;
@@ -23,15 +25,16 @@ export default function TimePeriod({
   setShowAll,
   bookedSlots
 }: TimePeriodProps) {
+  const { theme } = useTheme();
   if (slots.length === 0) return null;
 
   return (
     <div>
       <div className="flex items-center gap-1.5 sm:gap-2 mb-2 sm:mb-3">
         <span className={`material-icons text-${iconColor} text-base sm:text-lg`}>{icon}</span>
-        <h4 className="font-semibold text-gray-900 text-sm sm:text-base">{title}</h4>
+        <h4 className={`font-semibold text-sm sm:text-base ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{title}</h4>
         {slots.length > 4 && (
-          <span className="text-[10px] sm:text-xs text-gray-500">({slots.length} slots)</span>
+          <span className={`text-[10px] sm:text-xs ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>({slots.length} slots)</span>
         )}
       </div>
       <div className="grid grid-cols-2 gap-1.5 sm:gap-2">
@@ -44,10 +47,10 @@ export default function TimePeriod({
               disabled={isBooked}
               className={`py-1.5 sm:py-2 px-2 sm:px-3 rounded-lg text-xs sm:text-sm font-medium transition-all ${
                 isBooked
-                  ? 'bg-gray-200 text-gray-400 cursor-not-allowed opacity-50'
+                  ? theme === 'dark' ? 'bg-gray-700 text-gray-500 cursor-not-allowed opacity-50' : 'bg-gray-200 text-gray-400 cursor-not-allowed opacity-50'
                   : selectedTime === time
                   ? 'bg-teal-500 text-white'
-                  : 'bg-gray-50 text-gray-700 hover:bg-gray-100 border border-gray-200'
+                  : theme === 'dark' ? 'bg-gray-700 text-gray-200 hover:bg-gray-600 border border-gray-600' : 'bg-gray-50 text-gray-700 hover:bg-gray-100 border border-gray-200'
               }`}
             >
               {time}

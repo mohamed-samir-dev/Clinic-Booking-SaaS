@@ -1,6 +1,7 @@
 import { Doctor } from '@/app/types/index';
 import { CalendarDay } from '../types';
 import { MONTH_NAMES, DAY_NAMES } from '../constants';
+import { useTheme } from '@/app/contexts/ThemeContext';
 
 interface CalendarProps {
   currentMonth: Date;
@@ -25,30 +26,35 @@ export default function Calendar({
   canGoNext,
   blockedDates
 }: CalendarProps) {
+  const { theme } = useTheme();
   return (
-    <div className="bg-white rounded-2xl shadow-sm p-4 sm:p-6">
+    <div className={`rounded-2xl shadow-sm p-4 sm:p-6 ${
+      theme === 'dark' ? 'bg-gray-800' : 'bg-white'
+    }`}>
       <div className="flex items-center justify-between mb-3 sm:mb-4">
-        <h3 className="text-base sm:text-lg text-black font-semibold">{MONTH_NAMES[currentMonth.getMonth()]} {currentMonth.getFullYear()}</h3>
+        <h3 className={`text-base sm:text-lg font-semibold ${theme === 'dark' ? 'text-white' : 'text-black'}`}>{MONTH_NAMES[currentMonth.getMonth()]} {currentMonth.getFullYear()}</h3>
         <div className="flex gap-1 sm:gap-2">
           <button 
             onClick={() => canGoPrevious && setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1))} 
             disabled={!canGoPrevious}
-            className={`p-1.5 sm:p-2 rounded-lg ${canGoPrevious ? 'hover:bg-gray-100' : 'opacity-30 cursor-not-allowed'}`}
+            className={`p-1.5 sm:p-2 rounded-lg ${canGoPrevious ? theme === 'dark' ? 'hover:bg-gray-700' : 'hover:bg-gray-100' : 'opacity-30 cursor-not-allowed'}`}
           >
-            <span className="material-icons text-gray-600 text-lg sm:text-xl">chevron_left</span>
+            <span className={`material-icons text-lg sm:text-xl ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>chevron_left</span>
           </button>
           <button 
             onClick={() => canGoNext && setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1))} 
             disabled={!canGoNext}
-            className={`p-1.5 sm:p-2 rounded-lg ${canGoNext ? 'hover:bg-gray-100' : 'opacity-30 cursor-not-allowed'}`}
+            className={`p-1.5 sm:p-2 rounded-lg ${canGoNext ? theme === 'dark' ? 'hover:bg-gray-700' : 'hover:bg-gray-100' : 'opacity-30 cursor-not-allowed'}`}
           >
-            <span className="material-icons text-gray-600 text-lg sm:text-xl">chevron_right</span>
+            <span className={`material-icons text-lg sm:text-xl ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>chevron_right</span>
           </button>
         </div>
       </div>
 
       {!doctorObject && (
-        <div className="mb-2 sm:mb-3 p-2 font-semibold bg-amber-50 rounded-lg text-[10px] sm:text-xs text-amber-700 text-center">
+        <div className={`mb-2 sm:mb-3 p-2 font-semibold rounded-lg text-[10px] sm:text-xs text-center ${
+          theme === 'dark' ? 'bg-amber-900/30 text-amber-400' : 'bg-amber-50 text-amber-700'
+        }`}>
           Select a doctor to see available dates
         </div>
       )}
@@ -58,14 +64,16 @@ export default function Calendar({
           <div className="mb-2 sm:mb-3 flex items-center justify-center gap-3 sm:gap-4 text-[10px] sm:text-xs">
             <div className="flex items-center gap-1">
               <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-green-500"></div>
-              <span className="text-gray-600 font-semibold">Available</span>
+              <span className={`font-semibold ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Available</span>
             </div>
             <div className="flex items-center gap-1">
               <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-red-500"></div>
-              <span className="text-gray-600 font-semibold">Not Available</span>
+              <span className={`font-semibold ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Not Available</span>
             </div>
           </div>
-          <div className="mb-2 sm:mb-3 p-2 font-semibold bg-blue-50 rounded-lg text-[10px] sm:text-xs text-blue-700 text-center">
+          <div className={`mb-2 sm:mb-3 p-2 font-semibold rounded-lg text-[10px] sm:text-xs text-center ${
+            theme === 'dark' ? 'bg-blue-900/30 text-blue-400' : 'bg-blue-50 text-blue-700'
+          }`}>
             Booking available for the next 2 months
           </div>
         </>
@@ -73,7 +81,9 @@ export default function Calendar({
 
       <div className="grid grid-cols-7 gap-1 sm:gap-2">
         {DAY_NAMES.map(day => (
-          <div key={day} className="text-center text-[10px] sm:text-xs font-semibold text-gray-500 py-1 sm:py-2">{day}</div>
+          <div key={day} className={`text-center text-[10px] sm:text-xs font-semibold py-1 sm:py-2 ${
+            theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
+          }`}>{day}</div>
         ))}
         {days.map((d, idx) => {
           const dateStr = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), d.day).toISOString().split('T')[0];
@@ -85,13 +95,13 @@ export default function Calendar({
               onClick={() => d.isCurrentMonth && d.isAvailable && !d.isPast && !isBlocked && setSelectedDate(new Date(currentMonth.getFullYear(), currentMonth.getMonth(), d.day))}
               disabled={!d.isCurrentMonth || !d.isAvailable || d.isPast || isBlocked}
               className={`w-full aspect-square rounded-lg text-xs sm:text-sm font-medium transition-all relative ${
-                !d.isCurrentMonth ? 'text-gray-300 cursor-not-allowed' :
-                d.isPast ? 'text-gray-400 cursor-not-allowed line-through' :
+                !d.isCurrentMonth ? theme === 'dark' ? 'text-gray-600 cursor-not-allowed' : 'text-gray-300 cursor-not-allowed' :
+                d.isPast ? theme === 'dark' ? 'text-gray-600 cursor-not-allowed line-through' : 'text-gray-400 cursor-not-allowed line-through' :
                 isBlocked ? 'text-red-400 cursor-not-allowed bg-red-50' :
-                !d.isAvailable ? 'text-gray-400 cursor-not-allowed' :
+                !d.isAvailable ? theme === 'dark' ? 'text-gray-600 cursor-not-allowed' : 'text-gray-400 cursor-not-allowed' :
                 selectedDate?.getDate() === d.day && selectedDate?.getMonth() === currentMonth.getMonth() 
                   ? 'bg-teal-500 text-white' 
-                  : 'text-gray-700 hover:bg-gray-100'
+                  : theme === 'dark' ? 'text-gray-300 hover:bg-gray-700' : 'text-gray-700 hover:bg-gray-100'
               }`}
             >
               {d.day}

@@ -1,6 +1,7 @@
 import { Doctor } from '@/app/types/index';
 import TimePeriod from './TimePeriod';
 import { TIME_PERIODS } from '../constants';
+import { useTheme } from '@/app/contexts/ThemeContext';
 
 interface TimeSlotsProps {
   loading: boolean;
@@ -43,9 +44,12 @@ export default function TimeSlots({
   setShowAllEvening,
   bookedSlots
 }: TimeSlotsProps) {
+  const { theme } = useTheme();
   if (loading) {
     return (
-      <div className="bg-white rounded-2xl shadow-sm p-4 sm:p-6">
+      <div className={`rounded-2xl shadow-sm p-4 sm:p-6 ${
+        theme === 'dark' ? 'bg-gray-800' : 'bg-white'
+      }`}>
         <div className="flex items-center justify-center py-8 sm:py-12">
           <div className="animate-spin rounded-full h-6 w-6 sm:h-8 sm:w-8 border-b-2 border-teal-500"></div>
         </div>
@@ -55,8 +59,12 @@ export default function TimeSlots({
 
   if (!doctorObject) {
     return (
-      <div className="bg-white rounded-2xl shadow-sm p-4 sm:p-6">
-        <div className="text-center py-8 sm:py-12 text-gray-500">
+      <div className={`rounded-2xl shadow-sm p-4 sm:p-6 ${
+        theme === 'dark' ? 'bg-gray-800' : 'bg-white'
+      }`}>
+        <div className={`text-center py-8 sm:py-12 ${
+          theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
+        }`}>
           <span className="material-icons text-3xl sm:text-4xl mb-2">person_search</span>
           <p className="text-sm sm:text-base">Please select a doctor first</p>
         </div>
@@ -66,8 +74,12 @@ export default function TimeSlots({
 
   if (!selectedDate) {
     return (
-      <div className="bg-white rounded-2xl shadow-sm p-4 sm:p-6">
-        <div className="text-center py-8 sm:py-12 text-gray-500">
+      <div className={`rounded-2xl shadow-sm p-4 sm:p-6 ${
+        theme === 'dark' ? 'bg-gray-800' : 'bg-white'
+      }`}>
+        <div className={`text-center py-8 sm:py-12 ${
+          theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
+        }`}>
           <span className="material-icons text-3xl sm:text-4xl mb-2">event</span>
           <p className="text-sm sm:text-base">Please select a date first</p>
         </div>
@@ -79,8 +91,12 @@ export default function TimeSlots({
 
   if (!hasSlots) {
     return (
-      <div className="bg-white rounded-2xl shadow-sm p-4 sm:p-6">
-        <div className="text-center py-8 sm:py-12 text-gray-500">
+      <div className={`rounded-2xl shadow-sm p-4 sm:p-6 ${
+        theme === 'dark' ? 'bg-gray-800' : 'bg-white'
+      }`}>
+        <div className={`text-center py-8 sm:py-12 ${
+          theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
+        }`}>
           <span className="material-icons text-3xl sm:text-4xl mb-2">event_busy</span>
           <p className="text-sm sm:text-base">No available slots for this day</p>
         </div>
@@ -89,7 +105,9 @@ export default function TimeSlots({
   }
 
   return (
-    <div className="bg-white rounded-2xl shadow-sm p-4 sm:p-6">
+    <div className={`rounded-2xl shadow-sm p-4 sm:p-6 ${
+      theme === 'dark' ? 'bg-gray-800' : 'bg-white'
+    }`}>
       <div className="space-y-4 sm:space-y-6">
         <TimePeriod
           title={TIME_PERIODS.MORNING.label}
