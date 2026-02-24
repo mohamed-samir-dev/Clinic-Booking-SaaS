@@ -1,11 +1,29 @@
-export const MONTH_NAMES = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+import { useLanguage } from '@/app/contexts/LanguageContext';
+import translations from '@/messages/translations';
 
-export const DAY_NAMES = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
+export const useMonthNames = () => {
+  const { locale } = useLanguage();
+  const t = translations[locale].booking.timeSelection.calendar;
+  return locale === 'ar' 
+    ? ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر']
+    : ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+};
+
+export const useDayNames = () => {
+  const { locale } = useLanguage();
+  return locale === 'ar'
+    ? ['الأحد', 'الإثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت']
+    : ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
+};
 
 export const FULL_DAY_NAMES = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
 
-export const TIME_PERIODS = {
-  MORNING: { icon: 'light_mode', color: 'yellow-500', label: 'Morning' },
-  AFTERNOON: { icon: 'wb_sunny', color: 'orange-500', label: 'Afternoon' },
-  EVENING: { icon: 'dark_mode', color: 'indigo-500', label: 'Evening' }
+export const useTimePeriods = () => {
+  const { locale } = useLanguage();
+  const t = translations[locale].booking.timeSelection.timeSlots;
+  return {
+    MORNING: { icon: 'light_mode', color: 'yellow-500', label: t.morning },
+    AFTERNOON: { icon: 'wb_sunny', color: 'orange-500', label: t.afternoon },
+    EVENING: { icon: 'dark_mode', color: 'indigo-500', label: t.evening }
+  };
 };
