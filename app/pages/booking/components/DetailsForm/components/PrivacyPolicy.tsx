@@ -2,6 +2,8 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { useTheme } from '@/app/contexts/ThemeContext';
+import { useLanguage } from '@/app/contexts/LanguageContext';
+import translations from '@/messages/translations';
 
 interface PrivacyPolicyProps {
   agreeToPolicy: boolean;
@@ -10,6 +12,8 @@ interface PrivacyPolicyProps {
 
 export default function PrivacyPolicy({ agreeToPolicy, setAgreeToPolicy }: PrivacyPolicyProps) {
   const { theme } = useTheme();
+  const { locale } = useLanguage();
+  const t = translations[locale].booking.detailsForm.privacy;
   const [showPrivacyModal, setShowPrivacyModal] = useState(false);
   const [showCancellationModal, setShowCancellationModal] = useState(false);
   const [hasReadPrivacy, setHasReadPrivacy] = useState(false);
@@ -57,7 +61,7 @@ export default function PrivacyPolicy({ agreeToPolicy, setAgreeToPolicy }: Priva
               className="w-4 h-4 text-teal-600 border-gray-300 rounded focus:ring-teal-500 disabled:opacity-50 disabled:cursor-not-allowed flex-shrink-0"
             />
             <label htmlFor="privacy-policy" className={`text-xs sm:text-sm font-medium ${theme === 'dark' ? 'text-gray-200' : 'text-gray-900'}`}>
-              I agree to the policies:
+              {locale === 'ar' ? 'أوافق على السياسات:' : 'I agree to the policies:'}
             </label>
           </div>
           <button
@@ -69,7 +73,7 @@ export default function PrivacyPolicy({ agreeToPolicy, setAgreeToPolicy }: Priva
                 : 'bg-teal-50 text-teal-600 hover:bg-teal-100 border-2 border-teal-200'
             }`}
           >
-            {hasReadPrivacy ? '✓ Privacy Policy' : 'Read Privacy Policy'}
+            {hasReadPrivacy ? (locale === 'ar' ? '✓ سياسة الخصوصية' : '✓ Privacy Policy') : (locale === 'ar' ? 'اقرأ سياسة الخصوصية' : 'Read Privacy Policy')}
           </button>
           <button
             type="button"
@@ -80,65 +84,56 @@ export default function PrivacyPolicy({ agreeToPolicy, setAgreeToPolicy }: Priva
                 : 'bg-teal-50 text-teal-600 hover:bg-teal-100 border-2 border-teal-200'
             }`}
           >
-            {hasReadCancellation ? '✓ Cancellation Policy' : 'Read Cancellation Policy'}
+            {hasReadCancellation ? (locale === 'ar' ? '✓ سياسة الإلغاء' : '✓ Cancellation Policy') : (locale === 'ar' ? 'اقرأ سياسة الإلغاء' : 'Read Cancellation Policy')}
           </button>
         </div>
         {!canAgree && (
-          <p className={`text-[10px] sm:text-xs mt-2 font-medium ${theme === 'dark' ? 'text-amber-400' : 'text-amber-600'}`}>⚠ Please read both policies to the end before agreeing</p>
+          <p className={`text-[10px] sm:text-xs mt-2 font-medium ${theme === 'dark' ? 'text-amber-400' : 'text-amber-600'}`}>{locale === 'ar' ? '⚠ يرجى قراءة كلا السياستين حتى النهاية قبل الموافقة' : '⚠ Please read both policies to the end before agreeing'}</p>
         )}
       </div>
 
       {/* Privacy Policy Modal */}
       {showPrivacyModal && (
         <div className="fixed inset-0 backdrop-blur-sm flex items-center justify-center z-50 p-3 sm:p-4">
-          <div className={`rounded-2xl max-w-2xl w-full max-h-[85vh] sm:max-h-[80vh] flex flex-col ${theme === 'dark' ? 'bg-gray-800' : 'bg-white'}`}>
+          <div className={`rounded-2xl max-w-2xl w-full max-h-[85vh] sm:max-h-[80vh] flex flex-col ${theme === 'dark' ? 'bg-gray-800' : 'bg-white'}`} dir={locale === 'ar' ? 'rtl' : 'ltr'}>
             <div className={`p-4 sm:p-6 border-b ${theme === 'dark' ? 'border-gray-700' : 'border-gray-200'}`}>
-              <h3 className={`text-xl sm:text-2xl font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Privacy Policy</h3>
+              <h3 className={`text-xl sm:text-2xl font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{locale === 'ar' ? 'سياسة الخصوصية' : 'Privacy Policy'}</h3>
             </div>
             <div 
               ref={privacyScrollRef}
               onScroll={handlePrivacyScroll}
               className={`p-4 sm:p-6 overflow-y-auto flex-1 leading-relaxed text-sm sm:text-base ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}
             >
-              <h4 className="font-bold text-lg mb-3">1. Information Collection</h4>
-              <p className="mb-4">We collect personal information including your name, contact details, date of birth, and medical history to provide you with quality healthcare services. This information is essential for appointment scheduling, medical consultations, and maintaining accurate health records.</p>
+              <h4 className="font-bold text-lg mb-3">{locale === 'ar' ? '1. جمع المعلومات' : '1. Information Collection'}</h4>
+              <p className="mb-4">{locale === 'ar' ? 'نقوم بجمع المعلومات الشخصية بما في ذلك اسمك وتفاصيل الاتصال وتاريخ الميلاد والتاريخ الطبي لتزويدك بخدمات رعاية صحية عالية الجودة.' : 'We collect personal information including your name, contact details, date of birth, and medical history to provide you with quality healthcare services.'}</p>
 
-              <h4 className="font-bold text-lg mb-3">2. Data Usage</h4>
-              <p className="mb-4">Your personal and medical information will be used exclusively for healthcare purposes, including diagnosis, treatment planning, appointment management, and communication regarding your health. We may also use your contact information to send appointment reminders and important health updates.</p>
+              <h4 className="font-bold text-lg mb-3">{locale === 'ar' ? '2. استخدام البيانات' : '2. Data Usage'}</h4>
+              <p className="mb-4">{locale === 'ar' ? 'سيتم استخدام معلوماتك الشخصية والطبية حصرياً لأغراض الرعاية الصحية، بما في ذلك التشخيص وتخطيط العلاج وإدارة المواعيد.' : 'Your personal and medical information will be used exclusively for healthcare purposes, including diagnosis, treatment planning, and appointment management.'}</p>
 
-              <h4 className="font-bold text-lg mb-3">3. Data Protection</h4>
-              <p className="mb-4">We implement industry-standard security measures to protect your data from unauthorized access, disclosure, or misuse. All medical records are stored in encrypted databases with restricted access limited to authorized healthcare professionals directly involved in your care.</p>
+              <h4 className="font-bold text-lg mb-3">{locale === 'ar' ? '3. حماية البيانات' : '3. Data Protection'}</h4>
+              <p className="mb-4">{locale === 'ar' ? 'نطبق تدابير أمنية قياسية في الصناعة لحماية بياناتك من الوصول غير المصرح به أو الكشف أو إساءة الاستخدام.' : 'We implement industry-standard security measures to protect your data from unauthorized access, disclosure, or misuse.'}</p>
 
-              <h4 className="font-bold text-lg mb-3">4. Information Sharing</h4>
-              <p className="mb-4">Your medical information will only be shared with healthcare providers directly involved in your treatment. We will never sell, rent, or share your personal information with third parties for marketing purposes without your explicit consent.</p>
+              <h4 className="font-bold text-lg mb-3">{locale === 'ar' ? '4. مشاركة المعلومات' : '4. Information Sharing'}</h4>
+              <p className="mb-4">{locale === 'ar' ? 'سيتم مشاركة معلوماتك الطبية فقط مع مقدمي الرعاية الصحية المشاركين مباشرة في علاجك.' : 'Your medical information will only be shared with healthcare providers directly involved in your treatment.'}</p>
 
-              <h4 className="font-bold text-lg mb-3">5. Patient Rights</h4>
-              <p className="mb-4">You have the right to access, review, and request corrections to your medical records. You may also request a copy of your health information or ask us to restrict certain uses of your data, subject to legal and medical requirements.</p>
-
-              <h4 className="font-bold text-lg mb-3">6. Data Retention</h4>
-              <p className="mb-4">We retain your medical records in accordance with healthcare regulations and legal requirements. Your data will be securely stored for the minimum period required by law and medical best practices.</p>
-
-              <h4 className="font-bold text-lg mb-3">7. Cookies and Tracking</h4>
-              <p className="mb-4">Our website uses cookies to enhance your browsing experience and maintain session security. These cookies do not store sensitive medical information and can be managed through your browser settings.</p>
-
-              <h4 className="font-bold text-lg mb-3">8. Policy Updates</h4>
-              <p className="mb-4">We may update this privacy policy periodically to reflect changes in our practices or legal requirements. Significant changes will be communicated to you via email or through our website.</p>
+              <h4 className="font-bold text-lg mb-3">{locale === 'ar' ? '5. حقوق المريض' : '5. Patient Rights'}</h4>
+              <p className="mb-4">{locale === 'ar' ? 'لديك الحق في الوصول إلى سجلاتك الطبية ومراجعتها وطلب تصحيحات عليها.' : 'You have the right to access, review, and request corrections to your medical records.'}</p>
 
               <div className="h-20"></div>
             </div>
             <div className={`p-4 sm:p-6 border-t flex flex-col sm:flex-row justify-between items-center gap-2 ${theme === 'dark' ? 'border-gray-700' : 'border-gray-200'}`}>
               {!hasReadPrivacy && (
-                <p className="text-xs sm:text-sm text-amber-600 font-medium">↓ Scroll to the bottom to continue</p>
+                <p className="text-xs sm:text-sm text-amber-600 font-medium">{locale === 'ar' ? '↓ قم بالتمرير إلى الأسفل للمتابعة' : '↓ Scroll to the bottom to continue'}</p>
               )}
               {hasReadPrivacy && (
-                <p className="text-xs sm:text-sm text-green-600 font-medium">✓ You have read this policy</p>
+                <p className="text-xs sm:text-sm text-green-600 font-medium">{locale === 'ar' ? '✓ لقد قرأت هذه السياسة' : '✓ You have read this policy'}</p>
               )}
               <button
                 onClick={() => setShowPrivacyModal(false)}
                 disabled={!hasReadPrivacy}
                 className="w-full sm:w-auto px-4 sm:px-6 py-2 bg-teal-600 text-white rounded-lg font-semibold hover:bg-teal-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all text-sm"
               >
-                {hasReadPrivacy ? 'Close' : 'Read to Continue'}
+                {hasReadPrivacy ? (locale === 'ar' ? 'إغلاق' : 'Close') : (locale === 'ar' ? 'اقرأ للمتابعة' : 'Read to Continue')}
               </button>
             </div>
           </div>
@@ -148,57 +143,45 @@ export default function PrivacyPolicy({ agreeToPolicy, setAgreeToPolicy }: Priva
       {/* Cancellation & Rescheduling Policy Modal */}
       {showCancellationModal && (
         <div className="fixed inset-0 backdrop-blur flex items-center justify-center z-50 p-3 sm:p-4">
-          <div className={`rounded-2xl max-w-2xl w-full max-h-[85vh] sm:max-h-[80vh] flex flex-col ${theme === 'dark' ? 'bg-gray-800' : 'bg-white'}`}>
+          <div className={`rounded-2xl max-w-2xl w-full max-h-[85vh] sm:max-h-[80vh] flex flex-col ${theme === 'dark' ? 'bg-gray-800' : 'bg-white'}`} dir={locale === 'ar' ? 'rtl' : 'ltr'}>
             <div className={`p-4 sm:p-6 border-b ${theme === 'dark' ? 'border-gray-700' : 'border-gray-200'}`}>
-              <h3 className={`text-xl sm:text-2xl font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Cancellation & Rescheduling Policy</h3>
+              <h3 className={`text-xl sm:text-2xl font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{locale === 'ar' ? 'سياسة الإلغاء وإعادة الجدولة' : 'Cancellation & Rescheduling Policy'}</h3>
             </div>
             <div 
               ref={cancellationScrollRef}
               onScroll={handleCancellationScroll}
               className={`p-4 sm:p-6 overflow-y-auto flex-1 leading-relaxed text-sm sm:text-base ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}
             >
-              <h4 className="font-bold text-lg mb-3">1. Cancellation Notice Period</h4>
-              <p className="mb-4">Appointments must be cancelled at least 24 hours in advance to avoid cancellation fees. We understand that emergencies occur, but advance notice helps us serve other patients who may be waiting for appointments.</p>
+              <h4 className="font-bold text-lg mb-3">{locale === 'ar' ? '1. فترة إشعار الإلغاء' : '1. Cancellation Notice Period'}</h4>
+              <p className="mb-4">{locale === 'ar' ? 'يجب إلغاء المواعيد قبل 24 ساعة على الأقل لتجنب رسوم الإلغاء.' : 'Appointments must be cancelled at least 24 hours in advance to avoid cancellation fees.'}</p>
 
-              <h4 className="font-bold text-lg mb-3">2. Late Cancellation Fee</h4>
-              <p className="mb-4">Cancellations made less than 24 hours before your scheduled appointment will incur a fee of 50% of the consultation cost. This fee compensates for the reserved time slot that could have been offered to another patient.</p>
+              <h4 className="font-bold text-lg mb-3">{locale === 'ar' ? '2. رسوم الإلغاء المتأخر' : '2. Late Cancellation Fee'}</h4>
+              <p className="mb-4">{locale === 'ar' ? 'الإلغاءات التي تتم قبل أقل من 24 ساعة من موعدك المحدد ستتحمل رسوماً بنسبة 50٪ من تكلفة الاستشارة.' : 'Cancellations made less than 24 hours before your scheduled appointment will incur a fee of 50% of the consultation cost.'}</p>
 
-              <h4 className="font-bold text-lg mb-3">3. No-Show Policy</h4>
-              <p className="mb-4">Failure to attend your scheduled appointment without prior notice will result in a full consultation fee charge. Repeated no-shows may result in restrictions on future booking privileges.</p>
+              <h4 className="font-bold text-lg mb-3">{locale === 'ar' ? '3. سياسة عدم الحضور' : '3. No-Show Policy'}</h4>
+              <p className="mb-4">{locale === 'ar' ? 'عدم حضور موعدك المحدد دون إشعار مسبق سيؤدي إلى فرض رسوم استشارة كاملة.' : 'Failure to attend your scheduled appointment without prior notice will result in a full consultation fee charge.'}</p>
 
-              <h4 className="font-bold text-lg mb-3">4. Rescheduling Appointments</h4>
-              <p className="mb-4">You may reschedule your appointment up to 12 hours before the scheduled time without any fees. Rescheduling requests made within 12 hours of the appointment are subject to availability and may incur a rescheduling fee.</p>
+              <h4 className="font-bold text-lg mb-3">{locale === 'ar' ? '4. إعادة جدولة المواعيد' : '4. Rescheduling Appointments'}</h4>
+              <p className="mb-4">{locale === 'ar' ? 'يمكنك إعادة جدولة موعدك حتى 12 ساعة قبل الوقت المحدد دون أي رسوم.' : 'You may reschedule your appointment up to 12 hours before the scheduled time without any fees.'}</p>
 
-              <h4 className="font-bold text-lg mb-3">5. Emergency Situations</h4>
-              <p className="mb-4">We understand that genuine emergencies happen. If you need to cancel due to a medical emergency or unforeseen circumstances, please contact us as soon as possible. We will review each case individually and may waive fees at our discretion.</p>
-
-              <h4 className="font-bold text-lg mb-3">6. How to Cancel or Reschedule</h4>
-              <p className="mb-4">To cancel or reschedule your appointment, please contact our clinic via phone, email, or through your patient portal. You will receive a confirmation once your request has been processed.</p>
-
-              <h4 className="font-bold text-lg mb-3">7. Refund Policy</h4>
-              <p className="mb-4">If you have prepaid for your appointment and cancel within the allowed timeframe, you will receive a full refund within 5-7 business days. Late cancellations will receive a partial refund as per our fee structure.</p>
-
-              <h4 className="font-bold text-lg mb-3">8. Doctor Cancellations</h4>
-              <p className="mb-4">In the rare event that your doctor needs to cancel or reschedule your appointment, we will notify you immediately and offer alternative time slots. You will not be charged any fees for doctor-initiated cancellations.</p>
-
-              <h4 className="font-bold text-lg mb-3">9. Weather and Emergencies</h4>
-              <p className="mb-4">In case of severe weather conditions or clinic emergencies, we may need to cancel appointments. We will contact you as soon as possible to reschedule without any penalties.</p>
+              <h4 className="font-bold text-lg mb-3">{locale === 'ar' ? '5. حالات الطوارئ' : '5. Emergency Situations'}</h4>
+              <p className="mb-4">{locale === 'ar' ? 'نتفهم أن حالات الطوارئ الحقيقية تحدث. إذا كنت بحاجة إلى الإلغاء بسبب حالة طوارئ طبية، يرجى الاتصال بنا في أقرب وقت ممكن.' : 'We understand that genuine emergencies happen. If you need to cancel due to a medical emergency, please contact us as soon as possible.'}</p>
 
               <div className="h-20"></div>
             </div>
             <div className={`p-4 sm:p-6 border-t flex flex-col sm:flex-row justify-between items-center gap-2 ${theme === 'dark' ? 'border-gray-700' : 'border-gray-200'}`}>
               {!hasReadCancellation && (
-                <p className="text-xs sm:text-sm text-amber-600 font-medium">↓ Scroll to the bottom to continue</p>
+                <p className="text-xs sm:text-sm text-amber-600 font-medium">{locale === 'ar' ? '↓ قم بالتمرير إلى الأسفل للمتابعة' : '↓ Scroll to the bottom to continue'}</p>
               )}
               {hasReadCancellation && (
-                <p className="text-xs sm:text-sm text-green-600 font-medium">✓ You have read this policy</p>
+                <p className="text-xs sm:text-sm text-green-600 font-medium">{locale === 'ar' ? '✓ لقد قرأت هذه السياسة' : '✓ You have read this policy'}</p>
               )}
               <button
                 onClick={() => setShowCancellationModal(false)}
                 disabled={!hasReadCancellation}
                 className="w-full sm:w-auto px-4 sm:px-6 py-2 bg-teal-600 text-white rounded-lg font-semibold hover:bg-teal-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all text-sm"
               >
-                {hasReadCancellation ? 'Close' : 'Read to Continue'}
+                {hasReadCancellation ? (locale === 'ar' ? 'إغلاق' : 'Close') : (locale === 'ar' ? 'اقرأ للمتابعة' : 'Read to Continue')}
               </button>
             </div>
           </div>
