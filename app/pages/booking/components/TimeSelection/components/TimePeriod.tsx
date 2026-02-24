@@ -1,4 +1,6 @@
 import { useTheme } from '@/app/contexts/ThemeContext';
+import { useLanguage } from '@/app/contexts/LanguageContext';
+import translations from '@/messages/translations';
 
 interface TimePeriodProps {
   title: string;
@@ -26,6 +28,9 @@ export default function TimePeriod({
   bookedSlots
 }: TimePeriodProps) {
   const { theme } = useTheme();
+  const { locale } = useLanguage();
+  const t = translations[locale].booking.timeSelection.timeSlots;
+  
   if (slots.length === 0) return null;
 
   return (
@@ -34,7 +39,7 @@ export default function TimePeriod({
         <span className={`material-icons text-${iconColor} text-base sm:text-lg`}>{icon}</span>
         <h4 className={`font-semibold text-sm sm:text-base ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{title}</h4>
         {slots.length > 4 && (
-          <span className={`text-[10px] sm:text-xs ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>({slots.length} slots)</span>
+          <span className={`text-[10px] sm:text-xs ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>({slots.length} {locale === 'ar' ? 'موعد' : 'slots'})</span>
         )}
       </div>
       <div className="grid grid-cols-2 gap-1.5 sm:gap-2">
@@ -63,7 +68,7 @@ export default function TimePeriod({
           onClick={() => setShowAll(!showAll)}
           className="w-full mt-1.5 sm:mt-2 py-1.5 sm:py-2 text-xs sm:text-sm text-teal-600 hover:text-teal-700 font-medium flex items-center justify-center gap-1"
         >
-          <span>{showAll ? 'Show Less' : `Show ${slots.length - 4} More`}</span>
+          <span>{showAll ? t.showLess : `${t.showMore} ${slots.length - 4}`}</span>
           <span className="material-icons text-xs sm:text-sm">{showAll ? 'expand_less' : 'expand_more'}</span>
         </button>
       )}
