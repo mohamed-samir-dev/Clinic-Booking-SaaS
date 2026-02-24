@@ -1,6 +1,7 @@
 import { useState, useCallback } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/app/store/store';
+import { useLanguage } from '@/app/contexts/LanguageContext';
 import { BookingData,UseBookingParams } from '../types/types';
 import { createAppointment } from '../services/api';
 
@@ -18,6 +19,7 @@ export const useBooking = ({ selectedDoctor, selectedService, selectedDate, sele
   const [error, setError] = useState<string | null>(null);
 
   const { user, token } = useSelector((state: RootState) => state.auth);
+  const { locale } = useLanguage();
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
@@ -74,7 +76,8 @@ export const useBooking = ({ selectedDoctor, selectedService, selectedDate, sele
         selectedService,
         patientData: { fullName, phone, email, dateOfBirth, gender, reason },
         user,
-        token
+        token,
+        locale
       });
 
       setBookingData(data);
@@ -86,7 +89,7 @@ export const useBooking = ({ selectedDoctor, selectedService, selectedDate, sele
     } finally {
       setIsSubmitting(false);
     }
-  }, [agreeToPolicy, fullName, phone, email, dateOfBirth, gender, reason, selectedDoctor, selectedDate, selectedTime, selectedService, user, token]);
+  }, [agreeToPolicy, fullName, phone, email, dateOfBirth, gender, reason, selectedDoctor, selectedDate, selectedTime, selectedService, user, token, locale]);
 
   const canSubmit = agreeToPolicy && !!fullName && phone.length === 10 && email.endsWith('@gmail.com') && !!dateOfBirth && !!gender && !!reason;
 
