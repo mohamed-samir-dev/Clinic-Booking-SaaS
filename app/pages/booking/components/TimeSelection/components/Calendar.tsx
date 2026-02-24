@@ -1,7 +1,9 @@
 import { Doctor } from '@/app/types/index';
 import { CalendarDay } from '../types';
-import { MONTH_NAMES, DAY_NAMES } from '../constants';
+import { useMonthNames, useDayNames } from '../constants';
 import { useTheme } from '@/app/contexts/ThemeContext';
+import { useLanguage } from '@/app/contexts/LanguageContext';
+import translations from '@/messages/translations';
 
 interface CalendarProps {
   currentMonth: Date;
@@ -27,6 +29,11 @@ export default function Calendar({
   blockedDates
 }: CalendarProps) {
   const { theme } = useTheme();
+  const { locale } = useLanguage();
+  const t = translations[locale].booking.timeSelection.calendar;
+  const MONTH_NAMES = useMonthNames();
+  const DAY_NAMES = useDayNames();
+  
   return (
     <div className={`rounded-2xl shadow-sm p-4 sm:p-6 ${
       theme === 'dark' ? 'bg-gray-800' : 'bg-white'
@@ -39,14 +46,14 @@ export default function Calendar({
             disabled={!canGoPrevious}
             className={`p-1.5 sm:p-2 rounded-lg ${canGoPrevious ? theme === 'dark' ? 'hover:bg-gray-700' : 'hover:bg-gray-100' : 'opacity-30 cursor-not-allowed'}`}
           >
-            <span className={`material-icons text-lg sm:text-xl ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>chevron_left</span>
+            <span className={`material-icons text-lg sm:text-xl ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>{locale === 'ar' ? 'chevron_right' : 'chevron_left'}</span>
           </button>
           <button 
             onClick={() => canGoNext && setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1))} 
             disabled={!canGoNext}
             className={`p-1.5 sm:p-2 rounded-lg ${canGoNext ? theme === 'dark' ? 'hover:bg-gray-700' : 'hover:bg-gray-100' : 'opacity-30 cursor-not-allowed'}`}
           >
-            <span className={`material-icons text-lg sm:text-xl ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>chevron_right</span>
+            <span className={`material-icons text-lg sm:text-xl ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>{locale === 'ar' ? 'chevron_left' : 'chevron_right'}</span>
           </button>
         </div>
       </div>
@@ -55,7 +62,7 @@ export default function Calendar({
         <div className={`mb-2 sm:mb-3 p-2 font-semibold rounded-lg text-[10px] sm:text-xs text-center ${
           theme === 'dark' ? 'bg-amber-900/30 text-amber-400' : 'bg-amber-50 text-amber-700'
         }`}>
-          Select a doctor to see available dates
+          {t.selectDate}
         </div>
       )}
 
@@ -64,17 +71,17 @@ export default function Calendar({
           <div className="mb-2 sm:mb-3 flex items-center justify-center gap-3 sm:gap-4 text-[10px] sm:text-xs">
             <div className="flex items-center gap-1">
               <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-green-500"></div>
-              <span className={`font-semibold ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Available</span>
+              <span className={`font-semibold ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>{locale === 'ar' ? 'متاح' : 'Available'}</span>
             </div>
             <div className="flex items-center gap-1">
               <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-red-500"></div>
-              <span className={`font-semibold ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Not Available</span>
+              <span className={`font-semibold ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>{t.notAvailable}</span>
             </div>
           </div>
           <div className={`mb-2 sm:mb-3 p-2 font-semibold rounded-lg text-[10px] sm:text-xs text-center ${
             theme === 'dark' ? 'bg-blue-900/30 text-blue-400' : 'bg-blue-50 text-blue-700'
           }`}>
-            Booking available for the next 2 months
+            {locale === 'ar' ? 'الحجز متاح للشهرين القادمين' : 'Booking available for the next 2 months'}
           </div>
         </>
       )}
