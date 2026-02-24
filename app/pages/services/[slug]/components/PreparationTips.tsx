@@ -1,6 +1,8 @@
 import { motion } from 'framer-motion';
 import { IconType } from 'react-icons';
 import { useTheme } from '@/app/contexts/ThemeContext';
+import { useLanguage } from '@/app/contexts/LanguageContext';
+import translations from '@/messages/translations';
 
 interface PreparationTipsProps {
   tips: { icon: IconType; title: string; description: string }[];
@@ -8,11 +10,13 @@ interface PreparationTipsProps {
 
 export default function PreparationTips({ tips }: PreparationTipsProps) {
   const { theme } = useTheme();
+  const { locale } = useLanguage();
+  const t = translations[locale].services.serviceDetails.preparationTips;
   return (
     <div className={`${theme === 'dark' ? 'bg-gray-800' : 'bg-white'} py-12 sm:py-16 md:py-20`}>
       <div className="max-w-5xl mx-auto px-4 md:px-8">
         <div className="text-center mb-10 sm:mb-16">
-          <h3 className={`text-2xl sm:text-3xl md:text-4xl font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-900'} mb-3 px-2`}>Preparation For Your Visit</h3>
+          <h3 className={`text-2xl sm:text-3xl md:text-4xl font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-900'} mb-3 px-2`}>{t.title}</h3>
           <div className="w-16 sm:w-20 h-1 bg-teal-500 mx-auto rounded-full"></div>
         </div>
 
