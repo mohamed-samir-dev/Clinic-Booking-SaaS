@@ -11,6 +11,8 @@ import { useSelector } from 'react-redux';
 import { RootState } from '@/app/store/store';
 import Toast from '@/app/components/Toast';
 import { useTheme } from '@/app/contexts/ThemeContext';
+import { useLanguage } from '@/app/contexts/LanguageContext';
+import translations from '@/messages/translations';
 
 interface TimeSelectionProps {
   selectedTime: string;
@@ -23,6 +25,9 @@ interface TimeSelectionProps {
 
 export default function TimeSelection({ selectedTime, setSelectedTime, selectedDoctor, selectedService, selectedDate, setSelectedDate }: TimeSelectionProps) {
   const { theme } = useTheme();
+  const { locale } = useLanguage();
+  const t = translations[locale].booking.timeSelection;
+  const isRTL = locale === 'ar';
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [showAllMorning, setShowAllMorning] = useState(false);
   const [showAllAfternoon, setShowAllAfternoon] = useState(false);
@@ -80,7 +85,7 @@ export default function TimeSelection({ selectedTime, setSelectedTime, selectedD
     }
     const dateStr = date.toISOString().split('T')[0];
     if (blockedDates.includes(dateStr)) {
-      setErrorMessage('You already have an appointment with this doctor on this day.');
+      setErrorMessage(t.errors.alreadyBooked);
       return;
     }
     setSelectedDate(date);
@@ -148,13 +153,13 @@ export default function TimeSelection({ selectedTime, setSelectedTime, selectedD
   const canGoNext = currentMonth < new Date(maxMonth.getFullYear(), maxMonth.getMonth(), 1);
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
+    <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6" dir={isRTL ? 'rtl' : 'ltr'}>
       <div className="lg:col-span-2">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-4 sm:mb-6 gap-2">
-          <h2 className={`text-xl sm:text-2xl font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Select Date & Time</h2>
+          <h2 className={`text-xl sm:text-2xl font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{t.title}</h2>
           <div className={`flex items-center gap-2 text-xs sm:text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>
             <span className="material-icons text-base sm:text-lg">public</span>
-            <span>Cairo Time (GMT+3)</span>
+            <span>{t.timezone}</span>
           </div>
         </div>
 
