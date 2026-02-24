@@ -1,7 +1,11 @@
 import { useTheme } from '@/app/contexts/ThemeContext';
+import { useLanguage } from '@/app/contexts/LanguageContext';
+import translations from '@/messages/translations';
 import {BasicInformationProps}from '../types/types'
 export default function BasicInformation({ fullName, setFullName, phone, setPhone, email, setEmail }: BasicInformationProps) {
   const { theme } = useTheme();
+  const { locale } = useLanguage();
+  const t = translations[locale].booking.detailsForm.basicInfo;
   const isPhoneValid = phone.length === 10;
   const isEmailValid = email.endsWith('@gmail.com') && email.length > 10;
 
@@ -9,11 +13,11 @@ export default function BasicInformation({ fullName, setFullName, phone, setPhon
     <div className="mb-4 sm:mb-6">
       <div className="flex items-center gap-2 mb-3 sm:mb-4">
         <span className="material-icons text-teal-600 text-lg sm:text-xl">person</span>
-        <h3 className={`text-base sm:text-lg font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Basic Information</h3>
+        <h3 className={`text-base sm:text-lg font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{t.title}</h3>
       </div>
       <div className="space-y-3 sm:space-y-4">
         <div>
-          <label className={`block text-xs sm:text-sm font-bold mb-1.5 sm:mb-2 ${theme === 'dark' ? 'text-gray-200' : 'text-gray-900'}`}>Full Name</label>
+          <label className={`block text-xs sm:text-sm font-bold mb-1.5 sm:mb-2 ${theme === 'dark' ? 'text-gray-200' : 'text-gray-900'}`}>{t.fullName}</label>
           <input
             type="text"
             value={fullName}
@@ -21,11 +25,11 @@ export default function BasicInformation({ fullName, setFullName, phone, setPhon
             className={`w-full px-3 sm:px-4 py-2 sm:py-3 rounded-xl border-2 focus:outline-none text-sm sm:text-base ${
               theme === 'dark' ? 'bg-gray-700 border-gray-600 text-white focus:border-teal-500' : 'bg-white border-gray-200 text-gray-900 focus:border-teal-500'
             }`}
-            placeholder="Johnathan Doe"
+            placeholder={locale === 'ar' ? 'محمد أحمد' : 'Johnathan Doe'}
           />
         </div>
         <div>
-          <label className={`block text-xs sm:text-sm font-bold mb-1.5 sm:mb-2 ${theme === 'dark' ? 'text-gray-200' : 'text-gray-900'}`}>Phone Number</label>
+          <label className={`block text-xs sm:text-sm font-bold mb-1.5 sm:mb-2 ${theme === 'dark' ? 'text-gray-200' : 'text-gray-900'}`}>{t.phone}</label>
           <div className="flex gap-1.5 sm:gap-2">
             <div className={`px-2 sm:px-3 md:px-4 py-2 sm:py-3 rounded-xl border-2 text-xs sm:text-sm md:text-base font-semibold shrink-0 whitespace-nowrap ${
               theme === 'dark' ? 'bg-gray-700 border-gray-600 text-white' : 'bg-gray-50 border-gray-200 text-gray-900'
@@ -47,14 +51,14 @@ export default function BasicInformation({ fullName, setFullName, phone, setPhon
             />
           </div>
           {phone && !isPhoneValid && (
-            <p className="text-[10px] sm:text-xs text-red-500 mt-1">⚠ Phone number must be exactly 10 digits</p>
+            <p className="text-[10px] sm:text-xs text-red-500 mt-1">{locale === 'ar' ? '⚠ يجب أن يكون رقم الهاتف 10 أرقام بالضبط' : '⚠ Phone number must be exactly 10 digits'}</p>
           )}
           {(!phone || isPhoneValid) && (
-            <p className={`text-[10px] sm:text-xs mt-1 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>Please enter 10 digits only</p>
+            <p className={`text-[10px] sm:text-xs mt-1 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>{locale === 'ar' ? 'يرجى إدخال 10 أرقام فقط' : 'Please enter 10 digits only'}</p>
           )}
         </div>
         <div>
-          <label className={`block text-xs sm:text-sm font-bold mb-1.5 sm:mb-2 ${theme === 'dark' ? 'text-gray-200' : 'text-gray-900'}`}>Email Address</label>
+          <label className={`block text-xs sm:text-sm font-bold mb-1.5 sm:mb-2 ${theme === 'dark' ? 'text-gray-200' : 'text-gray-900'}`}>{t.email}</label>
           <input
             type="email"
             value={email}
@@ -68,10 +72,10 @@ export default function BasicInformation({ fullName, setFullName, phone, setPhon
             placeholder="john.doe@gmail.com"
           />
           {email && !isEmailValid && (
-            <p className="text-[10px] sm:text-xs text-red-500 mt-1">⚠ Email must end with @gmail.com</p>
+            <p className="text-[10px] sm:text-xs text-red-500 mt-1">{locale === 'ar' ? '⚠ يجب أن ينتهي البريد بـ @gmail.com' : '⚠ Email must end with @gmail.com'}</p>
           )}
           {(!email || isEmailValid) && (
-            <p className={`text-[10px] sm:text-xs mt-1 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>Must be a valid Gmail address</p>
+            <p className={`text-[10px] sm:text-xs mt-1 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>{locale === 'ar' ? 'يجب أن يكون عنوان Gmail صالح' : 'Must be a valid Gmail address'}</p>
           )}
         </div>
       </div>
