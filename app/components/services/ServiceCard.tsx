@@ -10,14 +10,15 @@ interface ServiceCardProps {
   icon: IconType;
   title: string;
   description: string;
+  serviceKey: string;
   isSelected?: boolean;
 }
 
-export default function ServiceCard({ icon: Icon, title, description, isSelected = false }: ServiceCardProps) {
+export default function ServiceCard({ icon: Icon, title, description, serviceKey, isSelected = false }: ServiceCardProps) {
   const { theme } = useTheme();
   const { locale } = useLanguage();
   const t = translations[locale].services;
-  const slug = title.toLowerCase().replace(/\s+/g, '-');
+  const slug = serviceKey.toLowerCase();
   const isRTL = locale === 'ar';
   
   return (
