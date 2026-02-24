@@ -100,6 +100,115 @@
           "answer": "Please bring a valid ID, your insurance card, a list of current medications, and any relevant medical records or test results."
         }
       ]
+    },
+    "serviceDetails": {
+      "bookAppointment": "Book Appointment",
+      "consultation": "Consultation",
+      "dentalCheckup": "Dental Cleaning & Checkup",
+      "description": "Our expert team provides comprehensive care tailored to your needs.",
+      "dentalDescription": "Maintain your brilliant smile and optimal oral health with our comprehensive cleaning and diagnostic services.",
+      "overview": {
+        "title": "Service Overview",
+        "generalMedicine": {
+          "intro": "A General Medicine Consultation is the foundation of maintaining your overall health. At CareSync, our experienced physicians provide a comprehensive medical evaluation to assess your condition and detect potential health concerns early. We focus on accurate diagnosis, preventive care, and personalized treatment plans tailored to your specific needs.",
+          "features": [
+            "Complete medical history review",
+            "Thorough physical examination and vital signs assessment",
+            "Diagnosis and management of acute and chronic conditions",
+            "Preventive health screenings",
+            "Personalized treatment and lifestyle recommendations"
+          ]
+        },
+        "pediatrics": {
+          "intro": "Pediatrics at CareSync is dedicated to providing compassionate and comprehensive healthcare for infants, children, and adolescents. Our pediatric specialists focus on monitoring growth and development, preventing illness, and ensuring your child's healthy future.",
+          "features": [
+            "Routine checkups and growth monitoring",
+            "Childhood vaccinations and immunizations",
+            "Diagnosis and treatment of common pediatric illnesses",
+            "Nutritional and developmental guidance",
+            "Preventive care and parental counseling"
+          ]
+        },
+        "dermatology": {
+          "intro": "Dermatology at CareSync provides comprehensive care for healthy, radiant skin. Our specialists diagnose and treat a wide range of skin, hair, and nail conditions using advanced medical and cosmetic techniques tailored to your needs.",
+          "features": [
+            "Diagnosis and treatment of skin conditions (acne, eczema, psoriasis)",
+            "Management of hair and scalp disorders",
+            "Skin allergy testing and treatment",
+            "Cosmetic dermatology procedures",
+            "Personalized skincare and prevention plans"
+          ]
+        },
+        "dentistry": {
+          "intro": "Dentistry at CareSync focuses on maintaining healthy, confident smiles through advanced preventive and restorative care. Our dental team provides comprehensive examinations and personalized treatment plans to ensure optimal oral health for every patient.",
+          "features": [
+            "Comprehensive dental examinations",
+            "Professional teeth cleaning and plaque removal",
+            "Cavity detection and tooth-colored fillings",
+            "Gum disease prevention and treatment",
+            "Personalized oral hygiene guidance"
+          ]
+        },
+        "gynecology": {
+          "intro": "Gynecology at CareSync provides comprehensive and compassionate care for women's health at every stage of life. Our specialists focus on preventive care, early diagnosis, and personalized treatment to support your well-being and confidence.",
+          "features": [
+            "Routine gynecological examinations",
+            "Pap smear and cervical cancer screening",
+            "Diagnosis and treatment of hormonal disorders",
+            "Menstrual and reproductive health care",
+            "Family planning and contraceptive counseling"
+          ]
+        },
+        "orthopedics": {
+          "intro": "Orthopedics at CareSync focuses on diagnosing and treating conditions related to bones, joints, muscles, and ligaments. Our specialists provide advanced care to relieve pain, restore mobility, and improve your quality of life.",
+          "features": [
+            "Diagnosis and treatment of bone and joint disorders",
+            "Sports injury management",
+            "Fracture care and rehabilitation",
+            "Treatment of back, neck, and joint pain",
+            "Personalized recovery and physiotherapy plans"
+          ]
+        },
+        "cardiology": {
+          "intro": "Cardiology at CareSync is dedicated to protecting and strengthening your heart health. Our specialists provide comprehensive cardiac evaluations, early detection of heart conditions, and personalized treatment plans using advanced diagnostic technology.",
+          "features": [
+            "Comprehensive heart health assessments",
+            "ECG and cardiac diagnostic testing",
+            "Management of hypertension and cholesterol",
+            "Diagnosis and treatment of heart diseases",
+            "Preventive cardiology and lifestyle guidance"
+          ]
+        },
+        "ent": {
+          "intro": "ENT at CareSync provides specialized care for conditions affecting the ear, nose, and throat. Our specialists use advanced diagnostic tools to accurately assess symptoms and deliver effective treatment for both acute and chronic conditions.",
+          "features": [
+            "Diagnosis and treatment of ear infections and hearing issues",
+            "Management of sinusitis and nasal allergies",
+            "Treatment of sore throat and tonsillitis",
+            "Voice and swallowing disorder evaluation",
+            "Preventive care and long-term condition management"
+          ]
+        }
+      },
+      "treatmentProcess": {
+        "title": "Treatment Process"
+      },
+      "preparationTips": {
+        "title": "Preparation Tips"
+      },
+      "faqs": {
+        "title": "Frequently Asked Questions"
+      },
+      "topDoctors": {
+        "title": "Top Doctors for"
+      },
+      "pricing": {
+        "duration": "Duration",
+        "price": "Price",
+        "minutes": "Minutes",
+        "startingFrom": "Starting from",
+        "egp": "EGP"
+      }
     }
   },
   "doctors": {
@@ -140,6 +249,34 @@
       "availabilityStatus": "Availability Status:",
       "availableTodayStatus": "Available Today",
       "notAvailableToday": "Not Available Today"
+    },
+    "profile": {
+      "verified": "Verified",
+      "bookAppointment": "Book Appointment",
+      "clinic": "Clinic:",
+      "yearsExp": "Years Exp.",
+      "reviews": "Reviews",
+      "patients": "Patients",
+      "perVisit": "Per Visit",
+      "tabs": {
+        "overview": "Overview",
+        "locations": "Locations",
+        "reviews": "Reviews",
+        "schedule": "Schedule"
+      },
+      "overview": {
+        "about": "About",
+        "noBio": "No bio available",
+        "education": "Education",
+        "institution": "Institution",
+        "degree": "Degree",
+        "experience": "Experience",
+        "years": "years",
+        "languages": "Languages"
+      },
+      "schedule": {
+        "noSchedule": "No schedule available"
+      }
     }
   },
   "clinics": {
@@ -148,7 +285,39 @@
     "description": "Discover our network of trusted medical facilities",
     "noLogo": "No Logo",
     "viewDetails": "View Details",
-    "noClinics": "No clinics available at the moment"
+    "noClinics": "No clinics available at the moment",
+    "details": {
+      "aboutClinic": "About the Clinic",
+      "contactInformation": "Contact Information",
+      "address": "Address",
+      "phone": "Phone",
+      "email": "Email",
+      "capacity": "Capacity",
+      "rooms": "Rooms",
+      "doctors": "Doctors",
+      "patientsPerDay": "Patients/Day",
+      "followUs": "Follow Us",
+      "gallery": "Gallery",
+      "facilitiesServices": "Facilities & Services",
+      "workingHours": "Working Hours",
+      "ourDoctors": "Our Doctors",
+      "viewProfile": "View Profile",
+      "bookAppointment": "Book Appointment",
+      "location": "Location",
+      "clinicNotFound": "Clinic not found",
+      "loading": "Loading...",
+      "days": {
+        "sunday": "Sunday",
+        "monday": "Monday",
+        "tuesday": "Tuesday",
+        "wednesday": "Wednesday",
+        "thursday": "Thursday",
+        "friday": "Friday",
+        "saturday": "Saturday"
+      },
+      "closed": "Closed",
+      "open": "Open"
+    }
   },
   "reviews": {
     "title": "Patient",
@@ -230,6 +399,122 @@
     "bookOnline": "Book Online Now",
     "callUs": "Call +201012486445"
   },
+  "booking": {
+    "steps": {
+      "services": "Services",
+      "doctor": "Doctor",
+      "time": "Time",
+      "details": "Details"
+    },
+    "navigation": {
+      "back": "Back",
+      "continue": "Continue",
+      "next": "Next",
+      "finish": "Finish",
+      "confirmFinish": "Confirm & Finish Booking",
+      "processing": "Processing..."
+    },
+    "serviceSelection": {
+      "title": "Select Service",
+      "searchPlaceholder": "Search for services...",
+      "noResults": "No services found matching your search."
+    },
+    "doctorSelection": {
+      "title": "Recommended Doctor",
+      "loading": "Loading doctors...",
+      "noResults": "No doctors available for",
+      "filters": {
+        "title": "Filter Doctors",
+        "specialty": "Specialty",
+        "allSpecialties": "All Specialties",
+        "gender": "Gender",
+        "allGenders": "All Genders",
+        "male": "Male",
+        "female": "Female",
+        "experience": "Experience",
+        "years": "Years",
+        "rating": "Rating",
+        "availability": "Availability",
+        "availableToday": "Available Today",
+        "clearAll": "Clear All"
+      },
+      "topRated": {
+        "title": "Top Rated Doctor",
+        "description": "Let us recommend our highest-rated doctor for you",
+        "button": "Select Top Rated"
+      }
+    },
+    "timeSelection": {
+      "title": "Select Date & Time",
+      "timezone": "Cairo Time (GMT+3)",
+      "calendar": {
+        "today": "Today",
+        "notAvailable": "Not Available",
+        "selectDate": "Select a date"
+      },
+      "timeSlots": {
+        "morning": "Morning",
+        "afternoon": "Afternoon",
+        "evening": "Evening",
+        "showMore": "Show More",
+        "showLess": "Show Less",
+        "noSlots": "No available slots",
+        "selectDate": "Please select a date first",
+        "booked": "Booked"
+      },
+      "summary": {
+        "title": "Booking Summary",
+        "doctor": "Doctor",
+        "service": "Service",
+        "duration": "Duration",
+        "minutes": "minutes",
+        "date": "Date",
+        "time": "Time",
+        "notSelected": "Not selected yet"
+      },
+      "errors": {
+        "alreadyBooked": "You already have an appointment with this doctor on this day."
+      }
+    },
+    "detailsForm": {
+      "title": "Patient Information",
+      "basicInfo": {
+        "title": "Basic Information",
+        "fullName": "Full Name",
+        "email": "Email Address",
+        "phone": "Phone Number",
+        "nationalId": "National ID"
+      },
+      "demographics": {
+        "title": "Patient Demographics",
+        "dateOfBirth": "Date of Birth",
+        "gender": "Gender",
+        "male": "Male",
+        "female": "Female",
+        "bloodType": "Blood Type",
+        "selectBloodType": "Select Blood Type"
+      },
+      "medicalContext": {
+        "title": "Medical Context",
+        "reasonForVisit": "Reason for Visit",
+        "symptoms": "Current Symptoms (Optional)",
+        "allergies": "Known Allergies (Optional)",
+        "medications": "Current Medications (Optional)"
+      },
+      "privacy": {
+        "title": "Privacy & Consent",
+        "agreement": "I agree to the Terms of Service and Privacy Policy",
+        "dataUsage": "I consent to the use of my health data for treatment purposes"
+      },
+      "validation": {
+        "required": "This field is required",
+        "invalidEmail": "Invalid email address",
+        "invalidPhone": "Invalid phone number",
+        "invalidNationalId": "Invalid National ID",
+        "mustAgree": "You must agree to continue"
+      }
+    }
+  },
   "contact": {
     "hero": {
       "title": "Get in Touch with",
@@ -296,5 +581,73 @@
       "q4": "Where is the nearest parking area?",
       "a4": "We have a dedicated parking area in the building basement with 2 hours of free parking for patients. Additional parking is available on the street."
     }
+  },
+  "login": {
+    "title": "Welcome Back",
+    "subtitle": "Please enter your details to sign in",
+    "selectClinic": "Select Clinic",
+    "emailLabel": "Email Address",
+    "emailPlaceholder": "example@email.com",
+    "passwordLabel": "Password",
+    "signingIn": "Signing in...",
+    "signIn": "Sign In",
+    "or": "Or",
+    "noAccount": "Don't have an account?",
+    "signUpLink": "Sign Up for clinic account",
+    "errors": {
+      "connectionError": "Connection error. Please try again.",
+      "invalidCredentials": "Invalid email or password",
+      "selectClinic": "Please select a clinic"
+    }
+  },
+  "register": {
+    "badge": "CareSync",
+    "title": "Create your account",
+    "subtitle": "Start your journey with us today",
+    "fullName": "Full Name",
+    "fullNamePlaceholder": "Enter your full name",
+    "emailLabel": "Email Address",
+    "emailPlaceholder": "your.email@clinic.com",
+    "phoneLabel": "Phone Number",
+    "phonePlaceholder": "01234567890",
+    "passwordLabel": "Password",
+    "passwordPlaceholder": "Create a strong password",
+    "confirmPasswordLabel": "Confirm Password",
+    "confirmPasswordPlaceholder": "Re-enter your password",
+    "creatingAccount": "Creating Account...",
+    "createAccount": "Create Account",
+    "alreadyHaveAccount": "Already have an account?",
+    "signInLink": "Sign In",
+    "passwordStrength": {
+      "weak": "Weak",
+      "fair": "Fair",
+      "good": "Good",
+      "strong": "Strong"
+    },
+    "passwordRequirements": {
+      "minLength": "At least 8 characters",
+      "uppercase": "One uppercase letter",
+      "lowercase": "One lowercase letter",
+      "number": "One number",
+      "special": "One special character"
+    },
+    "errors": {
+      "nameRequired": "Name is required",
+      "nameMinLength": "Name must be at least 2 characters",
+      "emailRequired": "Email is required",
+      "emailInvalid": "Invalid email address",
+      "phoneRequired": "Phone number is required",
+      "phoneInvalid": "Phone number must be 11 digits",
+      "passwordRequired": "Password is required",
+      "passwordMinLength": "Password must be at least 8 characters",
+      "passwordUppercase": "Password must contain at least one uppercase letter",
+      "passwordLowercase": "Password must contain at least one lowercase letter",
+      "passwordNumber": "Password must contain at least one number",
+      "passwordSpecial": "Password must contain at least one special character",
+      "confirmPasswordRequired": "Please confirm your password",
+      "passwordMismatch": "Passwords do not match"
+    },
+    "success": "Registration successful",
+    "failed": "Registration failed. Please try again."
   }
 }
