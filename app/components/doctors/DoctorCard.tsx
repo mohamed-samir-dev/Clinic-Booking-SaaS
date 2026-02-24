@@ -9,6 +9,7 @@ import { useLanguage } from '@/app/contexts/LanguageContext';
 import translations from '@/messages/translations';
 import {DoctorCardProps}from '../../types/index'
 import { saveQuickBookingData } from '../../pages/booking/utils/quickBooking';
+import { getServiceKeyFromSpecialty } from '../../pages/booking/utils/serviceHelpers';
 
 const checkIsAvailableNow = (availability?: Array<{ day: string; slots?: Array<{ from: string; to: string }>; workingHours?: { from: string; to: string } }>) => {
   if (!availability || availability.length === 0) return false;
@@ -115,7 +116,7 @@ export default function DoctorCard({
       doctorId: id,
       doctorName: displayName,
       specialty: displaySpecialty,
-      serviceId: specialty.en,
+      serviceId: getServiceKeyFromSpecialty(specialty.en),
       skipSteps: true
     });
     router.push('/pages/booking?quick=true');
