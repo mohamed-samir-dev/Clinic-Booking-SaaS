@@ -4,13 +4,17 @@ import { Eye } from 'lucide-react';
 import { getNextAvailableDay, getDoctorName, getDoctorSpecialty } from '../../utils/doctorHelpers';
 import {DoctorCardProps}from '../../types/type'
 import { useTheme } from '@/app/contexts/ThemeContext';
+import { useLanguage } from '@/app/contexts/LanguageContext';
+import translations from '@/messages/translations';
 
 
 export default function DoctorCard({ doctor, selectedDoctor, onSelect }: DoctorCardProps) {
   const { theme } = useTheme();
-  const nextAvailable = getNextAvailableDay(doctor.availability || []);
-  const doctorName = getDoctorName(doctor.name);
-  const doctorSpecialty = getDoctorSpecialty(doctor.specialty);
+  const { locale } = useLanguage();
+  const t = translations[locale].booking.doctorSelection;
+  const nextAvailable = getNextAvailableDay(doctor.availability || [], locale);
+  const doctorName = getDoctorName(doctor.name, locale);
+  const doctorSpecialty = getDoctorSpecialty(doctor.specialty, locale);
 
   return (
     <div
@@ -50,9 +54,9 @@ export default function DoctorCard({ doctor, selectedDoctor, onSelect }: DoctorC
           <div className="space-y-2">
             {nextAvailable ? (
               <div className="bg-green-50 border border-green-200 rounded-lg px-2 sm:px-3 py-1.5 sm:py-2">
-                <p className="text-[10px] sm:text-xs text-gray-600 mb-0.5">Next Available</p>
+                <p className="text-[10px] sm:text-xs text-gray-600 mb-0.5">{t.topRated.title}</p>
                 <p className="text-xs sm:text-sm font-semibold text-green-700 truncate">
-                  {nextAvailable.isToday ? 'Today' : nextAvailable.day.charAt(0).toUpperCase() + nextAvailable.day.slice(1)}
+                  {nextAvailable.isToday ? translations[locale].booking.timeSelection.calendar.today : nextAvailable.dayDisplay}
                   {' '}{nextAvailable.workingHours.from} - {nextAvailable.workingHours.to}
                 </p>
               </div>
@@ -60,7 +64,7 @@ export default function DoctorCard({ doctor, selectedDoctor, onSelect }: DoctorC
               <div className={`border rounded-lg px-2 sm:px-3 py-1.5 sm:py-2 ${
                 theme === 'dark' ? 'bg-gray-700 border-gray-600' : 'bg-gray-50 border-gray-200'
               }`}>
-                <p className={`text-xs sm:text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>No availability</p>
+                <p className={`text-xs sm:text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>{translations[locale].booking.timeSelection.calendar.notAvailable}</p>
               </div>
             )}
             
@@ -70,7 +74,7 @@ export default function DoctorCard({ doctor, selectedDoctor, onSelect }: DoctorC
                   theme === 'dark' ? 'bg-gray-700 text-gray-200 hover:bg-gray-600' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                 }`}>
                   <Eye className="w-3 h-3 sm:w-4 sm:h-4" />
-                  <span className="hidden sm:inline">View</span>
+                  <span className="hidden sm:inline">{translations[locale].doctors.viewProfile}</span>
                 </button>
               </Link>
               <button
@@ -81,7 +85,7 @@ export default function DoctorCard({ doctor, selectedDoctor, onSelect }: DoctorC
                     : theme === 'dark' ? 'bg-gray-700 text-gray-200 hover:bg-teal-900/50 hover:text-teal-300' : 'bg-gray-100 text-gray-700 hover:bg-teal-50 hover:text-teal-600'
                 }`}
               >
-                {selectedDoctor === doctor._id ? 'Selected' : 'Select'}
+                {selectedDoctor === doctor._id ? (locale === 'ar' ? 'مختار' : 'Selected') : (locale === 'ar' ? 'اختر' : 'Select')}
               </button>
             </div>
           </div>
