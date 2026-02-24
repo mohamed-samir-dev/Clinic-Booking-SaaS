@@ -1,6 +1,8 @@
 import { motion } from 'framer-motion';
 import { useState } from 'react';
 import { useTheme } from '@/app/contexts/ThemeContext';
+import { useLanguage } from '@/app/contexts/LanguageContext';
+import translations from '@/messages/translations';
 
 interface FAQSectionProps {
   faqs: { question: string; answer: string }[];
@@ -8,13 +10,15 @@ interface FAQSectionProps {
 
 export default function FAQSection({ faqs }: FAQSectionProps) {
   const { theme } = useTheme();
+  const { locale } = useLanguage();
+  const t = translations[locale].services.serviceDetails.faqs;
   const [openFaq, setOpenFaq] = useState<number | null>(null);
 
   return (
     <div className={`bg-linear-to-b ${theme === 'dark' ? 'from-gray-900 to-gray-800' : 'from-teal-50 to-white'} py-12 sm:py-16 md:py-20`}>
       <div className="max-w-4xl mx-auto px-4 md:px-8">
         <div className="text-center mb-10 sm:mb-16">
-          <h3 className={`text-2xl sm:text-3xl md:text-4xl font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-900'} mb-3 px-2`}>Common Questions</h3>
+          <h3 className={`text-2xl sm:text-3xl md:text-4xl font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-900'} mb-3 px-2`}>{t.title}</h3>
           <div className="w-16 sm:w-20 h-1 bg-teal-500 mx-auto rounded-full"></div>
         </div>
 

@@ -72,12 +72,15 @@ export default function ServicesPage() {
       return {
         icon: service.icon,
         title: serviceData.title,
-        description: serviceData.description
+        description: serviceData.description,
+        serviceKey: service.key
       };
     });
 
+  const isRTL = locale === 'ar';
+
   return (
-    <div className={`min-h-screen ${theme === 'dark' ? 'bg-gray-900' : 'bg-gray-50'}`}>
+    <div className={`min-h-screen ${theme === 'dark' ? 'bg-gray-900' : 'bg-gray-50'}`} dir={isRTL ? 'rtl' : 'ltr'}>
       <Banner 
         searchQuery={searchQuery}
         onSearchChange={setSearchQuery}
