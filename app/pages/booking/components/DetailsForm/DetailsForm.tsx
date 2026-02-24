@@ -6,6 +6,8 @@ import BookingSummary from '../TimeSelection/components/BookingSummary';
 import BookingConfirmationPopup from '../BookingConfirmationPopup';
 import Toast from '@/app/components/Toast';
 import { useTheme } from '@/app/contexts/ThemeContext';
+import { useLanguage } from '@/app/contexts/LanguageContext';
+import translations from '@/messages/translations';
 import { 
   BasicInformation, 
   PatientDemographics, 
@@ -24,6 +26,8 @@ interface DetailsFormProps {
 
 export default function DetailsForm({ selectedDoctor, selectedService, selectedDate, selectedTime, onBookingSubmit }: DetailsFormProps) {
   const { theme } = useTheme();
+  const { locale } = useLanguage();
+  const t = translations[locale].booking.detailsForm;
   const [showConfirmation, setShowConfirmation] = useState(false);
 
   const {
@@ -55,13 +59,13 @@ export default function DetailsForm({ selectedDoctor, selectedService, selectedD
   }, [onFinish, isSubmitting, canSubmit, onBookingSubmit]);
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
+    <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6" dir={locale === 'ar' ? 'rtl' : 'ltr'}>
       <div className="lg:col-span-2">
         <div className={`rounded-2xl shadow-sm p-4 sm:p-6 ${
           theme === 'dark' ? 'bg-gray-800' : 'bg-white'
         }`}>
-          <h2 className={`text-xl sm:text-2xl font-bold mb-1 sm:mb-2 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Patient Details</h2>
-          <p className={`mb-4 sm:mb-6 text-sm sm:text-base ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Step 4 of 4: Please provide your personal and medical information.</p>
+          <h2 className={`text-xl sm:text-2xl font-bold mb-1 sm:mb-2 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{t.title}</h2>
+          <p className={`mb-4 sm:mb-6 text-sm sm:text-base ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>{locale === 'ar' ? 'الخطوة 4 من 4: يرجى تقديم معلوماتك الشخصية والطبية.' : 'Step 4 of 4: Please provide your personal and medical information.'}</p>
 
           <BasicInformation 
             fullName={fullName} 
