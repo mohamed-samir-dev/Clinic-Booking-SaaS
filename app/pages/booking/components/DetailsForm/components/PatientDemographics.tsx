@@ -1,9 +1,13 @@
 'use client';
 
 import { useTheme } from '@/app/contexts/ThemeContext';
+import { useLanguage } from '@/app/contexts/LanguageContext';
+import translations from '@/messages/translations';
 import {PatientDemographicsProps}from '../types/types'
 export default function PatientDemographics({ dateOfBirth, setDateOfBirth, gender, setGender }: PatientDemographicsProps) {
   const { theme } = useTheme();
+  const { locale } = useLanguage();
+  const t = translations[locale].booking.detailsForm.demographics;
   const today = new Date().toISOString().split('T')[0];
   const minDate = new Date(new Date().getFullYear() - 120, 0, 1).toISOString().split('T')[0];
   
@@ -13,11 +17,11 @@ export default function PatientDemographics({ dateOfBirth, setDateOfBirth, gende
     <div className="mb-4 sm:mb-6">
       <div className="flex items-center gap-2 mb-3 sm:mb-4">
         <span className="material-icons text-teal-600 text-lg sm:text-xl">personal_injury</span>
-        <h3 className={`text-base sm:text-lg font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Patient Demographics</h3>
+        <h3 className={`text-base sm:text-lg font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{t.title}</h3>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
         <div>
-          <label className={`block text-xs sm:text-sm font-bold mb-1.5 sm:mb-2 ${theme === 'dark' ? 'text-gray-200' : 'text-gray-900'}`}>Date of Birth</label>
+          <label className={`block text-xs sm:text-sm font-bold mb-1.5 sm:mb-2 ${theme === 'dark' ? 'text-gray-200' : 'text-gray-900'}`}>{t.dateOfBirth}</label>
           <input
             type="date"
             value={dateOfBirth}
@@ -30,14 +34,14 @@ export default function PatientDemographics({ dateOfBirth, setDateOfBirth, gende
             placeholder="mm/dd/yyyy"
           />
           {dateOfBirth && !isDateValid && (
-            <p className="text-[10px] sm:text-xs text-red-500 mt-1">⚠ Date of birth cannot be in the future</p>
+            <p className="text-[10px] sm:text-xs text-red-500 mt-1">{locale === 'ar' ? '⚠ لا يمكن أن يكون تاريخ الميلاد في المستقبل' : '⚠ Date of birth cannot be in the future'}</p>
           )}
           {(!dateOfBirth || isDateValid) && (
-            <p className={`text-[10px] sm:text-xs mt-1 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>Select your date of birth</p>
+            <p className={`text-[10px] sm:text-xs mt-1 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>{locale === 'ar' ? 'اختر تاريخ ميلادك' : 'Select your date of birth'}</p>
           )}
         </div>
         <div>
-          <label className={`block text-xs sm:text-sm font-bold mb-1.5 sm:mb-2 ${theme === 'dark' ? 'text-gray-200' : 'text-gray-900'}`}>Gender</label>
+          <label className={`block text-xs sm:text-sm font-bold mb-1.5 sm:mb-2 ${theme === 'dark' ? 'text-gray-200' : 'text-gray-900'}`}>{t.gender}</label>
           <select
             value={gender}
             onChange={(e) => setGender(e.target.value)}
@@ -45,10 +49,10 @@ export default function PatientDemographics({ dateOfBirth, setDateOfBirth, gende
               theme === 'dark' ? 'bg-gray-700 border-gray-600 text-white focus:border-teal-500' : 'bg-white border-gray-200 text-gray-900 focus:border-teal-500'
             }`}
           >
-            <option value="">Select gender</option>
-            <option value="male">Male</option>
-            <option value="female">Female</option>
-            <option value="other">Other</option>
+            <option value="">{locale === 'ar' ? 'اختر الجنس' : 'Select gender'}</option>
+            <option value="male">{t.male}</option>
+            <option value="female">{t.female}</option>
+            <option value="other">{locale === 'ar' ? 'آخر' : 'Other'}</option>
           </select>
         </div>
       </div>
