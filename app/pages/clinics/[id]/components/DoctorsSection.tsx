@@ -4,14 +4,19 @@ import { useRouter } from 'next/navigation';
 import { Stethoscope, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Doctor } from '../types';
 import { saveQuickBookingData } from '../../../booking/utils/quickBooking';
+import { getServiceKeyFromSpecialty } from '../../../booking/utils/serviceHelpers';
+import { useTranslations } from 'next-intl';
 
 interface DoctorsSectionProps {
   doctors: Doctor[];
   theme: 'light' | 'dark';
+  locale: 'en' | 'ar';
 }
 
-export default function DoctorsSection({ doctors, theme }: DoctorsSectionProps) {
+export default function DoctorsSection({ doctors, theme, locale }: DoctorsSectionProps) {
   const router = useRouter();
+  const t = useTranslations('clinics.details');
+  const tDoctors = useTranslations('doctors');
   const [currentPage, setCurrentPage] = useState(1);
   const doctorsPerPage = 8;
 
@@ -26,7 +31,7 @@ export default function DoctorsSection({ doctors, theme }: DoctorsSectionProps) 
     <div className={`rounded-xl shadow p-4 sm:p-6 ${theme === 'dark' ? 'bg-gray-800' : 'bg-white'}`}>
       <h2 className={`text-xl sm:text-2xl font-bold mb-3 sm:mb-4 flex items-center gap-2 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
         <Stethoscope className="text-teal-600" size={20} />
-        Our Doctors
+        {t('ourDoctors')}
       </h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
         {currentDoctors.map((doctor) => (
@@ -43,9 +48,9 @@ export default function DoctorsSection({ doctors, theme }: DoctorsSectionProps) 
                 </div>
               </div>
               <div className="flex-1 min-w-0">
-                <h3 className={`text-base sm:text-lg font-bold mb-1 truncate ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{doctor.name.en}</h3>
-                <p className="text-teal-600 font-semibold text-xs sm:text-sm mb-1 truncate">{doctor.specialty.en}</p>
-                <p className={`text-xs ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>{doctor.experienceYears} Years Experience</p>
+                <h3 className={`text-base sm:text-lg font-bold mb-1 truncate ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{doctor.name[locale] || doctor.name.en}</h3>
+                <p className="text-teal-600 font-semibold text-xs sm:text-sm mb-1 truncate">{doctor.specialty[locale] || doctor.specialty.en}</p>
+                <p className={`text-xs ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>{doctor.experienceYears} {tDoctors('yearsExperience')}</p>
               </div>
             </div>
             <div className="mt-3 flex flex-col sm:flex-row gap-2">
@@ -53,19 +58,19 @@ export default function DoctorsSection({ doctors, theme }: DoctorsSectionProps) 
                 onClick={() => {
                   saveQuickBookingData({
                     doctorId: doctor._id,
-                    doctorName: typeof doctor.name === 'string' ? doctor.name : doctor.name?.en || 'Doctor',
-                    specialty: typeof doctor.specialty === 'string' ? doctor.specialty : doctor.specialty?.en || 'Specialist',
-                    serviceId: typeof doctor.specialty === 'string' ? doctor.specialty : doctor.specialty?.en || 'Specialist',
+                    doctorName: typeof doctor.name === 'string' ? doctor.name : doctor.name?.[locale] || doctor.name?.en || 'Doctor',
+                    specialty: typeof doctor.specialty === 'string' ? doctor.specialty : doctor.specialty?.[locale] || doctor.specialty?.en || 'Specialist',
+                    serviceId: getServiceKeyFromSpecialty(typeof doctor.specialty === 'string' ? doctor.specialty : doctor.specialty?.en || 'Specialist'),
                     skipSteps: true
                   });
                   router.push('/pages/booking?quick=true');
                 }}
                 className="flex-1 px-3 py-2 bg-teal-500 text-white rounded-lg hover:bg-teal-600 transition-all font-semibold text-xs sm:text-sm text-center"
               >
-                Book Now
+                {t('bookAppointment')}
               </button>
               <a href={`/pages/doctors/${doctor._id}`} className="flex-1 px-3 py-2 border-2 border-teal-500 text-teal-600 rounded-lg hover:bg-teal-50 transition-all font-semibold text-xs sm:text-sm text-center">
-                View Profile
+                {t('viewProfile')}
               </a>
             </div>
           </div>
@@ -81,7 +86,7 @@ export default function DoctorsSection({ doctors, theme }: DoctorsSectionProps) 
             <ChevronLeft size={18} className="sm:w-5 sm:h-5" />
           </button>
           <span className={`text-xs sm:text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>
-            Page {currentPage} of {totalPages}
+            {tDoctors('page.page')} {currentPage} {tDoctors('page.of')} {totalPages}
           </span>
           <button
             onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
