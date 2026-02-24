@@ -3,6 +3,8 @@ import FiltersSidebar from './FiltersSidebar';
 import TopRatedCard from './TopRatedCard';
 import DoctorCard from './DoctorCard';
 import { useTheme } from '@/app/contexts/ThemeContext';
+import { useLanguage } from '@/app/contexts/LanguageContext';
+import translations from '@/messages/translations';
 
 import {DoctorSelectionProps} from '../../types/type'
 
@@ -11,19 +13,23 @@ export default function DoctorSelection({
   selectedService, filterProps, onSelectTopRated
 }: DoctorSelectionProps) {
   const { theme } = useTheme();
+  const { locale } = useLanguage();
+  const t = translations[locale].booking.doctorSelection;
+  const isRTL = locale === 'ar';
+  
   return (
-    <div className="flex flex-col lg:flex-row gap-4 sm:gap-6">
+    <div className="flex flex-col lg:flex-row gap-4 sm:gap-6" dir={isRTL ? 'rtl' : 'ltr'}>
       <div className="lg:w-80 w-full">
         <FiltersSidebar {...filterProps} />
       </div>
       
       <div className="flex-1">
-        <h2 className={`text-xl sm:text-2xl font-bold mb-3 sm:mb-4 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Recommended Doctor</h2>
+        <h2 className={`text-xl sm:text-2xl font-bold mb-3 sm:mb-4 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{t.title}</h2>
         <TopRatedCard onSelect={onSelectTopRated} />
         
         {loadingDoctors ? (
           <div className="text-center py-12">
-            <p className={`text-base sm:text-lg ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>Loading doctors...</p>
+            <p className={`text-base sm:text-lg ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>{t.loading}</p>
           </div>
         ) : (
           <>
@@ -39,7 +45,7 @@ export default function DoctorSelection({
             </div>
             {doctors.length === 0 && (
               <div className="text-center py-12">
-                <p className={`text-base sm:text-lg ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>No doctors available for {selectedService}</p>
+                <p className={`text-base sm:text-lg ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>{t.noResults} {selectedService}</p>
               </div>
             )}
           </>
