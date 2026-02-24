@@ -1,7 +1,9 @@
 import { Doctor } from '@/app/types/index';
 import TimePeriod from './TimePeriod';
-import { TIME_PERIODS } from '../constants';
+import { useTimePeriods } from '../constants';
 import { useTheme } from '@/app/contexts/ThemeContext';
+import { useLanguage } from '@/app/contexts/LanguageContext';
+import translations from '@/messages/translations';
 
 interface TimeSlotsProps {
   loading: boolean;
@@ -45,6 +47,10 @@ export default function TimeSlots({
   bookedSlots
 }: TimeSlotsProps) {
   const { theme } = useTheme();
+  const { locale } = useLanguage();
+  const t = translations[locale].booking.timeSelection.timeSlots;
+  const TIME_PERIODS = useTimePeriods();
+  
   if (loading) {
     return (
       <div className={`rounded-2xl shadow-sm p-4 sm:p-6 ${
@@ -66,7 +72,7 @@ export default function TimeSlots({
           theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
         }`}>
           <span className="material-icons text-3xl sm:text-4xl mb-2">person_search</span>
-          <p className="text-sm sm:text-base">Please select a doctor first</p>
+          <p className="text-sm sm:text-base">{locale === 'ar' ? 'الرجاء اختيار طبيب أولاً' : 'Please select a doctor first'}</p>
         </div>
       </div>
     );
@@ -81,7 +87,7 @@ export default function TimeSlots({
           theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
         }`}>
           <span className="material-icons text-3xl sm:text-4xl mb-2">event</span>
-          <p className="text-sm sm:text-base">Please select a date first</p>
+          <p className="text-sm sm:text-base">{t.selectDate}</p>
         </div>
       </div>
     );
@@ -98,7 +104,7 @@ export default function TimeSlots({
           theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
         }`}>
           <span className="material-icons text-3xl sm:text-4xl mb-2">event_busy</span>
-          <p className="text-sm sm:text-base">No available slots for this day</p>
+          <p className="text-sm sm:text-base">{t.noSlots}</p>
         </div>
       </div>
     );
