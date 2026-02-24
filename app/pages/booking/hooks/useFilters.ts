@@ -1,6 +1,18 @@
 import { useState, useMemo } from 'react';
 import { Doctor } from '@/app/types/index';
 
+// دالة لتطبيع النص العربي للبحث
+const normalizeArabic = (text: string) => {
+  return text
+    .replace(/[أإآ]/g, 'ا')
+    .replace(/[ى]/g, 'ي')
+    .replace(/[ة]/g, 'ه')
+    .replace(/[ؤ]/g, 'و')
+    .replace(/[ئ]/g, 'ي')
+    .toLowerCase()
+    .trim();
+};
+
 export const useFilters = (allDoctors: Doctor[]) => {
   const [doctorSearchQuery, setDoctorSearchQuery] = useState('');
   const [selectedGender, setSelectedGender] = useState('');
@@ -17,9 +29,15 @@ export const useFilters = (allDoctors: Doctor[]) => {
     let filtered = [...allDoctors];
     
     if (doctorSearchQuery) {
+      const normalizedQuery = normalizeArabic(doctorSearchQuery);
       filtered = filtered.filter((d: Doctor) => {
-        const name = typeof d.name === 'object' ? d.name.en : d.name;
-        return typeof name === 'string' && name.toLowerCase().includes(doctorSearchQuery.toLowerCase());
+        if (typeof d.name === 'object') {
+          const nameEn = normalizeArabic(d.name.en || '');
+          const nameAr = normalizeArabic(d.name.ar || '');
+          return nameEn.includes(normalizedQuery) || nameAr.includes(normalizedQuery);
+        }
+        const name = normalizeArabic(String(d.name || ''));
+        return name.includes(normalizedQuery);
       });
     }
     if (selectedGender) {
