@@ -2,10 +2,9 @@ import { IconType } from 'react-icons';
 
 export interface ServiceHeroProps {
     service: {
-      title: string;
-      description: string;
       icon: IconType;
     };
+    serviceTitle: string;
     duration: string;
     price: string;
   }
