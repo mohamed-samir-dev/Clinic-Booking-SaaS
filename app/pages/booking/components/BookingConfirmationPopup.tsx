@@ -2,6 +2,7 @@
 import { useRef } from 'react';
 import Image from 'next/image';
 import { useTheme } from '@/app/contexts/ThemeContext';
+import { useLanguage } from '@/app/contexts/LanguageContext';
 
 interface BookingConfirmationPopupProps {
   isOpen: boolean;
@@ -29,6 +30,7 @@ interface BookingConfirmationPopupProps {
 
 export default function BookingConfirmationPopup({ isOpen, onClose, bookingData }: BookingConfirmationPopupProps) {
   const { theme } = useTheme();
+  const { locale } = useLanguage();
   const printRef = useRef<HTMLDivElement>(null);
 
   if (!isOpen) return null;
@@ -43,9 +45,9 @@ export default function BookingConfirmationPopup({ isOpen, onClose, bookingData 
     printWindow.document.write(`
       <html>
         <head>
-          <title>Booking Confirmation - ${bookingData.appointmentId}</title>
+          <title>${locale === 'ar' ? 'تأكيد الحجز' : 'Booking Confirmation'} - ${bookingData.appointmentId}</title>
           <style>
-            body { font-family: Arial, sans-serif; padding: 20px; }
+            body { font-family: Arial, sans-serif; padding: 20px; direction: ${locale === 'ar' ? 'rtl' : 'ltr'}; }
             .header { text-align: center; margin-bottom: 30px; }
             .header h1 { color: #14b8a6; margin: 0; }
             .section { margin: 20px 0; }
@@ -72,15 +74,15 @@ export default function BookingConfirmationPopup({ isOpen, onClose, bookingData 
 
   return (
     <div className="fixed inset-0 backdrop-blur-sm bg-black/20 flex items-center justify-center z-50 p-4 animate-fadeIn">
-      <div className={`rounded-2xl shadow-xl max-w-3xl w-full max-h-[90vh] overflow-y-auto animate-slideUp ${theme === 'dark' ? 'bg-gray-800' : 'bg-white'}`}>
+      <div className={`rounded-2xl shadow-xl max-w-3xl w-full max-h-[90vh] overflow-y-auto animate-slideUp ${theme === 'dark' ? 'bg-gray-800' : 'bg-white'}`} dir={locale === 'ar' ? 'rtl' : 'ltr'}>
         <div ref={printRef} className="p-6">
           {/* Header */}
           <div className="text-center mb-5">
             <div className="w-14 h-14 bg-teal-500 rounded-full flex items-center justify-center mx-auto mb-2">
               <span className="material-icons text-white text-3xl">check_circle</span>
             </div>
-            <h1 className={`text-xl font-bold mb-1 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Booking Confirmed!</h1>
-            <p className={`text-xs ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>ID: <span className="font-semibold text-teal-600">{bookingData.appointmentId}</span></p>
+            <h1 className={`text-xl font-bold mb-1 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{locale === 'ar' ? 'تم تأكيد الحجز!' : 'Booking Confirmed!'}</h1>
+            <p className={`text-xs ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>{locale === 'ar' ? 'رقم الحجز:' : 'ID:'} <span className="font-semibold text-teal-600">{bookingData.appointmentId}</span></p>
           </div>
 
           {/* Doctor & Patient in Row */}
@@ -89,7 +91,7 @@ export default function BookingConfirmationPopup({ isOpen, onClose, bookingData 
             <div className={`rounded-lg p-3 ${theme === 'dark' ? 'bg-gray-700' : 'bg-gray-50'}`}>
               <h2 className={`text-sm font-semibold flex items-center gap-1 mb-2 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
                 <span className="material-icons text-teal-600 text-lg">person</span>
-                Doctor
+                {locale === 'ar' ? 'الطبيب' : 'Doctor'}
               </h2>
               <div className="flex items-center gap-2">
                 {bookingData.doctor.photoUrl ? (
@@ -110,7 +112,7 @@ export default function BookingConfirmationPopup({ isOpen, onClose, bookingData 
             <div className={`rounded-lg p-3 ${theme === 'dark' ? 'bg-gray-700' : 'bg-gray-50'}`}>
               <h2 className={`text-sm font-semibold flex items-center gap-1 mb-2 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
                 <span className="material-icons text-teal-600 text-lg">badge</span>
-                Patient
+                {locale === 'ar' ? 'المريض' : 'Patient'}
               </h2>
               <div className="space-y-1">
                 <p className={`text-xs font-semibold ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{bookingData.patient.fullName}</p>
@@ -124,28 +126,28 @@ export default function BookingConfirmationPopup({ isOpen, onClose, bookingData 
           <div className={`rounded-lg p-3 mb-3 ${theme === 'dark' ? 'bg-gray-700' : 'bg-gray-50'}`}>
             <h2 className={`text-sm font-semibold flex items-center gap-1 mb-2 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
               <span className="material-icons text-teal-600 text-lg">event</span>
-              Appointment Details
+              {locale === 'ar' ? 'تفاصيل الموعد' : 'Appointment Details'}
             </h2>
             <div className="grid grid-cols-2 gap-x-4 gap-y-1.5">
               <div className="flex justify-between">
-                <span className={`text-xs ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Service:</span>
-                <span className={`text-xs font-semibold ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{bookingData.service || 'Consultation'}</span>
+                <span className={`text-xs ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>{locale === 'ar' ? 'الخدمة:' : 'Service:'}</span>
+                <span className={`text-xs font-semibold ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{bookingData.service || (locale === 'ar' ? 'استشارة' : 'Consultation')}</span>
               </div>
               <div className="flex justify-between">
-                <span className={`text-xs ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Fee:</span>
+                <span className={`text-xs ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>{locale === 'ar' ? 'الرسوم:' : 'Fee:'}</span>
                 <span className="text-sm font-bold text-teal-600">${bookingData.fee}</span>
               </div>
               <div className="flex justify-between">
-                <span className={`text-xs ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Date:</span>
-                <span className={`text-xs font-semibold ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{new Date(bookingData.appointmentDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</span>
+                <span className={`text-xs ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>{locale === 'ar' ? 'التاريخ:' : 'Date:'}</span>
+                <span className={`text-xs font-semibold ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{new Date(bookingData.appointmentDate).toLocaleDateString(locale === 'ar' ? 'ar-EG' : 'en-US', { month: 'short', day: 'numeric' })}</span>
               </div>
               <div className="flex justify-between">
-                <span className={`text-xs ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Time:</span>
+                <span className={`text-xs ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>{locale === 'ar' ? 'الوقت:' : 'Time:'}</span>
                 <span className={`text-xs font-semibold ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{bookingData.startTime}</span>
               </div>
               <div className="flex justify-between col-span-2">
-                <span className={`text-xs ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Status:</span>
-                <span className="px-2 py-0.5 bg-yellow-100 text-yellow-700 rounded-full text-xs font-semibold">{bookingData.status}</span>
+                <span className={`text-xs ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>{locale === 'ar' ? 'الحالة:' : 'Status:'}</span>
+                <span className="px-2 py-0.5 bg-yellow-100 text-yellow-700 rounded-full text-xs font-semibold">{locale === 'ar' ? 'قيد الانتظار' : bookingData.status}</span>
               </div>
             </div>
           </div>
@@ -154,20 +156,20 @@ export default function BookingConfirmationPopup({ isOpen, onClose, bookingData 
           <div className={`rounded-lg p-3 ${theme === 'dark' ? 'bg-blue-900/30 border border-blue-800' : 'bg-blue-50'}`}>
             <h3 className={`text-sm font-semibold flex items-center gap-1 mb-2 ${theme === 'dark' ? 'text-blue-400' : 'text-gray-900'}`}>
               <span className="material-icons text-blue-600 text-lg">info</span>
-              Important Info
+              {locale === 'ar' ? 'معلومات مهمة' : 'Important Info'}
             </h3>
             <ul className={`text-xs space-y-1 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
               <li className="flex items-start gap-1.5">
                 <span className="text-blue-600 mt-0.5">•</span>
-                <span>Arrive 10 minutes early</span>
+                <span>{locale === 'ar' ? 'احضر قبل 10 دقائق من الموعد' : 'Arrive 10 minutes early'}</span>
               </li>
               <li className="flex items-start gap-1.5">
                 <span className="text-blue-600 mt-0.5">•</span>
-                <span>Bring medical records if available</span>
+                <span>{locale === 'ar' ? 'أحضر السجلات الطبية إن وجدت' : 'Bring medical records if available'}</span>
               </li>
               <li className="flex items-start gap-1.5">
                 <span className="text-blue-600 mt-0.5">•</span>
-                <span>Cancel/reschedule 24 hours in advance</span>
+                <span>{locale === 'ar' ? 'الإلغاء/إعادة الجدولة قبل 24 ساعة' : 'Cancel/reschedule 24 hours in advance'}</span>
               </li>
             </ul>
           </div>
@@ -180,13 +182,13 @@ export default function BookingConfirmationPopup({ isOpen, onClose, bookingData 
             className="flex-1 py-2.5 px-4 bg-teal-600 text-white rounded-lg font-semibold hover:bg-teal-700 transition-colors flex items-center justify-center gap-2 text-sm"
           >
             <span className="material-icons text-lg">print</span>
-            Print
+            {locale === 'ar' ? 'طباعة' : 'Print'}
           </button>
           <button
             onClick={onClose}
             className={`flex-1 py-2.5 px-4 border rounded-lg font-semibold transition-colors text-sm ${theme === 'dark' ? 'bg-gray-600 border-gray-500 text-gray-200 hover:bg-gray-500' : 'bg-white border-gray-300 text-gray-700 hover:bg-gray-50'}`}
           >
-            Close
+            {locale === 'ar' ? 'إغلاق' : 'Close'}
           </button>
         </div>
       </div>
