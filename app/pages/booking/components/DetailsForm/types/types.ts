@@ -36,15 +36,7 @@ export interface CreateAppointmentParams {
   patientData: PatientFormData;
   user: unknown;
   token: string | null;
-}
-export interface CreateAppointmentParams {
-  selectedDoctor: Doctor;
-  selectedDate: Date;
-  selectedTime: string;
-  selectedService: string;
-  patientData: PatientFormData;
-  user: unknown;
-  token: string | null;
+  locale: 'en' | 'ar';
 }
 
 export interface BasicInformationProps {
