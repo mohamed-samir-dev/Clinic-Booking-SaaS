@@ -8,6 +8,7 @@ interface Service {
   icon: IconType;
   title: string;
   description: string;
+  serviceKey: string;
 }
 
 interface ServicesGridProps {
@@ -25,6 +26,7 @@ export default function ServicesGrid({ services }: ServicesGridProps) {
             icon={service.icon}
             title={service.title}
             description={service.description}
+            serviceKey={service.serviceKey}
           />
         ))}
       </div>
