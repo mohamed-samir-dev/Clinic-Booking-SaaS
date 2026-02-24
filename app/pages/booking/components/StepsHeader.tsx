@@ -1,13 +1,18 @@
 import { Check } from 'lucide-react';
 import { useTheme } from '@/app/contexts/ThemeContext';
+import { useLanguage } from '@/app/contexts/LanguageContext';
+import translations from '@/messages/translations';
 
 export default function StepsHeader({ currentStep }: { currentStep: number }) {
   const { theme } = useTheme();
+  const { locale } = useLanguage();
+  const t = translations[locale].booking.steps;
+  
   const steps = [
-    { number: 1, title: 'Services' },
-    { number: 2, title: 'Doctor' },
-    { number: 3, title: 'Time' },
-    { number: 4, title: 'Details' }
+    { number: 1, title: t.services },
+    { number: 2, title: t.doctor },
+    { number: 3, title: t.time },
+    { number: 4, title: t.details }
   ];
 
   return (
