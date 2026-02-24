@@ -52,6 +52,7 @@ export default function MedicalServices() {
                   icon={service.icon}
                   title={serviceData.title}
                   description={serviceData.description}
+                  serviceKey={service.key}
                 />
               </SwiperSlide>
             );
