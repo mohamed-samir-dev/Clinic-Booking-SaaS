@@ -21,8 +21,11 @@ export const useDoctors = (selectedService: string, currentStep: number, forceLo
         const data = (response as DoctorsResponse)?.doctors || (response as DoctorsResponse)?.data || response || [];
         const doctorsData = Array.isArray(data) ? data : [];
         const filtered = doctorsData.filter((d: Doctor) => {
-          const specialty = typeof d.specialty === 'object' ? d.specialty?.en : d.specialty;
-          return typeof specialty === 'string' && specialty.toLowerCase() === selectedService.toLowerCase();
+          const specialty = typeof d.specialty === 'object' ? d.specialty : { en: d.specialty, ar: d.specialty };
+          const specialtyEn = specialty?.en || '';
+          const specialtyAr = specialty?.ar || '';
+          const selectedLower = selectedService.toLowerCase();
+          return specialtyEn.toLowerCase() === selectedLower || specialtyAr.toLowerCase() === selectedLower;
         });
         setAllDoctors(filtered);
       } catch {
