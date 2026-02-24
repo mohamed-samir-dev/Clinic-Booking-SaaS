@@ -8,7 +8,8 @@ export const createAppointment = async ({
   selectedService,
   patientData,
   user,
-  token
+  token,
+  locale
 }: CreateAppointmentParams): Promise<BookingData> => {
   let guestId = null;
   if (!user) {
@@ -72,8 +73,8 @@ export const createAppointment = async ({
   return {
     appointmentId: data.appointment._id,
     doctor: {
-      name: selectedDoctor.name.en,
-      specialty: selectedDoctor.specialty.en,
+      name: locale === 'ar' ? selectedDoctor.name.ar : selectedDoctor.name.en,
+      specialty: locale === 'ar' ? selectedDoctor.specialty.ar : selectedDoctor.specialty.en,
       photoUrl: selectedDoctor.photoUrl
     },
     patient: {
