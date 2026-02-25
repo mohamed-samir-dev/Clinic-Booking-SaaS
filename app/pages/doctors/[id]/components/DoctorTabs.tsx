@@ -5,6 +5,8 @@ import { FaGraduationCap, FaLanguage, FaMapMarkerAlt, FaPhone, FaEnvelope, FaTin
 import { Doctor } from '../../../../types';
 import { ReviewsTab, ScheduleTab, SpecializationsCard } from './tabs';
 import { useTheme } from '../../../../contexts/ThemeContext';
+import { useLanguage } from '../../../../contexts/LanguageContext';
+import translations from '@/messages/translations';
 
 interface DoctorTabsProps {
   doctor: Doctor;
@@ -14,21 +16,25 @@ export default function DoctorTabs({ doctor }: DoctorTabsProps) {
   const [activeTab, setActiveTab] = useState('overview');
   const [showFullAbout, setShowFullAbout] = useState(false);
   const { theme } = useTheme();
-  const doctorAbout = typeof doctor.aboutUs === 'string' ? doctor.aboutUs : '';
+  const { locale } = useLanguage();
+  const t = translations[locale].doctors.profile.tabs;
+  const isRTL = locale === 'ar';
+  
+  const doctorAbout = typeof doctor.aboutUs === 'string' ? doctor.aboutUs : (locale === 'ar' && doctor.aboutUs?.ar ? doctor.aboutUs.ar : doctor.aboutUs?.en || '');
   const aboutPreview = doctorAbout.slice(0, 150);
 
   return (
     <>
-      <div className={`rounded-xl sm:rounded-2xl shadow-sm border overflow-hidden ${theme === 'dark' ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-100'}`}>
+      <div className={`rounded-xl sm:rounded-2xl shadow-sm border overflow-hidden ${theme === 'dark' ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-100'}`} dir={isRTL ? 'rtl' : 'ltr'}>
         {/* Tabs */}
-        <div className={`flex gap-4 sm:gap-6 md:gap-8 px-4 sm:px-6 md:px-8 pt-4 sm:pt-6 border-b overflow-x-auto ${theme === 'dark' ? 'border-gray-700' : 'border-gray-200'}`}>
+        <div className={`flex gap-4 sm:gap-6 md:gap-8 px-4 sm:px-6 md:px-8 pt-4 sm:pt-6 border-b overflow-x-auto ${theme === 'dark' ? 'border-gray-700' : 'border-gray-200'} ${isRTL ? 'flex-row-reverse' : ''}`}>
           <button
             onClick={() => setActiveTab('overview')}
             className={`pb-3 sm:pb-4 px-1 sm:px-2 font-semibold text-sm sm:text-base whitespace-nowrap transition-colors relative ${
               activeTab === 'overview' ? 'text-teal-600' : theme === 'dark' ? 'text-gray-400 hover:text-gray-200' : 'text-gray-500 hover:text-gray-700'
             }`}
           >
-            Overview
+            {t.overview}
             {activeTab === 'overview' && (
               <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-teal-600" />
             )}
@@ -39,7 +45,7 @@ export default function DoctorTabs({ doctor }: DoctorTabsProps) {
               activeTab === 'locations' ? 'text-teal-600' : theme === 'dark' ? 'text-gray-400 hover:text-gray-200' : 'text-gray-500 hover:text-gray-700'
             }`}
           >
-            Locations
+            {t.locations}
             {activeTab === 'locations' && (
               <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-teal-600" />
             )}
@@ -50,7 +56,7 @@ export default function DoctorTabs({ doctor }: DoctorTabsProps) {
               activeTab === 'reviews' ? 'text-teal-600' : theme === 'dark' ? 'text-gray-400 hover:text-gray-200' : 'text-gray-500 hover:text-gray-700'
             }`}
           >
-            Reviews
+            {t.reviews}
             {activeTab === 'reviews' && (
               <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-teal-600" />
             )}
@@ -61,7 +67,7 @@ export default function DoctorTabs({ doctor }: DoctorTabsProps) {
               activeTab === 'schedule' ? 'text-teal-600' : theme === 'dark' ? 'text-gray-400 hover:text-gray-200' : 'text-gray-500 hover:text-gray-700'
             }`}
           >
-            Schedule
+            {t.schedule}
             {activeTab === 'schedule' && (
               <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-teal-600" />
             )}

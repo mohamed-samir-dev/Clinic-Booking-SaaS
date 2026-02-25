@@ -2,6 +2,8 @@
 
 import { FaCalendarAlt, FaClock } from 'react-icons/fa';
 import { useTheme } from '../../../../../contexts/ThemeContext';
+import { useLanguage } from '../../../../../contexts/LanguageContext';
+import translations from '@/messages/translations';
 
 interface TimeSlot {
   from: string;
@@ -22,10 +24,31 @@ interface ScheduleTabProps {
   doctor: Doctor;
 }
 
+const daysArabic: Record<string, string> = {
+  'sunday': 'الأحد',
+  'monday': 'الإثنين',
+  'tuesday': 'الثلاثاء',
+  'wednesday': 'الأربعاء',
+  'thursday': 'الخميس',
+  'friday': 'الجمعة',
+  'saturday': 'السبت'
+};
+
 export default function ScheduleTab({ doctor }: ScheduleTabProps) {
   const { theme } = useTheme();
+  const { locale } = useLanguage();
+  const t = translations[locale].doctors.profile.schedule;
+  const isRTL = locale === 'ar';
+  
+  const getDayName = (day: string) => {
+    if (locale === 'ar') {
+      return daysArabic[day.toLowerCase()] || day;
+    }
+    return day.charAt(0).toUpperCase() + day.slice(1);
+  };
+  
   return (
-    <div className="space-y-4 sm:space-y-5">
+    <div className="space-y-4 sm:space-y-5" dir={isRTL ? 'rtl' : 'ltr'}>
       {doctor.availability && doctor.availability.length > 0 ? (
         <div className="space-y-3 sm:space-y-4">
           {doctor.availability.map((schedule, index: number) => (

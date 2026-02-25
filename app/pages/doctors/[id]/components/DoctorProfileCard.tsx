@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import { FaCheckCircle, FaStar, FaUserInjured, FaStethoscope, FaCalendarAlt, FaArrowRight } from 'react-icons/fa';
 import { Doctor } from '../../../../types';
 import { saveQuickBookingData } from '../../../booking/utils/quickBooking';
+import { getServiceKeyFromSpecialty } from '../../../booking/utils/serviceHelpers';
 import { useTheme } from '../../../../contexts/ThemeContext';
 
 interface DoctorProfileCardProps {
@@ -26,7 +27,7 @@ export default function DoctorProfileCard({ doctor }: DoctorProfileCardProps) {
       doctorId: doctor._id,
       doctorName: doctorName,
       specialty: doctorSpecialty,
-      serviceId: doctorSpecialty,
+      serviceId: getServiceKeyFromSpecialty(doctorSpecialty),
       skipSteps: true
     });
     router.push('/pages/booking?quick=true');
