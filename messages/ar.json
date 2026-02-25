@@ -515,6 +515,87 @@
       }
     }
   },
+  "auth": {
+    "login": {
+      "title": "مرحباً بعودتك",
+      "subtitle": "الرجاء إدخال بياناتك لتسجيل الدخول",
+      "email": "البريد الإلكتروني",
+      "emailPlaceholder": "أدخل بريدك الإلكتروني",
+      "password": "كلمة المرور",
+      "passwordPlaceholder": "أدخل كلمة المرور",
+      "businessId": "معرف العمل",
+      "businessIdPlaceholder": "أدخل معرف العمل",
+      "rememberMe": "تذكرني",
+      "forgotPassword": "نسيت كلمة المرور؟",
+      "signIn": "تسجيل الدخول",
+      "signingIn": "جاري تسجيل الدخول...",
+      "or": "أو",
+      "noAccount": "ليس لديك حساب؟",
+      "signUp": "إنشاء حساب ",
+      "signInWithGoogle": "تسجيل الدخول بواسطة جوجل",
+      "selectClinic": "اختر العيادة",
+      "errorIncorrect": "البريد الإلكتروني أو كلمة المرور غير صحيحة. يرجى المحاولة مرة أخرى.",
+      "errorConnection": "خطأ في الاتصال. يرجى المحاولة مرة أخرى."
+    },
+    "userTypes": {
+      "patient": "مريض",
+      "staff": "موظف",
+      "doctor": "طبيب",
+      "manager": "مدير",
+      "owner": "مالك"
+    },
+    "register": {
+      "badge": "كير سينك",
+      "title": "إنشاء حسابك",
+      "subtitle": "ابدأ رحلتك معنا اليوم",
+      "fullName": "الاسم الكامل",
+      "fullNamePlaceholder": "أدخل اسمك الكامل",
+      "email": "البريد الإلكتروني",
+      "emailPlaceholder": "your.email@clinic.com",
+      "phone": "رقم الهاتف",
+      "phonePlaceholder": "01234567890",
+      "password": "كلمة المرور",
+      "passwordPlaceholder": "أنشئ كلمة مرور قوية",
+      "confirmPassword": "تأكيد كلمة المرور",
+      "confirmPasswordPlaceholder": "أعد إدخال كلمة المرور",
+      "createAccount": "إنشاء حساب",
+      "creatingAccount": "جاري إنشاء الحساب...",
+      "haveAccount": "لديك حساب بالفعل؟",
+      "signIn": "تسجيل الدخول",
+      "passwordStrength": {
+        "weak": "ضعيفة",
+        "fair": "متوسطة",
+        "good": "جيدة",
+        "strong": "قوية"
+      },
+      "passwordRequirements": {
+        "title": "يجب أن تحتوي كلمة المرور على:",
+        "minLength": "8 أحرف على الأقل",
+        "uppercase": "حرف كبير واحد على الأقل",
+        "lowercase": "حرف صغير واحد على الأقل",
+        "number": "رقم واحد على الأقل",
+        "special": "رمز خاص واحد على الأقل"
+      },
+      "validation": {
+        "nameRequired": "الاسم مطلوب",
+        "nameMin": "الاسم يجب أن يكون حرفين على الأقل",
+        "emailRequired": "البريد الإلكتروني مطلوب",
+        "emailInvalid": "البريد الإلكتروني غير صالح",
+        "phoneRequired": "رقم الهاتف مطلوب",
+        "phoneInvalid": "رقم الهاتف يجب أن يكون 11 رقماً بالضبط",
+        "passwordRequired": "كلمة المرور مطلوبة",
+        "passwordMin": "كلمة المرور يجب أن تكون 8 أحرف على الأقل",
+        "passwordUppercase": "يجب أن تحتوي على حرف كبير",
+        "passwordLowercase": "يجب أن تحتوي على حرف صغير",
+        "passwordNumber": "يجب أن تحتوي على رقم",
+        "passwordSpecial": "يجب أن تحتوي على رمز خاص",
+        "confirmPasswordRequired": "تأكيد كلمة المرور مطلوب",
+        "passwordsNotMatch": "كلمات المرور غير متطابقة"
+      },
+      "success": "تم التسجيل بنجاح",
+      "error": "فشل التسجيل. يرجى المحاولة مرة أخرى."
+    }
+  },
   "contact": {
     "hero": {
       "title": "تواصل معنا للحصول على",
@@ -581,73 +662,5 @@
       "q4": "أين أقرب منطقة لوقوف السيارات؟",
       "a4": "لدينا منطقة مخصصة لوقوف السيارات في قبو المبنى مع ساعتين من وقوف السيارات المجاني للمرضى. يتوفر موقف إضافي في الشارع."
     }
-  },
-  "login": {
-    "title": "مرحباً بعودتك",
-    "subtitle": "الرجاء إدخال بياناتك لتسجيل الدخول",
-    "selectClinic": "اختر العيادة",
-    "emailLabel": "البريد الإلكتروني",
-    "emailPlaceholder": "example@email.com",
-    "passwordLabel": "كلمة المرور",
-    "signingIn": "جاري تسجيل الدخول...",
-    "signIn": "تسجيل الدخول",
-    "or": "أو",
-    "noAccount": "ليس لديك حساب؟",
-    "signUpLink": "سجل حساب عيادة",
-    "errors": {
-      "connectionError": "خطأ في الاتصال. يرجى المحاولة مرة أخرى.",
-      "invalidCredentials": "البريد الإلكتروني أو كلمة المرور غير صحيحة",
-      "selectClinic": "الرجاء اختيار عيادة"
-    }
-  },
-  "register": {
-    "badge": "كير سينك",
-    "title": "إنشاء حسابك",
-    "subtitle": "ابدأ رحلتك معنا اليوم",
-    "fullName": "الاسم الكامل",
-    "fullNamePlaceholder": "أدخل اسمك الكامل",
-    "emailLabel": "البريد الإلكتروني",
-    "emailPlaceholder": "your.email@clinic.com",
-    "phoneLabel": "رقم الهاتف",
-    "phonePlaceholder": "01234567890",
-    "passwordLabel": "كلمة المرور",
-    "passwordPlaceholder": "أنشئ كلمة مرور قوية",
-    "confirmPasswordLabel": "تأكيد كلمة المرور",
-    "confirmPasswordPlaceholder": "أعد إدخال كلمة المرور",
-    "creatingAccount": "جاري إنشاء الحساب...",
-    "createAccount": "إنشاء حساب",
-    "alreadyHaveAccount": "لديك حساب بالفعل؟",
-    "signInLink": "تسجيل الدخول",
-    "passwordStrength": {
-      "weak": "ضعيفة",
-      "fair": "مقبولة",
-      "good": "جيدة",
-      "strong": "قوية"
-    },
-    "passwordRequirements": {
-      "minLength": "8 أحرف على الأقل",
-      "uppercase": "حرف كبير واحد",
-      "lowercase": "حرف صغير واحد",
-      "number": "رقم واحد",
-      "special": "رمز خاص واحد"
-    },
-    "errors": {
-      "nameRequired": "الاسم مطلوب",
-      "nameMinLength": "يجب أن يكون الاسم حرفين على الأقل",
-      "emailRequired": "البريد الإلكتروني مطلوب",
-      "emailInvalid": "البريد الإلكتروني غير صالح",
-      "phoneRequired": "رقم الهاتف مطلوب",
-      "phoneInvalid": "يجب أن يكون رقم الهاتف 11 رقماً",
-      "passwordRequired": "كلمة المرور مطلوبة",
-      "passwordMinLength": "يجب أن تكون كلمة المرور 8 أحرف على الأقل",
-      "passwordUppercase": "يجب أن تحتوي كلمة المرور على حرف كبير واحد على الأقل",
-      "passwordLowercase": "يجب أن تحتوي كلمة المرور على حرف صغير واحد على الأقل",
-      "passwordNumber": "يجب أن تحتوي كلمة المرور على رقم واحد على الأقل",
-      "passwordSpecial": "يجب أن تحتوي كلمة المرور على رمز خاص واحد على الأقل",
-      "confirmPasswordRequired": "الرجاء تأكيد كلمة المرور",
-      "passwordMismatch": "كلمات المرور غير متطابقة"
-    },
-    "success": "تم التسجيل بنجاح",
-    "failed": "فشل التسجيل. يرجى المحاولة مرة أخرى."
   }
 }
