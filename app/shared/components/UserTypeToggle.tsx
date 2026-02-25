@@ -1,4 +1,7 @@
 import { UserType } from '../types/auth.types';
+import { useLanguage } from '@/app/contexts/LanguageContext';
+import messages from '@/messages/en.json';
+import messagesAr from '@/messages/ar.json';
 
 interface UserTypeToggleProps {
   userType: UserType;
@@ -6,12 +9,15 @@ interface UserTypeToggleProps {
 }
 
 export default function UserTypeToggle({ userType, onUserTypeChange }: UserTypeToggleProps) {
+  const { locale } = useLanguage();
+  const t = locale === 'ar' ? messagesAr.auth.userTypes : messages.auth.userTypes;
+  
   const userTypes: { value: UserType; label: string }[] = [
-    { value: 'patient', label: 'Patient' },
-    { value: 'staff', label: 'Staff' },
-    { value: 'doctor', label: 'Doctor' },
-    { value: 'manager', label: 'Manager' },
-    { value: 'owner', label: 'Owner' }
+    { value: 'patient', label: t.patient },
+    { value: 'staff', label: t.staff },
+    { value: 'doctor', label: t.doctor },
+    { value: 'manager', label: t.manager },
+    { value: 'owner', label: t.owner }
   ];
 
   return (
