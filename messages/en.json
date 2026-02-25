@@ -515,6 +515,87 @@
       }
     }
   },
+  "auth": {
+    "login": {
+      "title": "Welcome Back",
+      "subtitle": "Please enter your details to sign in",
+      "email": "Email Address",
+      "emailPlaceholder": "Enter your email",
+      "password": "Password",
+      "passwordPlaceholder": "Enter your password",
+      "businessId": "Business ID",
+      "businessIdPlaceholder": "Enter your business ID",
+      "rememberMe": "Remember me",
+      "forgotPassword": "Forgot password?",
+      "signIn": "Sign In",
+      "signingIn": "Signing in...",
+      "or": "Or",
+      "noAccount": "Don't have an account?",
+      "signUp": "Sign Up for New account",
+      "signInWithGoogle": "Sign in with Google",
+      "selectClinic": "Select Clinic",
+      "errorIncorrect": "The email or password you entered is incorrect. Please try again.",
+      "errorConnection": "Connection error. Please try again."
+    },
+    "userTypes": {
+      "patient": "Patient",
+      "staff": "Staff",
+      "doctor": "Doctor",
+      "manager": "Manager",
+      "owner": "Owner"
+    },
+    "register": {
+      "badge": "CareSync",
+      "title": "Create your account",
+      "subtitle": "Start your journey with us today",
+      "fullName": "Full Name",
+      "fullNamePlaceholder": "Enter your full name",
+      "email": "Email Address",
+      "emailPlaceholder": "your.email@clinic.com",
+      "phone": "Phone Number",
+      "phonePlaceholder": "01234567890",
+      "password": "Password",
+      "passwordPlaceholder": "Create a strong password",
+      "confirmPassword": "Confirm Password",
+      "confirmPasswordPlaceholder": "Re-enter your password",
+      "createAccount": "Create Account",
+      "creatingAccount": "Creating Account...",
+      "haveAccount": "Already have an account?",
+      "signIn": "Sign In",
+      "passwordStrength": {
+        "weak": "Weak",
+        "fair": "Fair",
+        "good": "Good",
+        "strong": "Strong"
+      },
+      "passwordRequirements": {
+        "title": "Password must contain:",
+        "minLength": "At least 8 characters",
+        "uppercase": "At least one uppercase letter",
+        "lowercase": "At least one lowercase letter",
+        "number": "At least one number",
+        "special": "At least one special character"
+      },
+      "validation": {
+        "nameRequired": "Name is required",
+        "nameMin": "Name must be at least 2 characters",
+        "emailRequired": "Email is required",
+        "emailInvalid": "Invalid email address",
+        "phoneRequired": "Phone number is required",
+        "phoneInvalid": "Phone must be exactly 11 digits",
+        "passwordRequired": "Password is required",
+        "passwordMin": "Password must be at least 8 characters",
+        "passwordUppercase": "Must contain uppercase letter",
+        "passwordLowercase": "Must contain lowercase letter",
+        "passwordNumber": "Must contain number",
+        "passwordSpecial": "Must contain special character",
+        "confirmPasswordRequired": "Please confirm your password",
+        "passwordsNotMatch": "Passwords do not match"
+      },
+      "success": "Registration successful",
+      "error": "Registration failed. Please try again."
+    }
+  },
   "contact": {
     "hero": {
       "title": "Get in Touch with",
@@ -581,73 +662,5 @@
       "q4": "Where is the nearest parking area?",
       "a4": "We have a dedicated parking area in the building basement with 2 hours of free parking for patients. Additional parking is available on the street."
     }
-  },
-  "login": {
-    "title": "Welcome Back",
-    "subtitle": "Please enter your details to sign in",
-    "selectClinic": "Select Clinic",
-    "emailLabel": "Email Address",
-    "emailPlaceholder": "example@email.com",
-    "passwordLabel": "Password",
-    "signingIn": "Signing in...",
-    "signIn": "Sign In",
-    "or": "Or",
-    "noAccount": "Don't have an account?",
-    "signUpLink": "Sign Up for clinic account",
-    "errors": {
-      "connectionError": "Connection error. Please try again.",
-      "invalidCredentials": "Invalid email or password",
-      "selectClinic": "Please select a clinic"
-    }
-  },
-  "register": {
-    "badge": "CareSync",
-    "title": "Create your account",
-    "subtitle": "Start your journey with us today",
-    "fullName": "Full Name",
-    "fullNamePlaceholder": "Enter your full name",
-    "emailLabel": "Email Address",
-    "emailPlaceholder": "your.email@clinic.com",
-    "phoneLabel": "Phone Number",
-    "phonePlaceholder": "01234567890",
-    "passwordLabel": "Password",
-    "passwordPlaceholder": "Create a strong password",
-    "confirmPasswordLabel": "Confirm Password",
-    "confirmPasswordPlaceholder": "Re-enter your password",
-    "creatingAccount": "Creating Account...",
-    "createAccount": "Create Account",
-    "alreadyHaveAccount": "Already have an account?",
-    "signInLink": "Sign In",
-    "passwordStrength": {
-      "weak": "Weak",
-      "fair": "Fair",
-      "good": "Good",
-      "strong": "Strong"
-    },
-    "passwordRequirements": {
-      "minLength": "At least 8 characters",
-      "uppercase": "One uppercase letter",
-      "lowercase": "One lowercase letter",
-      "number": "One number",
-      "special": "One special character"
-    },
-    "errors": {
-      "nameRequired": "Name is required",
-      "nameMinLength": "Name must be at least 2 characters",
-      "emailRequired": "Email is required",
-      "emailInvalid": "Invalid email address",
-      "phoneRequired": "Phone number is required",
-      "phoneInvalid": "Phone number must be 11 digits",
-      "passwordRequired": "Password is required",
-      "passwordMinLength": "Password must be at least 8 characters",
-      "passwordUppercase": "Password must contain at least one uppercase letter",
-      "passwordLowercase": "Password must contain at least one lowercase letter",
-      "passwordNumber": "Password must contain at least one number",
-      "passwordSpecial": "Password must contain at least one special character",
-      "confirmPasswordRequired": "Please confirm your password",
-      "passwordMismatch": "Passwords do not match"
-    },
-    "success": "Registration successful",
-    "failed": "Registration failed. Please try again."
   }
 }
