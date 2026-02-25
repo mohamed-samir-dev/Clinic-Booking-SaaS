@@ -1,8 +1,4 @@
-import { useTranslations } from 'next-intl';
-
 export const usePasswordStrength = (password: string) => {
-  const t = useTranslations('register.passwordStrength');
-  
   const calculatePasswordStrength = (pass: string) => {
     let strength = 0;
     if (pass.length >= 8) strength++;
@@ -16,9 +12,9 @@ export const usePasswordStrength = (password: string) => {
 
   const getStrengthLabel = () => {
     if (passwordStrength === 0) return '';
-    if (passwordStrength <= 2) return t('weak');
-    if (passwordStrength === 3) return t('fair');
-    return t('strong');
+    if (passwordStrength <= 2) return 'Weak';
+    if (passwordStrength === 3) return 'Medium';
+    return 'Strong';
   };
 
   const getStrengthColor = () => {
