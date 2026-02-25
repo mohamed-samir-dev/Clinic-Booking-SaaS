@@ -1,9 +1,27 @@
 import {PasswordStrengthIndicatorProps} from '../types/register';
 import { useTheme } from '@/app/contexts/ThemeContext';
+import { useLanguage } from '@/app/contexts/LanguageContext';
+import messages from '@/messages/en.json';
+import messagesAr from '@/messages/ar.json';
 
 export const PasswordStrengthIndicator = ({ password, passwordStrength, getStrengthColor, getStrengthLabel }: PasswordStrengthIndicatorProps) => {
   const { theme } = useTheme();
+  const { locale } = useLanguage();
+  const t = locale === 'ar' ? messagesAr.auth.register.passwordStrength : messages.auth.register.passwordStrength;
+  
   if (!password) return null;
+
+  const strengthLabels = {
+    weak: t.weak,
+    fair: t.fair,
+    good: t.good,
+    strong: t.strong
+  };
+
+  const getLocalizedLabel = () => {
+    const label = getStrengthLabel();
+    return strengthLabels[label.toLowerCase() as keyof typeof strengthLabels] || label;
+  };
 
   return (
     <div className="mt-2 sm:mt-3">
@@ -21,7 +39,7 @@ export const PasswordStrengthIndicator = ({ password, passwordStrength, getStren
         passwordStrength >= 4 ? 'text-teal-600' : 
         passwordStrength === 3 ? 'text-yellow-600' : 'text-red-600'
       }`}>
-        {getStrengthLabel()}
+        {getLocalizedLabel()}
       </p>
     </div>
   );
