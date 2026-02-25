@@ -1,6 +1,9 @@
 import { useState } from 'react';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import { useTheme } from '@/app/contexts/ThemeContext';
+import { useLanguage } from '@/app/contexts/LanguageContext';
+import messages from '@/messages/en.json';
+import messagesAr from '@/messages/ar.json';
 
 interface PasswordInputProps {
   id: string;
@@ -22,6 +25,8 @@ export default function PasswordInput({
   showForgotPassword = false
 }: PasswordInputProps) {
   const { theme } = useTheme();
+  const { locale } = useLanguage();
+  const t = locale === 'ar' ? messagesAr.auth.login : messages.auth.login;
   const [showPassword, setShowPassword] = useState(false);
 
   return (
@@ -32,27 +37,27 @@ export default function PasswordInput({
         </label>
         {showForgotPassword && (
           <a href="/forgot-password" className="text-xs sm:text-sm cursor-pointer text-teal-500 font-semibold hover:text-teal-600">
-            Forgot password?
+            {t.forgotPassword}
           </a>
         )}
       </div>
       <div className="relative">
+        <button
+          type="button"
+          onClick={() => setShowPassword(!showPassword)}
+          className={`absolute cursor-pointer left-2 xs:left-3 top-1/2 -translate-y-1/2 transition z-10 ${theme === 'dark' ? 'text-gray-400 hover:text-gray-200' : 'text-gray-400 hover:text-gray-600'}`}
+        >
+          {showPassword ? <FaEyeSlash size={16} className="xs:w-[18px] xs:h-[18px]" /> : <FaEye size={16} className="xs:w-[18px] xs:h-[18px]" />}
+        </button>
         <input
           type={showPassword ? 'text' : 'password'}
           id={id}
           value={value}
           onChange={(e) => onChange(e.target.value)}
-          className={`w-full px-2.5 xs:px-3 sm:px-4 py-2 xs:py-2.5 sm:py-3 text-sm sm:text-base border-2 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none transition ${theme === 'dark' ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' : 'bg-white border-gray-300 text-gray-900'}`}
+          className={`w-full pl-8 xs:pl-10 pr-2.5 xs:pr-3 sm:pr-4 py-2 xs:py-2.5 sm:py-3 text-sm sm:text-base border-2 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none transition ${theme === 'dark' ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' : 'bg-white border-gray-300 text-gray-900'}`}
           placeholder={placeholder}
           required={required}
         />
-        <button
-          type="button"
-          onClick={() => setShowPassword(!showPassword)}
-          className={`absolute cursor-pointer right-2 xs:right-3 top-1/2 -translate-y-1/2 transition ${theme === 'dark' ? 'text-gray-400 hover:text-gray-200' : 'text-gray-400 hover:text-gray-600'}`}
-        >
-          {showPassword ? <FaEyeSlash size={16} className="xs:w-[18px] xs:h-[18px]" /> : <FaEye size={16} className="xs:w-[18px] xs:h-[18px]" />}
-        </button>
       </div>
     </div>
   );
