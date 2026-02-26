@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState, FilterType } from './types';
 import { useRequests } from './hooks/useRequests';
@@ -11,7 +11,21 @@ import { RequestsList } from './components/RequestsList';
 export default function RequestsPage() {
   const token = useSelector((state: RootState) => state.auth.token);
   const [filter, setFilter] = useState<FilterType>('all');
+  const [theme, setTheme] = useState<'light' | 'dark'>('light');
   const { requests, loading, handleStatusUpdate } = useRequests(token);
+
+  useEffect(() => {
+    const savedTheme = localStorage.getItem('theme') as 'light' | 'dark' | null;
+    if (savedTheme) setTheme(savedTheme);
+
+    const handleThemeChange = () => {
+      const newTheme = localStorage.getItem('theme') as 'light' | 'dark' | null;
+      if (newTheme) setTheme(newTheme);
+    };
+
+    window.addEventListener('themeChange', handleThemeChange);
+    return () => window.removeEventListener('themeChange', handleThemeChange);
+  }, []);
 
   const filteredRequests = filter === 'all' 
     ? requests 
@@ -25,14 +39,15 @@ export default function RequestsPage() {
   };
 
   return (
-    <div className="h-screen overflow-y-auto bg-linear-to-br from-gray-50 via-white to-blue-50/30">
-      <RequestsHeader />
+    <div className={`h-screen overflow-y-auto ${theme === 'dark' ? 'bg-gray-900' : 'bg-linear-to-br from-gray-50 via-white to-blue-50/30'}`}>
+      <RequestsHeader theme={theme} />
       
       <div className="p-3 sm:p-5">
         <StatsCards 
           stats={stats} 
           filter={filter} 
           onFilterChange={setFilter}
+          theme={theme}
         />
         
         <RequestsList 
@@ -40,6 +55,7 @@ export default function RequestsPage() {
           loading={loading}
           filter={filter}
           onStatusUpdate={handleStatusUpdate}
+          theme={theme}
         />
       </div>
 
