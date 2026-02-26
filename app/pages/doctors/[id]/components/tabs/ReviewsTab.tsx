@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { FaStar, FaCheckCircle, FaPlus } from 'react-icons/fa';
 import { useTheme } from '../../../../../contexts/ThemeContext';
+import { useLanguage } from '../../../../../contexts/LanguageContext';
 import ReviewModal from '../ReviewModal';
 
 interface Review {
@@ -25,6 +26,7 @@ interface ReviewsTabProps {
 
 export default function ReviewsTab({ doctor }: ReviewsTabProps) {
   const { theme } = useTheme();
+  const { locale } = useLanguage();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [reviews, setReviews] = useState<Review[]>(doctor.reviews || []);
   
@@ -89,7 +91,7 @@ export default function ReviewsTab({ doctor }: ReviewsTabProps) {
                   <FaStar key={i} className={`text-lg sm:text-xl ${i < Math.round(parseFloat(averageRating)) ? 'text-teal-500' : theme === 'dark' ? 'text-gray-600' : 'text-gray-300'}`} />
                 ))}
               </div>
-              <p className={`text-xs sm:text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>{totalReviews} reviews</p>
+              <p className={`text-xs sm:text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>{totalReviews} {locale === 'ar' ? 'تقييم' : 'reviews'}</p>
             </div>
 
             <div className="flex-1 w-full space-y-2">
@@ -107,13 +109,13 @@ export default function ReviewsTab({ doctor }: ReviewsTabProps) {
         </div>
 
         <div className="flex justify-between items-center">
-          <h3 className={`text-lg sm:text-xl font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Patient Reviews</h3>
+          <h3 className={`text-lg sm:text-xl font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{locale === 'ar' ? 'تقييمات المرضى' : 'Patient Reviews'}</h3>
           <button
             onClick={() => setIsModalOpen(true)}
             className="inline-flex items-center gap-2 px-4 sm:px-6 py-2 sm:py-3 bg-linear-to-r from-teal-500 to-cyan-500 text-white rounded-lg font-semibold hover:from-teal-600 hover:to-cyan-600 transition-all shadow-md hover:shadow-lg text-sm sm:text-base"
           >
             <FaPlus className="text-sm" />
-            Write Review
+            {locale === 'ar' ? 'اكتب تقييم' : 'Write Review'}
           </button>
         </div>
 
@@ -134,7 +136,7 @@ export default function ReviewsTab({ doctor }: ReviewsTabProps) {
                     <div className="flex-1 min-w-0">
                       <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 sm:gap-0 mb-2">
                         <div>
-                          <h4 className={`font-bold text-sm sm:text-base ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{review.patientName || 'Anonymous'}</h4>
+                          <h4 className={`font-bold text-sm sm:text-base ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{review.patientName || (locale === 'ar' ? 'مجهول' : 'Anonymous')}</h4>
                           <div className="flex flex-wrap items-center gap-2 mt-1">
                             <div className="flex items-center gap-1">
                               {[...Array(5)].map((_, i) => (
@@ -151,7 +153,7 @@ export default function ReviewsTab({ doctor }: ReviewsTabProps) {
                             {review.isVerified && (
                               <span className="inline-flex items-center gap-1 text-xs text-teal-600 bg-teal-50 px-2 py-1 rounded-full">
                                 <FaCheckCircle />
-                                Verified
+                                {locale === 'ar' ? 'موثق' : 'Verified'}
                               </span>
                             )}
                           </div>
@@ -167,7 +169,7 @@ export default function ReviewsTab({ doctor }: ReviewsTabProps) {
               );
             })
           ) : (
-            <div className={`text-center py-6 sm:py-8 text-sm sm:text-base ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>No reviews yet</div>
+            <div className={`text-center py-6 sm:py-8 text-sm sm:text-base ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>{locale === 'ar' ? 'لا توجد تقييمات بعد' : 'No reviews yet'}</div>
           )}
         </div>
       </div>
