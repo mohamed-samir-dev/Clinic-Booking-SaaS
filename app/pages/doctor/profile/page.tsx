@@ -185,7 +185,7 @@ export default function DoctorProfilePage() {
     <div className="h-full overflow-y-auto bg-linear-to-br from-gray-50 via-white to-teal-50/30">
       {toast && <Toast message={toast.message} type={toast.type} />}
 
-      <div className="p-6 space-y-6">
+      <div className="p-3 sm:p-4 md:p-6 space-y-4 sm:space-y-6">
         <ProfileCard 
           profile={profile}
           editingField={editingField}
@@ -197,20 +197,20 @@ export default function DoctorProfilePage() {
           saving={fieldSaving}
         />
 
-        <div className="space-y-6">
+        <div className="space-y-4 sm:space-y-6">
           {profile.aboutUs?.en && (
-            <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-6">
-              <h3 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
-                <div className="w-8 h-8 rounded-lg bg-linear-to-br from-teal-500 to-cyan-600 flex items-center justify-center">
+            <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-4 sm:p-6">
+              <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-3 sm:mb-4 flex items-center gap-2">
+                <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-linear-to-br from-teal-500 to-cyan-600 flex items-center justify-center">
                   <span className="material-icons text-white text-sm">info</span>
                 </div>
                 About Me
               </h3>
-              <p className="text-gray-700 leading-relaxed">{profile.aboutUs.en}</p>
+              <p className="text-sm sm:text-base text-gray-700 leading-relaxed">{profile.aboutUs.en}</p>
             </div>
           )}
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
             <EducationSection education={profile.education} />
             <ContactInfo 
               profile={profile}
@@ -234,7 +234,7 @@ export default function DoctorProfilePage() {
             />
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
             <Specializations specializations={profile.specializations} />
             <LanguagesSection languages={profile.languages} />
           </div>
