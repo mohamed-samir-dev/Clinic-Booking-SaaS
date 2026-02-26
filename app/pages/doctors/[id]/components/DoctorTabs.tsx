@@ -18,16 +18,23 @@ export default function DoctorTabs({ doctor }: DoctorTabsProps) {
   const { theme } = useTheme();
   const { locale } = useLanguage();
   const t = translations[locale].doctors.profile.tabs;
+  const tOverview = translations[locale].doctors.profile.overview;
   const isRTL = locale === 'ar';
   
-  const doctorAbout = typeof doctor.aboutUs === 'string' ? doctor.aboutUs : (locale === 'ar' && doctor.aboutUs?.ar ? doctor.aboutUs.ar : doctor.aboutUs?.en || '');
+  const getText = (value: string | { en: string; ar: string } | undefined): string => {
+    if (!value) return '';
+    if (typeof value === 'string') return value;
+    return value[locale] || value.en || value.ar || '';
+  };
+
+  const doctorAbout = getText(doctor.aboutUs);
   const aboutPreview = doctorAbout.slice(0, 150);
 
   return (
     <>
-      <div className={`rounded-xl sm:rounded-2xl shadow-sm border overflow-hidden ${theme === 'dark' ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-100'}`} dir={isRTL ? 'rtl' : 'ltr'}>
+      <div className={`rounded-xl sm:rounded-2xl shadow-sm border overflow-hidden ${theme === 'dark' ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-100'}`} dir={locale === 'ar' ? 'rtl' : 'ltr'}>
         {/* Tabs */}
-        <div className={`flex gap-4 sm:gap-6 md:gap-8 px-4 sm:px-6 md:px-8 pt-4 sm:pt-6 border-b overflow-x-auto ${theme === 'dark' ? 'border-gray-700' : 'border-gray-200'} ${isRTL ? 'flex-row-reverse' : ''}`}>
+        <div className={`flex gap-4 sm:gap-6 md:gap-8 px-4 sm:px-6 md:px-8 pt-4 sm:pt-6 border-b overflow-x-auto ${theme === 'dark' ? 'border-gray-700' : 'border-gray-200'}`}>
           <button
             onClick={() => setActiveTab('overview')}
             className={`pb-3 sm:pb-4 px-1 sm:px-2 font-semibold text-sm sm:text-base whitespace-nowrap transition-colors relative ${
@@ -80,7 +87,7 @@ export default function DoctorTabs({ doctor }: DoctorTabsProps) {
             <div className="space-y-4 sm:space-y-6">
               {/* About Section */}
               <div className={`rounded-lg sm:rounded-xl p-4 sm:p-6 border-b-2 ${theme === 'dark' ? 'bg-gray-700 border-gray-600' : 'bg-gray-50 border-gray-200'}`}>
-                <h3 className={`text-lg sm:text-xl font-bold mb-2 sm:mb-3 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>About</h3>
+                <h3 className={`text-lg sm:text-xl font-bold mb-2 sm:mb-3 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{tOverview.about}</h3>
                 {doctorAbout ? (
                   <p className={`text-sm sm:text-base leading-relaxed ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>
                     {showFullAbout || doctorAbout.length <= 150 ? doctorAbout : `${aboutPreview}...`}
@@ -89,12 +96,12 @@ export default function DoctorTabs({ doctor }: DoctorTabsProps) {
                         onClick={() => setShowFullAbout(!showFullAbout)}
                         className="text-teal-600 hover:text-teal-700 font-semibold ml-2 inline-flex items-center"
                       >
-                        {showFullAbout ? 'Show Less' : 'Read More'}
+                        {showFullAbout ? (locale === 'ar' ? 'عرض أقل' : 'Show Less') : (locale === 'ar' ? 'اقرأ المزيد' : 'Read More')}
                       </button>
                     )}
                   </p>
                 ) : (
-                  <p className={`text-sm sm:text-base leading-relaxed ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>No information available</p>
+                  <p className={`text-sm sm:text-base leading-relaxed ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>{tOverview.noBio}</p>
                 )}
               </div>
 
@@ -106,7 +113,7 @@ export default function DoctorTabs({ doctor }: DoctorTabsProps) {
                     <div className={`w-8 h-8 sm:w-10 sm:h-10 rounded-lg flex items-center justify-center ${theme === 'dark' ? 'bg-teal-900/50' : 'bg-teal-50'}`}>
                       <FaGraduationCap className="text-teal-600 text-base sm:text-lg" />
                     </div>
-                    <h3 className={`text-base sm:text-lg font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Education</h3>
+                    <h3 className={`text-base sm:text-lg font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{tOverview.education}</h3>
                   </div>
                   <div className="space-y-3 sm:space-y-4">
                     {doctor.education && doctor.education.length > 0 ? (
@@ -116,15 +123,15 @@ export default function DoctorTabs({ doctor }: DoctorTabsProps) {
                             <FaGraduationCap className="text-teal-600 text-xs sm:text-sm" />
                           </div>
                           <div>
-                            <p className={`font-bold text-sm sm:text-base ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{edu.institution || 'Institution'}</p>
+                            <p className={`font-bold text-sm sm:text-base ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{getText(edu.institution) || tOverview.institution}</p>
                             <p className={`text-xs sm:text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>
-                              {edu.degree || 'Degree'}{edu.year && ` • ${edu.year}`}
+                              {getText(edu.degree) || tOverview.degree}{edu.year && ` • ${edu.year}`}
                             </p>
                           </div>
                         </div>
                       ))
                     ) : (
-                      <p className={`text-sm sm:text-base ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>No education information available</p>
+                      <p className={`text-sm sm:text-base ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>{locale === 'ar' ? 'لا توجد معلومات تعليمية' : 'No education information available'}</p>
                     )}
                   </div>
                 </div>
@@ -138,7 +145,7 @@ export default function DoctorTabs({ doctor }: DoctorTabsProps) {
                     <div className={`w-8 h-8 sm:w-10 sm:h-10 rounded-lg flex items-center justify-center ${theme === 'dark' ? 'bg-cyan-900/50' : 'bg-cyan-50'}`}>
                       <FaLanguage className="text-cyan-600 text-base sm:text-lg" />
                     </div>
-                    <h3 className={`text-base sm:text-lg font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Languages</h3>
+                    <h3 className={`text-base sm:text-lg font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{tOverview.languages}</h3>
                   </div>
                   <div className="flex flex-wrap gap-2 sm:gap-3">
                     {doctor.languages && doctor.languages.length > 0 ? (
@@ -151,7 +158,7 @@ export default function DoctorTabs({ doctor }: DoctorTabsProps) {
                         </span>
                       ))
                     ) : (
-                      <p className={`text-sm sm:text-base ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>No language information available</p>
+                      <p className={`text-sm sm:text-base ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>{locale === 'ar' ? 'لا توجد معلومات عن اللغات' : 'No language information available'}</p>
                     )}
                   </div>
                 </div>
@@ -165,7 +172,7 @@ export default function DoctorTabs({ doctor }: DoctorTabsProps) {
                       <FaTint className="text-red-600 text-lg sm:text-xl" />
                     </div>
                     <div>
-                      <p className={`text-xs sm:text-sm mb-1 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>Blood Type</p>
+                      <p className={`text-xs sm:text-sm mb-1 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>{locale === 'ar' ? 'فصيلة الدم' : 'Blood Type'}</p>
                       <p className="text-xl sm:text-2xl font-bold text-red-600">{doctor.bloodType}</p>
                     </div>
                   </div>
@@ -183,7 +190,7 @@ export default function DoctorTabs({ doctor }: DoctorTabsProps) {
                       <FaMapMarkerAlt className="text-teal-600 text-lg sm:text-xl" />
                     </div>
                     <div className="flex-1">
-                      <h3 className={`text-base sm:text-lg font-bold mb-2 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Clinic Location</h3>
+                      <h3 className={`text-base sm:text-lg font-bold mb-2 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{locale === 'ar' ? 'موقع العيادة' : 'Clinic Location'}</h3>
                       {doctor.location.address && (
                         <p className={`text-sm sm:text-base mb-1 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>{doctor.location.address}</p>
                       )}
@@ -198,7 +205,7 @@ export default function DoctorTabs({ doctor }: DoctorTabsProps) {
                           className="inline-flex items-center gap-2 text-teal-600 hover:text-teal-700 font-medium text-sm"
                         >
                           <FaMapMarkerAlt />
-                          View on Maps
+                          {locale === 'ar' ? 'عرض على الخريطة' : 'View on Maps'}
                         </a>
                       )}
                     </div>
@@ -206,7 +213,7 @@ export default function DoctorTabs({ doctor }: DoctorTabsProps) {
                 </div>
               ) : (
                 <div className={`text-center py-8 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
-                  No location information available
+                  {locale === 'ar' ? 'لا توجد معلومات عن الموقع' : 'No location information available'}
                 </div>
               )}
 
@@ -219,7 +226,7 @@ export default function DoctorTabs({ doctor }: DoctorTabsProps) {
                         <FaPhone className="text-blue-600 text-sm sm:text-base" />
                       </div>
                       <div>
-                        <p className={`text-xs mb-1 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>Phone</p>
+                        <p className={`text-xs mb-1 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>{locale === 'ar' ? 'الهاتف' : 'Phone'}</p>
                         <p className={`font-semibold text-sm sm:text-base ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{doctor.phone}</p>
                       </div>
                     </div>
@@ -232,7 +239,7 @@ export default function DoctorTabs({ doctor }: DoctorTabsProps) {
                         <FaEnvelope className="text-purple-600 text-sm sm:text-base" />
                       </div>
                       <div>
-                        <p className={`text-xs mb-1 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>Email</p>
+                        <p className={`text-xs mb-1 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>{locale === 'ar' ? 'البريد الإلكتروني' : 'Email'}</p>
                         <p className={`font-semibold text-xs sm:text-sm break-all ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{doctor.email}</p>
                       </div>
                     </div>
