@@ -18,7 +18,7 @@ function LayoutContent({
   return (
     <div className={`flex h-screen overflow-hidden transition-colors ${
       theme === 'dark'
-        ? 'bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900'
+        ? 'bg-linear-to-br from-gray-900 via-gray-800 to-gray-900'
         : 'bg-linear-to-br from-teal-50 via-cyan-50 to-emerald-50'
     }`}>
       <button
