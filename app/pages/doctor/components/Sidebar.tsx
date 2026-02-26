@@ -1,0 +1,233 @@
+'use client';
+
+import Link from 'next/link';
+import Image from 'next/image';
+import { usePathname, useRouter } from 'next/navigation';
+import { useSelector, useDispatch } from 'react-redux';
+import { logout } from '@/app/store/slices/authSlice';
+import { useEffect, useState } from 'react';
+import { 
+  LayoutDashboard, 
+  Calendar, 
+  UserPlus, 
+  User,
+  LogOut,
+  Stethoscope,
+  ChevronRight,
+  Moon
+} from 'lucide-react';
+
+export default function Sidebar() {
+  const pathname = usePathname();
+  const router = useRouter();
+  const dispatch = useDispatch();
+  const user = useSelector((state: { auth: { user: { name?: string | { en: string; ar: string }; clinicId?: string | { _id: string; id: string }; specialty?: { en: string; ar: string }; profileImage?: string } } }) => state.auth.user);
+  const [clinicData, setClinicData] = useState({ name: { en: 'MediCare', ar: 'ميديكير' }, logo: '' });
+  const [loading, setLoading] = useState(true);
+  const [pendingRequestsCount, setPendingRequestsCount] = useState(0);
+  const [doctorImage, setDoctorImage] = useState('');
+
+  useEffect(() => {
+    const fetchClinicData = async () => {
+      if (!user?.clinicId) {
+        setLoading(false);
+        return;
+      }
+
+      try {
+        const token = localStorage.getItem('token');
+        const clinicId = typeof user.clinicId === 'object' ? (user.clinicId as { _id?: string; id?: string })?._id || (user.clinicId as { _id?: string; id?: string })?.id : user.clinicId;
+        
+        if (!clinicId) {
+          setLoading(false);
+          return;
+        }
+        
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/clinics/${clinicId}`, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+          },
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          setClinicData({ name: data.name || { en: 'MediCare', ar: 'ميديكير' }, logo: data.logo || '' });
+        }
+      } catch (error) {
+        console.error('Error fetching clinic data:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    const fetchPendingRequests = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/appointments/doctor-stats`, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+          },
+        });
+
+        if (response.ok) {
+          const text = await response.text();
+          try {
+            const data = JSON.parse(text);
+            setPendingRequestsCount(data.pendingRequests || 0);
+          } catch {
+            console.error('Invalid JSON response');
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching pending requests:', error);
+      }
+    };
+
+    const fetchDoctorProfile = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/doctors/profile`, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+          },
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          setDoctorImage(data.photoUrl || '');
+        }
+      } catch (error) {
+        console.error('Error fetching doctor profile:', error);
+      }
+    };
+
+    fetchClinicData();
+    fetchPendingRequests();
+    fetchDoctorProfile();
+  }, [user?.clinicId]);
+
+  const handleLogout = () => {
+    dispatch(logout());
+    router.push('/pages/login');
+  };
+
+  const menuItems = [
+    { icon: LayoutDashboard, label: 'Dashboard', href: '/pages/doctor' },
+    { icon: Calendar, label: 'My Schedule', href: '/pages/doctor/schedule' },
+    { icon: UserPlus, label: 'Patient Requests', href: '/pages/doctor/requests', badge: pendingRequestsCount },
+    { icon: User, label: 'Profile', href: '/pages/doctor/profile' },
+  ];
+
+  const getInitials = () => {
+    if (!user?.name) return 'DR';
+    const name = typeof user.name === 'string' ? user.name : ((user.name as { en: string; ar: string }).en || (user.name as { en: string; ar: string }).ar || 'Doctor');
+    const names = name.split(' ');
+    return names.length > 1 ? `${names[0][0]}${names[1][0]}` : names[0][0];
+  };
+
+  if (!user) return null;
+
+  return (
+    <div className="w-[280px] h-screen p-3 bg-linear-to-br from-teal-50 via-cyan-50 to-emerald-50">
+      <aside className="h-full bg-white rounded-2xl shadow-xl shadow-teal-200/50 flex flex-col overflow-hidden border border-teal-100/50">
+        {/* Logo Header */}
+        <div className="p-4 bg-linear-to-br from-teal-500 via-teal-600 to-cyan-600 relative overflow-hidden">
+          <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAwIDEwIEwgNDAgMTAgTSAxMCAwIEwgMTAgNDAgTSAwIDIwIEwgNDAgMjAgTSAyMCAwIEwgMjAgNDAgTSAwIDMwIEwgNDAgMzAgTSAzMCAwIEwgMzAgNDAiIGZpbGw9Im5vbmUiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS1vcGFjaXR5PSIwLjA1IiBzdHJva2Utd2lkdGg9IjEiLz48L3BhdHRlcm4+PC9kZWZzPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JpZCkiLz48L3N2Zz4=')] opacity-30"></div>
+          <div className="relative z-10">
+            <div className="flex items-center gap-2">
+              <div className="w-12 h-12 rounded-xl bg-white/20 backdrop-blur-xl flex items-center justify-center border border-white/30 overflow-hidden">
+                {clinicData.logo ? (
+                  <Image src={clinicData.logo} alt="Clinic Logo" width={48} height={48} className="w-full h-full object-cover" />
+                ) : (
+                  <Stethoscope className="w-6 h-6 text-white" strokeWidth={2.5} />
+                )}
+              </div>
+              <div className="flex-1 min-w-0">
+                <h1 className="text-base font-bold text-white truncate">
+                  {loading ? 'MediCare' : clinicData.name.en}
+                </h1>
+                <p className="text-xs text-teal-100 font-medium">Doctor Dashboard</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Doctor Profile */}
+        <div className="px-3 py-3 border-b border-gray-100">
+          <div className="flex items-center gap-2">
+            <div className="relative">
+              <div className="w-12 h-12 rounded-xl bg-linear-to-br from-teal-500 via-teal-600 to-cyan-600 flex items-center justify-center text-white font-bold text-base shadow-md shadow-teal-300/50 overflow-hidden">
+                {doctorImage ? (
+                  <Image src={doctorImage} alt="Doctor" width={48} height={48} className="w-full h-full object-cover" />
+                ) : (
+                  getInitials()
+                )}
+              </div>
+              <div className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-green-500 rounded-full border-2 border-white"></div>
+            </div>
+            <div className="flex-1 min-w-0">
+              <h3 className="text-sm font-bold text-gray-900 truncate">{typeof user?.name === 'string' ? user.name : ((user?.name as { en: string; ar: string })?.en || (user?.name as { en: string; ar: string })?.ar || 'Doctor')}</h3>
+              <p className="text-xs text-teal-600 truncate font-medium">{user?.specialty?.en || 'Specialist'}</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Navigation */}
+        <nav className="flex-1 px-3 py-4 overflow-y-auto">
+          <ul className="space-y-1.5">
+            {menuItems.map((item) => {
+              const isActive = pathname === item.href;
+              const Icon = item.icon;
+              return (
+                <li key={item.href}>
+                  <Link href={item.href}>
+                    <div className={`group flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-200 ${
+                        isActive
+                          ? 'bg-linear-to-r from-teal-500 via-teal-600 to-cyan-600 text-white shadow-md shadow-teal-300/50'
+                          : 'text-gray-600 hover:bg-linear-to-r hover:from-teal-50 hover:to-cyan-50'
+                      }`}
+                    >
+                      <Icon className="w-5 h-5" strokeWidth={2.5} />
+                      <span className="flex-1 text-sm font-bold">{item.label}</span>
+                      {item.badge ? (
+                        <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${
+                          isActive ? 'bg-white/30 text-white' : 'bg-linear-to-r from-teal-500 to-cyan-600 text-white'
+                        }`}>
+                          {item.badge}
+                        </span>
+                      ) : (
+                        <ChevronRight className={`w-3.5 h-3.5 transition-opacity ${
+                          isActive ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
+                        }`} />
+                      )}
+                    </div>
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
+        </nav>
+
+        {/* Bottom Actions */}
+        <div className="p-3 space-y-2 border-t border-gray-100">
+          <div className="flex items-center gap-2">
+            <button className="flex-1 flex items-center justify-center gap-2 bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all">
+              <Moon className="w-4 h-4" strokeWidth={2.5} />
+              <span>Theme</span>
+            </button>
+            <button className="flex-1 flex items-center justify-center gap-2 bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all">
+              <span className="text-sm font-bold">EN</span>
+            </button>
+          </div>
+          <button
+            onClick={handleLogout}
+            className="flex items-center justify-center gap-2 w-full bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all"
+          >
+            <LogOut className="w-4 h-4" strokeWidth={2.5} />
+            <span>Logout</span>
+          </button>
+        </div>
+      </aside>
+    </div>
+  );
+}
