@@ -7,6 +7,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import { logout } from '@/app/store/slices/authSlice';
 import { useEffect, useState } from 'react';
 import { useTheme } from '@/app/contexts/ThemeContext';
+import { useLanguage } from '@/app/contexts/LanguageContext';
+import translations from '@/messages/translations';
 import { 
   LayoutDashboard, 
   Calendar, 
@@ -30,6 +32,8 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
   const router = useRouter();
   const dispatch = useDispatch();
   const { theme, toggleTheme } = useTheme();
+  const { locale, toggleLanguage } = useLanguage();
+  const t = translations[locale].doctor.sidebar;
   const user = useSelector((state: { auth: { user: { name?: string | { en: string; ar: string }; clinicId?: string | { _id: string; id: string }; specialty?: { en: string; ar: string }; profileImage?: string } } }) => state.auth.user);
   const [clinicData, setClinicData] = useState({ name: { en: 'MediCare', ar: 'ميديكير' }, logo: '' });
   const [loading, setLoading] = useState(true);
@@ -121,10 +125,10 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
   };
 
   const menuItems = [
-    { icon: LayoutDashboard, label: 'Dashboard', href: '/pages/doctor' },
-    { icon: Calendar, label: 'My Schedule', href: '/pages/doctor/schedule' },
-    { icon: UserPlus, label: 'Patient Requests', href: '/pages/doctor/requests', badge: pendingRequestsCount },
-    { icon: User, label: 'Profile', href: '/pages/doctor/profile' },
+    { icon: LayoutDashboard, label: t.dashboard, href: '/pages/doctor' },
+    { icon: Calendar, label: t.mySchedule, href: '/pages/doctor/schedule' },
+    { icon: UserPlus, label: t.patientRequests, href: '/pages/doctor/requests', badge: pendingRequestsCount },
+    { icon: User, label: t.profile, href: '/pages/doctor/profile' },
   ];
 
   const getInitials = () => {
@@ -166,13 +170,11 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
           {/* زر الإغلاق للشاشات الصغيرة */}
           <button
             onClick={onClose}
-            className={`xl:hidden absolute top-3 right-3 z-10 p-1 rounded-lg shadow-md ${
-              theme === 'dark' ? 'bg-gray-700/80' : 'bg-white/80'
+            className={`xl:hidden absolute top-3 ${locale === 'ar' ? 'left-3' : 'right-3'} z-[60] p-1.5 rounded-lg shadow-lg transition-all ${
+              theme === 'dark' ? 'bg-red-500 hover:bg-red-600' : 'bg-red-500 hover:bg-red-600'
             }`}
           >
-            <X className={`w-4 h-4 ${
-              theme === 'dark' ? 'text-gray-300' : 'text-gray-600'
-            }`} />
+            <X className="w-4 h-4 text-white" />
           </button>
 
           {/* Logo Header */}
@@ -189,9 +191,9 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
                 </div>
                 <div className="flex-1 min-w-0">
                   <h1 className="text-sm sm:text-base font-bold text-white truncate">
-                    {loading ? 'MediCare' : clinicData.name.en}
+                    {loading ? 'MediCare' : (typeof clinicData.name === 'object' ? clinicData.name[locale] : clinicData.name)}
                   </h1>
-                  <p className="text-[10px] sm:text-xs text-teal-100 font-medium">Doctor Dashboard</p>
+                  <p className="text-[10px] sm:text-xs text-teal-100 font-medium">{t.doctorDashboard}</p>
                 </div>
               </div>
             </div>
@@ -215,10 +217,10 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
               <div className="flex-1 min-w-0">
                 <h3 className={`text-xs sm:text-sm font-bold truncate ${
                   theme === 'dark' ? 'text-white' : 'text-gray-900'
-                }`}>{typeof user?.name === 'string' ? user.name : ((user?.name as { en: string; ar: string })?.en || (user?.name as { en: string; ar: string })?.ar || 'Doctor')}</h3>
+                }`}>{typeof user?.name === 'string' ? user.name : (user?.name ? user.name[locale] : 'Doctor')}</h3>
                 <p className={`text-[10px] sm:text-xs truncate font-medium ${
                   theme === 'dark' ? 'text-teal-400' : 'text-teal-600'
-                }`}>{user?.specialty?.en || 'Specialist'}</p>
+                }`}>{user?.specialty ? user.specialty[locale] : 'Specialist'}</p>
               </div>
             </div>
           </div>
@@ -279,14 +281,16 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
                 ) : (
                   <Moon className="w-3.5 h-3.5 sm:w-4 sm:h-4" strokeWidth={2.5} />
                 )}
-                <span>{theme === 'dark' ? 'Light' : 'Dark'}</span>
+                <span>{theme === 'dark' ? t.light : t.dark}</span>
               </button>
-              <button className={`flex-1 flex items-center justify-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-2 sm:py-2.5 rounded-lg sm:rounded-xl text-xs sm:text-sm font-semibold transition-all ${
-                theme === 'dark'
-                  ? 'bg-gray-700 hover:bg-gray-600 text-gray-200'
-                  : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
-              }`}>
-                <span className="text-xs sm:text-sm font-bold">EN</span>
+              <button 
+                onClick={toggleLanguage}
+                className={`flex-1 flex items-center justify-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-2 sm:py-2.5 rounded-lg sm:rounded-xl text-xs sm:text-sm font-semibold transition-all ${
+                  theme === 'dark'
+                    ? 'bg-gray-700 hover:bg-gray-600 text-gray-200'
+                    : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
+                }`}>
+                <span className="text-xs sm:text-sm font-bold">{locale === 'en' ? 'AR' : 'EN'}</span>
               </button>
             </div>
             <button
@@ -298,7 +302,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
               }`}
             >
               <LogOut className="w-3.5 h-3.5 sm:w-4 sm:h-4" strokeWidth={2.5} />
-              <span>Logout</span>
+              <span>{t.logout}</span>
             </button>
           </div>
         </aside>
