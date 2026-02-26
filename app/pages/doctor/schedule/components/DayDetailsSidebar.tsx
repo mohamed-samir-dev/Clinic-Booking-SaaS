@@ -2,14 +2,18 @@
 
 import { Appointment } from '../types';
 import { getStatusColor } from '../utils/calendarHelpers';
+import translations from '@/messages/translations';
 
 interface DayDetailsSidebarProps {
   selectedDate: Date | null;
   appointments: Appointment[];
   theme: 'light' | 'dark';
+  locale: 'en' | 'ar';
 }
 
-export const DayDetailsSidebar = ({ selectedDate, appointments, theme }: DayDetailsSidebarProps) => {
+export const DayDetailsSidebar = ({ selectedDate, appointments, theme, locale }: DayDetailsSidebarProps) => {
+  const t = translations[locale].doctor.schedule;
+  
   return (
     <div className={`rounded-xl sm:rounded-2xl shadow-lg p-3 sm:p-5 border ${
       theme === 'dark' ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-100'
@@ -22,12 +26,12 @@ export const DayDetailsSidebar = ({ selectedDate, appointments, theme }: DayDeta
           <h3 className={`text-sm sm:text-base font-bold ${
             theme === 'dark' ? 'text-white' : 'text-gray-900'
           }`}>
-            {selectedDate ? selectedDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : 'Select a Date'}
+            {selectedDate ? selectedDate.toLocaleDateString(locale === 'ar' ? 'ar-EG' : 'en-US', { month: 'short', day: 'numeric' }) : t.selectDate}
           </h3>
           <p className={`text-[10px] sm:text-xs font-medium ${
             theme === 'dark' ? 'text-gray-400' : 'text-gray-600'
           }`}>
-            {appointments.length} appointment{appointments.length !== 1 ? 's' : ''}
+            {appointments.length} {appointments.length !== 1 ? t.noAppointments : t.appointmentDetails}
           </p>
         </div>
       </div>
@@ -47,7 +51,7 @@ export const DayDetailsSidebar = ({ selectedDate, appointments, theme }: DayDeta
                   <h4 className={`font-bold text-xs sm:text-sm mb-1 ${
                     theme === 'dark' ? 'text-black' : 'text-gray-900'
                   }`}>
-                    {apt.patientId?.name || apt.guestData?.fullName || 'Guest Patient'}
+                    {apt.patientId?.name || apt.guestData?.fullName || t.guest}
                   </h4>
                   <div className="space-y-0.5 sm:space-y-1 text-[10px] sm:text-xs">
                     <div className={`flex items-center gap-1 ${
@@ -87,8 +91,8 @@ export const DayDetailsSidebar = ({ selectedDate, appointments, theme }: DayDeta
             <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-xl sm:rounded-2xl bg-linear-to-br from-gray-50 to-gray-100 flex items-center justify-center mb-2 sm:mb-3">
               <span className="material-icons text-2xl sm:text-3xl text-gray-300">event_available</span>
             </div>
-            <p className="text-xs sm:text-sm font-bold text-gray-500">No appointments</p>
-            <p className="text-[10px] sm:text-xs text-gray-400 mt-1">Select a date to view details</p>
+            <p className="text-xs sm:text-sm font-bold text-gray-500">{t.noAppointments}</p>
+            <p className="text-[10px] sm:text-xs text-gray-400 mt-1">{t.selectDate}</p>
           </div>
         )}
       </div>
