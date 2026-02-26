@@ -2,16 +2,26 @@
 
 import Link from 'next/link';
 
-export const ScheduleHeader = () => {
+interface ScheduleHeaderProps {
+  theme: 'light' | 'dark';
+}
+
+export const ScheduleHeader = ({ theme }: ScheduleHeaderProps) => {
   return (
-    <div className="bg-white rounded-xl sm:rounded-2xl shadow-lg p-3 sm:p-5 mb-3 sm:mb-5 border border-gray-100">
+    <div className={`rounded-xl sm:rounded-2xl shadow-lg p-3 sm:p-5 mb-3 sm:mb-5 border ${
+      theme === 'dark' ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-100'
+    }`}>
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
         <div className="flex-1 min-w-0">
-          <h1 className="text-xl sm:text-2xl font-bold text-gray-900 flex items-center gap-2">
+          <h1 className={`text-xl sm:text-2xl font-bold flex items-center gap-2 ${
+            theme === 'dark' ? 'text-white' : 'text-gray-900'
+          }`}>
             <span className="material-icons text-2xl sm:text-3xl text-teal-600">calendar_month</span>
             My Schedule
           </h1>
-          <p className="text-xs sm:text-sm text-gray-600 mt-1 font-medium">Manage your appointments and availability</p>
+          <p className={`text-xs sm:text-sm mt-1 font-medium ${
+            theme === 'dark' ? 'text-gray-400' : 'text-gray-600'
+          }`}>Manage your appointments and availability</p>
         </div>
         <Link
           href="/pages/doctor"
