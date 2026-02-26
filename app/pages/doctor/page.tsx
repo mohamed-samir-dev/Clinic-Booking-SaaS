@@ -4,6 +4,8 @@ import { useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useTheme } from '@/app/contexts/ThemeContext';
+import { useLanguage } from '@/app/contexts/LanguageContext';
+import translations from '@/messages/translations';
 
 interface Appointment {
   id: string;
@@ -24,6 +26,8 @@ interface RootState {
 
 export default function DoctorPage() {
   const { theme } = useTheme();
+  const { locale } = useLanguage();
+  const t = translations[locale].doctor.dashboard;
   const user = useSelector((state: RootState) => state.auth.user);
   const token = useSelector((state: RootState) => state.auth.token);
   
@@ -31,17 +35,25 @@ export default function DoctorPage() {
   const getText = (value: string | { en: string; ar: string } | undefined): string => {
     if (typeof value === 'string') return value;
     if (value && typeof value === 'object') {
-      return value.en || value.ar || '';
+      return value[locale] || value.en || value.ar || '';
     }
     return String(value || '');
   };
   
+  // Helper function to get first name
+  const getFirstName = (name: string | { en: string; ar: string } | undefined): string => {
+    const fullName = typeof name === 'string' ? name : name?.[locale] || name?.en || 'Doctor';
+    const parts = fullName.split(' ');
+    // If name starts with "د." or "Dr.", return the second part, otherwise return first part
+    return parts[0] === 'د.' || parts[0] === 'Dr.' ? (parts[1] || parts[0]) : parts[0];
+  };
+  
   const [stats, setStats] = useState([
-    { icon: 'event_available', label: "Today's Appointments", value: '0', color: 'from-blue-500 to-blue-600' },
-    { icon: 'pending_actions', label: 'Pending Requests', value: '0', color: 'from-orange-500 to-orange-600' },
-    { icon: 'calendar_month', label: 'Total Appointments', value: '0', color: 'from-purple-500 to-purple-600' },
-    { icon: 'payments', label: 'Monthly Revenue', value: '$0', color: 'from-green-500 to-green-600' },
-    { icon: 'star', label: 'Average Rating', value: '0.0', color: 'from-yellow-500 to-yellow-600' },
+    { icon: 'event_available', label: t.todayAppointments, value: '0', color: 'from-blue-500 to-blue-600' },
+    { icon: 'pending_actions', label: t.pendingRequests, value: '0', color: 'from-orange-500 to-orange-600' },
+    { icon: 'calendar_month', label: t.totalAppointments, value: '0', color: 'from-purple-500 to-purple-600' },
+    { icon: 'payments', label: t.monthlyRevenue, value: '$0', color: 'from-green-500 to-green-600' },
+    { icon: 'star', label: t.averageRating, value: '0.0', color: 'from-yellow-500 to-yellow-600' },
   ]);
 
   const [todayAppointments, setTodayAppointments] = useState<Appointment[]>([]);
@@ -66,11 +78,11 @@ export default function DoctorPage() {
         
         if (data.todayAppointments !== undefined) {
           setStats([
-            { icon: 'event_available', label: "Today's Appointments", value: data.todayAppointments.toString(), color: 'from-blue-500 to-blue-600' },
-            { icon: 'pending_actions', label: 'Pending Requests', value: data.pendingRequests.toString(), color: 'from-orange-500 to-orange-600' },
-            { icon: 'calendar_month', label: 'Total Appointments', value: data.totalAppointments.toString(), color: 'from-purple-500 to-purple-600' },
-            { icon: 'payments', label: 'Monthly Revenue', value: `$${data.monthlyRevenue.toLocaleString()}`, color: 'from-green-500 to-green-600' },
-            { icon: 'star', label: 'Average Rating', value: data.averageRating, color: 'from-yellow-500 to-yellow-600' },
+            { icon: 'event_available', label: t.todayAppointments, value: data.todayAppointments.toString(), color: 'from-blue-500 to-blue-600' },
+            { icon: 'pending_actions', label: t.pendingRequests, value: data.pendingRequests.toString(), color: 'from-orange-500 to-orange-600' },
+            { icon: 'calendar_month', label: t.totalAppointments, value: data.totalAppointments.toString(), color: 'from-purple-500 to-purple-600' },
+            { icon: 'payments', label: t.monthlyRevenue, value: `$${data.monthlyRevenue.toLocaleString()}`, color: 'from-green-500 to-green-600' },
+            { icon: 'star', label: t.averageRating, value: data.averageRating, color: 'from-yellow-500 to-yellow-600' },
           ]);
         }
       } catch (error) {
@@ -140,7 +152,7 @@ export default function DoctorPage() {
 
     window.addEventListener('appointmentUpdated', handleAppointmentUpdate);
     return () => window.removeEventListener('appointmentUpdated', handleAppointmentUpdate);
-  }, [token]);
+  }, [token, locale, t.todayAppointments, t.pendingRequests, t.totalAppointments, t.monthlyRevenue, t.averageRating]);
 
   return (
     <div className={`h-screen overflow-y-auto transition-colors duration-300 ${
@@ -161,11 +173,11 @@ export default function DoctorPage() {
                 ? 'text-teal-400'
                 : 'bg-linear-to-r from-teal-600 to-cyan-600 bg-clip-text text-transparent'
             }`}>
-              Welcome back, Dr. {getText(user?.name).split(' ')[0] || 'Doctor'}! 👋
+              {t.welcomeBack} {getFirstName(user?.name)}! 👋
             </h1>
             <p className={`text-xs sm:text-sm mt-1 font-medium hidden sm:block ${
               theme === 'dark' ? 'text-gray-400' : 'text-gray-600'
-            }`}>Here&rsquo;s what&rsquo;s happening with your practice today</p>
+            }`}>{t.subtitle}</p>
           </div>
           <div className="flex items-center gap-1 sm:gap-2 relative z-50">
             <div className="relative">
@@ -187,7 +199,7 @@ export default function DoctorPage() {
                 )}
               </button>
               {showNotifications && (
-                <div className={`absolute right-0 top-full mt-2 w-72 rounded-xl shadow-xl border z-9999 ${
+                <div className={`fixed sm:absolute left-1/2 -translate-x-1/2 sm:left-auto sm:translate-x-0 ${locale === 'ar' ? 'sm:left-0' : 'sm:right-0'} top-16 sm:top-full mt-0 sm:mt-2 w-[90vw] sm:w-80 max-w-sm rounded-xl shadow-xl border z-9999 ${
                   theme === 'dark'
                     ? 'bg-gray-800 border-gray-700'
                     : 'bg-white border-gray-200'
@@ -197,10 +209,10 @@ export default function DoctorPage() {
                   }`}>
                     <h3 className={`text-sm font-bold ${
                       theme === 'dark' ? 'text-white' : 'text-gray-900'
-                    }`}>New Booking Requests</h3>
+                    }`}>{t.newBookingRequests}</h3>
                     <p className={`text-xs mt-0.5 ${
                       theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
-                    }`}>{pendingCount} pending requests</p>
+                    }`}>{pendingCount} {t.pendingRequestsCount}</p>
                   </div>
                   <div className="max-h-80 overflow-y-auto">
                     {newRequests.length > 0 ? (
@@ -233,7 +245,7 @@ export default function DoctorPage() {
                     ) : (
                       <div className="p-6 text-center">
                         <span className="material-icons text-3xl text-gray-300">inbox</span>
-                        <p className="text-sm text-gray-500 mt-2">No new requests</p>
+                        <p className="text-sm text-gray-500 mt-2">{t.noNewRequestsInbox}</p>
                       </div>
                     )}
                   </div>
@@ -246,7 +258,7 @@ export default function DoctorPage() {
                           ? 'text-teal-400 hover:text-teal-300'
                           : 'text-teal-600 hover:text-teal-700'
                       }`}>
-                        View All Requests
+                        {t.viewAllRequests}
                       </button>
                     </Link>
                   </div>
@@ -314,13 +326,13 @@ export default function DoctorPage() {
                 <div className="flex-1 min-w-0">
                   <h3 className={`text-sm sm:text-lg font-bold truncate ${
                     theme === 'dark' ? 'text-white' : 'text-gray-900'
-                  }`}>Live Patient Flow</h3>
+                  }`}>{t.livePatientFlow}</h3>
                   <p className={`text-xs sm:text-sm font-medium mt-0.5 ${
                     theme === 'dark' ? 'text-gray-400' : 'text-gray-600'
                   }`}>
                     <span className={`font-bold ${
                       theme === 'dark' ? 'text-teal-400' : 'text-teal-600'
-                    }`}>{todayAppointments.length}</span> patients today
+                    }`}>{todayAppointments.length}</span> {t.patientsToday}
                   </p>
                 </div>
               </div>
@@ -328,8 +340,8 @@ export default function DoctorPage() {
                 href="/pages/doctor/schedule" 
                 className="px-2 sm:px-4 py-1.5 sm:py-2 bg-linear-to-r from-teal-500 to-cyan-600 hover:from-teal-600 hover:to-cyan-700 text-white rounded-lg sm:rounded-xl text-xs sm:text-sm font-bold transition-all shadow-md hover:shadow-lg flex items-center gap-1 shrink-0"
               >
-                <span className="hidden sm:inline">View Schedule</span>
-                <span className="sm:hidden">View</span>
+                <span className="hidden sm:inline">{t.viewSchedule}</span>
+                <span className="sm:hidden">{t.view}</span>
                 <span className="material-icons text-xs sm:text-sm">arrow_forward</span>
               </Link>
             </div>
@@ -347,8 +359,8 @@ export default function DoctorPage() {
                     button: boolean;
                   }> = {
                     confirmed: { 
-                      label: 'Checked-in', 
-                      location: 'Waiting Room',
+                      label: t.checkedIn, 
+                      location: t.waitingRoom,
                       bgColor: 'from-teal-50 to-cyan-50',
                       borderColor: 'border-teal-200',
                       iconBg: 'from-teal-500 to-cyan-600',
@@ -356,8 +368,8 @@ export default function DoctorPage() {
                       button: true
                     },
                     pending: { 
-                      label: 'In Consultation', 
-                      location: 'Room 2',
+                      label: t.inConsultation, 
+                      location: `${t.room} 2`,
                       bgColor: 'from-blue-50 to-indigo-50',
                       borderColor: 'border-blue-200',
                       iconBg: 'from-blue-500 to-indigo-600',
@@ -365,8 +377,8 @@ export default function DoctorPage() {
                       button: false
                     },
                     completed: { 
-                      label: 'Discharged', 
-                      location: 'Processed',
+                      label: t.discharged, 
+                      location: t.processed,
                       bgColor: 'from-gray-50 to-slate-50',
                       borderColor: 'border-gray-200',
                       iconBg: 'from-gray-500 to-slate-600',
@@ -416,8 +428,8 @@ export default function DoctorPage() {
                   <div className="w-16 h-16 rounded-2xl bg-linear-to-br from-gray-50 to-gray-100 flex items-center justify-center mb-3 shadow-sm">
                     <span className="material-icons text-3xl text-gray-300">event_busy</span>
                   </div>
-                  <p className="text-sm font-bold text-gray-500">No patients today</p>
-                  <p className="text-xs text-gray-400 mt-0.5">Your schedule is clear</p>
+                  <p className="text-sm font-bold text-gray-500">{t.noPatientsToday}</p>
+                  <p className="text-xs text-gray-400 mt-0.5">{t.scheduleIsClear}</p>
                 </div>
               )}
             </div>
@@ -437,18 +449,18 @@ export default function DoctorPage() {
                 <div className="flex-1 min-w-0">
                   <h3 className={`text-sm sm:text-base font-bold truncate ${
                     theme === 'dark' ? 'text-white' : 'text-gray-900'
-                  }`}>New Requests</h3>
+                  }`}>{t.newRequests}</h3>
                   <p className={`text-[10px] sm:text-xs font-medium mt-0.5 ${
                     theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
-                  }`}>Latest appointments</p>
+                  }`}>{t.latestAppointments}</p>
                 </div>
               </div>
               <Link 
                 href="/pages/doctor/requests" 
                 className="px-2 sm:px-3 py-1.5 sm:py-2 bg-linear-to-r from-orange-500 to-amber-600 hover:from-orange-600 hover:to-amber-700 text-white rounded-lg text-[10px] sm:text-xs font-bold transition-all shadow-md hover:shadow-lg flex items-center gap-1 shrink-0"
               >
-                <span className="hidden sm:inline">View All</span>
-                <span className="sm:hidden">All</span>
+                <span className="hidden sm:inline">{t.viewAll}</span>
+                <span className="sm:hidden">{t.all}</span>
                 <span className="material-icons text-xs sm:text-sm">arrow_forward</span>
               </Link>
             </div>
@@ -486,8 +498,8 @@ export default function DoctorPage() {
                   <div className="w-14 h-14 rounded-2xl bg-linear-to-br from-gray-50 to-gray-100 flex items-center justify-center mb-3 shadow-sm">
                     <span className="material-icons text-3xl text-gray-300">inbox</span>
                   </div>
-                  <p className="text-sm font-bold text-gray-500">No new requests</p>
-                  <p className="text-xs text-gray-400 mt-0.5">All caught up!</p>
+                  <p className="text-sm font-bold text-gray-500">{t.noNewRequests}</p>
+                  <p className="text-xs text-gray-400 mt-0.5">{t.allCaughtUp}</p>
                 </div>
               )}
             </div>
