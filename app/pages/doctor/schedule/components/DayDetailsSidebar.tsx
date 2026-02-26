@@ -1,3 +1,5 @@
+'use client';
+
 import { Appointment } from '../types';
 import { getStatusColor } from '../utils/calendarHelpers';
 
@@ -8,53 +10,53 @@ interface DayDetailsSidebarProps {
 
 export const DayDetailsSidebar = ({ selectedDate, appointments }: DayDetailsSidebarProps) => {
   return (
-    <div className="bg-white rounded-2xl shadow-lg p-5 border border-gray-100">
-      <div className="flex items-center gap-2 mb-5">
-        <div className="w-10 h-10 rounded-xl bg-linear-to-br from-teal-500 to-cyan-600 flex items-center justify-center">
-          <span className="material-icons text-white text-lg">event_note</span>
+    <div className="bg-white rounded-xl sm:rounded-2xl shadow-lg p-3 sm:p-5 border border-gray-100">
+      <div className="flex items-center gap-2 mb-3 sm:mb-5">
+        <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-linear-to-br from-teal-500 to-cyan-600 flex items-center justify-center">
+          <span className="material-icons text-white text-base sm:text-lg">event_note</span>
         </div>
         <div>
-          <h3 className="text-base font-bold text-gray-900">
+          <h3 className="text-sm sm:text-base font-bold text-gray-900">
             {selectedDate ? selectedDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : 'Select a Date'}
           </h3>
-          <p className="text-xs text-gray-600 font-medium">
+          <p className="text-[10px] sm:text-xs text-gray-600 font-medium">
             {appointments.length} appointment{appointments.length !== 1 ? 's' : ''}
           </p>
         </div>
       </div>
 
-      <div className="space-y-2.5 max-h-[500px] overflow-y-auto custom-scrollbar">
+      <div className="space-y-2 sm:space-y-2.5 max-h-[300px] sm:max-h-[500px] overflow-y-auto custom-scrollbar">
         {appointments.length > 0 ? (
           appointments.map((apt) => (
             <div
               key={apt._id}
-              className={`rounded-xl p-3 border-2 ${getStatusColor(apt.status)}`}
+              className={`rounded-lg sm:rounded-xl p-2 sm:p-3 border-2 ${getStatusColor(apt.status)}`}
             >
               <div className="flex items-start gap-2">
-                <div className="w-9 h-9 rounded-lg bg-linear-to-br from-teal-500 to-cyan-600 flex items-center justify-center shrink-0">
-                  <span className="material-icons text-white text-base">person</span>
+                <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-lg bg-linear-to-br from-teal-500 to-cyan-600 flex items-center justify-center shrink-0">
+                  <span className="material-icons text-white text-sm sm:text-base">person</span>
                 </div>
                 <div className="flex-1 min-w-0">
-                  <h4 className="font-bold text-gray-900 text-sm mb-1">
+                  <h4 className="font-bold text-gray-900 text-xs sm:text-sm mb-1">
                     {apt.patientId?.name || apt.guestData?.fullName || 'Guest Patient'}
                   </h4>
-                  <div className="space-y-1 text-xs">
+                  <div className="space-y-0.5 sm:space-y-1 text-[10px] sm:text-xs">
                     <div className="flex items-center gap-1 text-gray-600">
-                      <span className="material-icons text-xs">schedule</span>
+                      <span className="material-icons text-[10px] sm:text-xs">schedule</span>
                       <span className="font-bold">{apt.startTime} - {apt.endTime}</span>
                     </div>
                     {apt.patientId?.phone || apt.guestData?.phone ? (
                       <div className="flex items-center gap-1 text-gray-600">
-                        <span className="material-icons text-xs">phone</span>
+                        <span className="material-icons text-[10px] sm:text-xs">phone</span>
                         <span>{apt.patientId?.phone || apt.guestData?.phone}</span>
                       </div>
                     ) : null}
                     <div className="flex items-center gap-1 text-gray-600">
-                      <span className="material-icons text-xs">medical_services</span>
+                      <span className="material-icons text-[10px] sm:text-xs">medical_services</span>
                       <span className="capitalize">{apt.type}</span>
                     </div>
                     {apt.reason && (
-                      <div className="mt-2 p-2 bg-white/60 rounded-lg">
+                      <div className="mt-1 sm:mt-2 p-1.5 sm:p-2 bg-white/60 rounded-lg">
                         <p className="text-gray-700 font-medium">{apt.reason}</p>
                       </div>
                     )}
@@ -64,12 +66,12 @@ export const DayDetailsSidebar = ({ selectedDate, appointments }: DayDetailsSide
             </div>
           ))
         ) : (
-          <div className="flex flex-col items-center justify-center py-12 text-gray-400">
-            <div className="w-16 h-16 rounded-2xl bg-linear-to-br from-gray-50 to-gray-100 flex items-center justify-center mb-3">
-              <span className="material-icons text-3xl text-gray-300">event_available</span>
+          <div className="flex flex-col items-center justify-center py-8 sm:py-12 text-gray-400">
+            <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-xl sm:rounded-2xl bg-linear-to-br from-gray-50 to-gray-100 flex items-center justify-center mb-2 sm:mb-3">
+              <span className="material-icons text-2xl sm:text-3xl text-gray-300">event_available</span>
             </div>
-            <p className="text-sm font-bold text-gray-500">No appointments</p>
-            <p className="text-xs text-gray-400 mt-1">Select a date to view details</p>
+            <p className="text-xs sm:text-sm font-bold text-gray-500">No appointments</p>
+            <p className="text-[10px] sm:text-xs text-gray-400 mt-1">Select a date to view details</p>
           </div>
         )}
       </div>
