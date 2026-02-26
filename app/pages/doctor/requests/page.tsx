@@ -28,7 +28,7 @@ export default function RequestsPage() {
     <div className="h-screen overflow-y-auto bg-linear-to-br from-gray-50 via-white to-blue-50/30">
       <RequestsHeader />
       
-      <div className="p-5">
+      <div className="p-3 sm:p-5">
         <StatsCards 
           stats={stats} 
           filter={filter} 
