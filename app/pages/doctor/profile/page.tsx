@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { useDoctorProfile, useProfileEdit } from './hooks/useDoctorProfile';
 import { ProfileCard } from './components/ProfileCard';
 import { ContactInfo } from './components/ContactInfo';
