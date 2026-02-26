@@ -154,7 +154,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
         xl:transform-none
         ${isOpen ? 'translate-x-0' : '-translate-x-full xl:translate-x-0'}
         ${theme === 'dark' 
-          ? 'bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900' 
+          ? 'bg-linear-to-br from-gray-900 via-gray-800 to-gray-900' 
           : 'bg-linear-to-br from-teal-50 via-cyan-50 to-emerald-50'
         }
       `}>
