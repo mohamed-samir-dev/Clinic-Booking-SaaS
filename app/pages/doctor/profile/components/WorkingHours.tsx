@@ -16,6 +16,7 @@ interface WorkingHoursProps {
   onAddTimeSlot: (day: string) => void;
   onRemoveTimeSlot: (day: string, index: number) => void;
   onUpdateTimeSlot: (day: string, index: number, field: 'from' | 'to', value: string) => void;
+  theme: 'light' | 'dark';
 }
 
 const daysOfWeek = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
@@ -33,12 +34,17 @@ export const WorkingHours = ({
   onSaveSchedule,
   onAddTimeSlot,
   onRemoveTimeSlot,
-  onUpdateTimeSlot
+  onUpdateTimeSlot,
+  theme
 }: WorkingHoursProps) => {
   return (
-    <div className="bg-white rounded-xl sm:rounded-2xl shadow-lg border border-gray-100 p-4 sm:p-6 lg:p-8">
+    <div className={`rounded-xl sm:rounded-2xl shadow-lg border p-4 sm:p-6 lg:p-8 ${
+      theme === 'dark' ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-100'
+    }`}>
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-4 sm:mb-5 lg:mb-6 gap-3">
-        <h3 className="text-base sm:text-lg lg:text-xl font-bold text-gray-900 flex items-center gap-2">
+        <h3 className={`text-base sm:text-lg lg:text-xl font-bold flex items-center gap-2 ${
+          theme === 'dark' ? 'text-white' : 'text-gray-900'
+        }`}>
           <div className="w-8 h-8 sm:w-9 sm:h-9 lg:w-10 lg:h-10 rounded-lg bg-gradient-to-br from-cyan-500 to-cyan-600 flex items-center justify-center">
             <Clock className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
           </div>
@@ -89,10 +95,14 @@ export const WorkingHours = ({
           const isClinicOpen = clinicDay?.isOpen === true;
           
           return (
-            <div key={day} className="border border-gray-200 rounded-xl p-3 sm:p-4">
+            <div key={day} className={`border rounded-xl p-3 sm:p-4 ${
+              theme === 'dark' ? 'border-gray-700' : 'border-gray-200'
+            }`}>
               <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-2 gap-2">
                 <div className="flex-1">
-                  <h4 className="font-bold text-gray-900 capitalize text-sm sm:text-base">{day}</h4>
+                  <h4 className={`font-bold capitalize text-sm sm:text-base ${
+                    theme === 'dark' ? 'text-white' : 'text-gray-900'
+                  }`}>{day}</h4>
                   {isClinicOpen ? (
                     <p className="text-xs sm:text-sm text-gray-500">Clinic: {clinicDay.openTime} - {clinicDay.closeTime}</p>
                   ) : (
