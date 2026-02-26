@@ -1,9 +1,14 @@
 import { Mail, Phone, MapPin, Edit2, Check, X } from 'lucide-react';
 import { ContactInfoProps } from '../types';
+import { useLanguage } from '@/app/contexts/LanguageContext';
+import translations from '@/messages/translations';
 
 
 
 export const ContactInfo = ({ profile, editingField, editData, setEditData, onEdit, onSave, onCancel, saving, theme }: ContactInfoProps) => {
+  const { locale } = useLanguage();
+  const t = translations[locale].doctor.profile;
+  
   return (
     <div className={`rounded-xl sm:rounded-2xl shadow-lg border p-4 sm:p-6 lg:p-8 ${
       theme === 'dark' ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-100'
@@ -14,7 +19,7 @@ export const ContactInfo = ({ profile, editingField, editData, setEditData, onEd
         <div className="w-8 h-8 sm:w-9 sm:h-9 lg:w-10 lg:h-10 rounded-lg bg-linear-to-br from-green-500 to-green-600 flex items-center justify-center">
           <span className="material-icons text-white text-base sm:text-lg">contact_mail</span>
         </div>
-        Contact Info
+        {t.contactInfo}
       </h3>
       <div className="space-y-4 sm:space-y-5">
         <div className="flex items-start gap-3 sm:gap-4">
@@ -23,12 +28,12 @@ export const ContactInfo = ({ profile, editingField, editData, setEditData, onEd
           </div>
           <div className="flex-1 min-w-0">
             <div className="flex items-center justify-between gap-2">
-              <p className="text-xs sm:text-sm text-gray-500 font-semibold">Email</p>
+              <p className="text-xs sm:text-sm text-gray-500 font-semibold">{t.email}</p>
               {editingField !== 'email' && (
                 <button
                   onClick={() => onEdit('email')}
                   className="p-1.5 sm:p-2 bg-blue-100 hover:bg-blue-200 rounded-lg transition-colors group shrink-0"
-                  title="Edit Email"
+                  title={t.edit}
                 >
                   <Edit2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-blue-600 group-hover:text-blue-700" />
                 </button>
@@ -74,12 +79,12 @@ export const ContactInfo = ({ profile, editingField, editData, setEditData, onEd
             </div>
             <div className="flex-1 min-w-0">
               <div className="flex items-center justify-between gap-2">
-                <p className="text-xs sm:text-sm text-gray-500 font-semibold">Phone</p>
+                <p className="text-xs sm:text-sm text-gray-500 font-semibold">{t.phone}</p>
                 {editingField !== 'phone' && (
                   <button
                     onClick={() => onEdit('phone')}
                     className="p-1.5 sm:p-2 bg-green-100 hover:bg-green-200 rounded-lg transition-colors group shrink-0"
-                    title="Edit Phone"
+                    title={t.edit}
                   >
                     <Edit2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-green-600 group-hover:text-green-700" />
                   </button>
@@ -126,12 +131,12 @@ export const ContactInfo = ({ profile, editingField, editData, setEditData, onEd
             </div>
             <div className="flex-1 min-w-0">
               <div className="flex items-center justify-between gap-2">
-                <p className="text-xs sm:text-sm text-gray-500 font-semibold">Location</p>
+                <p className="text-xs sm:text-sm text-gray-500 font-semibold">{t.location}</p>
                 {editingField !== 'location' && (
                   <button
                     onClick={() => onEdit('location')}
                     className="p-1.5 sm:p-2 bg-orange-100 hover:bg-orange-200 rounded-lg transition-colors group shrink-0"
-                    title="Edit Location"
+                    title={t.edit}
                   >
                     <Edit2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-orange-600 group-hover:text-orange-700" />
                   </button>
@@ -146,7 +151,7 @@ export const ContactInfo = ({ profile, editingField, editData, setEditData, onEd
                     className={`w-full px-3 py-2 sm:py-2.5 border-2 border-orange-400 rounded-lg text-sm sm:text-base font-semibold focus:outline-none focus:border-orange-600 shadow-md ${
                       theme === 'dark' ? 'bg-gray-700 text-white' : 'bg-white text-gray-900'
                     }`}
-                    placeholder="Address"
+                    placeholder={t.address}
                   />
                   <input
                     type="text"
@@ -155,7 +160,7 @@ export const ContactInfo = ({ profile, editingField, editData, setEditData, onEd
                     className={`w-full px-3 py-2 sm:py-2.5 border-2 border-orange-400 rounded-lg text-sm sm:text-base font-semibold focus:outline-none focus:border-orange-600 shadow-md ${
                       theme === 'dark' ? 'bg-gray-700 text-white' : 'bg-white text-gray-900'
                     }`}
-                    placeholder="City"
+                    placeholder={t.city}
                   />
                   <div className="flex gap-2">
                     <button
