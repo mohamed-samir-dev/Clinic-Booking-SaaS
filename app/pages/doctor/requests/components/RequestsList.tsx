@@ -2,6 +2,7 @@
 
 import { Appointment, FilterType } from '../types';
 import { RequestCard } from './RequestCard';
+import translations from '@/messages/translations';
 
 interface RequestsListProps {
   requests: Appointment[];
@@ -9,9 +10,17 @@ interface RequestsListProps {
   filter: FilterType;
   onStatusUpdate: (id: string, status: string) => void;
   theme: 'light' | 'dark';
+  locale: 'en' | 'ar';
 }
 
-export const RequestsList = ({ requests, loading, filter, onStatusUpdate, theme }: RequestsListProps) => {
+export const RequestsList = ({ requests, loading, filter, onStatusUpdate, theme, locale }: RequestsListProps) => {
+  const t = translations[locale].doctor.requests;
+  
+  const getFilterTitle = () => {
+    if (filter === 'all') return t.allRequests;
+    return `${t[filter]} ${locale === 'ar' ? 'الطلبات' : 'Requests'}`;
+  };
+  
   return (
     <div className={`rounded-xl sm:rounded-2xl shadow-lg border overflow-hidden ${
       theme === 'dark' ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-100'
@@ -28,11 +37,11 @@ export const RequestsList = ({ requests, loading, filter, onStatusUpdate, theme 
               <h3 className={`text-base sm:text-lg font-bold ${
                 theme === 'dark' ? 'text-white' : 'text-gray-900'
               }`}>
-                {filter === 'all' ? 'All Requests' : `${filter.charAt(0).toUpperCase() + filter.slice(1)} Requests`}
+                {getFilterTitle()}
               </h3>
               <p className={`text-xs sm:text-sm font-medium ${
                 theme === 'dark' ? 'text-gray-400' : 'text-gray-600'
-              }`}>{requests.length} total</p>
+              }`}>{requests.length} {t.total}</p>
             </div>
           </div>
         </div>
@@ -44,7 +53,7 @@ export const RequestsList = ({ requests, loading, filter, onStatusUpdate, theme 
             <div className="w-10 h-10 sm:w-12 sm:h-12 border-4 border-orange-500 border-t-transparent rounded-full animate-spin mb-3"></div>
             <p className={`text-xs sm:text-sm font-medium ${
               theme === 'dark' ? 'text-gray-400' : 'text-gray-600'
-            }`}>Loading requests...</p>
+            }`}>{t.loadingRequests}</p>
           </div>
         ) : requests.length > 0 ? (
           <div className="space-y-2 sm:space-y-2.5">
@@ -54,6 +63,7 @@ export const RequestsList = ({ requests, loading, filter, onStatusUpdate, theme 
                 request={request} 
                 onStatusUpdate={onStatusUpdate}
                 theme={theme}
+                locale={locale}
               />
             ))}
           </div>
@@ -62,9 +72,9 @@ export const RequestsList = ({ requests, loading, filter, onStatusUpdate, theme 
             <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-xl sm:rounded-2xl bg-linear-to-br from-gray-50 to-gray-100 flex items-center justify-center mb-2 sm:mb-3 shadow-sm">
               <span className="material-icons text-2xl sm:text-3xl text-gray-300">inbox</span>
             </div>
-            <p className="text-xs sm:text-sm font-bold text-gray-500">No requests found</p>
+            <p className="text-xs sm:text-sm font-bold text-gray-500">{t.noRequestsFound}</p>
             <p className="text-[10px] sm:text-xs text-gray-400 mt-0.5">
-              {filter === 'all' ? 'You have no appointment requests' : `No ${filter} requests`}
+              {filter === 'all' ? t.noAppointmentRequests : `${t.noFilteredRequests.replace('{filter}', t[filter])}`}
             </p>
           </div>
         )}
