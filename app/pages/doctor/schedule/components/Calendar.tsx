@@ -1,7 +1,7 @@
 'use client';
 
 import { Appointment } from '../types';
-import { monthNames, dayNames, getAppointmentsForDate, getStatusColor } from '../utils/calendarHelpers';
+import { getMonthNames, getDayNames, getAppointmentsForDate, getStatusColor } from '../utils/calendarHelpers';
 
 interface CalendarProps {
   currentDate: Date;
@@ -11,6 +11,7 @@ interface CalendarProps {
   onDateSelect: (date: Date) => void;
   onMonthChange: (delta: number) => void;
   theme: 'light' | 'dark';
+  locale: 'en' | 'ar';
 }
 
 export const Calendar = ({ 
@@ -20,8 +21,12 @@ export const Calendar = ({
   selectedDate, 
   onDateSelect, 
   onMonthChange,
-  theme
+  theme,
+  locale
 }: CalendarProps) => {
+  const monthNames = getMonthNames(locale);
+  const dayNames = getDayNames(locale);
+  
   return (
     <div className={`lg:col-span-2 rounded-xl sm:rounded-2xl shadow-lg border overflow-hidden ${
       theme === 'dark' ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-100'
@@ -32,7 +37,7 @@ export const Calendar = ({
             onClick={() => onMonthChange(-1)}
             className="p-1.5 sm:p-2 hover:bg-white/20 rounded-lg transition-all"
           >
-            <span className="material-icons text-white text-lg sm:text-xl">chevron_left</span>
+            <span className="material-icons text-white text-lg sm:text-xl">{locale === 'ar' ? 'chevron_right' : 'chevron_left'}</span>
           </button>
           <h2 className="text-base sm:text-lg font-bold text-white">
             {monthNames[currentDate.getMonth()]} {currentDate.getFullYear()}
@@ -41,7 +46,7 @@ export const Calendar = ({
             onClick={() => onMonthChange(1)}
             className="p-1.5 sm:p-2 hover:bg-white/20 rounded-lg transition-all"
           >
-            <span className="material-icons text-white text-lg sm:text-xl">chevron_right</span>
+            <span className="material-icons text-white text-lg sm:text-xl">{locale === 'ar' ? 'chevron_left' : 'chevron_right'}</span>
           </button>
         </div>
       </div>
