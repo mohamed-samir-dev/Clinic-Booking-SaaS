@@ -1,5 +1,7 @@
 import { Award, Languages } from 'lucide-react';
 import { DoctorProfile } from '../types';
+import { useLanguage } from '@/app/contexts/LanguageContext';
+import translations from '@/messages/translations';
 
 interface SpecializationsProps {
   specializations: DoctorProfile['specializations'];
@@ -7,6 +9,17 @@ interface SpecializationsProps {
 }
 
 export const Specializations = ({ specializations, theme }: SpecializationsProps) => {
+  const { locale } = useLanguage();
+  const t = translations[locale].doctor.profile;
+  
+  const getText = (value: string | { en: string; ar: string } | undefined): string => {
+    if (typeof value === 'string') return value;
+    if (value && typeof value === 'object') {
+      return value[locale] || value.en || value.ar || '';
+    }
+    return String(value || '');
+  };
+  
   if (!specializations || specializations.length === 0) return null;
 
   return (
@@ -19,21 +32,17 @@ export const Specializations = ({ specializations, theme }: SpecializationsProps
         <div className="w-8 h-8 sm:w-9 sm:h-9 lg:w-10 lg:h-10 rounded-lg bg-gradient-to-br from-purple-500 to-purple-600 flex items-center justify-center">
           <Award className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
         </div>
-        Specializations
+        {t.specializations}
       </h3>
       <div className="flex flex-wrap gap-2 sm:gap-2.5">
-        {specializations.map((spec, index) => {
-          const displayText = typeof spec === 'string' ? spec : spec.en;
-          
-          return (
-            <span 
-              key={index}
-              className="px-3 sm:px-4 py-2 sm:py-2.5 bg-gradient-to-r from-purple-50 to-pink-50 text-purple-700 rounded-lg text-xs sm:text-sm font-semibold border border-purple-200"
-            >
-              {displayText}
-            </span>
-          );
-        })}
+        {specializations.map((spec, index) => (
+          <span 
+            key={index}
+            className="px-3 sm:px-4 py-2 sm:py-2.5 bg-gradient-to-r from-purple-50 to-pink-50 text-purple-700 rounded-lg text-xs sm:text-sm font-semibold border border-purple-200"
+          >
+            {getText(spec)}
+          </span>
+        ))}
       </div>
     </div>
   );
@@ -45,6 +54,9 @@ interface LanguagesSectionProps {
 }
 
 export const LanguagesSection = ({ languages, theme }: LanguagesSectionProps) => {
+  const { locale } = useLanguage();
+  const t = translations[locale].doctor.profile;
+  
   if (!languages || languages.length === 0) return null;
 
   return (
@@ -57,7 +69,7 @@ export const LanguagesSection = ({ languages, theme }: LanguagesSectionProps) =>
         <div className="w-8 h-8 sm:w-9 sm:h-9 lg:w-10 lg:h-10 rounded-lg bg-gradient-to-br from-indigo-500 to-indigo-600 flex items-center justify-center">
           <Languages className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
         </div>
-        Languages
+        {t.languages}
       </h3>
       <div className="space-y-2.5 sm:space-y-3">
         {languages.map((lang, index) => (
