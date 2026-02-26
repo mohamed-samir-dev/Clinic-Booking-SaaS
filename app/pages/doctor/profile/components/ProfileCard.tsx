@@ -4,18 +4,21 @@ import { DoctorProfile, EditData } from '../types';
 
 interface ProfileCardProps {
   profile: DoctorProfile;
-  editingField: 'name' | 'fees' | 'duration' | 'email' | 'phone' | 'location' | 'password' | null;
+  editingField: 'name' | 'fees' | 'duration' | 'email' | 'phone' | 'location' | 'password' | 'about' | 'education' | null;
   editData: EditData;
   setEditData: (data: EditData) => void;
   onEdit: (field: 'name' | 'fees' | 'duration') => void;
   onSave: (field: 'name' | 'fees' | 'duration') => void;
   onCancel: (field: 'name' | 'fees' | 'duration') => void;
   saving: boolean;
+  theme: 'light' | 'dark';
 }
 
-export const ProfileCard = ({ profile, editingField, editData, setEditData, onEdit, onSave, onCancel, saving }: ProfileCardProps) => {
+export const ProfileCard = ({ profile, editingField, editData, setEditData, onEdit, onSave, onCancel, saving, theme }: ProfileCardProps) => {
   return (
-    <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
+    <div className={`rounded-2xl shadow-lg border overflow-hidden ${
+      theme === 'dark' ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-100'
+    }`}>
       <div className="h-20 sm:h-28 md:h-32 bg-linear-to-r from-teal-500 via-teal-600 to-cyan-600 relative">
         <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAwIDEwIEwgNDAgMTAgTSAxMCAwIEwgMTAgNDAgTSAwIDIwIEwgNDAgMjAgTSAyMCAwIEwgMjAgNDAgTSAwIDMwIEwgNDAgMzAgTSAzMCAwIEwgMzAgNDAiIGZpbGw9Im5vbmUiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS1vcGFjaXR5PSIwLjA1IiBzdHJva2Utd2lkdGg9IjEiLz48L3BhdHRlcm4+PC9kZWZzPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JpZCkiLz48L3N2Zz4=')] opacity-30"></div>
       </div>
@@ -23,7 +26,9 @@ export const ProfileCard = ({ profile, editingField, editData, setEditData, onEd
       <div className="px-4 sm:px-5 md:px-6 pb-4 sm:pb-5 md:pb-6">
         <div className="flex flex-col min-[870px]:flex-row gap-3 sm:gap-5 md:gap-6 -mt-10 sm:-mt-14 md:-mt-16 relative">
           <div className="shrink-0 mx-auto min-[870px]:mx-0">
-            <div className="w-32 h-32 sm:w-28 sm:h-28 md:w-32 md:h-32 rounded-2xl bg-white p-2 shadow-xl">
+            <div className={`w-32 h-32 sm:w-28 sm:h-28 md:w-32 md:h-32 rounded-2xl p-2 shadow-xl ${
+              theme === 'dark' ? 'bg-gray-700' : 'bg-white'
+            }`}>
               {profile.photoUrl ? (
                 <Image 
                   src={profile.photoUrl} 
@@ -81,7 +86,9 @@ export const ProfileCard = ({ profile, editingField, editData, setEditData, onEd
                 ) : (
                   <div className="overflow-x-auto">
                     <div className="flex items-center gap-2 min-w-max">
-                      <h2 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold text-gray-900 whitespace-nowrap">
+                      <h2 className={`text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold whitespace-nowrap ${
+                        theme === 'dark' ? 'text-white' : 'text-gray-900'
+                      }`}>
                         {profile.title}. {profile.firstName} {profile.lastName}
                       </h2>
                       <button
@@ -153,7 +160,7 @@ export const ProfileCard = ({ profile, editingField, editData, setEditData, onEd
                     </button>
                   </div>
                 ) : (
-                  <p className="text-base sm:text-lg md:text-xl lg:text-2xl font-bold text-gray-900">${profile.fees}</p>
+                <p className="text-base sm:text-lg md:text-xl lg:text-2xl font-bold text-gray-900">${profile.fees}</p>
                 )}
               </div>
               
