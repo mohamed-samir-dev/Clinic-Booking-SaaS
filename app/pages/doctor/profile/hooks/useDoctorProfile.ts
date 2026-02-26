@@ -53,22 +53,40 @@ export const useDoctorProfile = () => {
 export const useProfileEdit = (profile: DoctorProfile | null) => {
   const [editMode, setEditMode] = useState(false);
   
-  const initialData = useMemo(() => 
-    profile ? {
-      firstName: profile.firstName,
-      lastName: profile.lastName,
-      email: profile.email,
-      fees: profile.fees,
-      consultationDuration: profile.consultationDuration,
-      phone: profile.phone || '',
-      location: { address: profile.location?.address || '', city: profile.location?.city || '' },
-      password: '',
-      aboutUs: profile.aboutUs?.en || '',
-      availability: profile.availability || [],
-      education: profile.education || []
-    } : {
+  const initialData = useMemo(() => {
+    if (profile) {
+      const nameObj = profile.name;
+      let firstNameAr = '';
+      let lastNameAr = '';
+      
+      if (typeof nameObj === 'object' && nameObj.ar) {
+        const parts = nameObj.ar.split(' ');
+        firstNameAr = parts[0] || '';
+        lastNameAr = parts.slice(1).join(' ') || '';
+      }
+      
+      return {
+        firstName: profile.firstName,
+        lastName: profile.lastName,
+        firstNameAr,
+        lastNameAr,
+        email: profile.email,
+        fees: profile.fees,
+        consultationDuration: profile.consultationDuration,
+        phone: profile.phone || '',
+        location: { address: profile.location?.address || '', city: profile.location?.city || '' },
+        password: '',
+        aboutUs: profile.aboutUs?.en || '',
+        availability: profile.availability || [],
+        education: profile.education || []
+      };
+    }
+    
+    return {
       firstName: '',
       lastName: '',
+      firstNameAr: '',
+      lastNameAr: '',
       email: '',
       fees: 0,
       consultationDuration: 20,
@@ -78,8 +96,8 @@ export const useProfileEdit = (profile: DoctorProfile | null) => {
       aboutUs: '',
       availability: [],
       education: []
-    }, [profile]
-  );
+    };
+  }, [profile]);
 
   const [editData, setEditData] = useState<EditData>(initialData);
 
