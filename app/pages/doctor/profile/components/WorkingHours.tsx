@@ -1,6 +1,8 @@
 import { Clock } from 'lucide-react';
 import { DoctorProfile, EditData, ClinicWorkingHours } from '../types';
 import { getClinicDayData } from '../utils/scheduleHelpers';
+import { useLanguage } from '@/app/contexts/LanguageContext';
+import translations from '@/messages/translations';
 
 interface WorkingHoursProps {
   profile: DoctorProfile;
@@ -37,6 +39,9 @@ export const WorkingHours = ({
   onUpdateTimeSlot,
   theme
 }: WorkingHoursProps) => {
+  const { locale } = useLanguage();
+  const t = translations[locale].doctor.profile;
+  
   return (
     <div className={`rounded-xl sm:rounded-2xl shadow-lg border p-4 sm:p-6 lg:p-8 ${
       theme === 'dark' ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-100'
@@ -48,14 +53,14 @@ export const WorkingHours = ({
           <div className="w-8 h-8 sm:w-9 sm:h-9 lg:w-10 lg:h-10 rounded-lg bg-gradient-to-br from-cyan-500 to-cyan-600 flex items-center justify-center">
             <Clock className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
           </div>
-          Working Hours
+          {t.workingHours}
         </h3>
         {!editingSchedule ? (
           <button
             onClick={onEditSchedule}
             className="px-3 sm:px-4 py-1.5 sm:py-2 bg-cyan-100 text-cyan-700 rounded-lg text-xs sm:text-sm font-semibold hover:bg-cyan-200 transition-all w-full sm:w-auto"
           >
-            Edit Schedule
+            {t.editSchedule}
           </button>
         ) : (
           <div className="flex gap-2 w-full sm:w-auto">
@@ -63,14 +68,14 @@ export const WorkingHours = ({
               onClick={onCancelSchedule}
               className="flex-1 sm:flex-none px-3 sm:px-4 py-1.5 sm:py-2 bg-gray-200 text-gray-700 rounded-lg text-xs sm:text-sm font-semibold hover:bg-gray-300 transition-all"
             >
-              Cancel
+              {t.cancel}
             </button>
             <button
               onClick={onSaveSchedule}
               disabled={savingSchedule}
               className="flex-1 sm:flex-none px-3 sm:px-4 py-1.5 sm:py-2 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-lg text-xs sm:text-sm font-semibold hover:shadow-lg transition-all disabled:opacity-50"
             >
-              {savingSchedule ? 'Saving...' : 'Save'}
+              {savingSchedule ? `${t.loading}` : t.save}
             </button>
           </div>
         )}
@@ -102,11 +107,11 @@ export const WorkingHours = ({
                 <div className="flex-1">
                   <h4 className={`font-bold capitalize text-sm sm:text-base ${
                     theme === 'dark' ? 'text-white' : 'text-gray-900'
-                  }`}>{day}</h4>
+                  }`}>{t.days[day as keyof typeof t.days]}</h4>
                   {isClinicOpen ? (
-                    <p className="text-xs sm:text-sm text-gray-500">Clinic: {clinicDay.openTime} - {clinicDay.closeTime}</p>
+                    <p className="text-xs sm:text-sm text-gray-500">{t.clinicHours}: {clinicDay.openTime} - {clinicDay.closeTime}</p>
                   ) : (
-                    <p className="text-xs sm:text-sm text-red-500">Clinic Closed</p>
+                    <p className="text-xs sm:text-sm text-red-500">{t.closed}</p>
                   )}
                 </div>
                 {editingSchedule && isClinicOpen && !daySchedule && (
@@ -114,7 +119,7 @@ export const WorkingHours = ({
                     onClick={() => onAddTimeSlot(day)}
                     className="px-3 py-1.5 bg-green-100 text-green-700 rounded-lg text-xs sm:text-sm font-semibold hover:bg-green-200 w-full sm:w-auto"
                   >
-                    + Add Slot
+                    + {t.addTimeSlot}
                   </button>
                 )}
               </div>
@@ -146,7 +151,7 @@ export const WorkingHours = ({
                             onClick={() => onRemoveTimeSlot(day, idx)}
                             className="px-2 py-1.5 bg-red-100 text-red-600 rounded text-xs sm:text-sm font-semibold hover:bg-red-200 w-full sm:w-auto sm:ml-auto"
                           >
-                            Remove
+                            {t.remove}
                           </button>
                         </>
                       ) : (
@@ -158,7 +163,7 @@ export const WorkingHours = ({
                   ))}
                 </div>
               ) : (
-                <p className="text-xs sm:text-sm text-gray-400 italic mt-2">No working hours set</p>
+                <p className="text-xs sm:text-sm text-gray-400 italic mt-2">{t.noWorkingHoursSet}</p>
               )}
             </div>
           );
