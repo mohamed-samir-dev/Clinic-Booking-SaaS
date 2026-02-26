@@ -21,7 +21,7 @@ export default function SchedulePage() {
   };
 
   return (
-    <div className="h-screen overflow-y-auto bg-linear-to-br from-gray-50 to-gray-100 p-5">
+    <div className="h-screen overflow-y-auto bg-linear-to-br from-gray-50 to-gray-100 p-3 sm:p-5">
       <div className="max-w-7xl mx-auto">
         <ScheduleHeader />
         <StatusLegend />
