@@ -1,6 +1,8 @@
 import Image from 'next/image';
 import { Star, Briefcase, DollarSign, Clock, Award, Edit2, Check, X } from 'lucide-react';
 import { DoctorProfile, EditData } from '../types';
+import { useLanguage } from '@/app/contexts/LanguageContext';
+import translations from '@/messages/translations';
 
 interface ProfileCardProps {
   profile: DoctorProfile;
@@ -15,6 +17,17 @@ interface ProfileCardProps {
 }
 
 export const ProfileCard = ({ profile, editingField, editData, setEditData, onEdit, onSave, onCancel, saving, theme }: ProfileCardProps) => {
+  const { locale } = useLanguage();
+  const t = translations[locale];
+
+  const getText = (value: string | { en: string; ar: string } | undefined): string => {
+    if (typeof value === 'string') return value;
+    if (value && typeof value === 'object') {
+      return value[locale] || value.en || value.ar || '';
+    }
+    return String(value || '');
+  };
+
   return (
     <div className={`rounded-2xl shadow-lg border overflow-hidden ${
       theme === 'dark' ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-100'
@@ -49,38 +62,56 @@ export const ProfileCard = ({ profile, editingField, editData, setEditData, onEd
             <div className="flex flex-col gap-3">
               <div className="flex-1">
                 {editingField === 'name' ? (
-                  <div className="w-full">
+                  <div className="w-full space-y-2">
                     <div className="flex flex-col min-[670px]:flex-row gap-2 items-stretch min-[670px]:items-center w-full">
                       <input
                         type="text"
                         value={editData.firstName}
                         onChange={(e) => setEditData({...editData, firstName: e.target.value})}
                         className="flex-1 px-2 sm:px-3 py-1.5 sm:py-2 border-2 border-teal-400 rounded-xl font-semibold text-sm sm:text-base text-gray-900 focus:outline-none focus:border-teal-600 bg-white shadow-md"
-                        placeholder="First Name"
+                        placeholder="First Name (English)"
                       />
                       <input
                         type="text"
                         value={editData.lastName}
                         onChange={(e) => setEditData({...editData, lastName: e.target.value})}
                         className="flex-1 px-2 sm:px-3 py-1.5 sm:py-2 border-2 border-teal-400 rounded-xl font-semibold text-sm sm:text-base text-gray-900 focus:outline-none focus:border-teal-600 bg-white shadow-md"
-                        placeholder="Last Name"
+                        placeholder="Last Name (English)"
                       />
-                      <div className="flex gap-2 shrink-0">
-                        <button
-                          onClick={() => onSave('name')}
-                          disabled={saving}
-                          className="flex-1 min-[670px]:flex-none p-1.5 sm:p-2 bg-green-500 hover:bg-green-600 text-white rounded-lg disabled:opacity-50"
-                        >
-                          <Check className="w-4 h-4" />
-                        </button>
-                        <button
-                          onClick={() => onCancel('name')}
-                          disabled={saving}
-                          className="flex-1 min-[670px]:flex-none p-1.5 sm:p-2 bg-red-500 hover:bg-red-600 text-white rounded-lg disabled:opacity-50"
-                        >
-                          <X className="w-4 h-4" />
-                        </button>
-                      </div>
+                    </div>
+                    <div className="flex flex-col min-[670px]:flex-row gap-2 items-stretch min-[670px]:items-center w-full">
+                      <input
+                        type="text"
+                        value={editData.firstNameAr || ''}
+                        onChange={(e) => setEditData({...editData, firstNameAr: e.target.value})}
+                        className="flex-1 px-2 sm:px-3 py-1.5 sm:py-2 border-2 border-teal-400 rounded-xl font-semibold text-sm sm:text-base text-gray-900 focus:outline-none focus:border-teal-600 bg-white shadow-md"
+                        placeholder="الاسم الأول (عربي)"
+                        dir="rtl"
+                      />
+                      <input
+                        type="text"
+                        value={editData.lastNameAr || ''}
+                        onChange={(e) => setEditData({...editData, lastNameAr: e.target.value})}
+                        className="flex-1 px-2 sm:px-3 py-1.5 sm:py-2 border-2 border-teal-400 rounded-xl font-semibold text-sm sm:text-base text-gray-900 focus:outline-none focus:border-teal-600 bg-white shadow-md"
+                        placeholder="الاسم الأخير (عربي)"
+                        dir="rtl"
+                      />
+                    </div>
+                    <div className="flex gap-2">
+                      <button
+                        onClick={() => onSave('name')}
+                        disabled={saving}
+                        className="flex-1 p-1.5 sm:p-2 bg-green-500 hover:bg-green-600 text-white rounded-lg disabled:opacity-50"
+                      >
+                        <Check className="w-4 h-4" />
+                      </button>
+                      <button
+                        onClick={() => onCancel('name')}
+                        disabled={saving}
+                        className="flex-1 p-1.5 sm:p-2 bg-red-500 hover:bg-red-600 text-white rounded-lg disabled:opacity-50"
+                      >
+                        <X className="w-4 h-4" />
+                      </button>
                     </div>
                   </div>
                 ) : (
@@ -89,21 +120,21 @@ export const ProfileCard = ({ profile, editingField, editData, setEditData, onEd
                       <h2 className={`text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold whitespace-nowrap ${
                         theme === 'dark' ? 'text-white' : 'text-gray-900'
                       }`}>
-                        {profile.title}. {profile.firstName} {profile.lastName}
+                        {profile.title}. {getText(profile.name)}
                       </h2>
                       <button
                         onClick={() => onEdit('name')}
                         className="p-1.5 bg-teal-100 hover:bg-teal-200 rounded-lg transition-colors group shrink-0"
-                        title="Edit Name"
+                        title={locale === 'ar' ? 'تعديل الاسم' : 'Edit Name'}
                       >
                         <Edit2 className="w-4 h-4 text-teal-600 group-hover:text-teal-700" />
                       </button>
                     </div>
                   </div>
                 )}
-                <p className="text-sm sm:text-base md:text-lg text-teal-600 font-semibold mt-1">{profile.specialty.en}</p>
-                {profile.brief?.en && (
-                  <p className="text-xs sm:text-sm text-gray-600 mt-1.5 sm:mt-2 line-clamp-2">{profile.brief.en}</p>
+                <p className="text-sm sm:text-base md:text-lg text-teal-600 font-semibold mt-1">{getText(profile.specialty)}</p>
+                {profile.brief && (
+                  <p className="text-xs sm:text-sm text-gray-600 mt-1.5 sm:mt-2 line-clamp-2">{getText(profile.brief)}</p>
                 )}
               </div>
               <div className="flex items-center gap-1.5 sm:gap-2 bg-linear-to-r from-yellow-50 to-amber-50 px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-xl border border-yellow-200 self-start">
@@ -117,20 +148,20 @@ export const ProfileCard = ({ profile, editingField, editData, setEditData, onEd
               <div className="bg-linear-to-br from-blue-50 to-blue-100 rounded-xl p-2.5 sm:p-3">
                 <div className="flex items-center gap-1 sm:gap-1.5 text-blue-600 mb-0.5 sm:mb-1">
                   <Briefcase className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
-                  <span className="text-[10px] sm:text-xs font-semibold">Experience</span>
+                  <span className="text-[10px] sm:text-xs font-semibold">{locale === 'ar' ? 'الخبرة' : 'Experience'}</span>
                 </div>
-                <p className="text-base sm:text-lg md:text-xl lg:text-2xl font-bold text-gray-900">{profile.experienceYears}<span className="text-[10px] sm:text-xs md:text-sm ml-0.5 sm:ml-1">Years</span></p>
+                <p className="text-base sm:text-lg md:text-xl lg:text-2xl font-bold text-gray-900">{profile.experienceYears}<span className="text-[10px] sm:text-xs md:text-sm ml-0.5 sm:ml-1">{locale === 'ar' ? 'سنوات' : 'Years'}</span></p>
               </div>
               
               <div className="bg-linear-to-br from-green-50 to-green-100 rounded-xl p-2.5 sm:p-3">
                 <div className="flex items-center gap-1 sm:gap-1.5 text-green-600 mb-0.5 sm:mb-1">
                   <DollarSign className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
-                  <span className="text-[10px] sm:text-xs font-semibold">Fee</span>
+                  <span className="text-[10px] sm:text-xs font-semibold">{locale === 'ar' ? 'الرسوم' : 'Fee'}</span>
                   {editingField !== 'fees' && (
                     <button
                       onClick={() => onEdit('fees')}
                       className="ml-auto p-1 bg-green-200 hover:bg-green-300 rounded-lg transition-colors group"
-                      title="Edit Fee"
+                      title={locale === 'ar' ? 'تعديل الرسوم' : 'Edit Fee'}
                     >
                       <Edit2 className="w-3 h-3 text-green-700 group-hover:text-green-800" />
                     </button>
@@ -167,12 +198,12 @@ export const ProfileCard = ({ profile, editingField, editData, setEditData, onEd
               <div className="bg-linear-to-br from-purple-50 to-purple-100 rounded-xl p-2.5 sm:p-3">
                 <div className="flex items-center gap-1 sm:gap-1.5 text-purple-600 mb-0.5 sm:mb-1">
                   <Clock className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
-                  <span className="text-[10px] sm:text-xs font-semibold">Duration</span>
+                  <span className="text-[10px] sm:text-xs font-semibold">{locale === 'ar' ? 'المدة' : 'Duration'}</span>
                   {editingField !== 'duration' && (
                     <button
                       onClick={() => onEdit('duration')}
                       className="ml-auto p-1 bg-purple-200 hover:bg-purple-300 rounded-lg transition-colors group"
-                      title="Edit Duration"
+                      title={locale === 'ar' ? 'تعديل المدة' : 'Edit Duration'}
                     >
                       <Edit2 className="w-3 h-3 text-purple-700 group-hover:text-purple-800" />
                     </button>
@@ -185,11 +216,11 @@ export const ProfileCard = ({ profile, editingField, editData, setEditData, onEd
                       onChange={(e) => setEditData({...editData, consultationDuration: Number(e.target.value)})}
                       className="w-full px-1.5 py-0.5 sm:px-2 sm:py-1 border-2 border-purple-400 rounded-lg font-semibold text-xs sm:text-sm text-gray-900 focus:outline-none focus:border-purple-600 bg-white shadow-md"
                     >
-                      <option value={15}>15 min</option>
-                      <option value={20}>20 min</option>
-                      <option value={30}>30 min</option>
-                      <option value={45}>45 min</option>
-                      <option value={60}>60 min</option>
+                      <option value={15}>15 {locale === 'ar' ? 'دقيقة' : 'min'}</option>
+                      <option value={20}>20 {locale === 'ar' ? 'دقيقة' : 'min'}</option>
+                      <option value={30}>30 {locale === 'ar' ? 'دقيقة' : 'min'}</option>
+                      <option value={45}>45 {locale === 'ar' ? 'دقيقة' : 'min'}</option>
+                      <option value={60}>60 {locale === 'ar' ? 'دقيقة' : 'min'}</option>
                     </select>
                     <button
                       onClick={() => onSave('duration')}
@@ -207,14 +238,14 @@ export const ProfileCard = ({ profile, editingField, editData, setEditData, onEd
                     </button>
                   </div>
                 ) : (
-                  <p className="text-base sm:text-lg md:text-xl lg:text-2xl font-bold text-gray-900">{profile.consultationDuration}<span className="text-[10px] sm:text-xs md:text-sm ml-0.5 sm:ml-1">min</span></p>
+                  <p className="text-base sm:text-lg md:text-xl lg:text-2xl font-bold text-gray-900">{profile.consultationDuration}<span className="text-[10px] sm:text-xs md:text-sm ml-0.5 sm:ml-1">{locale === 'ar' ? 'دقيقة' : 'min'}</span></p>
                 )}
               </div>
               
               <div className="bg-linear-to-br from-orange-50 to-orange-100 rounded-xl p-2.5 sm:p-3">
                 <div className="flex items-center gap-1 sm:gap-1.5 text-orange-600 mb-0.5 sm:mb-1">
                   <Award className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
-                  <span className="text-[10px] sm:text-xs font-semibold">Status</span>
+                  <span className="text-[10px] sm:text-xs font-semibold">{locale === 'ar' ? 'الحالة' : 'Status'}</span>
                 </div>
                 <p className="text-sm sm:text-base md:text-lg font-bold text-gray-900 capitalize">{profile.status}</p>
               </div>
