@@ -126,6 +126,7 @@ export default function TimeSlots({
           showAll={showAllMorning}
           setShowAll={setShowAllMorning}
           bookedSlots={bookedSlots}
+          selectedDate={selectedDate}
         />
         <TimePeriod
           title={TIME_PERIODS.AFTERNOON.label}
@@ -138,6 +139,7 @@ export default function TimeSlots({
           showAll={showAllAfternoon}
           setShowAll={setShowAllAfternoon}
           bookedSlots={bookedSlots}
+          selectedDate={selectedDate}
         />
         <TimePeriod
           title={TIME_PERIODS.EVENING.label}
@@ -150,6 +152,7 @@ export default function TimeSlots({
           showAll={showAllEvening}
           setShowAll={setShowAllEvening}
           bookedSlots={bookedSlots}
+          selectedDate={selectedDate}
         />
       </div>
     </div>

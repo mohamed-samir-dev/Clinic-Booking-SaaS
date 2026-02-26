@@ -1,6 +1,7 @@
 import { useTheme } from '@/app/contexts/ThemeContext';
 import { useLanguage } from '@/app/contexts/LanguageContext';
 import translations from '@/messages/translations';
+import { isTimePassed } from '../utils/timeUtils';
 
 interface TimePeriodProps {
   title: string;
@@ -13,6 +14,7 @@ interface TimePeriodProps {
   showAll: boolean;
   setShowAll: (show: boolean) => void;
   bookedSlots: string[];
+  selectedDate: Date | null;
 }
 
 export default function TimePeriod({
@@ -25,7 +27,8 @@ export default function TimePeriod({
   setSelectedTime,
   showAll,
   setShowAll,
-  bookedSlots
+  bookedSlots,
+  selectedDate
 }: TimePeriodProps) {
   const { theme } = useTheme();
   const { locale } = useLanguage();
@@ -45,13 +48,15 @@ export default function TimePeriod({
       <div className="grid grid-cols-2 gap-1.5 sm:gap-2">
         {displayedSlots.map(time => {
           const isBooked = bookedSlots.includes(time);
+          const isPassed = isTimePassed(time, selectedDate);
+          const isDisabled = isBooked || isPassed;
           return (
             <button
               key={time}
-              onClick={() => !isBooked && setSelectedTime(time)}
-              disabled={isBooked}
+              onClick={() => !isDisabled && setSelectedTime(time)}
+              disabled={isDisabled}
               className={`py-1.5 sm:py-2 px-2 sm:px-3 rounded-lg text-xs sm:text-sm font-medium transition-all ${
-                isBooked
+                isDisabled
                   ? theme === 'dark' ? 'bg-gray-700 text-gray-500 cursor-not-allowed opacity-50' : 'bg-gray-200 text-gray-400 cursor-not-allowed opacity-50'
                   : selectedTime === time
                   ? 'bg-teal-500 text-white'
