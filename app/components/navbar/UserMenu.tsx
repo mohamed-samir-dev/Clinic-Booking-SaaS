@@ -28,7 +28,7 @@ export default function UserMenu({ user, showDropdown, setShowDropdown, handleLo
         onClick={() => setShowDropdown(!showDropdown)}
         className="w-10 h-10 rounded-full bg-linear-to-br from-teal-500 to-teal-600 flex items-center justify-center text-white font-semibold shadow-md hover:shadow-lg transition-all hover:scale-105"
       >
-        {user.name?.charAt(0).toUpperCase() || <FaUser />}
+        {(typeof user.name === 'string' && user.name.charAt(0).toUpperCase()) || <FaUser />}
       </button>
       {showDropdown && (
         <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2 z-50">
