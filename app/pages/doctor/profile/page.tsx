@@ -10,12 +10,16 @@ import { Specializations, LanguagesSection } from './components/SpecializationsA
 import { WorkingHours } from './components/WorkingHours';
 import { validateWorkingHours, addTimeSlot, removeTimeSlot, updateTimeSlot } from './utils/scheduleHelpers';
 import { Toast } from './components/Toast';
+import { useLanguage } from '@/app/contexts/LanguageContext';
+import translations from '@/messages/translations';
 
 type EditingField = 'name' | 'fees' | 'duration' | 'email' | 'phone' | 'location' | 'password' | 'about' | 'education' | null;
 
 export default function DoctorProfilePage() {
   const { profile, setProfile, loading, clinicHours, token } = useDoctorProfile();
   const { editData, setEditData } = useProfileEdit(profile);
+  const { locale } = useLanguage();
+  const t = translations[locale];
   const [editingSchedule, setEditingSchedule] = useState(false);
   const [savingSchedule, setSavingSchedule] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
@@ -26,6 +30,14 @@ export default function DoctorProfilePage() {
   const [theme, setTheme] = useState<'light' | 'dark'>('light');
   const [showFullAbout, setShowFullAbout] = useState(false);
   const [editingAbout, setEditingAbout] = useState(false);
+
+  const getText = (value: string | { en: string; ar: string } | undefined): string => {
+    if (typeof value === 'string') return value;
+    if (value && typeof value === 'object') {
+      return value[locale] || value.en || value.ar || '';
+    }
+    return String(value || '');
+  };
 
   useEffect(() => {
     const savedTheme = localStorage.getItem('theme') as 'light' | 'dark' | null;
@@ -46,7 +58,7 @@ export default function DoctorProfilePage() {
     setErrorMessage('');
     setSuccessMessage('');
     
-    const validation = validateWorkingHours(editData.availability, clinicHours);
+    const validation = validateWorkingHours(editData.availability, clinicHours, locale);
     if (!validation.valid) {
       setErrorMessage(validation.error || 'Invalid working hours');
       return;
@@ -72,7 +84,7 @@ export default function DoctorProfilePage() {
       const data = await response.json();
       setProfile(data);
       setEditingSchedule(false);
-      setSuccessMessage('Working hours updated successfully!');
+      setSuccessMessage(t.doctor.profile.workingHoursUpdated);
       setTimeout(() => setSuccessMessage(''), 3000);
     } catch (error: unknown) {
       setErrorMessage(error instanceof Error ? error.message : 'Failed to update schedule');
@@ -95,7 +107,15 @@ export default function DoctorProfilePage() {
       
       switch(field) {
         case 'name':
-          updateData = { firstName: editData.firstName, lastName: editData.lastName };
+          const nameEn = `${editData.firstName} ${editData.lastName}`;
+          const nameAr = editData.firstNameAr && editData.lastNameAr 
+            ? `${editData.firstNameAr} ${editData.lastNameAr}` 
+            : nameEn;
+          updateData = { 
+            firstName: editData.firstName, 
+            lastName: editData.lastName,
+            name: { en: nameEn, ar: nameAr }
+          };
           break;
         case 'fees':
           updateData = { fees: editData.fees };
@@ -114,14 +134,20 @@ export default function DoctorProfilePage() {
           break;
         case 'password':
           if (!editData.password) {
-            showToast('Please enter a new password', 'error');
+            showToast(t.doctor.profile.enterNewPassword, 'error');
             setFieldSaving(false);
             return;
           }
           updateData = { password: editData.password };
           break;
         case 'about':
-          updateData = { aboutUs: { en: editData.aboutUs, ar: editData.aboutUs } };
+          const currentAboutUs = profile.aboutUs || { en: '', ar: '' };
+          updateData = { 
+            aboutUs: { 
+              en: locale === 'en' ? editData.aboutUs : (typeof currentAboutUs === 'string' ? currentAboutUs : currentAboutUs.en || ''),
+              ar: locale === 'ar' ? editData.aboutUs : (typeof currentAboutUs === 'string' ? currentAboutUs : currentAboutUs.ar || '')
+            } 
+          };
           break;
         case 'education':
           updateData = { education: editData.education };
@@ -148,7 +174,7 @@ export default function DoctorProfilePage() {
       if (field === 'password') {
         setEditData({...editData, password: ''});
       }
-      showToast('Updated successfully!', 'success');
+      showToast(t.doctor.profile.updatedSuccessfully, 'success');
     } catch (error: unknown) {
       showToast(error instanceof Error ? error.message : 'Failed to update', 'error');
     } finally {
@@ -161,7 +187,23 @@ export default function DoctorProfilePage() {
     
     switch(field) {
       case 'name':
-        setEditData({...editData, firstName: profile.firstName, lastName: profile.lastName});
+        const nameObj = profile.name;
+        let firstNameAr = '';
+        let lastNameAr = '';
+        
+        if (typeof nameObj === 'object' && nameObj.ar) {
+          const parts = nameObj.ar.split(' ');
+          firstNameAr = parts[0] || '';
+          lastNameAr = parts.slice(1).join(' ') || '';
+        }
+        
+        setEditData({
+          ...editData, 
+          firstName: profile.firstName, 
+          lastName: profile.lastName,
+          firstNameAr,
+          lastNameAr
+        });
         break;
       case 'fees':
         setEditData({...editData, fees: profile.fees});
@@ -182,7 +224,7 @@ export default function DoctorProfilePage() {
         setEditData({...editData, password: ''});
         break;
       case 'about':
-        setEditData({...editData, aboutUs: profile.aboutUs?.en || ''});
+        setEditData({...editData, aboutUs: getText(profile.aboutUs)});
         break;
       case 'education':
         setEditData({...editData, education: profile.education || []});
@@ -208,7 +250,9 @@ export default function DoctorProfilePage() {
       <div className={`h-full flex items-center justify-center ${
         theme === 'dark' ? 'bg-gray-900' : 'bg-gray-50'
       }`}>
-        <p className={theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}>Failed to load profile</p>
+        <p className={theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}>
+          {t.doctor.profile.failedToLoad}
+        </p>
       </div>
     );
   }
@@ -233,7 +277,7 @@ export default function DoctorProfilePage() {
         />
 
         <div className="space-y-4 sm:space-y-6">
-          {profile.aboutUs?.en && (
+          {(profile.aboutUs?.en || profile.aboutUs?.ar) && (
             <div className={`rounded-2xl shadow-lg border p-4 sm:p-6 ${
               theme === 'dark' ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-100'
             }`}>
@@ -244,7 +288,7 @@ export default function DoctorProfilePage() {
                   <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-linear-to-br from-teal-500 to-cyan-600 flex items-center justify-center">
                     <span className="material-icons text-white text-sm">info</span>
                   </div>
-                  About Me
+                  {t.doctor.profile.aboutMe}
                 </h3>
                 {!editingAbout && (
                   <button
@@ -258,37 +302,89 @@ export default function DoctorProfilePage() {
               </div>
               {editingAbout ? (
                 <div className="space-y-3">
-                  <textarea
-                    value={editData.aboutUs}
-                    onChange={(e) => setEditData({...editData, aboutUs: e.target.value})}
-                    className={`w-full px-3 py-2 border-2 rounded-lg text-sm resize-none focus:outline-none ${
-                      theme === 'dark' 
-                        ? 'bg-gray-700 border-gray-600 text-white focus:border-teal-500' 
-                        : 'bg-white border-teal-400 text-gray-900 focus:border-teal-600'
-                    }`}
-                    rows={6}
-                    placeholder="Write about yourself..."
-                  />
+                  <div>
+                    <label className={`block text-xs font-semibold mb-1 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>
+                      {locale === 'ar' ? 'النص بالإنجليزية' : 'English Text'}
+                    </label>
+                    <textarea
+                      value={typeof profile.aboutUs === 'string' ? profile.aboutUs : (profile.aboutUs?.en || '')}
+                      onChange={(e) => {
+                        const currentAbout = profile.aboutUs || { en: '', ar: '' };
+                        const updatedAbout = typeof currentAbout === 'string' 
+                          ? { en: e.target.value, ar: currentAbout }
+                          : { ...currentAbout, en: e.target.value };
+                        setProfile({...profile, aboutUs: updatedAbout});
+                      }}
+                      className={`w-full px-3 py-2 border-2 rounded-lg text-sm resize-none focus:outline-none ${
+                        theme === 'dark' 
+                          ? 'bg-gray-700 border-gray-600 text-white focus:border-teal-500' 
+                          : 'bg-white border-teal-400 text-gray-900 focus:border-teal-600'
+                      }`}
+                      rows={4}
+                      placeholder="Write about yourself in English..."
+                    />
+                  </div>
+                  <div>
+                    <label className={`block text-xs font-semibold mb-1 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>
+                      {locale === 'ar' ? 'النص بالعربية' : 'Arabic Text'}
+                    </label>
+                    <textarea
+                      value={typeof profile.aboutUs === 'string' ? profile.aboutUs : (profile.aboutUs?.ar || '')}
+                      onChange={(e) => {
+                        const currentAbout = profile.aboutUs || { en: '', ar: '' };
+                        const updatedAbout = typeof currentAbout === 'string' 
+                          ? { en: currentAbout, ar: e.target.value }
+                          : { ...currentAbout, ar: e.target.value };
+                        setProfile({...profile, aboutUs: updatedAbout});
+                      }}
+                      className={`w-full px-3 py-2 border-2 rounded-lg text-sm resize-none focus:outline-none ${
+                        theme === 'dark' 
+                          ? 'bg-gray-700 border-gray-600 text-white focus:border-teal-500' 
+                          : 'bg-white border-teal-400 text-gray-900 focus:border-teal-600'
+                      }`}
+                      rows={4}
+                      placeholder="اكتب عن نفسك بالعربية..."
+                      dir="rtl"
+                    />
+                  </div>
                   <div className="flex gap-2">
                     <button
                       onClick={async () => {
-                        await handleFieldSave('about');
-                        setEditingAbout(false);
+                        const updateData = { aboutUs: profile.aboutUs };
+                        try {
+                          setFieldSaving(true);
+                          const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/doctors/profile`, {
+                            method: 'PUT',
+                            headers: {
+                              'Authorization': `Bearer ${token}`,
+                              'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(updateData)
+                          });
+                          if (!response.ok) throw new Error('Failed to update');
+                          const data = await response.json();
+                          setProfile(data);
+                          setEditingAbout(false);
+                          showToast(t.doctor.profile.updatedSuccessfully, 'success');
+                        } catch (error) {
+                          showToast(error instanceof Error ? error.message : 'Failed to update', 'error');
+                        } finally {
+                          setFieldSaving(false);
+                        }
                       }}
                       disabled={fieldSaving}
                       className="flex-1 py-2 px-3 bg-green-500 hover:bg-green-600 text-white rounded-lg disabled:opacity-50 font-semibold flex items-center justify-center gap-2 text-sm"
                     >
-                      <span className="material-icons text-sm">check</span> Save
+                      <span className="material-icons text-sm">check</span> {t.doctor.profile.save}
                     </button>
                     <button
                       onClick={() => {
-                        handleFieldCancel('about');
                         setEditingAbout(false);
                       }}
                       disabled={fieldSaving}
                       className="flex-1 py-2 px-3 bg-red-500 hover:bg-red-600 text-white rounded-lg disabled:opacity-50 font-semibold flex items-center justify-center gap-2 text-sm"
                     >
-                      <span className="material-icons text-sm">close</span> Cancel
+                      <span className="material-icons text-sm">close</span> {t.doctor.profile.cancel}
                     </button>
                   </div>
                 </div>
@@ -304,16 +400,16 @@ export default function DoctorProfilePage() {
                       overflow: showFullAbout ? 'visible' : 'hidden'
                     }}
                   >
-                    {profile.aboutUs.en}
+                    {getText(profile.aboutUs)}
                   </p>
-                  {profile.aboutUs.en.length > 200 && (
+                  {getText(profile.aboutUs).length > 200 && (
                     <button
                       onClick={() => setShowFullAbout(!showFullAbout)}
                       className={`mt-3 text-sm font-semibold hover:underline transition-colors ${
                         theme === 'dark' ? 'text-teal-400 hover:text-teal-300' : 'text-teal-600 hover:text-teal-700'
                       }`}
                     >
-                      {showFullAbout ? 'View Less' : 'View More'}
+                      {showFullAbout ? t.doctor.profile.viewLess : t.doctor.profile.viewMore}
                     </button>
                   )}
                 </div>
