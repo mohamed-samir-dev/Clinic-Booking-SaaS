@@ -6,20 +6,27 @@ import { getStatusColor } from '../utils/calendarHelpers';
 interface DayDetailsSidebarProps {
   selectedDate: Date | null;
   appointments: Appointment[];
+  theme: 'light' | 'dark';
 }
 
-export const DayDetailsSidebar = ({ selectedDate, appointments }: DayDetailsSidebarProps) => {
+export const DayDetailsSidebar = ({ selectedDate, appointments, theme }: DayDetailsSidebarProps) => {
   return (
-    <div className="bg-white rounded-xl sm:rounded-2xl shadow-lg p-3 sm:p-5 border border-gray-100">
+    <div className={`rounded-xl sm:rounded-2xl shadow-lg p-3 sm:p-5 border ${
+      theme === 'dark' ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-100'
+    }`}>
       <div className="flex items-center gap-2 mb-3 sm:mb-5">
         <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-linear-to-br from-teal-500 to-cyan-600 flex items-center justify-center">
           <span className="material-icons text-white text-base sm:text-lg">event_note</span>
         </div>
         <div>
-          <h3 className="text-sm sm:text-base font-bold text-gray-900">
+          <h3 className={`text-sm sm:text-base font-bold ${
+            theme === 'dark' ? 'text-white' : 'text-gray-900'
+          }`}>
             {selectedDate ? selectedDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : 'Select a Date'}
           </h3>
-          <p className="text-[10px] sm:text-xs text-gray-600 font-medium">
+          <p className={`text-[10px] sm:text-xs font-medium ${
+            theme === 'dark' ? 'text-gray-400' : 'text-gray-600'
+          }`}>
             {appointments.length} appointment{appointments.length !== 1 ? 's' : ''}
           </p>
         </div>
@@ -37,27 +44,37 @@ export const DayDetailsSidebar = ({ selectedDate, appointments }: DayDetailsSide
                   <span className="material-icons text-white text-sm sm:text-base">person</span>
                 </div>
                 <div className="flex-1 min-w-0">
-                  <h4 className="font-bold text-gray-900 text-xs sm:text-sm mb-1">
+                  <h4 className={`font-bold text-xs sm:text-sm mb-1 ${
+                    theme === 'dark' ? 'text-black' : 'text-gray-900'
+                  }`}>
                     {apt.patientId?.name || apt.guestData?.fullName || 'Guest Patient'}
                   </h4>
                   <div className="space-y-0.5 sm:space-y-1 text-[10px] sm:text-xs">
-                    <div className="flex items-center gap-1 text-gray-600">
+                    <div className={`flex items-center gap-1 ${
+                      theme === 'dark' ? 'text-gray-600' : 'text-gray-600'
+                    }`}>
                       <span className="material-icons text-[10px] sm:text-xs">schedule</span>
                       <span className="font-bold">{apt.startTime} - {apt.endTime}</span>
                     </div>
                     {apt.patientId?.phone || apt.guestData?.phone ? (
-                      <div className="flex items-center gap-1 text-gray-600">
+                      <div className={`flex items-center gap-1 ${
+                        theme === 'dark' ? 'text-gray-600' : 'text-gray-600'
+                      }`}>
                         <span className="material-icons text-[10px] sm:text-xs">phone</span>
                         <span>{apt.patientId?.phone || apt.guestData?.phone}</span>
                       </div>
                     ) : null}
-                    <div className="flex items-center gap-1 text-gray-600">
+                    <div className={`flex items-center gap-1 ${
+                      theme === 'dark' ? 'text-gray-600' : 'text-gray-600'
+                    }`}>
                       <span className="material-icons text-[10px] sm:text-xs">medical_services</span>
                       <span className="capitalize">{apt.type}</span>
                     </div>
                     {apt.reason && (
                       <div className="mt-1 sm:mt-2 p-1.5 sm:p-2 bg-white/60 rounded-lg">
-                        <p className="text-gray-700 font-medium">{apt.reason}</p>
+                        <p className={`font-medium ${
+                          theme === 'dark' ? 'text-gray-900' : 'text-gray-700'
+                        }`}>{apt.reason}</p>
                       </div>
                     )}
                   </div>
