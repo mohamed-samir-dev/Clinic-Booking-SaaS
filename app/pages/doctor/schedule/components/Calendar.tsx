@@ -10,6 +10,7 @@ interface CalendarProps {
   selectedDate: Date | null;
   onDateSelect: (date: Date) => void;
   onMonthChange: (delta: number) => void;
+  theme: 'light' | 'dark';
 }
 
 export const Calendar = ({ 
@@ -18,10 +19,13 @@ export const Calendar = ({
   appointments, 
   selectedDate, 
   onDateSelect, 
-  onMonthChange 
+  onMonthChange,
+  theme
 }: CalendarProps) => {
   return (
-    <div className="lg:col-span-2 bg-white rounded-xl sm:rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
+    <div className={`lg:col-span-2 rounded-xl sm:rounded-2xl shadow-lg border overflow-hidden ${
+      theme === 'dark' ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-100'
+    }`}>
       <div className="bg-linear-to-r from-teal-500 to-cyan-600 p-3 sm:p-4">
         <div className="flex items-center justify-between">
           <button
@@ -42,15 +46,21 @@ export const Calendar = ({
         </div>
       </div>
 
-      <div className="grid grid-cols-7 bg-gray-50 border-b border-gray-200">
+      <div className={`grid grid-cols-7 border-b ${
+        theme === 'dark' ? 'bg-gray-700 border-gray-600' : 'bg-gray-50 border-gray-200'
+      }`}>
         {dayNames.map(day => (
-          <div key={day} className="p-1 sm:p-2 text-center font-bold text-gray-600 text-[10px] sm:text-xs">
+          <div key={day} className={`p-1 sm:p-2 text-center font-bold text-[10px] sm:text-xs ${
+            theme === 'dark' ? 'text-gray-300' : 'text-gray-600'
+          }`}>
             {day}
           </div>
         ))}
       </div>
 
-      <div className="grid grid-cols-7 gap-px bg-gray-200">
+      <div className={`grid grid-cols-7 gap-px ${
+        theme === 'dark' ? 'bg-gray-700' : 'bg-gray-200'
+      }`}>
         {days.map((day, index) => {
           const dayAppointments = day ? getAppointmentsForDate(day, appointments) : [];
           const isToday = day && day.toDateString() === new Date().toDateString();
@@ -61,8 +71,10 @@ export const Calendar = ({
             <div
               key={index}
               onClick={() => day && onDateSelect(day)}
-              className={`min-h-[60px] sm:min-h-[100px] bg-white p-1 sm:p-2 cursor-pointer transition-all hover:bg-gray-50 relative ${
-                !day ? 'bg-gray-50 cursor-default' : ''
+              className={`min-h-[60px] sm:min-h-[100px] p-1 sm:p-2 cursor-pointer transition-all relative ${
+                theme === 'dark' ? 'bg-gray-800 hover:bg-gray-750' : 'bg-white hover:bg-gray-50'
+              } ${
+                !day ? (theme === 'dark' ? 'bg-gray-900 cursor-default' : 'bg-gray-50 cursor-default') : ''
               } ${isSelected ? 'ring-2 ring-teal-500' : ''} ${isPast ? 'opacity-60' : ''}`}
             >
               {day && (
@@ -73,7 +85,7 @@ export const Calendar = ({
                     </div>
                   )}
                   <div className={`text-[10px] sm:text-xs font-bold mb-0.5 sm:mb-1 ${
-                    isToday ? 'bg-teal-500 text-white w-5 h-5 sm:w-6 sm:h-6 rounded-full flex items-center justify-center text-[10px] sm:text-xs' : 'text-gray-700'
+                    isToday ? 'bg-teal-500 text-white w-5 h-5 sm:w-6 sm:h-6 rounded-full flex items-center justify-center text-[10px] sm:text-xs' : (theme === 'dark' ? 'text-gray-300' : 'text-gray-700')
                   }`}>
                     {day.getDate()}
                   </div>
@@ -88,7 +100,9 @@ export const Calendar = ({
                       </div>
                     ))}
                     {dayAppointments.length > 2 && (
-                      <div className="text-[8px] sm:text-[10px] text-gray-500 font-bold px-1 sm:px-1.5">
+                      <div className={`text-[8px] sm:text-[10px] font-bold px-1 sm:px-1.5 ${
+                        theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
+                      }`}>
                         +{dayAppointments.length - 2}
                       </div>
                     )}
