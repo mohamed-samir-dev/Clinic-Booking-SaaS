@@ -143,21 +143,21 @@ export default function DoctorPage() {
   return (
     <div className="h-screen overflow-y-auto bg-linear-to-br from-gray-50 via-white to-teal-50/30">
       {/* Header */}
-      <div className="bg-white/80 backdrop-blur-xl border-b border-gray-200/50 px-6 py-4 relative z-40">
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-2xl font-bold bg-linear-to-r from-teal-600 to-cyan-600 bg-clip-text text-transparent">
+      <div className="bg-white/80 backdrop-blur-xl border-b border-gray-200/50 px-3 sm:px-6 py-3 sm:py-4 relative z-40">
+        <div className="flex items-center justify-between gap-2">
+          <div className="flex-1 min-w-0">
+            <h1 className="text-lg sm:text-2xl font-bold bg-linear-to-r from-teal-600 to-cyan-600 bg-clip-text text-transparent truncate">
               Welcome back, Dr. {getText(user?.name).split(' ')[0] || 'Doctor'}! 👋
             </h1>
-            <p className="text-sm text-gray-600 mt-1 font-medium">Here&rsquo;s what&rsquo;s happening with your practice today</p>
+            <p className="text-xs sm:text-sm text-gray-600 mt-1 font-medium hidden sm:block">Here&rsquo;s what&rsquo;s happening with your practice today</p>
           </div>
-          <div className="flex items-center gap-2 relative z-50">
+          <div className="flex items-center gap-1 sm:gap-2 relative z-50">
             <div className="relative">
               <button 
                 onClick={() => setShowNotifications(!showNotifications)}
-                className="relative p-2 rounded-xl bg-linear-to-br from-teal-50 to-cyan-50 hover:from-teal-100 hover:to-cyan-100 transition-all shadow-sm hover:shadow-md"
+                className="relative p-1.5 sm:p-2 rounded-xl bg-linear-to-br from-teal-50 to-cyan-50 hover:from-teal-100 hover:to-cyan-100 transition-all shadow-sm hover:shadow-md"
               >
-                <span className="material-icons text-teal-600 text-lg">notifications</span>
+                <span className="material-icons text-teal-600 text-base sm:text-lg">notifications</span>
                 {pendingCount > 0 && (
                   <span className="absolute top-0 right-0 min-w-[18px] h-[18px] px-1 bg-red-500 text-white text-[11px] font-bold rounded-full flex items-center justify-center border-2 border-white">
                     {pendingCount}
@@ -207,61 +207,64 @@ export default function DoctorPage() {
                 </div>
               )}
             </div>
-            <button className="p-2 rounded-xl bg-linear-to-br from-gray-50 to-gray-100 hover:from-gray-100 hover:to-gray-200 transition-all shadow-sm hover:shadow-md">
-              <span className="material-icons text-gray-600 text-lg">settings</span>
-            </button>
+            <Link href="/pages/doctor/profile">
+              <button className="p-1.5 sm:p-2 rounded-xl bg-linear-to-br from-gray-50 to-gray-100 hover:from-gray-100 hover:to-gray-200 transition-all shadow-sm hover:shadow-md">
+                <span className="material-icons text-gray-600 text-base sm:text-lg">settings</span>
+              </button>
+            </Link>
           </div>
         </div>
       </div>
 
-      <div className="p-5">
+      <div className="p-3 sm:p-5">
         {/* Stats Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 mb-5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-2 sm:gap-4 mb-3 sm:mb-5">
           {stats.map((stat, index) => (
             <div 
               key={index} 
-              className="group relative bg-white rounded-2xl p-5 shadow-sm border border-gray-100 overflow-hidden"
+              className="group relative bg-white rounded-xl sm:rounded-2xl p-3 sm:p-5 shadow-sm border border-gray-100 overflow-hidden"
             >
               <div className="absolute inset-0 bg-linear-to-br from-teal-50/0 to-cyan-50/0"></div>
               <div className="relative z-10">
-                <div className="flex items-start justify-between mb-3">
-                  <div className={`w-11 h-11 rounded-xl bg-linear-to-br ${stat.color} flex items-center justify-center shadow-md`}>
-                    <span className="material-icons text-white text-xl">{stat.icon}</span>
+                <div className="flex items-start justify-between mb-2 sm:mb-3">
+                  <div className={`w-9 h-9 sm:w-11 sm:h-11 rounded-lg sm:rounded-xl bg-linear-to-br ${stat.color} flex items-center justify-center shadow-md`}>
+                    <span className="material-icons text-white text-base sm:text-xl">{stat.icon}</span>
                   </div>
                 </div>
-                <p className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-1.5">{stat.label}</p>
-                <h3 className="text-2xl font-bold text-gray-900">{stat.value}</h3>
+                <p className="text-[10px] sm:text-xs font-bold text-gray-500 uppercase tracking-wider mb-1 sm:mb-1.5">{stat.label}</p>
+                <h3 className="text-lg sm:text-2xl font-bold text-gray-900">{stat.value}</h3>
               </div>
             </div>
           ))}
         </div>
 
         {/* Main Content Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-3 sm:gap-5">
           {/* Live Patient Flow Card - Takes 2 columns */}
-          <div className="lg:col-span-2 bg-white rounded-2xl p-5 shadow-lg border border-gray-100">
-            <div className="flex items-center justify-between mb-5">
-              <div className="flex items-center gap-3">
-                <div className="w-11 h-11 rounded-xl bg-linear-to-br from-teal-500 to-cyan-600 flex items-center justify-center shadow-md">
-                  <span className="material-icons text-white text-xl">groups</span>
+          <div className="lg:col-span-2 bg-white rounded-xl sm:rounded-2xl p-3 sm:p-5 shadow-lg border border-gray-100">
+            <div className="flex items-center justify-between mb-3 sm:mb-5 gap-2">
+              <div className="flex items-center gap-2 sm:gap-3 flex-1 min-w-0">
+                <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-lg sm:rounded-xl bg-linear-to-br from-teal-500 to-cyan-600 flex items-center justify-center shadow-md shrink-0">
+                  <span className="material-icons text-white text-base sm:text-xl">groups</span>
                 </div>
-                <div>
-                  <h3 className="text-lg font-bold text-gray-900">Live Patient Flow</h3>
-                  <p className="text-sm text-gray-600 font-medium mt-0.5">
+                <div className="flex-1 min-w-0">
+                  <h3 className="text-sm sm:text-lg font-bold text-gray-900 truncate">Live Patient Flow</h3>
+                  <p className="text-xs sm:text-sm text-gray-600 font-medium mt-0.5">
                     <span className="text-teal-600 font-bold">{todayAppointments.length}</span> patients today
                   </p>
                 </div>
               </div>
               <Link 
                 href="/pages/doctor/schedule" 
-                className="px-4 py-2 bg-linear-to-r from-teal-500 to-cyan-600 hover:from-teal-600 hover:to-cyan-700 text-white rounded-xl text-sm font-bold transition-all shadow-md hover:shadow-lg flex items-center gap-1"
+                className="px-2 sm:px-4 py-1.5 sm:py-2 bg-linear-to-r from-teal-500 to-cyan-600 hover:from-teal-600 hover:to-cyan-700 text-white rounded-lg sm:rounded-xl text-xs sm:text-sm font-bold transition-all shadow-md hover:shadow-lg flex items-center gap-1 shrink-0"
               >
-                View Schedule
-                <span className="material-icons text-sm">arrow_forward</span>
+                <span className="hidden sm:inline">View Schedule</span>
+                <span className="sm:hidden">View</span>
+                <span className="material-icons text-xs sm:text-sm">arrow_forward</span>
               </Link>
             </div>
             
-            <div className="space-y-2.5 max-h-[420px] overflow-y-auto pr-2">
+            <div className="space-y-2 sm:space-y-2.5 max-h-[300px] sm:max-h-[420px] overflow-y-auto pr-1 sm:pr-2">
               {todayAppointments.length > 0 ? (
                 todayAppointments.map((appointment) => {
                   const statusConfig: Record<string, {
@@ -307,22 +310,22 @@ export default function DoctorPage() {
                   return (
                     <div 
                       key={appointment.id}
-                      className={`group bg-linear-to-br ${config.bgColor} rounded-xl border ${config.borderColor}`}
+                      className={`group bg-linear-to-br ${config.bgColor} rounded-lg sm:rounded-xl border ${config.borderColor}`}
                     >
-                      <div className="flex items-center gap-3 p-4">
-                        <div className={`w-11 h-11 rounded-xl bg-linear-to-br ${config.iconBg} flex items-center justify-center shrink-0 shadow-md`}>
-                          <span className="material-icons text-white text-xl">person</span>
+                      <div className="flex items-center gap-2 sm:gap-3 p-2.5 sm:p-4">
+                        <div className={`w-9 h-9 sm:w-11 sm:h-11 rounded-lg sm:rounded-xl bg-linear-to-br ${config.iconBg} flex items-center justify-center shrink-0 shadow-md`}>
+                          <span className="material-icons text-white text-base sm:text-xl">person</span>
                         </div>
                         
                         <div className="flex-1 min-w-0">
-                          <h4 className="font-bold text-gray-900 text-base mb-1">{getText(appointment.patientName)}</h4>
-                          <div className="flex items-center gap-2 text-sm">
-                            <span className={`font-bold ${config.textColor} px-2.5 py-0.5 rounded-lg bg-white/60`}>
+                          <h4 className="font-bold text-gray-900 text-sm sm:text-base mb-0.5 sm:mb-1 truncate">{getText(appointment.patientName)}</h4>
+                          <div className="flex items-center gap-1 sm:gap-2 text-xs sm:text-sm flex-wrap">
+                            <span className={`font-bold ${config.textColor} px-1.5 sm:px-2.5 py-0.5 rounded-md sm:rounded-lg bg-white/60 text-[10px] sm:text-sm`}>
                               {config.label}
                             </span>
-                            <span className="text-gray-400">•</span>
-                            <span className="text-gray-600 font-medium">{config.location}</span>
-                            <span className="text-gray-400">•</span>
+                            <span className="text-gray-400 hidden sm:inline">•</span>
+                            <span className="text-gray-600 font-medium hidden sm:inline">{config.location}</span>
+                            <span className="text-gray-400 hidden sm:inline">•</span>
                             <span className="font-bold text-teal-600">{appointment.time}</span>
                           </div>
                         </div>
@@ -343,43 +346,44 @@ export default function DoctorPage() {
           </div>
 
           {/* New Requests Card - Takes 1 column */}
-          <div className="bg-white rounded-2xl p-5 shadow-lg border border-gray-100">
-            <div className="flex items-center justify-between mb-5">
-              <div className="flex items-center gap-2">
-                <div className="w-11 h-11 rounded-xl bg-linear-to-br from-orange-500 to-amber-600 flex items-center justify-center shadow-md">
-                  <span className="material-icons text-white text-lg">notification_important</span>
+          <div className="bg-white rounded-xl sm:rounded-2xl p-3 sm:p-5 shadow-lg border border-gray-100">
+            <div className="flex items-center justify-between mb-3 sm:mb-5 gap-2">
+              <div className="flex items-center gap-2 flex-1 min-w-0">
+                <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-lg sm:rounded-xl bg-linear-to-br from-orange-500 to-amber-600 flex items-center justify-center shadow-md shrink-0">
+                  <span className="material-icons text-white text-base sm:text-lg">notification_important</span>
                 </div>
-                <div>
-                  <h3 className="text-base font-bold text-gray-900">New Requests</h3>
-                  <p className="text-xs text-gray-500 font-medium mt-0.5">Latest appointments</p>
+                <div className="flex-1 min-w-0">
+                  <h3 className="text-sm sm:text-base font-bold text-gray-900 truncate">New Requests</h3>
+                  <p className="text-[10px] sm:text-xs text-gray-500 font-medium mt-0.5">Latest appointments</p>
                 </div>
               </div>
               <Link 
                 href="/pages/doctor/requests" 
-                className="px-3 py-2 bg-linear-to-r from-orange-500 to-amber-600 hover:from-orange-600 hover:to-amber-700 text-white rounded-lg text-xs font-bold transition-all shadow-md hover:shadow-lg flex items-center gap-1"
+                className="px-2 sm:px-3 py-1.5 sm:py-2 bg-linear-to-r from-orange-500 to-amber-600 hover:from-orange-600 hover:to-amber-700 text-white rounded-lg text-[10px] sm:text-xs font-bold transition-all shadow-md hover:shadow-lg flex items-center gap-1 shrink-0"
               >
-                View All
-                <span className="material-icons text-sm">arrow_forward</span>
+                <span className="hidden sm:inline">View All</span>
+                <span className="sm:hidden">All</span>
+                <span className="material-icons text-xs sm:text-sm">arrow_forward</span>
               </Link>
             </div>
             
-            <div className="space-y-2.5 max-h-[420px] overflow-y-auto pr-2">
+            <div className="space-y-2 sm:space-y-2.5 max-h-[300px] sm:max-h-[420px] overflow-y-auto pr-1 sm:pr-2">
               {newRequests.length > 0 ? (
                 <>
                   {newRequests.map((request) => (
                     <div 
                       key={request.id}
-                      className="group bg-linear-to-br from-orange-50 to-amber-50 rounded-xl p-3 border border-orange-200"
+                      className="group bg-linear-to-br from-orange-50 to-amber-50 rounded-lg sm:rounded-xl p-2 sm:p-3 border border-orange-200"
                     >
-                      <div className="flex items-center gap-2.5 mb-2">
-                        <div className="w-10 h-10 rounded-lg bg-linear-to-br from-orange-500 to-amber-600 flex items-center justify-center shrink-0 shadow-md">
-                          <span className="material-icons text-white text-lg">person</span>
+                      <div className="flex items-center gap-2 sm:gap-2.5 mb-1.5 sm:mb-2">
+                        <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg bg-linear-to-br from-orange-500 to-amber-600 flex items-center justify-center shrink-0 shadow-md">
+                          <span className="material-icons text-white text-base sm:text-lg">person</span>
                         </div>
                         <div className="flex-1 min-w-0">
-                          <h4 className="font-bold text-gray-900 text-sm">{getText(request.patientName)}</h4>
-                          <div className="flex items-center gap-1 text-xs text-gray-500 mt-0.5">
-                            <span className="material-icons text-xs">schedule</span>
-                            <span className="font-medium">{request.requestedAgo}</span>
+                          <h4 className="font-bold text-gray-900 text-xs sm:text-sm truncate">{getText(request.patientName)}</h4>
+                          <div className="flex items-center gap-1 text-[10px] sm:text-xs text-gray-500 mt-0.5">
+                            <span className="material-icons text-[10px] sm:text-xs">schedule</span>
+                            <span className="font-medium truncate">{request.requestedAgo}</span>
                           </div>
                         </div>
                       </div>
