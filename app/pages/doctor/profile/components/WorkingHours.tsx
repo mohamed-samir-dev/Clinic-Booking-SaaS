@@ -50,7 +50,7 @@ export const WorkingHours = ({
         <h3 className={`text-base sm:text-lg lg:text-xl font-bold flex items-center gap-2 ${
           theme === 'dark' ? 'text-white' : 'text-gray-900'
         }`}>
-          <div className="w-8 h-8 sm:w-9 sm:h-9 lg:w-10 lg:h-10 rounded-lg bg-gradient-to-br from-cyan-500 to-cyan-600 flex items-center justify-center">
+          <div className="w-8 h-8 sm:w-9 sm:h-9 lg:w-10 lg:h-10 rounded-lg bg-linear-to-br from-cyan-500 to-cyan-600 flex items-center justify-center">
             <Clock className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
           </div>
           {t.workingHours}
@@ -73,7 +73,7 @@ export const WorkingHours = ({
             <button
               onClick={onSaveSchedule}
               disabled={savingSchedule}
-              className="flex-1 sm:flex-none px-3 sm:px-4 py-1.5 sm:py-2 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-lg text-xs sm:text-sm font-semibold hover:shadow-lg transition-all disabled:opacity-50"
+              className="flex-1 sm:flex-none px-3 sm:px-4 py-1.5 sm:py-2 bg-linear-to-r from-green-500 to-green-600 text-white rounded-lg text-xs sm:text-sm font-semibold hover:shadow-lg transition-all disabled:opacity-50"
             >
               {savingSchedule ? `${t.loading}` : t.save}
             </button>
