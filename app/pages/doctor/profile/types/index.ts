@@ -12,7 +12,7 @@ export interface DoctorProfile {
   experienceYears: number;
   languages: string[];
   education: Array<{ degree: string; institution: string; year: string }>;
-  specializations: string[];
+  specializations: Array<{ en: string; ar: string }>;
   gender: string;
   bloodType?: string;
   phone: string;
@@ -49,17 +49,20 @@ export interface EditData {
   phone: string;
   location: { address: string; city: string };
   password: string;
+  aboutUs: string;
   availability: Array<{ day: string; slots: Array<{ from: string; to: string }> }>;
+  education: Array<{ degree: string; institution: string; year: string }>;
 }
 
 
 export interface ContactInfoProps {
   profile: DoctorProfile;
-  editingField: 'name' | 'fees' | 'duration' | 'email' | 'phone' | 'location' | 'password' | null;
+  editingField: 'name' | 'fees' | 'duration' | 'email' | 'phone' | 'location' | 'password' | 'about' | 'education' | null;
   editData: EditData;
   setEditData: (data: EditData) => void;
   onEdit: (field: 'email' | 'phone' | 'location') => void;
   onSave: (field: 'email' | 'phone' | 'location') => void;
   onCancel: (field: 'email' | 'phone' | 'location') => void;
   saving: boolean;
+  theme: 'light' | 'dark';
 }
