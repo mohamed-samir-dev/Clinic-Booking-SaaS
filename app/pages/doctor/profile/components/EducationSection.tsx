@@ -159,10 +159,10 @@ export const EducationSection = ({ education, theme, editData, onUpdate, onSave,
                   <GraduationCap className="w-6 h-6 text-white" />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <h4 className={`font-bold text-sm sm:text-base break-words ${
+                  <h4 className={`font-bold text-sm sm:text-base wrap-break-word ${
                     theme === 'dark' ? 'text-white' : 'text-gray-900'
                   }`}>{edu.degree}</h4>
-                  <p className={`text-xs sm:text-sm mt-1 break-words ${
+                  <p className={`text-xs sm:text-sm mt-1 wrap-break-word ${
                     theme === 'dark' ? 'text-gray-300' : 'text-gray-600'
                   }`}>{edu.institution}</p>
                   <p className={`text-xs font-semibold mt-1 ${
