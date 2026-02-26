@@ -58,7 +58,7 @@ export default function ScheduleTab({ doctor }: ScheduleTabProps) {
                   <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg bg-teal-500 flex items-center justify-center">
                     <FaCalendarAlt className="text-white text-base sm:text-lg" />
                   </div>
-                  <h3 className={`text-lg sm:text-xl font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{schedule.day}</h3>
+                  <h3 className={`text-lg sm:text-xl font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{getDayName(schedule.day)}</h3>
                 </div>
                 {schedule.slots && schedule.slots.length > 0 && (
                   <div className={`flex items-center gap-2 px-3 sm:px-4 py-2 rounded-lg ${theme === 'dark' ? 'bg-gray-900' : 'bg-white'}`}>
@@ -77,7 +77,7 @@ export default function ScheduleTab({ doctor }: ScheduleTabProps) {
       ) : (
         <div className={`text-center py-8 sm:py-12 rounded-lg sm:rounded-xl ${theme === 'dark' ? 'bg-gray-800' : 'bg-gray-50'}`}>
           <FaCalendarAlt className={`text-3xl sm:text-4xl mx-auto mb-2 sm:mb-3 ${theme === 'dark' ? 'text-gray-600' : 'text-gray-300'}`} />
-          <p className={`text-sm sm:text-base ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>No schedule available</p>
+          <p className={`text-sm sm:text-base ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>{t.noSchedule}</p>
         </div>
       )}
     </div>
