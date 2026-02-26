@@ -36,35 +36,35 @@ export const WorkingHours = ({
   onUpdateTimeSlot
 }: WorkingHoursProps) => {
   return (
-    <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-6">
-      <div className="flex items-center justify-between mb-4">
-        <h3 className="text-xl font-bold text-gray-900 flex items-center gap-2">
-          <div className="w-8 h-8 rounded-lg bg-linear-to-br from-cyan-500 to-cyan-600 flex items-center justify-center">
-            <Clock className="w-4 h-4 text-white" />
+    <div className="bg-white rounded-xl sm:rounded-2xl shadow-lg border border-gray-100 p-4 sm:p-6 lg:p-8">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-4 sm:mb-5 lg:mb-6 gap-3">
+        <h3 className="text-base sm:text-lg lg:text-xl font-bold text-gray-900 flex items-center gap-2">
+          <div className="w-8 h-8 sm:w-9 sm:h-9 lg:w-10 lg:h-10 rounded-lg bg-gradient-to-br from-cyan-500 to-cyan-600 flex items-center justify-center">
+            <Clock className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
           </div>
           Working Hours
         </h3>
         {!editingSchedule ? (
           <button
             onClick={onEditSchedule}
-            className="px-3 py-1.5 bg-cyan-100 text-cyan-700 rounded-lg text-sm font-semibold hover:bg-cyan-200 transition-all"
+            className="px-3 sm:px-4 py-1.5 sm:py-2 bg-cyan-100 text-cyan-700 rounded-lg text-xs sm:text-sm font-semibold hover:bg-cyan-200 transition-all w-full sm:w-auto"
           >
             Edit Schedule
           </button>
         ) : (
-          <div className="flex gap-2">
+          <div className="flex gap-2 w-full sm:w-auto">
             <button
               onClick={onCancelSchedule}
-              className="px-3 py-1.5 bg-gray-200 text-gray-700 rounded-lg text-sm font-semibold hover:bg-gray-300 transition-all"
+              className="flex-1 sm:flex-none px-3 sm:px-4 py-1.5 sm:py-2 bg-gray-200 text-gray-700 rounded-lg text-xs sm:text-sm font-semibold hover:bg-gray-300 transition-all"
             >
               Cancel
             </button>
             <button
               onClick={onSaveSchedule}
               disabled={savingSchedule}
-              className="px-3 py-1.5 bg-linear-to-r from-green-500 to-green-600 text-white rounded-lg text-sm font-semibold hover:shadow-lg transition-all disabled:opacity-50"
+              className="flex-1 sm:flex-none px-3 sm:px-4 py-1.5 sm:py-2 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-lg text-xs sm:text-sm font-semibold hover:shadow-lg transition-all disabled:opacity-50"
             >
-              {savingSchedule ? 'Saving...' : 'Save Schedule'}
+              {savingSchedule ? 'Saving...' : 'Save'}
             </button>
           </div>
         )}
@@ -72,37 +72,37 @@ export const WorkingHours = ({
       
       {errorMessage && (
         <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg">
-          <p className="text-sm text-red-700 font-semibold">{errorMessage}</p>
+          <p className="text-xs sm:text-sm text-red-700 font-semibold">{errorMessage}</p>
         </div>
       )}
       
       {successMessage && (
         <div className="mb-4 p-3 bg-green-50 border border-green-200 rounded-lg">
-          <p className="text-sm text-green-700 font-semibold">{successMessage}</p>
+          <p className="text-xs sm:text-sm text-green-700 font-semibold">{successMessage}</p>
         </div>
       )}
       
-      <div className="space-y-3">
+      <div className="space-y-2.5 sm:space-y-3">
         {daysOfWeek.map(day => {
           const clinicDay = getClinicDayData(day, clinicHours);
           const daySchedule = (editingSchedule ? editData.availability : profile.availability)?.find(a => a.day === day);
           const isClinicOpen = clinicDay?.isOpen === true;
           
           return (
-            <div key={day} className="border border-gray-200 rounded-xl p-4">
-              <div className="flex items-center justify-between mb-2">
-                <div>
-                  <h4 className="font-bold text-gray-900 capitalize">{day}</h4>
+            <div key={day} className="border border-gray-200 rounded-xl p-3 sm:p-4">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-2 gap-2">
+                <div className="flex-1">
+                  <h4 className="font-bold text-gray-900 capitalize text-sm sm:text-base">{day}</h4>
                   {isClinicOpen ? (
-                    <p className="text-xs text-gray-500">Clinic: {clinicDay.openTime} - {clinicDay.closeTime}</p>
+                    <p className="text-xs sm:text-sm text-gray-500">Clinic: {clinicDay.openTime} - {clinicDay.closeTime}</p>
                   ) : (
-                    <p className="text-xs text-red-500">Clinic Closed</p>
+                    <p className="text-xs sm:text-sm text-red-500">Clinic Closed</p>
                   )}
                 </div>
                 {editingSchedule && isClinicOpen && !daySchedule && (
                   <button
                     onClick={() => onAddTimeSlot(day)}
-                    className="px-3 py-1 bg-green-100 text-green-700 rounded-lg text-xs font-semibold hover:bg-green-200"
+                    className="px-3 py-1.5 bg-green-100 text-green-700 rounded-lg text-xs sm:text-sm font-semibold hover:bg-green-200 w-full sm:w-auto"
                   >
                     + Add Slot
                   </button>
@@ -112,7 +112,7 @@ export const WorkingHours = ({
               {daySchedule?.slots && daySchedule.slots.length > 0 ? (
                 <div className="space-y-2 mt-2">
                   {daySchedule.slots.map((slot, idx) => (
-                    <div key={idx} className="flex items-center gap-2 bg-cyan-50 p-2 rounded-lg">
+                    <div key={idx} className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 bg-cyan-50 p-2 sm:p-2.5 rounded-lg">
                       {editingSchedule ? (
                         <>
                           <input
@@ -121,26 +121,26 @@ export const WorkingHours = ({
                             onChange={(e) => onUpdateTimeSlot(day, idx, 'from', e.target.value)}
                             min={clinicDay?.openTime}
                             max={clinicDay?.closeTime}
-                            className="px-2 py-1 text-black border border-cyan-300 rounded text-sm"
+                            className="flex-1 px-2 py-1.5 text-black border border-cyan-300 rounded text-xs sm:text-sm"
                           />
-                          <span className="text-gray-500">-</span>
+                          <span className="text-gray-500 text-center sm:text-left text-sm">-</span>
                           <input
                             type="time"
                             value={slot.to}
                             onChange={(e) => onUpdateTimeSlot(day, idx, 'to', e.target.value)}
                             min={clinicDay?.openTime}
                             max={clinicDay?.closeTime}
-                            className="px-2 py-1 text-black border border-cyan-300 rounded text-sm"
+                            className="flex-1 px-2 py-1.5 text-black border border-cyan-300 rounded text-xs sm:text-sm"
                           />
                           <button
                             onClick={() => onRemoveTimeSlot(day, idx)}
-                            className="ml-auto px-2 py-1 bg-red-100 text-red-600 rounded text-xs font-semibold hover:bg-red-200"
+                            className="px-2 py-1.5 bg-red-100 text-red-600 rounded text-xs sm:text-sm font-semibold hover:bg-red-200 w-full sm:w-auto sm:ml-auto"
                           >
                             Remove
                           </button>
                         </>
                       ) : (
-                        <span className="text-sm font-semibold text-cyan-700">
+                        <span className="text-xs sm:text-sm font-semibold text-cyan-700">
                           {slot.from} - {slot.to}
                         </span>
                       )}
@@ -148,7 +148,7 @@ export const WorkingHours = ({
                   ))}
                 </div>
               ) : (
-                <p className="text-sm text-gray-400 italic mt-2">No working hours set</p>
+                <p className="text-xs sm:text-sm text-gray-400 italic mt-2">No working hours set</p>
               )}
             </div>
           );
