@@ -7,25 +7,15 @@ import { useRequests } from './hooks/useRequests';
 import { RequestsHeader } from './components/RequestsHeader';
 import { StatsCards } from './components/StatsCards';
 import { RequestsList } from './components/RequestsList';
+import { useTheme } from '@/app/contexts/ThemeContext';
+import { useLanguage } from '@/app/contexts/LanguageContext';
 
 export default function RequestsPage() {
   const token = useSelector((state: RootState) => state.auth.token);
   const [filter, setFilter] = useState<FilterType>('all');
-  const [theme, setTheme] = useState<'light' | 'dark'>('light');
+  const { theme } = useTheme();
+  const { locale } = useLanguage();
   const { requests, loading, handleStatusUpdate } = useRequests(token);
-
-  useEffect(() => {
-    const savedTheme = localStorage.getItem('theme') as 'light' | 'dark' | null;
-    if (savedTheme) setTheme(savedTheme);
-
-    const handleThemeChange = () => {
-      const newTheme = localStorage.getItem('theme') as 'light' | 'dark' | null;
-      if (newTheme) setTheme(newTheme);
-    };
-
-    window.addEventListener('themeChange', handleThemeChange);
-    return () => window.removeEventListener('themeChange', handleThemeChange);
-  }, []);
 
   const filteredRequests = filter === 'all' 
     ? requests 
@@ -40,7 +30,7 @@ export default function RequestsPage() {
 
   return (
     <div className={`h-screen overflow-y-auto ${theme === 'dark' ? 'bg-gray-900' : 'bg-linear-to-br from-gray-50 via-white to-blue-50/30'}`}>
-      <RequestsHeader theme={theme} />
+      <RequestsHeader theme={theme} locale={locale} />
       
       <div className="p-3 sm:p-5">
         <StatsCards 
@@ -48,6 +38,7 @@ export default function RequestsPage() {
           filter={filter} 
           onFilterChange={setFilter}
           theme={theme}
+          locale={locale}
         />
         
         <RequestsList 
@@ -56,6 +47,7 @@ export default function RequestsPage() {
           filter={filter}
           onStatusUpdate={handleStatusUpdate}
           theme={theme}
+          locale={locale}
         />
       </div>
 
