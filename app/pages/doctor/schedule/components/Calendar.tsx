@@ -1,3 +1,5 @@
+'use client';
+
 import { Appointment } from '../types';
 import { monthNames, dayNames, getAppointmentsForDate, getStatusColor } from '../utils/calendarHelpers';
 
@@ -19,30 +21,30 @@ export const Calendar = ({
   onMonthChange 
 }: CalendarProps) => {
   return (
-    <div className="lg:col-span-2 bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
-      <div className="bg-linear-to-r from-teal-500 to-cyan-600 p-4">
+    <div className="lg:col-span-2 bg-white rounded-xl sm:rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
+      <div className="bg-linear-to-r from-teal-500 to-cyan-600 p-3 sm:p-4">
         <div className="flex items-center justify-between">
           <button
             onClick={() => onMonthChange(-1)}
-            className="p-2 hover:bg-white/20 rounded-lg transition-all"
+            className="p-1.5 sm:p-2 hover:bg-white/20 rounded-lg transition-all"
           >
-            <span className="material-icons text-white text-xl">chevron_left</span>
+            <span className="material-icons text-white text-lg sm:text-xl">chevron_left</span>
           </button>
-          <h2 className="text-lg font-bold text-white">
+          <h2 className="text-base sm:text-lg font-bold text-white">
             {monthNames[currentDate.getMonth()]} {currentDate.getFullYear()}
           </h2>
           <button
             onClick={() => onMonthChange(1)}
-            className="p-2 hover:bg-white/20 rounded-lg transition-all"
+            className="p-1.5 sm:p-2 hover:bg-white/20 rounded-lg transition-all"
           >
-            <span className="material-icons text-white text-xl">chevron_right</span>
+            <span className="material-icons text-white text-lg sm:text-xl">chevron_right</span>
           </button>
         </div>
       </div>
 
       <div className="grid grid-cols-7 bg-gray-50 border-b border-gray-200">
         {dayNames.map(day => (
-          <div key={day} className="p-2 text-center font-bold text-gray-600 text-xs">
+          <div key={day} className="p-1 sm:p-2 text-center font-bold text-gray-600 text-[10px] sm:text-xs">
             {day}
           </div>
         ))}
@@ -59,7 +61,7 @@ export const Calendar = ({
             <div
               key={index}
               onClick={() => day && onDateSelect(day)}
-              className={`min-h-[100px] bg-white p-2 cursor-pointer transition-all hover:bg-gray-50 relative ${
+              className={`min-h-[60px] sm:min-h-[100px] bg-white p-1 sm:p-2 cursor-pointer transition-all hover:bg-gray-50 relative ${
                 !day ? 'bg-gray-50 cursor-default' : ''
               } ${isSelected ? 'ring-2 ring-teal-500' : ''} ${isPast ? 'opacity-60' : ''}`}
             >
@@ -70,23 +72,24 @@ export const Calendar = ({
                       <div className="w-full h-0.5 bg-gray-400 rotate-[-20deg]"></div>
                     </div>
                   )}
-                  <div className={`text-xs font-bold mb-1 ${
-                    isToday ? 'bg-teal-500 text-white w-6 h-6 rounded-full flex items-center justify-center' : 'text-gray-700'
+                  <div className={`text-[10px] sm:text-xs font-bold mb-0.5 sm:mb-1 ${
+                    isToday ? 'bg-teal-500 text-white w-5 h-5 sm:w-6 sm:h-6 rounded-full flex items-center justify-center text-[10px] sm:text-xs' : 'text-gray-700'
                   }`}>
                     {day.getDate()}
                   </div>
-                  <div className="space-y-1">
+                  <div className="space-y-0.5 sm:space-y-1">
                     {dayAppointments.slice(0, 2).map((apt, i) => (
                       <div
                         key={i}
-                        className={`text-[10px] px-1.5 py-0.5 rounded-md border truncate ${getStatusColor(apt.status)}`}
+                        className={`text-[8px] sm:text-[10px] px-1 sm:px-1.5 py-0.5 rounded-md border truncate ${getStatusColor(apt.status)}`}
                       >
-                        {apt.startTime} - {apt.patientId?.name || apt.guestData?.fullName || 'Guest'}
+                        <span className="hidden sm:inline">{apt.startTime} - </span>
+                        {apt.patientId?.name || apt.guestData?.fullName || 'Guest'}
                       </div>
                     ))}
                     {dayAppointments.length > 2 && (
-                      <div className="text-[10px] text-gray-500 font-bold px-1.5">
-                        +{dayAppointments.length - 2} more
+                      <div className="text-[8px] sm:text-[10px] text-gray-500 font-bold px-1 sm:px-1.5">
+                        +{dayAppointments.length - 2}
                       </div>
                     )}
                   </div>
