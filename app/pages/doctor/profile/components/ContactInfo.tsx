@@ -3,10 +3,14 @@ import { ContactInfoProps } from '../types';
 
 
 
-export const ContactInfo = ({ profile, editingField, editData, setEditData, onEdit, onSave, onCancel, saving }: ContactInfoProps) => {
+export const ContactInfo = ({ profile, editingField, editData, setEditData, onEdit, onSave, onCancel, saving, theme }: ContactInfoProps) => {
   return (
-    <div className="bg-white rounded-xl sm:rounded-2xl shadow-lg border border-gray-100 p-4 sm:p-6 lg:p-8">
-      <h3 className="text-base sm:text-lg lg:text-xl font-bold text-gray-900 mb-4 sm:mb-5 lg:mb-6 flex items-center gap-2">
+    <div className={`rounded-xl sm:rounded-2xl shadow-lg border p-4 sm:p-6 lg:p-8 ${
+      theme === 'dark' ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-100'
+    }`}>
+      <h3 className={`text-base sm:text-lg lg:text-xl font-bold mb-4 sm:mb-5 lg:mb-6 flex items-center gap-2 ${
+        theme === 'dark' ? 'text-white' : 'text-gray-900'
+      }`}>
         <div className="w-8 h-8 sm:w-9 sm:h-9 lg:w-10 lg:h-10 rounded-lg bg-linear-to-br from-green-500 to-green-600 flex items-center justify-center">
           <span className="material-icons text-white text-base sm:text-lg">contact_mail</span>
         </div>
@@ -36,7 +40,9 @@ export const ContactInfo = ({ profile, editingField, editData, setEditData, onEd
                   type="email"
                   value={editData.email}
                   onChange={(e) => setEditData({...editData, email: e.target.value})}
-                  className="flex-1 min-w-0 px-3 py-2 sm:py-2.5 border-2 border-blue-400 rounded-lg text-sm sm:text-base font-semibold text-gray-900 focus:outline-none focus:border-blue-600 bg-white shadow-md"
+                  className={`flex-1 min-w-0 px-3 py-2 sm:py-2.5 border-2 border-blue-400 rounded-lg text-sm sm:text-base font-semibold focus:outline-none focus:border-blue-600 shadow-md ${
+                    theme === 'dark' ? 'bg-gray-700 text-white' : 'bg-white text-gray-900'
+                  }`}
                 />
                 <button
                   onClick={() => onSave('email')}
@@ -54,7 +60,9 @@ export const ContactInfo = ({ profile, editingField, editData, setEditData, onEd
                 </button>
               </div>
             ) : (
-              <p className="text-sm sm:text-base text-gray-900 font-medium mt-1.5 break-all">{profile.email}</p>
+              <p className={`text-sm sm:text-base font-medium mt-1.5 break-all ${
+                theme === 'dark' ? 'text-gray-300' : 'text-gray-900'
+              }`}>{profile.email}</p>
             )}
           </div>
         </div>
@@ -83,7 +91,9 @@ export const ContactInfo = ({ profile, editingField, editData, setEditData, onEd
                     type="tel"
                     value={editData.phone}
                     onChange={(e) => setEditData({...editData, phone: e.target.value})}
-                    className="flex-1 min-w-0 px-3 py-2 sm:py-2.5 border-2 border-green-400 rounded-lg text-sm sm:text-base font-semibold text-gray-900 focus:outline-none focus:border-green-600 bg-white shadow-md"
+                    className={`flex-1 min-w-0 px-3 py-2 sm:py-2.5 border-2 border-green-400 rounded-lg text-sm sm:text-base font-semibold focus:outline-none focus:border-green-600 shadow-md ${
+                      theme === 'dark' ? 'bg-gray-700 text-white' : 'bg-white text-gray-900'
+                    }`}
                   />
                   <button
                     onClick={() => onSave('phone')}
@@ -101,7 +111,9 @@ export const ContactInfo = ({ profile, editingField, editData, setEditData, onEd
                   </button>
                 </div>
               ) : (
-                <p className="text-sm sm:text-base text-gray-900 font-medium mt-1.5">{profile.phone}</p>
+                <p className={`text-sm sm:text-base font-medium mt-1.5 ${
+                  theme === 'dark' ? 'text-gray-300' : 'text-gray-900'
+                }`}>{profile.phone}</p>
               )}
             </div>
           </div>
@@ -131,14 +143,18 @@ export const ContactInfo = ({ profile, editingField, editData, setEditData, onEd
                     type="text"
                     value={editData.location.address}
                     onChange={(e) => setEditData({...editData, location: {...editData.location, address: e.target.value}})}
-                    className="w-full px-3 py-2 sm:py-2.5 border-2 border-orange-400 rounded-lg text-sm sm:text-base font-semibold text-gray-900 focus:outline-none focus:border-orange-600 bg-white shadow-md"
+                    className={`w-full px-3 py-2 sm:py-2.5 border-2 border-orange-400 rounded-lg text-sm sm:text-base font-semibold focus:outline-none focus:border-orange-600 shadow-md ${
+                      theme === 'dark' ? 'bg-gray-700 text-white' : 'bg-white text-gray-900'
+                    }`}
                     placeholder="Address"
                   />
                   <input
                     type="text"
                     value={editData.location.city}
                     onChange={(e) => setEditData({...editData, location: {...editData.location, city: e.target.value}})}
-                    className="w-full px-3 py-2 sm:py-2.5 border-2 border-orange-400 rounded-lg text-sm sm:text-base font-semibold text-gray-900 focus:outline-none focus:border-orange-600 bg-white shadow-md"
+                    className={`w-full px-3 py-2 sm:py-2.5 border-2 border-orange-400 rounded-lg text-sm sm:text-base font-semibold focus:outline-none focus:border-orange-600 shadow-md ${
+                      theme === 'dark' ? 'bg-gray-700 text-white' : 'bg-white text-gray-900'
+                    }`}
                     placeholder="City"
                   />
                   <div className="flex gap-2">
@@ -160,9 +176,13 @@ export const ContactInfo = ({ profile, editingField, editData, setEditData, onEd
                 </div>
               ) : (
                 <>
-                  <p className="text-sm sm:text-base text-gray-900 font-medium mt-1.5">{profile.location.address}</p>
+                  <p className={`text-sm sm:text-base font-medium mt-1.5 ${
+                    theme === 'dark' ? 'text-gray-300' : 'text-gray-900'
+                  }`}>{profile.location.address}</p>
                   {profile.location.city && (
-                    <p className="text-xs sm:text-sm text-gray-600 mt-1">{profile.location.city}</p>
+                    <p className={`text-xs sm:text-sm mt-1 ${
+                      theme === 'dark' ? 'text-gray-400' : 'text-gray-600'
+                    }`}>{profile.location.city}</p>
                   )}
                 </>
               )}
