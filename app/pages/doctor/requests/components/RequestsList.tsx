@@ -8,22 +8,31 @@ interface RequestsListProps {
   loading: boolean;
   filter: FilterType;
   onStatusUpdate: (id: string, status: string) => void;
+  theme: 'light' | 'dark';
 }
 
-export const RequestsList = ({ requests, loading, filter, onStatusUpdate }: RequestsListProps) => {
+export const RequestsList = ({ requests, loading, filter, onStatusUpdate, theme }: RequestsListProps) => {
   return (
-    <div className="bg-white rounded-xl sm:rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
-      <div className="p-3 sm:p-5 border-b border-gray-200 bg-linear-to-r from-gray-50 to-white">
+    <div className={`rounded-xl sm:rounded-2xl shadow-lg border overflow-hidden ${
+      theme === 'dark' ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-100'
+    }`}>
+      <div className={`p-3 sm:p-5 border-b ${
+        theme === 'dark' ? 'border-gray-700 bg-gray-750' : 'border-gray-200 bg-linear-to-r from-gray-50 to-white'
+      }`}>
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2 sm:gap-3">
             <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-lg sm:rounded-xl bg-linear-to-br from-blue-500 to-indigo-600 flex items-center justify-center shadow-md">
               <span className="material-icons text-white text-base sm:text-xl">list_alt</span>
             </div>
             <div>
-              <h3 className="text-base sm:text-lg font-bold text-gray-900">
+              <h3 className={`text-base sm:text-lg font-bold ${
+                theme === 'dark' ? 'text-white' : 'text-gray-900'
+              }`}>
                 {filter === 'all' ? 'All Requests' : `${filter.charAt(0).toUpperCase() + filter.slice(1)} Requests`}
               </h3>
-              <p className="text-xs sm:text-sm text-gray-600 font-medium">{requests.length} total</p>
+              <p className={`text-xs sm:text-sm font-medium ${
+                theme === 'dark' ? 'text-gray-400' : 'text-gray-600'
+              }`}>{requests.length} total</p>
             </div>
           </div>
         </div>
@@ -33,7 +42,9 @@ export const RequestsList = ({ requests, loading, filter, onStatusUpdate }: Requ
         {loading ? (
           <div className="flex flex-col items-center justify-center py-12 sm:py-16">
             <div className="w-10 h-10 sm:w-12 sm:h-12 border-4 border-orange-500 border-t-transparent rounded-full animate-spin mb-3"></div>
-            <p className="text-xs sm:text-sm text-gray-600 font-medium">Loading requests...</p>
+            <p className={`text-xs sm:text-sm font-medium ${
+              theme === 'dark' ? 'text-gray-400' : 'text-gray-600'
+            }`}>Loading requests...</p>
           </div>
         ) : requests.length > 0 ? (
           <div className="space-y-2 sm:space-y-2.5">
@@ -42,6 +53,7 @@ export const RequestsList = ({ requests, loading, filter, onStatusUpdate }: Requ
                 key={request._id} 
                 request={request} 
                 onStatusUpdate={onStatusUpdate}
+                theme={theme}
               />
             ))}
           </div>
