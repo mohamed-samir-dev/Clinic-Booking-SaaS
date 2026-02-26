@@ -1,6 +1,7 @@
 'use client';
 
 import { FilterType } from '../types';
+import translations from '@/messages/translations';
 
 interface StatsCardsProps {
   stats: {
@@ -12,9 +13,12 @@ interface StatsCardsProps {
   filter: FilterType;
   onFilterChange: (filter: FilterType) => void;
   theme: 'light' | 'dark';
+  locale: 'en' | 'ar';
 }
 
-export const StatsCards = ({ stats, filter, onFilterChange, theme }: StatsCardsProps) => {
+export const StatsCards = ({ stats, filter, onFilterChange, theme, locale }: StatsCardsProps) => {
+  const t = translations[locale].doctor.requests;
+  
   return (
     <div className="grid grid-cols-1 min-[480px]:grid-cols-2 md:grid-cols-4 gap-2 sm:gap-4 mb-3 sm:mb-5">
       <div 
@@ -29,7 +33,7 @@ export const StatsCards = ({ stats, filter, onFilterChange, theme }: StatsCardsP
           <div className="flex-1 min-w-0">
             <p className={`text-[10px] sm:text-xs font-bold uppercase tracking-wider mb-1 sm:mb-1.5 ${
               theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
-            }`}>All Requests</p>
+            }`}>{t.allRequests}</p>
             <h3 className={`text-xl sm:text-2xl font-bold ${
               theme === 'dark' ? 'text-white' : 'text-gray-900'
             }`}>{stats.all}</h3>
@@ -52,8 +56,10 @@ export const StatsCards = ({ stats, filter, onFilterChange, theme }: StatsCardsP
           <div className="flex-1 min-w-0">
             <p className={`text-[10px] sm:text-xs font-bold uppercase tracking-wider mb-1 sm:mb-1.5 ${
               theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
-            }`}>Pending</p>
-            <h3 className="text-xl sm:text-2xl font-bold text-yellow-600">{stats.pending}</h3>
+            }`}>{t.pending}</p>
+            <h3 className={`text-xl sm:text-2xl font-bold ${
+              theme === 'dark' ? 'text-yellow-400' : 'text-yellow-600'
+            }`}>{stats.pending}</h3>
           </div>
           <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-lg sm:rounded-xl bg-linear-to-br from-yellow-500 to-yellow-600 flex items-center justify-center shadow-md">
             <span className="material-icons text-white text-base sm:text-xl">pending_actions</span>
@@ -73,8 +79,10 @@ export const StatsCards = ({ stats, filter, onFilterChange, theme }: StatsCardsP
           <div className="flex-1 min-w-0">
             <p className={`text-[10px] sm:text-xs font-bold uppercase tracking-wider mb-1 sm:mb-1.5 ${
               theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
-            }`}>Confirmed</p>
-            <h3 className="text-xl sm:text-2xl font-bold text-teal-600">{stats.confirmed}</h3>
+            }`}>{t.confirmed}</p>
+            <h3 className={`text-xl sm:text-2xl font-bold ${
+              theme === 'dark' ? 'text-teal-400' : 'text-teal-600'
+            }`}>{stats.confirmed}</h3>
           </div>
           <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-lg sm:rounded-xl bg-linear-to-br from-teal-500 to-cyan-600 flex items-center justify-center shadow-md">
             <span className="material-icons text-white text-base sm:text-xl">check_circle</span>
@@ -94,8 +102,10 @@ export const StatsCards = ({ stats, filter, onFilterChange, theme }: StatsCardsP
           <div className="flex-1 min-w-0">
             <p className={`text-[10px] sm:text-xs font-bold uppercase tracking-wider mb-1 sm:mb-1.5 ${
               theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
-            }`}>Cancelled</p>
-            <h3 className="text-xl sm:text-2xl font-bold text-red-600">{stats.cancelled}</h3>
+            }`}>{t.cancelled}</p>
+            <h3 className={`text-xl sm:text-2xl font-bold ${
+              theme === 'dark' ? 'text-red-400' : 'text-red-600'
+            }`}>{stats.cancelled}</h3>
           </div>
           <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-lg sm:rounded-xl bg-linear-to-br from-red-500 to-rose-600 flex items-center justify-center shadow-md">
             <span className="material-icons text-white text-base sm:text-xl">cancel</span>
