@@ -3,6 +3,7 @@
 import { useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import { useTheme } from '@/app/contexts/ThemeContext';
 
 interface Appointment {
   id: string;
@@ -22,6 +23,7 @@ interface RootState {
 }
 
 export default function DoctorPage() {
+  const { theme } = useTheme();
   const user = useSelector((state: RootState) => state.auth.user);
   const token = useSelector((state: RootState) => state.auth.token);
   
@@ -141,23 +143,43 @@ export default function DoctorPage() {
   }, [token]);
 
   return (
-    <div className="h-screen overflow-y-auto bg-linear-to-br from-gray-50 via-white to-teal-50/30">
+    <div className={`h-screen overflow-y-auto transition-colors duration-300 ${
+      theme === 'dark' 
+        ? 'bg-linear-to-br from-gray-900 via-gray-800 to-gray-900' 
+        : 'bg-linear-to-br from-gray-50 via-white to-teal-50/30'
+    }`}>
       {/* Header */}
-      <div className="bg-white/80 backdrop-blur-xl border-b border-gray-200/50 px-3 sm:px-6 py-3 sm:py-4 relative z-40">
+      <div className={`backdrop-blur-xl border-b px-3 sm:px-6 py-3 sm:py-4 relative z-40 ${
+        theme === 'dark'
+          ? 'bg-gray-800/80 border-gray-700/50'
+          : 'bg-white/80 border-gray-200/50'
+      }`}>
         <div className="flex items-center justify-between gap-2">
           <div className="flex-1 min-w-0">
-            <h1 className="text-lg sm:text-2xl font-bold bg-linear-to-r from-teal-600 to-cyan-600 bg-clip-text text-transparent truncate">
+            <h1 className={`text-lg sm:text-2xl font-bold truncate ${
+              theme === 'dark'
+                ? 'text-teal-400'
+                : 'bg-linear-to-r from-teal-600 to-cyan-600 bg-clip-text text-transparent'
+            }`}>
               Welcome back, Dr. {getText(user?.name).split(' ')[0] || 'Doctor'}! 👋
             </h1>
-            <p className="text-xs sm:text-sm text-gray-600 mt-1 font-medium hidden sm:block">Here&rsquo;s what&rsquo;s happening with your practice today</p>
+            <p className={`text-xs sm:text-sm mt-1 font-medium hidden sm:block ${
+              theme === 'dark' ? 'text-gray-400' : 'text-gray-600'
+            }`}>Here&rsquo;s what&rsquo;s happening with your practice today</p>
           </div>
           <div className="flex items-center gap-1 sm:gap-2 relative z-50">
             <div className="relative">
               <button 
                 onClick={() => setShowNotifications(!showNotifications)}
-                className="relative p-1.5 sm:p-2 rounded-xl bg-linear-to-br from-teal-50 to-cyan-50 hover:from-teal-100 hover:to-cyan-100 transition-all shadow-sm hover:shadow-md"
+                className={`relative p-1.5 sm:p-2 rounded-xl transition-all shadow-sm hover:shadow-md ${
+                  theme === 'dark'
+                    ? 'bg-gray-700 hover:bg-gray-600'
+                    : 'bg-linear-to-br from-teal-50 to-cyan-50 hover:from-teal-100 hover:to-cyan-100'
+                }`}
               >
-                <span className="material-icons text-teal-600 text-base sm:text-lg">notifications</span>
+                <span className={`material-icons text-base sm:text-lg ${
+                  theme === 'dark' ? 'text-teal-400' : 'text-teal-600'
+                }`}>notifications</span>
                 {pendingCount > 0 && (
                   <span className="absolute top-0 right-0 min-w-[18px] h-[18px] px-1 bg-red-500 text-white text-[11px] font-bold rounded-full flex items-center justify-center border-2 border-white">
                     {pendingCount}
@@ -165,22 +187,40 @@ export default function DoctorPage() {
                 )}
               </button>
               {showNotifications && (
-                <div className="absolute right-0 top-full mt-2 w-72 bg-white rounded-xl shadow-xl border border-gray-200 z-9999">
-                  <div className="p-3 border-b border-gray-100">
-                    <h3 className="text-sm font-bold text-gray-900">New Booking Requests</h3>
-                    <p className="text-xs text-gray-500 mt-0.5">{pendingCount} pending requests</p>
+                <div className={`absolute right-0 top-full mt-2 w-72 rounded-xl shadow-xl border z-9999 ${
+                  theme === 'dark'
+                    ? 'bg-gray-800 border-gray-700'
+                    : 'bg-white border-gray-200'
+                }`}>
+                  <div className={`p-3 border-b ${
+                    theme === 'dark' ? 'border-gray-700' : 'border-gray-100'
+                  }`}>
+                    <h3 className={`text-sm font-bold ${
+                      theme === 'dark' ? 'text-white' : 'text-gray-900'
+                    }`}>New Booking Requests</h3>
+                    <p className={`text-xs mt-0.5 ${
+                      theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
+                    }`}>{pendingCount} pending requests</p>
                   </div>
                   <div className="max-h-80 overflow-y-auto">
                     {newRequests.length > 0 ? (
                       newRequests.map((request) => (
-                        <div key={request.id} className="p-3 border-b border-gray-50 hover:bg-gray-50 transition-colors">
+                        <div key={request.id} className={`p-3 border-b transition-colors ${
+                          theme === 'dark'
+                            ? 'border-gray-700 hover:bg-gray-700/50'
+                            : 'border-gray-50 hover:bg-gray-50'
+                        }`}>
                           <div className="flex items-start gap-2">
                             <div className="w-8 h-8 rounded-lg bg-linear-to-br from-orange-500 to-amber-600 flex items-center justify-center shrink-0">
                               <span className="material-icons text-white text-sm">person</span>
                             </div>
                             <div className="flex-1 min-w-0">
-                              <h4 className="text-sm font-bold text-gray-900 truncate">{getText(request.patientName)}</h4>
-                              <p className="text-xs text-gray-600 mt-0.5 flex items-center gap-1">
+                              <h4 className={`text-sm font-bold truncate ${
+                                theme === 'dark' ? 'text-white' : 'text-gray-900'
+                              }`}>{getText(request.patientName)}</h4>
+                              <p className={`text-xs mt-0.5 flex items-center gap-1 ${
+                                theme === 'dark' ? 'text-gray-400' : 'text-gray-600'
+                              }`}>
                                 <span className="material-icons text-xs">schedule</span>
                                 <span className="truncate">{request.time}</span>
                                 <span className="text-gray-400">•</span>
@@ -197,9 +237,15 @@ export default function DoctorPage() {
                       </div>
                     )}
                   </div>
-                  <div className="p-2 border-t border-gray-100">
+                  <div className={`p-2 border-t ${
+                    theme === 'dark' ? 'border-gray-700' : 'border-gray-100'
+                  }`}>
                     <Link href="/pages/doctor/requests" onClick={() => setShowNotifications(false)}>
-                      <button className="w-full text-center text-sm font-bold text-teal-600 hover:text-teal-700 py-1.5">
+                      <button className={`w-full text-center text-sm font-bold py-1.5 ${
+                        theme === 'dark'
+                          ? 'text-teal-400 hover:text-teal-300'
+                          : 'text-teal-600 hover:text-teal-700'
+                      }`}>
                         View All Requests
                       </button>
                     </Link>
@@ -208,8 +254,14 @@ export default function DoctorPage() {
               )}
             </div>
             <Link href="/pages/doctor/profile">
-              <button className="p-1.5 sm:p-2 rounded-xl bg-linear-to-br from-gray-50 to-gray-100 hover:from-gray-100 hover:to-gray-200 transition-all shadow-sm hover:shadow-md">
-                <span className="material-icons text-gray-600 text-base sm:text-lg">settings</span>
+              <button className={`p-1.5 sm:p-2 rounded-xl transition-all shadow-sm hover:shadow-md ${
+                theme === 'dark'
+                  ? 'bg-gray-700 hover:bg-gray-600'
+                  : 'bg-linear-to-br from-gray-50 to-gray-100 hover:from-gray-100 hover:to-gray-200'
+              }`}>
+                <span className={`material-icons text-base sm:text-lg ${
+                  theme === 'dark' ? 'text-gray-300' : 'text-gray-600'
+                }`}>settings</span>
               </button>
             </Link>
           </div>
@@ -222,7 +274,11 @@ export default function DoctorPage() {
           {stats.map((stat, index) => (
             <div 
               key={index} 
-              className="group relative bg-white rounded-xl sm:rounded-2xl p-3 sm:p-5 shadow-sm border border-gray-100 overflow-hidden"
+              className={`group relative rounded-xl sm:rounded-2xl p-3 sm:p-5 shadow-sm border overflow-hidden ${
+                theme === 'dark'
+                  ? 'bg-gray-800 border-gray-700'
+                  : 'bg-white border-gray-100'
+              }`}
             >
               <div className="absolute inset-0 bg-linear-to-br from-teal-50/0 to-cyan-50/0"></div>
               <div className="relative z-10">
@@ -231,8 +287,12 @@ export default function DoctorPage() {
                     <span className="material-icons text-white text-base sm:text-xl">{stat.icon}</span>
                   </div>
                 </div>
-                <p className="text-[10px] sm:text-xs font-bold text-gray-500 uppercase tracking-wider mb-1 sm:mb-1.5">{stat.label}</p>
-                <h3 className="text-lg sm:text-2xl font-bold text-gray-900">{stat.value}</h3>
+                <p className={`text-[10px] sm:text-xs font-bold uppercase tracking-wider mb-1 sm:mb-1.5 ${
+                  theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
+                }`}>{stat.label}</p>
+                <h3 className={`text-lg sm:text-2xl font-bold ${
+                  theme === 'dark' ? 'text-white' : 'text-gray-900'
+                }`}>{stat.value}</h3>
               </div>
             </div>
           ))}
@@ -241,16 +301,26 @@ export default function DoctorPage() {
         {/* Main Content Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-3 sm:gap-5">
           {/* Live Patient Flow Card - Takes 2 columns */}
-          <div className="lg:col-span-2 bg-white rounded-xl sm:rounded-2xl p-3 sm:p-5 shadow-lg border border-gray-100">
+          <div className={`lg:col-span-2 rounded-xl sm:rounded-2xl p-3 sm:p-5 shadow-lg border ${
+            theme === 'dark'
+              ? 'bg-gray-800 border-gray-700'
+              : 'bg-white border-gray-100'
+          }`}>
             <div className="flex items-center justify-between mb-3 sm:mb-5 gap-2">
               <div className="flex items-center gap-2 sm:gap-3 flex-1 min-w-0">
                 <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-lg sm:rounded-xl bg-linear-to-br from-teal-500 to-cyan-600 flex items-center justify-center shadow-md shrink-0">
                   <span className="material-icons text-white text-base sm:text-xl">groups</span>
                 </div>
                 <div className="flex-1 min-w-0">
-                  <h3 className="text-sm sm:text-lg font-bold text-gray-900 truncate">Live Patient Flow</h3>
-                  <p className="text-xs sm:text-sm text-gray-600 font-medium mt-0.5">
-                    <span className="text-teal-600 font-bold">{todayAppointments.length}</span> patients today
+                  <h3 className={`text-sm sm:text-lg font-bold truncate ${
+                    theme === 'dark' ? 'text-white' : 'text-gray-900'
+                  }`}>Live Patient Flow</h3>
+                  <p className={`text-xs sm:text-sm font-medium mt-0.5 ${
+                    theme === 'dark' ? 'text-gray-400' : 'text-gray-600'
+                  }`}>
+                    <span className={`font-bold ${
+                      theme === 'dark' ? 'text-teal-400' : 'text-teal-600'
+                    }`}>{todayAppointments.length}</span> patients today
                   </p>
                 </div>
               </div>
@@ -318,15 +388,23 @@ export default function DoctorPage() {
                         </div>
                         
                         <div className="flex-1 min-w-0">
-                          <h4 className="font-bold text-gray-900 text-sm sm:text-base mb-0.5 sm:mb-1 truncate">{getText(appointment.patientName)}</h4>
+                          <h4 className={`font-bold text-sm sm:text-base mb-0.5 sm:mb-1 truncate ${
+                            theme === 'dark' ? 'text-black' : 'text-gray-900'
+                          }`}>{getText(appointment.patientName)}</h4>
                           <div className="flex items-center gap-1 sm:gap-2 text-xs sm:text-sm flex-wrap">
                             <span className={`font-bold ${config.textColor} px-1.5 sm:px-2.5 py-0.5 rounded-md sm:rounded-lg bg-white/60 text-[10px] sm:text-sm`}>
                               {config.label}
                             </span>
                             <span className="text-gray-400 hidden sm:inline">•</span>
-                            <span className="text-gray-600 font-medium hidden sm:inline">{config.location}</span>
-                            <span className="text-gray-400 hidden sm:inline">•</span>
-                            <span className="font-bold text-teal-600">{appointment.time}</span>
+                            <span className={`font-medium hidden sm:inline ${
+                              theme === 'dark' ? 'text-gray-400' : 'text-gray-600'
+                            }`}>{config.location}</span>
+                            <span className={`hidden sm:inline ${
+                              theme === 'dark' ? 'text-gray-600' : 'text-gray-400'
+                            }`}>•</span>
+                            <span className={`font-bold ${
+                              theme === 'dark' ? 'text-teal-400' : 'text-teal-600'
+                            }`}>{appointment.time}</span>
                           </div>
                         </div>
                       </div>
@@ -346,15 +424,23 @@ export default function DoctorPage() {
           </div>
 
           {/* New Requests Card - Takes 1 column */}
-          <div className="bg-white rounded-xl sm:rounded-2xl p-3 sm:p-5 shadow-lg border border-gray-100">
+          <div className={`rounded-xl sm:rounded-2xl p-3 sm:p-5 shadow-lg border ${
+            theme === 'dark'
+              ? 'bg-gray-800 border-gray-700'
+              : 'bg-white border-gray-100'
+          }`}>
             <div className="flex items-center justify-between mb-3 sm:mb-5 gap-2">
               <div className="flex items-center gap-2 flex-1 min-w-0">
                 <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-lg sm:rounded-xl bg-linear-to-br from-orange-500 to-amber-600 flex items-center justify-center shadow-md shrink-0">
                   <span className="material-icons text-white text-base sm:text-lg">notification_important</span>
                 </div>
                 <div className="flex-1 min-w-0">
-                  <h3 className="text-sm sm:text-base font-bold text-gray-900 truncate">New Requests</h3>
-                  <p className="text-[10px] sm:text-xs text-gray-500 font-medium mt-0.5">Latest appointments</p>
+                  <h3 className={`text-sm sm:text-base font-bold truncate ${
+                    theme === 'dark' ? 'text-white' : 'text-gray-900'
+                  }`}>New Requests</h3>
+                  <p className={`text-[10px] sm:text-xs font-medium mt-0.5 ${
+                    theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
+                  }`}>Latest appointments</p>
                 </div>
               </div>
               <Link 
@@ -380,8 +466,12 @@ export default function DoctorPage() {
                           <span className="material-icons text-white text-base sm:text-lg">person</span>
                         </div>
                         <div className="flex-1 min-w-0">
-                          <h4 className="font-bold text-gray-900 text-xs sm:text-sm truncate">{getText(request.patientName)}</h4>
-                          <div className="flex items-center gap-1 text-[10px] sm:text-xs text-gray-500 mt-0.5">
+                          <h4 className={`font-bold text-xs sm:text-sm truncate ${
+                            theme === 'dark' ? 'text-gray-900' : 'text-gray-900'
+                          }`}>{getText(request.patientName)}</h4>
+                          <div className={`flex items-center gap-1 text-[10px] sm:text-xs mt-0.5 ${
+                            theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
+                          }`}>
                             <span className="material-icons text-[10px] sm:text-xs">schedule</span>
                             <span className="font-medium truncate">{request.requestedAgo}</span>
                           </div>
