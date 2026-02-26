@@ -1,5 +1,20 @@
 import { Appointment } from '../types';
+import translations from '@/messages/translations';
 
+export const getMonthNames = (locale: 'en' | 'ar') => {
+  const t = translations[locale].doctor.schedule.months;
+  return [
+    t.january, t.february, t.march, t.april, t.may, t.june,
+    t.july, t.august, t.september, t.october, t.november, t.december
+  ];
+};
+
+export const getDayNames = (locale: 'en' | 'ar') => {
+  const t = translations[locale].doctor.schedule.days;
+  return [t.sun, t.mon, t.tue, t.wed, t.thu, t.fri, t.sat];
+};
+
+// Keep for backward compatibility
 export const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
   'July', 'August', 'September', 'October', 'November', 'December'];
 
