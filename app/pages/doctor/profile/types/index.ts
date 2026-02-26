@@ -43,6 +43,8 @@ export interface ClinicWorkingHours {
 export interface EditData {
   firstName: string;
   lastName: string;
+  firstNameAr?: string;
+  lastNameAr?: string;
   email: string;
   fees: number;
   consultationDuration: number;
