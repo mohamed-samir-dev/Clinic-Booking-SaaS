@@ -14,10 +14,16 @@ import {
   LogOut,
   Stethoscope,
   ChevronRight,
-  Moon
+  Moon,
+  X
 } from 'lucide-react';
 
-export default function Sidebar() {
+interface SidebarProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+export default function Sidebar({ isOpen, onClose }: SidebarProps) {
   const pathname = usePathname();
   const router = useRouter();
   const dispatch = useDispatch();
@@ -128,106 +134,131 @@ export default function Sidebar() {
   if (!user) return null;
 
   return (
-    <div className="w-[280px] h-screen p-3 bg-linear-to-br from-teal-50 via-cyan-50 to-emerald-50">
-      <aside className="h-full bg-white rounded-2xl shadow-xl shadow-teal-200/50 flex flex-col overflow-hidden border border-teal-100/50">
-        {/* Logo Header */}
-        <div className="p-4 bg-linear-to-br from-teal-500 via-teal-600 to-cyan-600 relative overflow-hidden">
-          <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAwIDEwIEwgNDAgMTAgTSAxMCAwIEwgMTAgNDAgTSAwIDIwIEwgNDAgMjAgTSAyMCAwIEwgMjAgNDAgTSAwIDMwIEwgNDAgMzAgTSAzMCAwIEwgMzAgNDAiIGZpbGw9Im5vbmUiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS1vcGFjaXR5PSIwLjA1IiBzdHJva2Utd2lkdGg9IjEiLz48L3BhdHRlcm4+PC9kZWZzPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JpZCkiLz48L3N2Zz4=')] opacity-30"></div>
-          <div className="relative z-10">
+    <>
+      {/* Overlay للشاشات الصغيرة */}
+      {isOpen && (
+        <div 
+          className="fixed inset-0 bg-black/50 z-40 xl:hidden"
+          onClick={onClose}
+        />
+      )}
+      
+      {/* Sidebar */}
+      <div className={`
+        fixed xl:relative inset-y-0 left-0 z-50
+        w-[85vw] max-w-[280px] xl:w-[280px] h-screen p-2 sm:p-3 bg-linear-to-br from-teal-50 via-cyan-50 to-emerald-50
+        transform transition-transform duration-300 ease-in-out
+        xl:transform-none
+        ${isOpen ? 'translate-x-0' : '-translate-x-full xl:translate-x-0'}
+      `}>
+        <aside className="h-full bg-white rounded-2xl shadow-xl shadow-teal-200/50 flex flex-col overflow-hidden border border-teal-100/50">
+          {/* زر الإغلاق للشاشات الصغيرة */}
+          <button
+            onClick={onClose}
+            className="xl:hidden absolute top-3 right-3 z-10 p-1 bg-white/80 rounded-lg shadow-md"
+          >
+            <X className="w-4 h-4 text-gray-600" />
+          </button>
+
+          {/* Logo Header */}
+          <div className="p-3 sm:p-4 bg-linear-to-br from-teal-500 via-teal-600 to-cyan-600 relative overflow-hidden">
+            <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAwIDEwIEwgNDAgMTAgTSAxMCAwIEwgMTAgNDAgTSAwIDIwIEwgNDAgMjAgTSAyMCAwIEwgMjAgNDAgTSAwIDMwIEwgNDAgMzAgTSAzMCAwIEwgMzAgNDAiIGZpbGw9Im5vbmUiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS1vcGFjaXR5PSIwLjA1IiBzdHJva2Utd2lkdGg9IjEiLz48L3BhdHRlcm4+PC9kZWZzPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JpZCkiLz48L3N2Zz4=')] opacity-30"></div>
+            <div className="relative z-10">
+              <div className="flex items-center gap-2">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl bg-white/20 backdrop-blur-xl flex items-center justify-center border border-white/30 overflow-hidden">
+                  {clinicData.logo ? (
+                    <Image src={clinicData.logo} alt="Clinic Logo" width={48} height={48} className="w-full h-full object-cover" />
+                  ) : (
+                    <Stethoscope className="w-5 h-5 sm:w-6 sm:h-6 text-white" strokeWidth={2.5} />
+                  )}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <h1 className="text-sm sm:text-base font-bold text-white truncate">
+                    {loading ? 'MediCare' : clinicData.name.en}
+                  </h1>
+                  <p className="text-[10px] sm:text-xs text-teal-100 font-medium">Doctor Dashboard</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Doctor Profile */}
+          <div className="px-2 sm:px-3 py-2.5 sm:py-3 border-b border-gray-100">
             <div className="flex items-center gap-2">
-              <div className="w-12 h-12 rounded-xl bg-white/20 backdrop-blur-xl flex items-center justify-center border border-white/30 overflow-hidden">
-                {clinicData.logo ? (
-                  <Image src={clinicData.logo} alt="Clinic Logo" width={48} height={48} className="w-full h-full object-cover" />
-                ) : (
-                  <Stethoscope className="w-6 h-6 text-white" strokeWidth={2.5} />
-                )}
+              <div className="relative">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl bg-linear-to-br from-teal-500 via-teal-600 to-cyan-600 flex items-center justify-center text-white font-bold text-sm sm:text-base shadow-md shadow-teal-300/50 overflow-hidden">
+                  {doctorImage ? (
+                    <Image src={doctorImage} alt="Doctor" width={48} height={48} className="w-full h-full object-cover" />
+                  ) : (
+                    getInitials()
+                  )}
+                </div>
+                <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 sm:w-3.5 sm:h-3.5 bg-green-500 rounded-full border-2 border-white"></div>
               </div>
               <div className="flex-1 min-w-0">
-                <h1 className="text-base font-bold text-white truncate">
-                  {loading ? 'MediCare' : clinicData.name.en}
-                </h1>
-                <p className="text-xs text-teal-100 font-medium">Doctor Dashboard</p>
+                <h3 className="text-xs sm:text-sm font-bold text-gray-900 truncate">{typeof user?.name === 'string' ? user.name : ((user?.name as { en: string; ar: string })?.en || (user?.name as { en: string; ar: string })?.ar || 'Doctor')}</h3>
+                <p className="text-[10px] sm:text-xs text-teal-600 truncate font-medium">{user?.specialty?.en || 'Specialist'}</p>
               </div>
             </div>
           </div>
-        </div>
 
-        {/* Doctor Profile */}
-        <div className="px-3 py-3 border-b border-gray-100">
-          <div className="flex items-center gap-2">
-            <div className="relative">
-              <div className="w-12 h-12 rounded-xl bg-linear-to-br from-teal-500 via-teal-600 to-cyan-600 flex items-center justify-center text-white font-bold text-base shadow-md shadow-teal-300/50 overflow-hidden">
-                {doctorImage ? (
-                  <Image src={doctorImage} alt="Doctor" width={48} height={48} className="w-full h-full object-cover" />
-                ) : (
-                  getInitials()
-                )}
-              </div>
-              <div className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-green-500 rounded-full border-2 border-white"></div>
+          {/* Navigation */}
+          <nav className="flex-1 px-2 sm:px-3 py-3 sm:py-4 overflow-y-auto">
+            <ul className="space-y-1">
+              {menuItems.map((item) => {
+                const isActive = pathname === item.href;
+                const Icon = item.icon;
+                return (
+                  <li key={item.href}>
+                    <Link href={item.href} onClick={onClose}>
+                      <div className={`group flex items-center gap-2 sm:gap-3 px-2.5 sm:px-3 py-2 sm:py-2.5 rounded-lg sm:rounded-xl transition-all duration-200 ${
+                          isActive
+                            ? 'bg-linear-to-r from-teal-500 via-teal-600 to-cyan-600 text-white shadow-md shadow-teal-300/50'
+                            : 'text-gray-600 hover:bg-linear-to-r hover:from-teal-50 hover:to-cyan-50'
+                        }`}
+                      >
+                        <Icon className="w-4 h-4 sm:w-5 sm:h-5" strokeWidth={2.5} />
+                        <span className="flex-1 text-xs sm:text-sm font-bold">{item.label}</span>
+                        {item.badge ? (
+                          <span className={`text-[10px] sm:text-xs font-bold px-1.5 sm:px-2 py-0.5 rounded-full ${
+                            isActive ? 'bg-white/30 text-white' : 'bg-linear-to-r from-teal-500 to-cyan-600 text-white'
+                          }`}>
+                            {item.badge}
+                          </span>
+                        ) : (
+                          <ChevronRight className={`w-3 h-3 sm:w-3.5 sm:h-3.5 transition-opacity ${
+                            isActive ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
+                          }`} />
+                        )}
+                      </div>
+                    </Link>
+                  </li>
+                );
+              })}
+            </ul>
+          </nav>
+
+          {/* Bottom Actions */}
+          <div className="p-2 sm:p-3 space-y-1.5 sm:space-y-2 border-t border-gray-100">
+            <div className="flex items-center gap-1.5 sm:gap-2">
+              <button className="flex-1 flex items-center justify-center gap-1.5 sm:gap-2 bg-gray-100 hover:bg-gray-200 text-gray-700 px-2 sm:px-3 py-2 sm:py-2.5 rounded-lg sm:rounded-xl text-xs sm:text-sm font-semibold transition-all">
+                <Moon className="w-3.5 h-3.5 sm:w-4 sm:h-4" strokeWidth={2.5} />
+                <span>Theme</span>
+              </button>
+              <button className="flex-1 flex items-center justify-center gap-1.5 sm:gap-2 bg-gray-100 hover:bg-gray-200 text-gray-700 px-2 sm:px-3 py-2 sm:py-2.5 rounded-lg sm:rounded-xl text-xs sm:text-sm font-semibold transition-all">
+                <span className="text-xs sm:text-sm font-bold">EN</span>
+              </button>
             </div>
-            <div className="flex-1 min-w-0">
-              <h3 className="text-sm font-bold text-gray-900 truncate">{typeof user?.name === 'string' ? user.name : ((user?.name as { en: string; ar: string })?.en || (user?.name as { en: string; ar: string })?.ar || 'Doctor')}</h3>
-              <p className="text-xs text-teal-600 truncate font-medium">{user?.specialty?.en || 'Specialist'}</p>
-            </div>
-          </div>
-        </div>
-
-        {/* Navigation */}
-        <nav className="flex-1 px-3 py-4 overflow-y-auto">
-          <ul className="space-y-1.5">
-            {menuItems.map((item) => {
-              const isActive = pathname === item.href;
-              const Icon = item.icon;
-              return (
-                <li key={item.href}>
-                  <Link href={item.href}>
-                    <div className={`group flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-200 ${
-                        isActive
-                          ? 'bg-linear-to-r from-teal-500 via-teal-600 to-cyan-600 text-white shadow-md shadow-teal-300/50'
-                          : 'text-gray-600 hover:bg-linear-to-r hover:from-teal-50 hover:to-cyan-50'
-                      }`}
-                    >
-                      <Icon className="w-5 h-5" strokeWidth={2.5} />
-                      <span className="flex-1 text-sm font-bold">{item.label}</span>
-                      {item.badge ? (
-                        <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${
-                          isActive ? 'bg-white/30 text-white' : 'bg-linear-to-r from-teal-500 to-cyan-600 text-white'
-                        }`}>
-                          {item.badge}
-                        </span>
-                      ) : (
-                        <ChevronRight className={`w-3.5 h-3.5 transition-opacity ${
-                          isActive ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
-                        }`} />
-                      )}
-                    </div>
-                  </Link>
-                </li>
-              );
-            })}
-          </ul>
-        </nav>
-
-        {/* Bottom Actions */}
-        <div className="p-3 space-y-2 border-t border-gray-100">
-          <div className="flex items-center gap-2">
-            <button className="flex-1 flex items-center justify-center gap-2 bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all">
-              <Moon className="w-4 h-4" strokeWidth={2.5} />
-              <span>Theme</span>
-            </button>
-            <button className="flex-1 flex items-center justify-center gap-2 bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all">
-              <span className="text-sm font-bold">EN</span>
+            <button
+              onClick={handleLogout}
+              className="flex items-center justify-center gap-1.5 sm:gap-2 w-full bg-gray-100 hover:bg-gray-200 text-gray-700 px-2 sm:px-3 py-2 sm:py-2.5 rounded-lg sm:rounded-xl text-xs sm:text-sm font-semibold transition-all"
+            >
+              <LogOut className="w-3.5 h-3.5 sm:w-4 sm:h-4" strokeWidth={2.5} />
+              <span>Logout</span>
             </button>
           </div>
-          <button
-            onClick={handleLogout}
-            className="flex items-center justify-center gap-2 w-full bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all"
-          >
-            <LogOut className="w-4 h-4" strokeWidth={2.5} />
-            <span>Logout</span>
-          </button>
-        </div>
-      </aside>
-    </div>
+        </aside>
+      </div>
+    </>
   );
 }
