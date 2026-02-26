@@ -2,13 +2,16 @@
 
 import { FaStethoscope, FaHeartbeat, FaBrain, FaBone, FaEye, FaTooth, FaChild, FaAllergies, FaHospital, FaPrescriptionBottle, FaVirus, FaLungs, FaXRay, FaTint } from 'react-icons/fa';
 import { useTheme } from '../../../../../contexts/ThemeContext';
+import { useLanguage } from '../../../../../contexts/LanguageContext';
+import translations from '@/messages/translations';
 
 interface SpecializationsCardProps {
-  specializations: string[];
+  specializations: (string | { en: string; ar: string })[];
 }
 
-const getIconForSpecialization = (specialization: string) => {
-  const specLower = specialization.toLowerCase();
+const getIconForSpecialization = (specialization: string | { en: string; ar: string }) => {
+  const specText = typeof specialization === 'string' ? specialization : (specialization?.en || specialization?.ar || '');
+  const specLower = specText.toLowerCase();
   if (specLower.includes('heart') || specLower.includes('cardio') || specLower.includes('قلب')) return FaHeartbeat;
   if (specLower.includes('brain') || specLower.includes('neuro') || specLower.includes('مخ') || specLower.includes('أعصاب')) return FaBrain;
   if (specLower.includes('bone') || specLower.includes('ortho') || specLower.includes('عظام')) return FaBone;
@@ -27,6 +30,9 @@ const getIconForSpecialization = (specialization: string) => {
 
 export default function SpecializationsCard({ specializations }: SpecializationsCardProps) {
   const { theme } = useTheme();
+  const { locale } = useLanguage();
+  const t = translations[locale].doctor.profile;
+  
   if (!specializations || specializations.length === 0) return null;
 
   return (
@@ -35,10 +41,11 @@ export default function SpecializationsCard({ specializations }: Specializations
         <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl bg-linear-to-br from-teal-500 to-cyan-500 flex items-center justify-center shadow-md">
           <FaStethoscope className="text-white text-lg sm:text-xl" />
         </div>
-        <h3 className={`text-xl sm:text-2xl font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Specializations</h3>
+        <h3 className={`text-xl sm:text-2xl font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{t.specializations}</h3>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 md:gap-5">
         {specializations.map((spec, index) => {
+          const specText = typeof spec === 'string' ? spec : (spec?.[locale] || spec?.en || spec?.ar || '');
           const Icon = getIconForSpecialization(spec);
           
           return (
@@ -49,7 +56,7 @@ export default function SpecializationsCard({ specializations }: Specializations
               <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg bg-linear-to-br from-teal-500 to-cyan-500 flex items-center justify-center group-hover:scale-110 transition-transform">
                 <Icon className="text-white text-base sm:text-lg" />
               </div>
-              <span className={`font-bold text-sm sm:text-base ${theme === 'dark' ? 'text-gray-200' : 'text-gray-800'}`}>{spec}</span>
+              <span className={`font-bold text-sm sm:text-base ${theme === 'dark' ? 'text-gray-200' : 'text-gray-800'}`}>{specText}</span>
             </div>
           );
         })}
