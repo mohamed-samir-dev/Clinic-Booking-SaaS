@@ -1,13 +1,21 @@
 'use client';
 
-export const StatusLegend = () => {
+interface StatusLegendProps {
+  theme: 'light' | 'dark';
+}
+
+export const StatusLegend = ({ theme }: StatusLegendProps) => {
   return (
-    <div className="bg-white rounded-xl sm:rounded-2xl shadow-lg p-3 sm:p-4 mb-3 sm:mb-5 border border-gray-100">
+    <div className={`rounded-xl sm:rounded-2xl shadow-lg p-3 sm:p-4 mb-3 sm:mb-5 border ${
+      theme === 'dark' ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-100'
+    }`}>
       <div className="flex items-center gap-2 mb-2 sm:mb-3">
         <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-lg bg-linear-to-br from-purple-500 to-purple-600 flex items-center justify-center">
           <span className="material-icons text-white text-sm sm:text-base">palette</span>
         </div>
-        <h3 className="text-sm sm:text-base font-bold text-gray-900">Status Legend</h3>
+        <h3 className={`text-sm sm:text-base font-bold ${
+          theme === 'dark' ? 'text-white' : 'text-gray-900'
+        }`}>Status Legend</h3>
       </div>
       <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
         <div className="flex items-center gap-1.5 sm:gap-2 p-1.5 sm:p-2 bg-yellow-50 rounded-lg border border-yellow-200">
