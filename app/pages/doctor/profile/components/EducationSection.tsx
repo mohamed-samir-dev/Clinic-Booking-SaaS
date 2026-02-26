@@ -1,6 +1,8 @@
 import { GraduationCap, Plus, Trash2 } from 'lucide-react';
 import { DoctorProfile } from '../types';
 import { useState } from 'react';
+import { useLanguage } from '@/app/contexts/LanguageContext';
+import translations from '@/messages/translations';
 
 interface EducationSectionProps {
   education: DoctorProfile['education'];
@@ -13,6 +15,8 @@ interface EducationSectionProps {
 
 export const EducationSection = ({ education, theme, editData, onUpdate, onSave, saving }: EducationSectionProps) => {
   const [editing, setEditing] = useState(false);
+  const { locale } = useLanguage();
+  const t = translations[locale].doctor.profile;
 
   const handleAdd = () => {
     onUpdate([...editData, { degree: '', institution: '', year: '' }]);
@@ -49,13 +53,13 @@ export const EducationSection = ({ education, theme, editData, onUpdate, onSave,
           <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-linear-to-br from-blue-500 to-blue-600 flex items-center justify-center">
             <GraduationCap className="w-4 h-4 text-white" />
           </div>
-          Education
+          {t.education}
         </h3>
         {!editing && (
           <button
             onClick={() => setEditing(true)}
             className="p-1.5 bg-blue-100 hover:bg-blue-200 rounded-lg transition-colors"
-            title="Edit Education"
+            title={t.edit}
           >
             <span className="material-icons text-sm text-blue-600">edit</span>
           </button>
@@ -84,7 +88,7 @@ export const EducationSection = ({ education, theme, editData, onUpdate, onSave,
                 type="text"
                 value={edu.degree}
                 onChange={(e) => handleChange(index, 'degree', e.target.value)}
-                placeholder="Degree (e.g., MBBS)"
+                placeholder={locale === 'ar' ? 'الدرجة (مثل: بكالوريوس طب)' : 'Degree (e.g., MBBS)'}
                 className={`w-full px-3 py-2 rounded-lg text-sm focus:outline-none ${
                   theme === 'dark' 
                     ? 'bg-gray-600 border-gray-500 text-white focus:border-blue-500' 
@@ -95,7 +99,7 @@ export const EducationSection = ({ education, theme, editData, onUpdate, onSave,
                 type="text"
                 value={edu.institution}
                 onChange={(e) => handleChange(index, 'institution', e.target.value)}
-                placeholder="Institution"
+                placeholder={locale === 'ar' ? 'المؤسسة' : 'Institution'}
                 className={`w-full px-3 py-2 rounded-lg text-sm focus:outline-none ${
                   theme === 'dark' 
                     ? 'bg-gray-600 border-gray-500 text-white focus:border-blue-500' 
@@ -106,7 +110,7 @@ export const EducationSection = ({ education, theme, editData, onUpdate, onSave,
                 type="text"
                 value={edu.year}
                 onChange={(e) => handleChange(index, 'year', e.target.value)}
-                placeholder="Year (e.g., 2020)"
+                placeholder={locale === 'ar' ? 'السنة (مثل: 2020)' : 'Year (e.g., 2020)'}
                 className={`w-full px-3 py-2 rounded-lg text-sm focus:outline-none ${
                   theme === 'dark' 
                     ? 'bg-gray-600 border-gray-500 text-white focus:border-blue-500' 
@@ -124,7 +128,7 @@ export const EducationSection = ({ education, theme, editData, onUpdate, onSave,
                 : 'border-blue-300 text-blue-600 hover:border-blue-500 hover:text-blue-700'
             }`}
           >
-            <Plus className="w-4 h-4" /> Add Education
+            <Plus className="w-4 h-4" /> {t.addEducation}
           </button>
 
           <div className="flex gap-2 pt-2">
@@ -133,14 +137,14 @@ export const EducationSection = ({ education, theme, editData, onUpdate, onSave,
               disabled={saving}
               className="flex-1 py-2 px-3 bg-green-500 hover:bg-green-600 text-white rounded-lg disabled:opacity-50 font-semibold flex items-center justify-center gap-2 text-sm"
             >
-              <span className="material-icons text-sm">check</span> Save
+              <span className="material-icons text-sm">check</span> {t.save}
             </button>
             <button
               onClick={handleCancel}
               disabled={saving}
               className="flex-1 py-2 px-3 bg-red-500 hover:bg-red-600 text-white rounded-lg disabled:opacity-50 font-semibold flex items-center justify-center gap-2 text-sm"
             >
-              <span className="material-icons text-sm">close</span> Cancel
+              <span className="material-icons text-sm">close</span> {t.cancel}
             </button>
           </div>
         </div>
@@ -149,7 +153,7 @@ export const EducationSection = ({ education, theme, editData, onUpdate, onSave,
           {(!education || education.length === 0) ? (
             <p className={`text-sm text-center py-4 ${
               theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
-            }`}>No education added yet</p>
+            }`}>{locale === 'ar' ? 'لم يتم إضافة تعليم بعد' : 'No education added yet'}</p>
           ) : (
             education.map((edu, index) => (
               <div key={index} className={`flex gap-3 sm:gap-4 p-3 sm:p-4 rounded-xl border ${
