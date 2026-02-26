@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { DoctorProfile, ClinicWorkingHours, EditData } from '../types';
 
@@ -52,33 +52,40 @@ export const useDoctorProfile = () => {
 
 export const useProfileEdit = (profile: DoctorProfile | null) => {
   const [editMode, setEditMode] = useState(false);
-  const [editData, setEditData] = useState<EditData>({
-    firstName: '',
-    lastName: '',
-    email: '',
-    fees: 0,
-    consultationDuration: 20,
-    phone: '',
-    location: { address: '', city: '' },
-    password: '',
-    availability: []
-  });
+  
+  const initialData = useMemo(() => 
+    profile ? {
+      firstName: profile.firstName,
+      lastName: profile.lastName,
+      email: profile.email,
+      fees: profile.fees,
+      consultationDuration: profile.consultationDuration,
+      phone: profile.phone || '',
+      location: { address: profile.location?.address || '', city: profile.location?.city || '' },
+      password: '',
+      aboutUs: profile.aboutUs?.en || '',
+      availability: profile.availability || [],
+      education: profile.education || []
+    } : {
+      firstName: '',
+      lastName: '',
+      email: '',
+      fees: 0,
+      consultationDuration: 20,
+      phone: '',
+      location: { address: '', city: '' },
+      password: '',
+      aboutUs: '',
+      availability: [],
+      education: []
+    }, [profile]
+  );
+
+  const [editData, setEditData] = useState<EditData>(initialData);
 
   useEffect(() => {
-    if (profile) {
-      setEditData({
-        firstName: profile.firstName,
-        lastName: profile.lastName,
-        email: profile.email,
-        fees: profile.fees,
-        consultationDuration: profile.consultationDuration,
-        phone: profile.phone || '',
-        location: { address: profile.location?.address || '', city: profile.location?.city || '' },
-        password: '',
-        availability: profile.availability || []
-      });
-    }
-  }, [profile]);
+    setEditData(initialData);
+  }, [initialData]);
 
   return { editMode, setEditMode, editData, setEditData };
 };
