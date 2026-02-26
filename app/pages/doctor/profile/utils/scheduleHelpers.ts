@@ -1,5 +1,7 @@
 import { ClinicWorkingHours, EditData } from '../types';
 
+type Locale = 'en' | 'ar';
+
 export const getClinicDayData = (day: string, clinicHours: ClinicWorkingHours) => {
   const lowerDay = day.toLowerCase();
   const capitalizedDay = day.charAt(0).toUpperCase() + day.slice(1).toLowerCase();
@@ -61,15 +63,29 @@ export const updateTimeSlot = (
 
 export const validateWorkingHours = (
   availability: Array<{ day: string; slots: Array<{ from: string; to: string }> }>,
-  clinicHours: ClinicWorkingHours
+  clinicHours: ClinicWorkingHours,
+  locale: 'en' | 'ar' = 'en'
 ): { valid: boolean; error?: string } => {
+  const daysMap: Record<string, { en: string; ar: string }> = {
+    sunday: { en: 'Sunday', ar: 'الأحد' },
+    monday: { en: 'Monday', ar: 'الاثنين' },
+    tuesday: { en: 'Tuesday', ar: 'الثلاثاء' },
+    wednesday: { en: 'Wednesday', ar: 'الأربعاء' },
+    thursday: { en: 'Thursday', ar: 'الخميس' },
+    friday: { en: 'Friday', ar: 'الجمعة' },
+    saturday: { en: 'Saturday', ar: 'السبت' }
+  };
+
   for (const daySchedule of availability) {
     const clinicDay = getClinicDayData(daySchedule.day, clinicHours);
+    const dayName = daysMap[daySchedule.day.toLowerCase()]?.[locale] || daySchedule.day;
     
     if (!clinicDay || clinicDay.isOpen !== true) {
       return {
         valid: false,
-        error: `Cannot set working hours on ${daySchedule.day}. The clinic is closed on this day.`
+        error: locale === 'ar' 
+          ? `لا يمكن تحديد ساعات عمل في ${dayName}. العيادة مغلقة في هذا اليوم.`
+          : `Cannot set working hours on ${dayName}. The clinic is closed on this day.`
       };
     }
     
@@ -77,7 +93,9 @@ export const validateWorkingHours = (
       if (slot.from < clinicDay.openTime || slot.to > clinicDay.closeTime) {
         return {
           valid: false,
-          error: `Working hours on ${daySchedule.day} (${slot.from} - ${slot.to}) are outside clinic hours (${clinicDay.openTime} - ${clinicDay.closeTime})`
+          error: locale === 'ar'
+            ? `ساعات العمل في ${dayName} (${slot.from} - ${slot.to}) خارج ساعات العيادة (${clinicDay.openTime} - ${clinicDay.closeTime})`
+            : `Working hours on ${dayName} (${slot.from} - ${slot.to}) are outside clinic hours (${clinicDay.openTime} - ${clinicDay.closeTime})`
         };
       }
     }
