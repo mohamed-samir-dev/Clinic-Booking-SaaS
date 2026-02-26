@@ -76,3 +76,24 @@ export const getDaysInMonth = (date: Date, availability: DayAvailability[]): Cal
   
   return days;
 };
+
+export const isTimePassed = (timeSlot: string, selectedDate: Date | null): boolean => {
+  if (!selectedDate) return false;
+  
+  const today = new Date();
+  const isToday = selectedDate.toDateString() === today.toDateString();
+  
+  if (!isToday) return false;
+  
+  const [time, period] = timeSlot.split(' ');
+  const [hours, minutes] = time.split(':').map(Number);
+  
+  let hour24 = hours;
+  if (period === 'PM' && hours !== 12) hour24 = hours + 12;
+  if (period === 'AM' && hours === 12) hour24 = 0;
+  
+  const slotTime = new Date();
+  slotTime.setHours(hour24, minutes, 0, 0);
+  
+  return slotTime < today;
+};
