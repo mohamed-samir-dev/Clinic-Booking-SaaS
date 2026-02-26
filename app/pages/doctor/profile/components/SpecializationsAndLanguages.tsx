@@ -3,28 +3,37 @@ import { DoctorProfile } from '../types';
 
 interface SpecializationsProps {
   specializations: DoctorProfile['specializations'];
+  theme: 'light' | 'dark';
 }
 
-export const Specializations = ({ specializations }: SpecializationsProps) => {
+export const Specializations = ({ specializations, theme }: SpecializationsProps) => {
   if (!specializations || specializations.length === 0) return null;
 
   return (
-    <div className="bg-white rounded-xl sm:rounded-2xl shadow-lg border border-gray-100 p-4 sm:p-6 lg:p-8">
-      <h3 className="text-base sm:text-lg lg:text-xl font-bold text-gray-900 mb-4 sm:mb-5 lg:mb-6 flex items-center gap-2">
+    <div className={`rounded-xl sm:rounded-2xl shadow-lg border p-4 sm:p-6 lg:p-8 ${
+      theme === 'dark' ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-100'
+    }`}>
+      <h3 className={`text-base sm:text-lg lg:text-xl font-bold mb-4 sm:mb-5 lg:mb-6 flex items-center gap-2 ${
+        theme === 'dark' ? 'text-white' : 'text-gray-900'
+      }`}>
         <div className="w-8 h-8 sm:w-9 sm:h-9 lg:w-10 lg:h-10 rounded-lg bg-gradient-to-br from-purple-500 to-purple-600 flex items-center justify-center">
           <Award className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
         </div>
         Specializations
       </h3>
       <div className="flex flex-wrap gap-2 sm:gap-2.5">
-        {specializations.map((spec, index) => (
-          <span 
-            key={index}
-            className="px-3 sm:px-4 py-2 sm:py-2.5 bg-gradient-to-r from-purple-50 to-pink-50 text-purple-700 rounded-lg text-xs sm:text-sm font-semibold border border-purple-200"
-          >
-            {spec}
-          </span>
-        ))}
+        {specializations.map((spec, index) => {
+          const displayText = typeof spec === 'string' ? spec : spec.en;
+          
+          return (
+            <span 
+              key={index}
+              className="px-3 sm:px-4 py-2 sm:py-2.5 bg-gradient-to-r from-purple-50 to-pink-50 text-purple-700 rounded-lg text-xs sm:text-sm font-semibold border border-purple-200"
+            >
+              {displayText}
+            </span>
+          );
+        })}
       </div>
     </div>
   );
@@ -32,14 +41,19 @@ export const Specializations = ({ specializations }: SpecializationsProps) => {
 
 interface LanguagesSectionProps {
   languages: DoctorProfile['languages'];
+  theme: 'light' | 'dark';
 }
 
-export const LanguagesSection = ({ languages }: LanguagesSectionProps) => {
+export const LanguagesSection = ({ languages, theme }: LanguagesSectionProps) => {
   if (!languages || languages.length === 0) return null;
 
   return (
-    <div className="bg-white rounded-xl sm:rounded-2xl shadow-lg border border-gray-100 p-4 sm:p-6 lg:p-8">
-      <h3 className="text-base sm:text-lg lg:text-xl font-bold text-gray-900 mb-4 sm:mb-5 lg:mb-6 flex items-center gap-2">
+    <div className={`rounded-xl sm:rounded-2xl shadow-lg border p-4 sm:p-6 lg:p-8 ${
+      theme === 'dark' ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-100'
+    }`}>
+      <h3 className={`text-base sm:text-lg lg:text-xl font-bold mb-4 sm:mb-5 lg:mb-6 flex items-center gap-2 ${
+        theme === 'dark' ? 'text-white' : 'text-gray-900'
+      }`}>
         <div className="w-8 h-8 sm:w-9 sm:h-9 lg:w-10 lg:h-10 rounded-lg bg-gradient-to-br from-indigo-500 to-indigo-600 flex items-center justify-center">
           <Languages className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
         </div>
