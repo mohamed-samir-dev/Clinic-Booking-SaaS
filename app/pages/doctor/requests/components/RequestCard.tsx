@@ -6,9 +6,10 @@ import { getStatusConfig, getTimeAgo } from '../utils/helpers';
 interface RequestCardProps {
   request: Appointment;
   onStatusUpdate: (id: string, status: string) => void;
+  theme: 'light' | 'dark';
 }
 
-export const RequestCard = ({ request, onStatusUpdate }: RequestCardProps) => {
+export const RequestCard = ({ request, onStatusUpdate, theme }: RequestCardProps) => {
   const config = getStatusConfig(request.status);
   const patientName = request.patientId?.name || request.guestData?.fullName || 'Guest Patient';
   const patientPhone = request.patientId?.phone || request.guestData?.phone;
@@ -24,13 +25,17 @@ export const RequestCard = ({ request, onStatusUpdate }: RequestCardProps) => {
           </div>
 
           <div className="flex-1 min-w-0">
-            <h4 className="font-bold text-gray-900 text-xs sm:text-base mb-1 truncate">{patientName}</h4>
+            <h4 className={`font-bold text-xs sm:text-base mb-1 truncate ${
+              theme === 'dark' ? 'text-black' : 'text-gray-900'
+            }`}>{patientName}</h4>
             <div className="flex items-center gap-1 flex-wrap">
               <span className={`px-1.5 py-0.5 rounded-md text-[9px] sm:text-xs font-bold ${config.textColor} bg-white/60 flex items-center gap-0.5`}>
                 <span className="material-icons text-[10px] sm:text-xs">{config.icon}</span>
                 <span className="whitespace-nowrap">{config.label}</span>
               </span>
-              <span className="text-[9px] sm:text-xs text-gray-500 font-medium whitespace-nowrap">
+              <span className={`text-[9px] sm:text-xs font-medium whitespace-nowrap ${
+                theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
+              }`}>
                 {getTimeAgo(request.createdAt)}
               </span>
             </div>
