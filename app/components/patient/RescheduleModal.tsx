@@ -56,7 +56,6 @@ export default function RescheduleModal({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  // Fetch doctor availability
   useEffect(() => {
     const fetchAvailability = async () => {
       try {
@@ -71,7 +70,6 @@ export default function RescheduleModal({
     fetchAvailability();
   }, [doctorId]);
 
-  // Fetch blocked dates
   useEffect(() => {
     const fetchBlockedDates = async () => {
       try {
@@ -88,7 +86,6 @@ export default function RescheduleModal({
     fetchBlockedDates();
   }, [doctorId]);
 
-  // Fetch booked slots for selected date (excluding current appointment)
   useEffect(() => {
     if (!selectedDate) {
       setBookedSlots([]);
@@ -123,7 +120,6 @@ export default function RescheduleModal({
     fetchBookedSlots();
   }, [selectedDate, doctorId, appointmentId]);
 
-  // Generate time slots
   const availableSlots = useMemo(() => {
     if (!selectedDate || !availability.length) return [];
 
@@ -149,7 +145,6 @@ export default function RescheduleModal({
         const displayHour = hour > 12 ? hour - 12 : hour === 0 ? 12 : hour;
         const timeSlot = `${String(displayHour).padStart(2, '0')}:${String(min).padStart(2, '0')} ${period}`;
         
-        // Check if time has passed (only for today)
         if (isToday) {
           const slotTime = new Date();
           slotTime.setHours(hour, min, 0, 0);
@@ -167,7 +162,6 @@ export default function RescheduleModal({
     return slots.filter(slot => !bookedSlots.includes(slot));
   }, [selectedDate, availability, consultationDuration, bookedSlots]);
 
-  // Generate calendar days
   const getDaysInMonth = () => {
     const year = currentMonth.getFullYear();
     const month = currentMonth.getMonth();
@@ -223,20 +217,18 @@ export default function RescheduleModal({
 
       const startTime = `${String(hour24).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
       
-      // Calculate end time properly
       const totalMinutes = hour24 * 60 + minutes + consultationDuration;
       const endHour = Math.floor(totalMinutes / 60);
       const endMin = totalMinutes % 60;
       const endTime = `${String(endHour).padStart(2, '0')}:${String(endMin).padStart(2, '0')}`;
 
-      // Format date without timezone conversion
       const year = selectedDate.getFullYear();
       const month = String(selectedDate.getMonth() + 1).padStart(2, '0');
       const day = String(selectedDate.getDate()).padStart(2, '0');
       const appointmentDate = `${year}-${month}-${day}`;
 
       const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:5000/api/patient/appointments/${appointmentId}/reschedule`, {
+      const response = await fetch(`http://localhost:5000/api/patients/appointments/${appointmentId}/reschedule`, {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -272,7 +264,6 @@ export default function RescheduleModal({
   const canGoPrevious = currentMonth > new Date(today.getFullYear(), today.getMonth(), 1);
   const canGoNext = currentMonth < new Date(maxMonth.getFullYear(), maxMonth.getMonth(), 1);
 
-  // Categorize time slots
   const categorizeSlots = (slots: string[]) => {
     const morning = slots.filter(time => time.includes('AM') && !time.startsWith('12'));
     const afternoon = slots.filter(time => 
@@ -288,62 +279,62 @@ export default function RescheduleModal({
   const { morning, afternoon, evening } = categorizeSlots(availableSlots);
 
   return (
-    <div className="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center p-4 z-50" onClick={onClose}>
+    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50" onClick={onClose}>
       <div className="bg-white rounded-2xl max-w-4xl w-full shadow-2xl max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
-        <div className="bg-linear-to-r from-teal-500 to-teal-600 p-6 rounded-t-2xl sticky top-0 z-10">
+        <div className="bg-linear-to-r from-teal-500 to-teal-600 p-4 sm:p-6 rounded-t-2xl sticky top-0 z-10">
           <div className="flex items-center justify-between text-white">
             <div>
-              <h2 className="text-xl font-bold mb-1">Reschedule Appointment</h2>
-              <p className="text-teal-100 text-sm">Choose from available dates and times</p>
+              <h2 className="text-lg sm:text-xl font-bold mb-1">Reschedule Appointment</h2>
+              <p className="text-teal-100 text-xs sm:text-sm">Choose from available dates and times</p>
             </div>
-            <button onClick={onClose} className="text-white  cursor-pointer  p-2 rounded-lg transition-colors">
-              <FaTimes className="text-xl" />
+            <button onClick={onClose} className="text-white p-2 rounded-lg transition-colors">
+              <FaTimes className="text-lg sm:text-xl" />
             </button>
           </div>
         </div>
 
-        <form onSubmit={handleSubmit} className="p-6 space-y-6">
+        <form onSubmit={handleSubmit} className="p-4 sm:p-6 space-y-4 sm:space-y-6">
           {error && (
-            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm">
+            <div className="bg-red-50 border border-red-200 text-red-700 px-3 sm:px-4 py-2 sm:py-3 rounded-lg text-xs sm:text-sm">
               {error}
             </div>
           )}
 
-          <div className="grid md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
             {/* Calendar */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-3">
+              <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-2 sm:mb-3">
                 <FaCalendarAlt className="inline mr-2 text-teal-600" />
                 Select Date
               </label>
-              <div className="bg-white border border-gray-200 rounded-xl p-4">
-                <div className="flex items-center justify-between mb-4">
+              <div className="bg-white border border-gray-200 rounded-xl p-3 sm:p-4">
+                <div className="flex items-center justify-between mb-3 sm:mb-4">
                   <button
                     type="button"
                     onClick={() => setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1))}
                     disabled={!canGoPrevious}
-                    className="p-2 hover:bg-gray-100 rounded-lg disabled:opacity-30 disabled:cursor-not-allowed text-gray-700 font-bold text-lg"
+                    className="p-1.5 sm:p-2 hover:bg-gray-100 rounded-lg disabled:opacity-30 disabled:cursor-not-allowed text-gray-700 font-bold text-base sm:text-lg"
                   >
                     ←
                   </button>
-                  <h3 className="font-semibold text-gray-900">
+                  <h3 className="font-semibold text-gray-900 text-sm sm:text-base">
                     {MONTH_NAMES[currentMonth.getMonth()]} {currentMonth.getFullYear()}
                   </h3>
                   <button
                     type="button"
                     onClick={() => setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1))}
                     disabled={!canGoNext}
-                    className="p-2 hover:bg-gray-100 rounded-lg disabled:opacity-30 disabled:cursor-not-allowed text-gray-700 font-bold text-lg"
+                    className="p-1.5 sm:p-2 hover:bg-gray-100 rounded-lg disabled:opacity-30 disabled:cursor-not-allowed text-gray-700 font-bold text-base sm:text-lg"
                   >
                     →
                   </button>
                 </div>
-                <div className="grid grid-cols-7 gap-1 mb-2">
+                <div className="grid grid-cols-7 gap-0.5 sm:gap-1 mb-2">
                   {DAY_NAMES.map(day => (
-                    <div key={day} className="text-center text-xs font-medium text-gray-500 py-2">{day}</div>
+                    <div key={day} className="text-center text-[10px] sm:text-xs font-medium text-gray-500 py-1 sm:py-2">{day}</div>
                   ))}
                 </div>
-                <div className="grid grid-cols-7 gap-1">
+                <div className="grid grid-cols-7 gap-0.5 sm:gap-1">
                   {days.map((day, idx) => (
                     <button
                       key={idx}
@@ -351,7 +342,7 @@ export default function RescheduleModal({
                       onClick={() => day.isAvailable && day.date && setSelectedDate(day.date)}
                       disabled={!day.isAvailable}
                       className={`
-                        aspect-square p-2 text-sm rounded-lg transition-all
+                        aspect-square p-1 sm:p-2 text-xs sm:text-sm rounded-lg transition-all
                         ${!day.isCurrentMonth ? 'text-gray-300' : ''}
                         ${day.isPast || !day.isAvailable ? 'text-gray-300 cursor-not-allowed' : 'hover:bg-teal-50'}
                         ${selectedDate && day.date && selectedDate.toDateString() === day.date.toDateString() ? 'bg-teal-600 text-white font-bold' : ''}
@@ -367,31 +358,31 @@ export default function RescheduleModal({
 
             {/* Time Slots */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-3">
+              <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-2 sm:mb-3">
                 <FaClock className="inline mr-2 text-teal-600" />
                 Select Time
               </label>
-              <div className="bg-white border border-gray-200 rounded-xl p-4 max-h-96 overflow-y-auto">
+              <div className="bg-white border border-gray-200 rounded-xl p-3 sm:p-4 max-h-80 sm:max-h-96 overflow-y-auto">
                 {!selectedDate ? (
-                  <p className="text-gray-500 text-center py-8">Please select a date first</p>
+                  <p className="text-gray-500 text-center py-6 sm:py-8 text-xs sm:text-sm">Please select a date first</p>
                 ) : availableSlots.length === 0 ? (
-                  <p className="text-gray-500 text-center py-8">No available slots for this date</p>
+                  <p className="text-gray-500 text-center py-6 sm:py-8 text-xs sm:text-sm">No available slots for this date</p>
                 ) : (
-                  <div className="space-y-4">
+                  <div className="space-y-3 sm:space-y-4">
                     {morning.length > 0 && (
                       <div>
                         <div className="flex items-center gap-2 mb-2">
-                          <span className="text-lg">🌅</span>
-                          <h4 className="text-sm font-semibold text-gray-700">Morning</h4>
-                          <span className="text-xs text-gray-500">({morning.length})</span>
+                          <span className="text-base sm:text-lg">🌅</span>
+                          <h4 className="text-xs sm:text-sm font-semibold text-gray-700">Morning</h4>
+                          <span className="text-[10px] sm:text-xs text-gray-500">({morning.length})</span>
                         </div>
-                        <div className="grid grid-cols-2 gap-2">
+                        <div className="grid grid-cols-2 gap-1.5 sm:gap-2">
                           {morning.map((slot) => (
                             <button
                               key={slot}
                               type="button"
                               onClick={() => setSelectedTime(slot)}
-                              className={`px-3 py-2 rounded-lg text-sm font-medium transition-all ${
+                              className={`px-2 sm:px-3 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm font-medium transition-all ${
                                 selectedTime === slot ? 'bg-teal-600 text-white' : 'bg-gray-50 text-gray-700 hover:bg-teal-50 hover:text-teal-700'
                               }`}
                             >
@@ -404,17 +395,17 @@ export default function RescheduleModal({
                     {afternoon.length > 0 && (
                       <div>
                         <div className="flex items-center gap-2 mb-2">
-                          <span className="text-lg">☀️</span>
-                          <h4 className="text-sm font-semibold text-gray-700">Afternoon</h4>
-                          <span className="text-xs text-gray-500">({afternoon.length})</span>
+                          <span className="text-base sm:text-lg">☀️</span>
+                          <h4 className="text-xs sm:text-sm font-semibold text-gray-700">Afternoon</h4>
+                          <span className="text-[10px] sm:text-xs text-gray-500">({afternoon.length})</span>
                         </div>
-                        <div className="grid grid-cols-2 gap-2">
+                        <div className="grid grid-cols-2 gap-1.5 sm:gap-2">
                           {afternoon.map((slot) => (
                             <button
                               key={slot}
                               type="button"
                               onClick={() => setSelectedTime(slot)}
-                              className={`px-3 py-2 rounded-lg text-sm font-medium transition-all ${
+                              className={`px-2 sm:px-3 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm font-medium transition-all ${
                                 selectedTime === slot ? 'bg-teal-600 text-white' : 'bg-gray-50 text-gray-700 hover:bg-teal-50 hover:text-teal-700'
                               }`}
                             >
@@ -427,17 +418,17 @@ export default function RescheduleModal({
                     {evening.length > 0 && (
                       <div>
                         <div className="flex items-center gap-2 mb-2">
-                          <span className="text-lg">🌙</span>
-                          <h4 className="text-sm font-semibold text-gray-700">Evening</h4>
-                          <span className="text-xs text-gray-500">({evening.length})</span>
+                          <span className="text-base sm:text-lg">🌙</span>
+                          <h4 className="text-xs sm:text-sm font-semibold text-gray-700">Evening</h4>
+                          <span className="text-[10px] sm:text-xs text-gray-500">({evening.length})</span>
                         </div>
-                        <div className="grid grid-cols-2 gap-2">
+                        <div className="grid grid-cols-2 gap-1.5 sm:gap-2">
                           {evening.map((slot) => (
                             <button
                               key={slot}
                               type="button"
                               onClick={() => setSelectedTime(slot)}
-                              className={`px-3 py-2 rounded-lg text-sm font-medium transition-all ${
+                              className={`px-2 sm:px-3 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm font-medium transition-all ${
                                 selectedTime === slot ? 'bg-teal-600 text-white' : 'bg-gray-50 text-gray-700 hover:bg-teal-50 hover:text-teal-700'
                               }`}
                             >
@@ -454,31 +445,31 @@ export default function RescheduleModal({
           </div>
 
           {selectedDate && selectedTime && (
-            <div className="bg-teal-50 border border-teal-200 rounded-lg p-4">
-              <p className="text-sm text-teal-800 font-medium">
+            <div className="bg-teal-50 border border-teal-200 rounded-lg p-3 sm:p-4">
+              <p className="text-xs sm:text-sm text-teal-800 font-medium">
                 New appointment: {selectedDate.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })} at {selectedTime}
               </p>
             </div>
           )}
 
-          <div className="bg-blue-50 rounded-lg p-4">
-            <p className="text-sm text-blue-700">
+          <div className="bg-blue-50 rounded-lg p-3 sm:p-4">
+            <p className="text-xs sm:text-sm text-blue-700">
               Note: You can reschedule your appointment to any future date and time.
             </p>
           </div>
 
-          <div className="flex gap-3 pt-2">
+          <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 pt-2">
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 px-4 py-2.5 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors font-medium"
+              className="flex-1 px-4 py-2 sm:py-2.5 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors font-medium text-sm sm:text-base"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={loading || !selectedDate || !selectedTime}
-              className="flex-1 px-4 py-2.5 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+              className="flex-1 px-4 py-2 sm:py-2.5 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors font-medium text-sm sm:text-base disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {loading ? 'Rescheduling...' : 'Reschedule'}
             </button>
