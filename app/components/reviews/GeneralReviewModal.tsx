@@ -89,7 +89,7 @@ export default function GeneralReviewModal({ isOpen, onClose, onSuccess }: Gener
               value={patientName}
               onChange={(e) => setPatientName(e.target.value)}
               placeholder={t.enterName}
-              className={`w-full px-4 py-3 rounded-lg border focus:ring-2 focus:ring-teal-500 outline-none ${theme === 'dark' ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300'}`}
+              className={`w-full px-4 py-3 text-black rounded-lg border focus:ring-2 focus:ring-teal-500 outline-none ${theme === 'dark' ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300'}`}
             />
           </div>
 
@@ -121,7 +121,7 @@ export default function GeneralReviewModal({ isOpen, onClose, onSuccess }: Gener
               required
               minLength={10}
               maxLength={500}
-              className={`w-full px-4 py-3 rounded-lg border focus:ring-2 focus:ring-teal-500 outline-none resize-none ${theme === 'dark' ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300'}`}
+              className={`w-full px-4 py-3 text-black rounded-lg border focus:ring-2 focus:ring-teal-500 outline-none resize-none ${theme === 'dark' ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300'}`}
             />
             <p className={`text-xs mt-1 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
               {comment.length}/500 {t.characters}
