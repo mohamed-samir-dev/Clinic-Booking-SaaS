@@ -1,6 +1,6 @@
 'use client';
 
-import { Building2, MapPin, Phone, ArrowRight } from 'lucide-react';
+import { Building2, MapPin, Phone, ArrowRight, Heart } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useTheme } from '@/app/contexts/ThemeContext';
@@ -24,7 +24,10 @@ export default function ClinicCard({ id, name, logo, address, phone }: ClinicCar
   const displayAddress = address ? (locale === 'ar' && address.ar ? address.ar : address.en) : '';
   
   return (
-    <div className={`mb-10 rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden group border ${theme === 'dark' ? 'bg-gray-700 border-gray-600' : 'bg-white border-gray-100'}`}>
+    <div className={`mb-10 rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden group border relative ${theme === 'dark' ? 'bg-gray-700 border-gray-600' : 'bg-white border-gray-100'}`}>
+      <button className="absolute top-4 right-4 z-10 text-gray-400 hover:text-red-500 transition-colors duration-300">
+        <Heart className="w-6 h-6" />
+      </button>
       <div className={`relative h-64 flex items-center justify-center p-8 ${theme === 'dark' ? 'bg-gray-800' : 'bg-linear-to-br from-teal-50 to-emerald-50'}`}>
         {logo ? (
           <div className="relative w-full h-full">
