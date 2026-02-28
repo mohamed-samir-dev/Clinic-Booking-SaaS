@@ -52,8 +52,8 @@ export const api = {
   },
   patient: {
     appointments: {
-      getAll: () => fetchAPI('/api/patient/appointments', { requireAuth: true }),
-      cancel: (id: string) => fetchAPI(`/api/patient/appointments/${id}/cancel`, { 
+      getAll: () => fetchAPI('/api/patients/appointments', { requireAuth: true }),
+      cancel: (id: string) => fetchAPI(`/api/patients/appointments/${id}/cancel`, { 
         method: 'PUT', 
         requireAuth: true 
       }),
