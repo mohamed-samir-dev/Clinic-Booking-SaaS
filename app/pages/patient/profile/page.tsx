@@ -72,7 +72,7 @@ export default function PersonalInfoPage() {
 
       <div>
         <form onSubmit={handleSubmit}>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 mb-4 sm:mb-6">
             <ContactInfo formData={formData} isEditing={isEditing} onChange={setFormData} />
             <PersonalDetails formData={formData} isEditing={isEditing} onChange={setFormData} />
           </div>
