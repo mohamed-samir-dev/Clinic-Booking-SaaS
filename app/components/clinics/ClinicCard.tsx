@@ -3,9 +3,11 @@
 import { Building2, MapPin, Phone, ArrowRight, Heart } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useState } from 'react';
 import { useTheme } from '@/app/contexts/ThemeContext';
 import { useLanguage } from '@/app/contexts/LanguageContext';
 import translations from '@/messages/translations';
+import { useFavoriteClinics } from '@/app/hooks/useFavoriteClinics';
 
 interface ClinicCardProps {
   id: string;
@@ -19,14 +21,50 @@ export default function ClinicCard({ id, name, logo, address, phone }: ClinicCar
   const { theme } = useTheme();
   const { locale } = useLanguage();
   const t = translations[locale].clinics;
+  const { toggleFavorite, isFavorite: checkIsFavorite, isAuthenticated } = useFavoriteClinics();
+  const [showMessage, setShowMessage] = useState(false);
+  const [message, setMessage] = useState('');
   
   const displayName = locale === 'ar' && name.ar ? name.ar : name.en;
   const displayAddress = address ? (locale === 'ar' && address.ar ? address.ar : address.en) : '';
+  const isFavorited = checkIsFavorite(id);
+
+  const handleFavoriteClick = async () => {
+    if (!isAuthenticated) {
+      setMessage(locale === 'ar' ? 'يجب تسجيل الدخول كمريض لإضافة العيادات للمفضلة' : 'You must login as a patient to add clinics to favorites');
+      setShowMessage(true);
+      setTimeout(() => setShowMessage(false), 3000);
+      return;
+    }
+
+    const result = await toggleFavorite(id);
+    if (result) {
+      const isAdding = !isFavorited;
+      setMessage(
+        isAdding 
+          ? (locale === 'ar' ? '✓ تمت إضافة العيادة للمفضلة' : '✓ Clinic added to favorites')
+          : (locale === 'ar' ? '✓ تمت إزالة العيادة من المفضلة' : '✓ Clinic removed from favorites')
+      );
+      setShowMessage(true);
+      setTimeout(() => setShowMessage(false), 3000);
+    }
+  };
   
   return (
     <div className={`mb-10 rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden group border relative ${theme === 'dark' ? 'bg-gray-700 border-gray-600' : 'bg-white border-gray-100'}`}>
-      <button className="absolute top-4 right-4 z-10 text-gray-400 hover:text-red-500 transition-colors duration-300">
-        <Heart className="w-6 h-6" />
+      {showMessage && (
+        <div className={`fixed top-20 left-1/2 transform -translate-x-1/2 z-50 px-6 py-3 rounded-lg shadow-2xl animate-bounce ${theme === 'dark' ? 'bg-gray-800 text-white' : 'bg-white text-gray-800'} border-2 ${theme === 'dark' ? 'border-teal-500' : 'border-teal-400'}`}>
+          <p className="text-sm font-bold flex items-center gap-2">
+            <span className="text-green-500 text-lg">✓</span>
+            {message}
+          </p>
+        </div>
+      )}
+      <button 
+        onClick={handleFavoriteClick}
+        className={`absolute top-4 ${locale === 'ar' ? 'left-4' : 'right-4'} z-10 transition-all duration-300 ${isFavorited ? 'text-red-500 scale-110' : 'text-gray-400 hover:text-red-500'}`}
+      >
+        <Heart className={`w-6 h-6 ${isFavorited ? 'fill-current' : ''}`} />
       </button>
       <div className={`relative h-64 flex items-center justify-center p-8 ${theme === 'dark' ? 'bg-gray-800' : 'bg-linear-to-br from-teal-50 to-emerald-50'}`}>
         {logo ? (
