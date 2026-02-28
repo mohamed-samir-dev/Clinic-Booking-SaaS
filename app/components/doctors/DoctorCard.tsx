@@ -3,6 +3,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 import { FaUserMd, FaCalendarCheck, FaCalendarTimes, FaBriefcase, FaClock, FaHospital, FaHeart } from 'react-icons/fa';
 import { useTheme } from '@/app/contexts/ThemeContext';
 import { useLanguage } from '@/app/contexts/LanguageContext';
@@ -10,6 +11,7 @@ import translations from '@/messages/translations';
 import {DoctorCardProps}from '../../types/index'
 import { saveQuickBookingData } from '../../pages/booking/utils/quickBooking';
 import { getServiceKeyFromSpecialty } from '../../pages/booking/utils/serviceHelpers';
+import { useFavorites } from '../../hooks/useFavorites';
 
 const checkIsAvailableNow = (availability?: Array<{ day: string; slots?: Array<{ from: string; to: string }>; workingHours?: { from: string; to: string } }>) => {
   if (!availability || availability.length === 0) return false;
@@ -104,8 +106,13 @@ export default function DoctorCard({
   const { locale } = useLanguage();
   const t = translations[locale].doctors;
   const router = useRouter();
+  const { toggleFavorite, isFavorite: checkIsFavorite, isAuthenticated } = useFavorites();
+  const [showMessage, setShowMessage] = useState(false);
+  const [message, setMessage] = useState('');
+  
   const nextAvailable = getNextAvailableDay(availability, locale);
   const isCurrentlyAvailable = checkIsAvailableNow(availability);
+  const isFavorited = checkIsFavorite(id);
   
   const displayName = locale === 'ar' && name.ar ? name.ar : name.en;
   const displaySpecialty = locale === 'ar' && specialty.ar ? specialty.ar : specialty.en;
@@ -121,11 +128,43 @@ export default function DoctorCard({
     });
     router.push('/pages/booking?quick=true');
   };
+
+  const handleFavoriteClick = async () => {
+    if (!isAuthenticated) {
+      setMessage(locale === 'ar' ? 'يجب تسجيل الدخول كمريض لإضافة الأطباء للمفضلة' : 'You must login as a patient to add doctors to favorites');
+      setShowMessage(true);
+      setTimeout(() => setShowMessage(false), 3000);
+      return;
+    }
+
+    const result = await toggleFavorite(id);
+    if (result) {
+      const isAdding = !isFavorited;
+      setMessage(
+        isAdding 
+          ? (locale === 'ar' ? '✓ تمت إضافة الدكتور للمفضلة' : '✓ Doctor added to favorites')
+          : (locale === 'ar' ? '✓ تمت إزالة الدكتور من المفضلة' : '✓ Doctor removed from favorites')
+      );
+      setShowMessage(true);
+      setTimeout(() => setShowMessage(false), 3000);
+    }
+  };
   
   return (
     <div className={`mb-8 sm:mb-10 rounded-2xl sm:rounded-3xl shadow-md hover:shadow-2xl transition-all duration-500 p-5 sm:p-6 md:p-8 group ${theme === 'dark' ? 'bg-gray-700 border-gray-600' : 'bg-white border-gray-100'} border relative`}>
-      <button className="absolute top-4 right-4 text-gray-400 hover:text-red-500 transition-colors duration-300">
-        <FaHeart className="text-xl" />
+      {showMessage && (
+        <div className={`fixed top-20 left-1/2 transform -translate-x-1/2 z-50 px-6 py-3 rounded-lg shadow-2xl animate-bounce ${theme === 'dark' ? 'bg-gray-800 text-white' : 'bg-white text-gray-800'} border-2 ${theme === 'dark' ? 'border-teal-500' : 'border-teal-400'}`}>
+          <p className="text-sm font-bold flex items-center gap-2">
+            <span className="text-green-500 text-lg">✓</span>
+            {message}
+          </p>
+        </div>
+      )}
+      <button 
+        onClick={handleFavoriteClick}
+        className={`absolute top-4 ${locale === 'ar' ? 'left-4' : 'right-4'} transition-all duration-300 ${isFavorited ? 'text-red-500 scale-110' : 'text-gray-400 hover:text-red-500'}`}
+      >
+        <FaHeart className={`text-xl ${isFavorited ? 'fill-current' : ''}`} />
       </button>
       <div className="flex flex-col items-center">
         <div className="relative w-24 h-24 sm:w-28 sm:h-28 md:w-32 md:h-32 mb-4 sm:mb-5">
