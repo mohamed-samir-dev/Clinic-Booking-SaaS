@@ -152,7 +152,8 @@ export default function DoctorPage() {
 
     window.addEventListener('appointmentUpdated', handleAppointmentUpdate);
     return () => window.removeEventListener('appointmentUpdated', handleAppointmentUpdate);
-  }, [token, locale, t.todayAppointments, t.pendingRequests, t.totalAppointments, t.monthlyRevenue, t.averageRating]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [token]);
 
   return (
     <div className={`h-screen overflow-y-auto transition-colors duration-300 ${
