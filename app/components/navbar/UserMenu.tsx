@@ -36,6 +36,14 @@ export default function UserMenu({ user, showDropdown, setShowDropdown, handleLo
             <p className="text-sm font-semibold text-gray-900">{user.name}</p>
             <p className="text-xs text-gray-500">{user.email}</p>
           </div>
+          {user.role === 'patient' && (
+            <Link
+              href="/pages/patient/profile"
+              className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+            >
+              {locale === 'ar' ? 'الملف الشخصي' : 'Profile'}
+            </Link>
+          )}
           <button
             onClick={handleLogout}
             className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors"
