@@ -35,7 +35,7 @@ export default function ReviewModal({
 
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:5000/api/patient/appointments/${appointmentId}/review`, {
+      const response = await fetch(`http://localhost:5000/api/patients/appointments/${appointmentId}/review`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -63,35 +63,35 @@ export default function ReviewModal({
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 animate-fadeIn">
-      <div className="bg-white rounded-2xl max-w-md w-full animate-slideUp">
-        <div className="border-b border-gray-200 p-6 flex items-center justify-between">
-          <h2 className="text-xl font-bold text-gray-900">Leave a Review</h2>
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50 animate-fadeIn" onClick={onClose}>
+      <div className="bg-white rounded-2xl max-w-md w-full animate-slideUp" onClick={(e) => e.stopPropagation()}>
+        <div className="border-b border-gray-200 p-4 sm:p-6 flex items-center justify-between">
+          <h2 className="text-lg sm:text-xl font-bold text-gray-900">Leave a Review</h2>
           <button
             onClick={onClose}
             className="text-gray-400 hover:text-gray-600 transition-colors"
           >
-            <FaTimes className="text-xl" />
+            <FaTimes className="text-lg sm:text-xl" />
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="p-6 space-y-4">
+        <form onSubmit={handleSubmit} className="p-4 sm:p-6 space-y-3 sm:space-y-4">
           {error && (
-            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm">
+            <div className="bg-red-50 border border-red-200 text-red-700 px-3 sm:px-4 py-2 sm:py-3 rounded-lg text-xs sm:text-sm">
               {error}
             </div>
           )}
 
           <div>
-            <p className="text-sm text-gray-600 mb-2">How was your experience with</p>
-            <p className="font-semibold text-gray-900 mb-4">{doctorName}?</p>
+            <p className="text-xs sm:text-sm text-gray-600 mb-1 sm:mb-2">How was your experience with</p>
+            <p className="font-semibold text-gray-900 mb-3 sm:mb-4 text-sm sm:text-base">{doctorName}?</p>
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-3">
+            <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-2 sm:mb-3">
               Rating
             </label>
-            <div className="flex gap-2 justify-center">
+            <div className="flex gap-1.5 sm:gap-2 justify-center">
               {[1, 2, 3, 4, 5].map((star) => (
                 <button
                   key={star}
@@ -102,7 +102,7 @@ export default function ReviewModal({
                   className="transition-transform hover:scale-110"
                 >
                   <FaStar
-                    className={`text-4xl ${
+                    className={`text-2xl sm:text-4xl ${
                       star <= (hoveredRating || rating)
                         ? 'text-yellow-400'
                         : 'text-gray-300'
@@ -112,7 +112,7 @@ export default function ReviewModal({
               ))}
             </div>
             {rating > 0 && (
-              <p className="text-center text-sm text-gray-600 mt-2">
+              <p className="text-center text-xs sm:text-sm text-gray-600 mt-2">
                 {rating === 1 && 'Poor'}
                 {rating === 2 && 'Fair'}
                 {rating === 3 && 'Good'}
@@ -123,7 +123,7 @@ export default function ReviewModal({
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-2">
               Comment (Optional)
             </label>
             <textarea
@@ -131,22 +131,22 @@ export default function ReviewModal({
               onChange={(e) => setComment(e.target.value)}
               rows={4}
               placeholder="Share your experience..."
-              className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:border-teal-500 focus:ring-2 focus:ring-teal-200 focus:outline-none resize-none"
+              className="w-full px-3 sm:px-4 py-2 sm:py-2.5 text-xs sm:text-sm border border-gray-200 rounded-lg focus:border-teal-500 focus:ring-2 focus:ring-teal-200 focus:outline-none resize-none"
             />
           </div>
 
-          <div className="flex gap-3 pt-2">
+          <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 pt-2">
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 px-4 py-2.5 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors font-medium"
+              className="flex-1 px-4 py-2 sm:py-2.5 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors font-medium text-sm sm:text-base"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={loading}
-              className="flex-1 px-4 py-2.5 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+              className="flex-1 px-4 py-2 sm:py-2.5 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors font-medium text-sm sm:text-base disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {loading ? 'Submitting...' : 'Submit Review'}
             </button>
