@@ -50,7 +50,7 @@ export const usePersonalInfo = () => {
     setLoading(true);
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:5000/api/patient/profile', {
+      const response = await fetch('http://localhost:5000/api/patients/profile', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
         body: JSON.stringify(formData)
