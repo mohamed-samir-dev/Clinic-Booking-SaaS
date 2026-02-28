@@ -37,7 +37,7 @@ export default function MedicalInfoPage() {
       <PageHeader />
 
       
-      <div className="space-y-6">
+      <div className="space-y-4 sm:space-y-6">
         <BasicHealthSection 
           formData={formData}
           setFormData={setFormData}
