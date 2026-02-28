@@ -50,4 +50,13 @@ export const api = {
     getAll: () => fetchAPI('/api/reviews'),
     getStats: () => fetchAPI('/api/reviews/stats'),
   },
+  patient: {
+    appointments: {
+      getAll: () => fetchAPI('/api/patient/appointments', { requireAuth: true }),
+      cancel: (id: string) => fetchAPI(`/api/patient/appointments/${id}/cancel`, { 
+        method: 'PUT', 
+        requireAuth: true 
+      }),
+    },
+  },
 };
