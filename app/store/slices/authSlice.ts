@@ -10,6 +10,28 @@ interface User {
     en: string;
     ar?: string;
   };
+  dateOfBirth?: string;
+  gender?: string;
+  address?: {
+    street?: string;
+    city?: string;
+    state?: string;
+    zipCode?: string;
+  };
+  bloodType?: string;
+  height?: number;
+  weight?: number;
+  allergies?: string[];
+  chronicConditions?: string[];
+  chronicConditionsOther?: string;
+  currentMedications?: Array<{
+    name: string;
+    dosage: string;
+    frequency: string;
+    notes: string;
+  }>;
+  notesForDoctor?: string;
+  medicalHistory?: string[];
 }
 
 interface AuthState {
