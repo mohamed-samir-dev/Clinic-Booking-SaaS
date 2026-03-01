@@ -1,5 +1,9 @@
 import { FaAllergies, FaEdit, FaTimes, FaSave, FaPlus } from 'react-icons/fa';
 import { MedicalFormData } from '../types';
+import { useTheme } from '@/app/contexts/ThemeContext';
+import { useLanguage } from '@/app/contexts/LanguageContext';
+import messages from '@/messages/en.json';
+import messagesAr from '@/messages/ar.json';
 
 interface AllergiesSectionProps {
   formData: MedicalFormData;
@@ -14,18 +18,26 @@ interface AllergiesSectionProps {
 }
 
 export const AllergiesSection = ({ formData, editingSection, setEditingSection, loading, handleSubmit, newAllergy, setNewAllergy, handleAddAllergy, handleRemoveAllergy }: AllergiesSectionProps) => {
+  const { theme } = useTheme();
+  const { locale } = useLanguage();
+  const t = locale === 'ar' ? messagesAr.patient.medical : messages.patient.medical;
+  
   return (
-    <div className="bg-white rounded-2xl shadow-lg p-4 sm:p-6 border border-gray-100">
+    <div className={`rounded-2xl shadow-lg p-4 sm:p-6 border ${
+      theme === 'dark' ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-100'
+    }`}>
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-0 mb-4 sm:mb-6">
-        <h2 className="text-lg sm:text-xl font-bold text-gray-900 flex items-center gap-2">
+        <h2 className={`text-lg sm:text-xl font-bold flex items-center gap-2 ${
+          theme === 'dark' ? 'text-white' : 'text-gray-900'
+        }`}>
           <div className="w-7 h-7 sm:w-8 sm:h-8 bg-orange-100 rounded-lg flex items-center justify-center">
             <FaAllergies className="text-orange-600 text-sm sm:text-base" />
           </div>
-          Allergies
+          {t.allergies.title}
         </h2>
         {editingSection !== 'allergies' ? (
           <button onClick={() => setEditingSection('allergies')} className="w-full sm:w-auto px-4 py-2 bg-teal-600 text-white rounded-lg text-sm sm:text-base font-semibold hover:bg-teal-700 transition-all flex items-center justify-center gap-2">
-            <FaEdit /> Edit
+            <FaEdit /> {t.actions.edit}
           </button>
         ) : (
           <div className="flex gap-2">
@@ -33,7 +45,7 @@ export const AllergiesSection = ({ formData, editingSection, setEditingSection, 
               <FaTimes />
             </button>
             <button onClick={handleSubmit} disabled={loading} className="flex-1 sm:flex-none px-4 py-2 bg-teal-600 text-white rounded-lg text-sm sm:text-base font-semibold hover:bg-teal-700 transition-all flex items-center justify-center gap-2">
-              <FaSave /> {loading ? '...' : 'Save'}
+              <FaSave /> {loading ? '...' : t.actions.save}
             </button>
           </div>
         )}
@@ -41,9 +53,11 @@ export const AllergiesSection = ({ formData, editingSection, setEditingSection, 
       
       {editingSection === 'allergies' && (
         <div className="mb-4 flex flex-col sm:flex-row gap-2">
-          <input type="text" value={newAllergy} onChange={(e) => setNewAllergy(e.target.value)} onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), handleAddAllergy())} placeholder="Add allergy (e.g., Penicillin, Peanuts)" className="flex-1 px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base border-2 border-gray-300 rounded-xl focus:border-teal-500 focus:outline-none text-gray-900" />
+          <input type="text" value={newAllergy} onChange={(e) => setNewAllergy(e.target.value)} onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), handleAddAllergy())} placeholder={locale === 'ar' ? 'أضف حساسية (مثل: بنسلين، فول سوداني)' : 'Add allergy (e.g., Penicillin, Peanuts)'} className={`flex-1 px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base border-2 rounded-xl focus:outline-none ${
+            theme === 'dark' ? 'bg-gray-900 border-gray-600 text-white focus:border-teal-400 placeholder-gray-500' : 'bg-white border-gray-300 text-gray-900 focus:border-teal-500'
+          }`} />
           <button type="button" onClick={handleAddAllergy} className="px-4 sm:px-6 py-2.5 sm:py-3 bg-orange-600 text-white rounded-xl text-sm sm:text-base font-semibold hover:bg-orange-700 transition-all flex items-center justify-center gap-2">
-            <FaPlus /> Add
+            <FaPlus /> {t.actions.add}
           </button>
         </div>
       )}
@@ -61,7 +75,9 @@ export const AllergiesSection = ({ formData, editingSection, setEditingSection, 
             </div>
           ))
         ) : (
-          <p className="text-gray-500 italic text-sm sm:text-base">No allergies recorded</p>
+          <p className={`italic text-sm sm:text-base ${
+            theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
+          }`}>{t.allergies.noAllergies}</p>
         )}
       </div>
     </div>
