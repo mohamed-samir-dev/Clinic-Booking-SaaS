@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { FaBars, FaTimes } from 'react-icons/fa';
@@ -29,7 +29,12 @@ export default function Navbar() {
 
   const t = locale === 'ar' ? messagesAr.navbar : messages.navbar;
 
+  useEffect(() => {
+    setShowDropdown(false);
+  }, [user]);
+
   const handleLogout = () => {
+    setShowDropdown(false);
     dispatch(logout());
     localStorage.removeItem('token');
     localStorage.removeItem('user');
