@@ -2,6 +2,8 @@
 
 import { useState, useEffect, useMemo } from 'react';
 import { FaTimes, FaCalendarAlt, FaClock } from 'react-icons/fa';
+import { useTranslations } from 'next-intl';
+import { useLanguage } from '@/app/contexts/LanguageContext';
 
 interface TimeSlot {
   from: string;
@@ -37,8 +39,6 @@ interface CalendarDay {
 }
 
 const FULL_DAY_NAMES = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
-const MONTH_NAMES = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-const DAY_NAMES = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
 
 export default function RescheduleModal({
   appointmentId,
@@ -46,6 +46,17 @@ export default function RescheduleModal({
   onClose,
   onSuccess,
 }: RescheduleModalProps) {
+  const t = useTranslations('patient.appointments.reschedule');
+  const { locale } = useLanguage();
+  
+  const MONTH_NAMES = locale === 'ar' 
+    ? ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر']
+    : ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+  
+  const DAY_NAMES = locale === 'ar'
+    ? ['الأحد', 'الإثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت']
+    : ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
+  
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [selectedTime, setSelectedTime] = useState('');
   const [currentMonth, setCurrentMonth] = useState(new Date());
@@ -201,7 +212,7 @@ export default function RescheduleModal({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!selectedDate || !selectedTime) {
-      setError('Please select both date and time');
+      setError(t('selectDateTime'));
       return;
     }
 
@@ -247,10 +258,10 @@ export default function RescheduleModal({
         onSuccess();
         onClose();
       } else {
-        setError(data.message || 'Failed to reschedule appointment');
+        setError(data.message || t('failed'));
       }
     } catch {
-      setError('Error rescheduling appointment');
+      setError(t('error'));
     } finally {
       setLoading(false);
     }
@@ -284,8 +295,8 @@ export default function RescheduleModal({
         <div className="bg-linear-to-r from-teal-500 to-teal-600 p-4 sm:p-6 rounded-t-2xl sticky top-0 z-10">
           <div className="flex items-center justify-between text-white">
             <div>
-              <h2 className="text-lg sm:text-xl font-bold mb-1">Reschedule Appointment</h2>
-              <p className="text-teal-100 text-xs sm:text-sm">Choose from available dates and times</p>
+              <h2 className="text-lg sm:text-xl font-bold mb-1">{t('title')}</h2>
+              <p className="text-teal-100 text-xs sm:text-sm">{t('subtitle')}</p>
             </div>
             <button onClick={onClose} className="text-white p-2 rounded-lg transition-colors">
               <FaTimes className="text-lg sm:text-xl" />
@@ -305,7 +316,7 @@ export default function RescheduleModal({
             <div>
               <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-2 sm:mb-3">
                 <FaCalendarAlt className="inline mr-2 text-teal-600" />
-                Select Date
+                {t('selectDate')}
               </label>
               <div className="bg-white border border-gray-200 rounded-xl p-3 sm:p-4">
                 <div className="flex items-center justify-between mb-3 sm:mb-4">
@@ -360,20 +371,20 @@ export default function RescheduleModal({
             <div>
               <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-2 sm:mb-3">
                 <FaClock className="inline mr-2 text-teal-600" />
-                Select Time
+                {t('selectTime')}
               </label>
               <div className="bg-white border border-gray-200 rounded-xl p-3 sm:p-4 max-h-80 sm:max-h-96 overflow-y-auto">
                 {!selectedDate ? (
-                  <p className="text-gray-500 text-center py-6 sm:py-8 text-xs sm:text-sm">Please select a date first</p>
+                  <p className="text-gray-500 text-center py-6 sm:py-8 text-xs sm:text-sm">{t('selectDateFirst')}</p>
                 ) : availableSlots.length === 0 ? (
-                  <p className="text-gray-500 text-center py-6 sm:py-8 text-xs sm:text-sm">No available slots for this date</p>
+                  <p className="text-gray-500 text-center py-6 sm:py-8 text-xs sm:text-sm">{t('noSlots')}</p>
                 ) : (
                   <div className="space-y-3 sm:space-y-4">
                     {morning.length > 0 && (
                       <div>
                         <div className="flex items-center gap-2 mb-2">
                           <span className="text-base sm:text-lg">🌅</span>
-                          <h4 className="text-xs sm:text-sm font-semibold text-gray-700">Morning</h4>
+                          <h4 className="text-xs sm:text-sm font-semibold text-gray-700">{t('morning')}</h4>
                           <span className="text-[10px] sm:text-xs text-gray-500">({morning.length})</span>
                         </div>
                         <div className="grid grid-cols-2 gap-1.5 sm:gap-2">
@@ -396,7 +407,7 @@ export default function RescheduleModal({
                       <div>
                         <div className="flex items-center gap-2 mb-2">
                           <span className="text-base sm:text-lg">☀️</span>
-                          <h4 className="text-xs sm:text-sm font-semibold text-gray-700">Afternoon</h4>
+                          <h4 className="text-xs sm:text-sm font-semibold text-gray-700">{t('afternoon')}</h4>
                           <span className="text-[10px] sm:text-xs text-gray-500">({afternoon.length})</span>
                         </div>
                         <div className="grid grid-cols-2 gap-1.5 sm:gap-2">
@@ -419,7 +430,7 @@ export default function RescheduleModal({
                       <div>
                         <div className="flex items-center gap-2 mb-2">
                           <span className="text-base sm:text-lg">🌙</span>
-                          <h4 className="text-xs sm:text-sm font-semibold text-gray-700">Evening</h4>
+                          <h4 className="text-xs sm:text-sm font-semibold text-gray-700">{t('evening')}</h4>
                           <span className="text-[10px] sm:text-xs text-gray-500">({evening.length})</span>
                         </div>
                         <div className="grid grid-cols-2 gap-1.5 sm:gap-2">
@@ -447,14 +458,14 @@ export default function RescheduleModal({
           {selectedDate && selectedTime && (
             <div className="bg-teal-50 border border-teal-200 rounded-lg p-3 sm:p-4">
               <p className="text-xs sm:text-sm text-teal-800 font-medium">
-                New appointment: {selectedDate.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })} at {selectedTime}
+                {t('newAppointment')}: {selectedDate.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })} {t('at')} {selectedTime}
               </p>
             </div>
           )}
 
           <div className="bg-blue-50 rounded-lg p-3 sm:p-4">
             <p className="text-xs sm:text-sm text-blue-700">
-              Note: You can reschedule your appointment to any future date and time.
+              {t('note')}
             </p>
           </div>
 
@@ -464,14 +475,14 @@ export default function RescheduleModal({
               onClick={onClose}
               className="flex-1 px-4 py-2 sm:py-2.5 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors font-medium text-sm sm:text-base"
             >
-              Cancel
+              {t('cancel')}
             </button>
             <button
               type="submit"
               disabled={loading || !selectedDate || !selectedTime}
               className="flex-1 px-4 py-2 sm:py-2.5 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors font-medium text-sm sm:text-base disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {loading ? 'Rescheduling...' : 'Reschedule'}
+              {loading ? t('rescheduling') : t('reschedule')}
             </button>
           </div>
         </form>
