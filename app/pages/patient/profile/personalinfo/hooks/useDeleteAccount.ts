@@ -1,4 +1,11 @@
 import { useState } from 'react';
+import ar from '@/messages/ar.json';
+import en from '@/messages/en.json';
+
+const getMessages = () => {
+  const locale = (typeof window !== 'undefined' ? localStorage.getItem('locale') : 'en') || 'en';
+  return locale === 'ar' ? ar.patient.profile.personalInfo.messages : en.patient.profile.personalInfo.messages;
+};
 
 export const useDeleteAccount = () => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -11,6 +18,7 @@ export const useDeleteAccount = () => {
     e.preventDefault();
     setShowDeleteError(false);
     setLoading(true);
+    const messages = getMessages();
     try {
       const token = localStorage.getItem('token');
       const response = await fetch('http://localhost:5000/api/patients/account', {
@@ -24,12 +32,12 @@ export const useDeleteAccount = () => {
         localStorage.removeItem('user');
         window.location.href = '/';
       } else {
-        setDeleteErrorMsg(data.message || 'Failed to delete account');
+        setDeleteErrorMsg(data.message || messages.failedDeleteAccount);
         setShowDeleteError(true);
         setTimeout(() => setShowDeleteError(false), 3000);
       }
     } catch {
-      setDeleteErrorMsg('Error deleting account');
+      setDeleteErrorMsg(messages.errorDeletingAccount);
       setShowDeleteError(true);
       setTimeout(() => setShowDeleteError(false), 3000);
     } finally {
