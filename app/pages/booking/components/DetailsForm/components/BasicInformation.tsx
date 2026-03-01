@@ -44,7 +44,7 @@ export default function BasicInformation({ fullName, setFullName, phone, setPhon
                 if (value.length <= 10) setPhone(value);
               }}
               className={`flex-1 min-w-0 px-2 sm:px-3 md:px-4 py-2 sm:py-3 rounded-xl border-2 focus:outline-none text-sm sm:text-base ${
-                phone && !isPhoneValid ?  'text-black border-red-500 focus:border-red-500' : theme === 'dark' ? 'bg-gray-00 border-gray-600 text-black focus:border-teal-500' : 'bg-white text-black border-gray-200  focus:border-teal-500'
+                phone && !isPhoneValid ?  'text-black border-red-500 focus:border-red-500' : theme === 'dark' ? 'bg-gray-00 border-gray-600 text-white focus:border-teal-500' : 'bg-white text-black border-gray-200  focus:border-teal-500'
               }`}
               placeholder="1012345678"
               maxLength={10}
@@ -54,7 +54,7 @@ export default function BasicInformation({ fullName, setFullName, phone, setPhon
             <p className="text-[10px] sm:text-xs text-red-500 mt-1">{locale === 'ar' ? '⚠ يجب أن يكون رقم الهاتف 10 أرقام بالضبط' : '⚠ Phone number must be exactly 10 digits'}</p>
           )}
           {(!phone || isPhoneValid) && (
-            <p className={`text-[10px] sm:text-xs mt-1 ${theme === 'dark' ? 'text-black' : 'text-black'}`}>{locale === 'ar' ? 'يرجى إدخال 10 أرقام فقط' : 'Please enter 10 digits only'}</p>
+            <p className={`text-[10px] sm:text-xs mt-1 ${theme === 'dark' ? 'text-white' : 'text-black'}`}>{locale === 'ar' ? 'يرجى إدخال 10 أرقام فقط' : 'Please enter 10 digits only'}</p>
           )}
         </div>
         <div>
@@ -67,7 +67,7 @@ export default function BasicInformation({ fullName, setFullName, phone, setPhon
               setEmail(value);
             }}
             className={`w-full px-3 sm:px-4 py-2 sm:py-3 rounded-xl border-2 focus:outline-none text-sm sm:text-base ${
-              email && !isEmailValid ? 'border-red-500 text-black focus:border-red-500' : theme === 'dark' ? 'bg-gray-700 border-gray-600 text-white focus:border-teal-500' : 'bg-white border-gray-200 text-gray-900 focus:border-teal-500'
+              email && !isEmailValid ? 'border-red-500 text-black focus:border-red-500' : theme === 'dark' ? 'bg-gray-700 border-gray-600 text-black focus:border-teal-500' : 'bg-white border-gray-200 text-white focus:border-teal-500'
             }`}
             placeholder="john.doe@gmail.com"
           />
