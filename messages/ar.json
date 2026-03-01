@@ -761,6 +761,7 @@
       "noAppointmentRequests": "ليس لديك طلبات مواعيد",
       "noFilteredRequests": "لا توجد طلبات {filter}",
       "patientInfo": "معلومات المريض",
+      "patientMedicalInfo": "المعلومات الطبية للمريض",
       "requestedTime": "الوقت المطلوب",
       "bookingType": "نوع الحجز",
       "reason": "السبب",
@@ -823,6 +824,245 @@
         "thursday": "الخميس",
         "friday": "الجمعة",
         "saturday": "السبت"
+      }
+    }
+  },
+  "patient": {
+    "medical": {
+      "pageTitle": "المعلومات الطبية",
+      "pageSubtitle": "إدارة سجلاتك الصحية وتاريخك الطبي",
+      "privacyNotice": "إشعار الخصوصية",
+      "privacyText": "هذه المعلومات خاصة ويتم مشاركتها فقط مع طبيبك المعالج. جميع الحقول اختيارية ويمكن تحديثها في أي وقت.",
+      "basicHealth": {
+        "title": "المعلومات الصحية الأساسية",
+        "bloodType": "فصيلة الدم",
+        "selectBloodType": "اختر فصيلة الدم",
+        "height": "الطول (سم)",
+        "weight": "الوزن (كجم)",
+        "notProvided": "غير متوفر"
+      },
+      "allergies": {
+        "title": "الحساسية",
+        "addAllergy": "إضافة حساسية",
+        "allergyName": "اسم الحساسية",
+        "severity": "الشدة",
+        "selectSeverity": "اختر الشدة",
+        "mild": "خفيفة",
+        "moderate": "متوسطة",
+        "severe": "شديدة",
+        "reaction": "رد الفعل",
+        "noAllergies": "لا توجد حساسية مسجلة"
+      },
+      "chronicConditions": {
+        "title": "الأمراض المزمنة",
+        "diabetes": "السكري",
+        "hypertension": "ارتفاع ضغط الدم",
+        "asthma": "الربو",
+        "heartDisease": "أمراض القلب",
+        "kidneyDisease": "أمراض الكلى",
+        "liverDisease": "أمراض الكبد",
+        "thyroidDisorder": "اضطرابات الغدة الدرقية",
+        "cancer": "السرطان",
+        "other": "أخرى",
+        "otherPlaceholder": "اكتب أي أمراض مزمنة أخرى...",
+        "noConditions": "لا توجد أمراض مزمنة مسجلة"
+      },
+      "medications": {
+        "title": "الأدوية الحالية",
+        "addMedication": "إضافة دواء",
+        "medicationName": "اسم الدواء",
+        "dosage": "الجرعة",
+        "frequency": "التكرار",
+        "noMedications": "لا توجد أدوية مسجلة"
+      },
+      "notes": {
+        "title": "ملاحظات إضافية",
+        "placeholder": "أضف أي معلومات طبية إضافية هنا...",
+        "noNotes": "لا توجد ملاحظات"
+      },
+      "actions": {
+        "edit": "تعديل",
+        "save": "حفظ",
+        "cancel": "إلغاء",
+        "add": "إضافة",
+        "remove": "حذف"
+      },
+      "messages": {
+        "updateSuccess": "تم تحديث المعلومات الطبية بنجاح!",
+        "updateError": "فشل تحديث المعلومات الطبية"
+      }
+    },
+    "appointments": {
+      "title": "مواعيدي",
+      "subtitle": "عرض وإدارة مواعيدك الطبية",
+      "tabs": {
+        "upcoming": "القادمة",
+        "past": "السابقة",
+        "cancelled": "الملغاة"
+      },
+      "filters": {
+        "searchPlaceholder": "ابحث عن طبيب أو خدمة...",
+        "sortBy": "ترتيب حسب",
+        "allStatus": "جميع الحالات",
+        "dateAsc": "التاريخ (الأقدم أولاً)",
+        "dateDesc": "التاريخ (الأحدث أولاً)",
+        "doctorName": "اسم الطبيب"
+      },
+      "nextAppointment": {
+        "title": "موعدك القادم",
+        "in": "بعد",
+        "days": "أيام",
+        "hours": "ساعات",
+        "minutes": "دقائق"
+      },
+      "card": {
+        "viewDetails": "عرض التفاصيل",
+        "details": "التفاصيل",
+        "reschedule": "إعادة الجدولة",
+        "cancel": "إلغاء",
+        "leaveReview": "اترك تقييم",
+        "review": "تقييم",
+        "bookAgain": "احجز مرة أخرى",
+        "book": "احجز",
+        "paid": "مدفوع",
+        "cash": "نقدي"
+      },
+      "status": {
+        "pending": "قيد الانتظار",
+        "confirmed": "مؤكد",
+        "completed": "مكتمل",
+        "cancelled": "ملغي"
+      },
+      "emptyState": {
+        "title": "لا توجد مواعيد",
+        "noAppointments": "ليس لديك أي مواعيد {tab} حتى الآن.",
+        "bookAppointment": "احجز موعد",
+        "loading": "جاري تحميل المواعيد..."
+      },
+      "cancelModal": {
+        "title": "إلغاء الموعد",
+        "message": "هل أنت متأكد من إلغاء هذا الموعد؟ لا يمكن التراجع عن هذا الإجراء.",
+        "keepAppointment": "الاحتفاظ بالموعد",
+        "yesCancel": "نعم، إلغاء",
+        "cancelling": "جاري الإلغاء..."
+      },
+      "messages": {
+        "cancelSuccess": "تم إلغاء الموعد بنجاح",
+        "cancelError": "فشل إلغاء الموعد"
+      },
+      "details": {
+        "title": "تفاصيل الموعد",
+        "subtitle": "معلومات كاملة عن موعدك",
+        "bookingId": "رقم الحجز",
+        "status": "الحالة",
+        "doctorInfo": "معلومات الطبيب",
+        "name": "الاسم",
+        "specialization": "التخصص",
+        "appointmentInfo": "معلومات الموعد",
+        "clinic": "العيادة",
+        "date": "التاريخ",
+        "time": "الوقت",
+        "service": "الخدمة",
+        "type": "النوع",
+        "paymentInfo": "معلومات الدفع",
+        "fee": "الرسوم",
+        "paymentMethod": "طريقة الدفع",
+        "online": "أونلاين",
+        "cash": "نقدي",
+        "paymentStatus": "حالة الدفع",
+        "paid": "مدفوع",
+        "pending": "قيد الانتظار",
+        "notes": "ملاحظات",
+        "cancellationInfo": "معلومات الإلغاء",
+        "cancelledBy": "ألغي بواسطة",
+        "cancelledAt": "ألغي في",
+        "reason": "السبب",
+        "cancellationPolicy": "سياسة الإلغاء",
+        "policyText": "يمكن إلغاء المواعيد قبل 24 ساعة من الموعد المحدد. قد تخضع عمليات الإلغاء التي تتم قبل أقل من 24 ساعة لرسوم إلغاء.",
+        "downloadInvoice": "تحميل الفاتورة",
+        "close": "إغلاق"
+      },
+      "reschedule": {
+        "title": "إعادة جدولة الموعد",
+        "subtitle": "اختر من التواريخ والأوقات المتاحة",
+        "selectDate": "اختر التاريخ",
+        "selectTime": "اختر الوقت",
+        "selectDateFirst": "الرجاء اختيار تاريخ أولاً",
+        "noSlots": "لا توجد مواعيد متاحة لهذا التاريخ",
+        "morning": "صباحاً",
+        "afternoon": "ظهراً",
+        "evening": "مساءً",
+        "newAppointment": "الموعد الجديد",
+        "at": "في الساعة",
+        "note": "ملاحظة: يمكنك إعادة جدولة موعدك إلى أي تاريخ ووقت مستقبلي.",
+        "cancel": "إلغاء",
+        "reschedule": "إعادة الجدولة",
+        "rescheduling": "جاري إعادة الجدولة...",
+        "selectDateTime": "الرجاء اختيار التاريخ والوقت",
+        "failed": "فشل إعادة جدولة الموعد",
+        "error": "حدث خطأ أثناء إعادة الجدولة"
+      }
+    },
+    "profile": {
+      "personalInfo": {
+        "editProfile": "تعديل الملف الشخصي",
+        "cancel": "إلغاء",
+        "save": "حفظ",
+        "saving": "جاري الحفظ...",
+        "contactInformation": "معلومات الاتصال",
+        "fullName": "الاسم الكامل",
+        "emailAddress": "البريد الإلكتروني",
+        "phoneNumber": "رقم الهاتف",
+        "notProvided": "غير متوفر",
+        "personalDetails": "التفاصيل الشخصية",
+        "dateOfBirth": "تاريخ الميلاد",
+        "gender": "الجنس",
+        "selectGender": "اختر الجنس",
+        "male": "ذكر",
+        "female": "أنثى",
+        "address": "العنوان",
+        "street": "الشارع",
+        "city": "المدينة",
+        "state": "المحافظة",
+        "zipCode": "الرمز البريدي",
+        "changePassword": "تغيير كلمة المرور",
+        "change": "تغيير",
+        "keepAccountSecure": "حافظ على أمان حسابك بتحديث كلمة المرور بانتظام",
+        "deleteAccount": "حذف الحساب",
+        "successUpdated": "تم التحديث بنجاح!",
+        "errorUpdating": "حدث خطأ أثناء التحديث",
+        "passwordModal": {
+          "title": "تغيير كلمة المرور",
+          "subtitle": "أدخل كلمة المرور الحالية واختر كلمة مرور جديدة",
+          "currentPassword": "كلمة المرور الحالية",
+          "newPassword": "كلمة المرور الجديدة",
+          "confirmPassword": "تأكيد كلمة المرور",
+          "cancel": "إلغاء",
+          "change": "تغيير",
+          "changing": "جاري التغيير..."
+        },
+        "deleteModal": {
+          "title": "حذف الحساب",
+          "subtitle": "لا يمكن التراجع عن هذا الإجراء. سيتم حذف جميع بياناتك نهائياً.",
+          "enterPassword": "أدخل كلمة المرور للتأكيد",
+          "passwordPlaceholder": "كلمة المرور",
+          "cancel": "إلغاء",
+          "delete": "حذف",
+          "deleting": "جاري الحذف..."
+        },
+        "messages": {
+          "passwordsNotMatch": "كلمات المرور غير متطابقة",
+          "passwordChangedSuccess": "تم تغيير كلمة المرور بنجاح!",
+          "passwordRecentlyChanged": "تم تغيير كلمة المرور مؤخراً. يرجى تسجيل الدخول مرة أخرى",
+          "goToDashboard": "تسجيل الدخول",
+          "failedChangePassword": "فشل تغيير كلمة المرور",
+          "errorChangingPassword": "حدث خطأ أثناء تغيير كلمة المرور",
+          "currentPasswordIncorrect": "كلمة المرور الحالية غير صحيحة",
+          "profileUpdatedSuccess": "تم تحديث الملف الشخصي بنجاح!",
+          "errorUpdatingProfile": "حدث خطأ أثناء تحديث الملف الشخصي",
+          "failedDeleteAccount": "فشل حذف الحساب",
+          "errorDeletingAccount": "حدث خطأ أثناء حذف الحساب"
+        }
       }
     }
   }
