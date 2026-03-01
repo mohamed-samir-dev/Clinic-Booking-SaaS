@@ -1,6 +1,7 @@
 'use client';
 
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { NextIntlClientProvider } from 'next-intl';
 
 type Locale = 'en' | 'ar';
 
@@ -14,17 +15,26 @@ const LanguageContext = createContext<LanguageContextType | undefined>(undefined
 export function LanguageProvider({ children }: { children: ReactNode }) {
   const [locale, setLocale] = useState<Locale>('en');
   const [mounted, setMounted] = useState(false);
+  const [messages, setMessages] = useState<any>(null);
 
   useEffect(() => {
     const savedLocale = (localStorage.getItem('locale') as Locale) || 'en';
     setLocale(savedLocale);
-    setMounted(true);
+    
+    import(`../../messages/${savedLocale}.json`).then((msgs) => {
+      setMessages(msgs.default);
+      setMounted(true);
+    });
   }, []);
 
   useEffect(() => {
     if (mounted) {
       document.documentElement.dir = locale === 'ar' ? 'rtl' : 'ltr';
       document.documentElement.lang = locale;
+      
+      import(`../../messages/${locale}.json`).then((msgs) => {
+        setMessages(msgs.default);
+      });
     }
   }, [locale, mounted]);
 
@@ -36,9 +46,15 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     document.documentElement.lang = newLocale;
   };
 
+  if (!mounted || !messages) {
+    return null;
+  }
+
   return (
     <LanguageContext.Provider value={{ locale, toggleLanguage }}>
-      {children}
+      <NextIntlClientProvider locale={locale} messages={messages}>
+        {children}
+      </NextIntlClientProvider>
     </LanguageContext.Provider>
   );
 }
