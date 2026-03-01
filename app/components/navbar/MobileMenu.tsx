@@ -94,6 +94,17 @@ export default function MobileMenu({
               }`}>{user.email}</p>
             </div>
           </div>
+          {user.role === 'patient' && (
+            <Link
+              href="/pages/patient/profile"
+              onClick={() => setMobileMenuOpen(false)}
+              className={`w-full block px-4 py-2 text-sm rounded-lg transition-colors font-medium mb-2 text-center ${
+                theme === 'dark' ? 'text-gray-200 bg-gray-700 hover:bg-gray-600' : 'text-gray-700 bg-white hover:bg-gray-100'
+              }`}
+            >
+              {locale === 'ar' ? 'الملف الشخصي' : 'Profile'}
+            </Link>
+          )}
           <button
             onClick={handleLogout}
             className={`w-full px-4 py-2 text-sm rounded-lg transition-colors font-medium ${
