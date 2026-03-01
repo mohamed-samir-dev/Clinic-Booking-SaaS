@@ -1,11 +1,16 @@
 import { useState, useEffect } from 'react';
 import { useAppSelector, useAppDispatch } from '@/app/store/hooks';
 import { setCredentials } from '@/app/store/slices/authSlice';
+import { useLanguage } from '@/app/contexts/LanguageContext';
+import messages from '@/messages/en.json';
+import messagesAr from '@/messages/ar.json';
 import { MedicalFormData, Medication } from '../types';
 
 export const useMedicalForm = () => {
   const user = useAppSelector((state) => state.auth.user);
   const dispatch = useAppDispatch();
+  const { locale } = useLanguage();
+  const t = locale === 'ar' ? messagesAr.patient.medical : messages.patient.medical;
   const [editingSection, setEditingSection] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
@@ -122,18 +127,18 @@ export const useMedicalForm = () => {
           role: user?.role || 'patient' 
         };
         dispatch(setCredentials({ user: updatedUser, token: token! }));
-        setSuccessMessage('Medical information updated successfully!');
+        setSuccessMessage(t.messages.updateSuccess);
         setErrorMessage('');
         setShowSuccess(true);
         setEditingSection(null);
         setTimeout(() => setShowSuccess(false), 3000);
       } else {
-        setErrorMessage(data.message || 'Failed to update medical information');
+        setErrorMessage(data.message || t.messages.updateError);
         setShowSuccess(true);
         setTimeout(() => setShowSuccess(false), 3000);
       }
     } catch {
-      setErrorMessage('Error updating medical information');
+      setErrorMessage(t.messages.updateError);
       setShowSuccess(true);
       setTimeout(() => setShowSuccess(false), 3000);
     } finally {
