@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { FaUser } from 'react-icons/fa';
 import { UserMenuProps } from '../../types/index';
 import { useLanguage } from '@/app/contexts/LanguageContext';
+import { useTheme } from '@/app/contexts/ThemeContext';
 import messages from '@/messages/en.json';
 import messagesAr from '@/messages/ar.json';
 
@@ -9,7 +10,12 @@ import messagesAr from '@/messages/ar.json';
 
 export default function UserMenu({ user, showDropdown, setShowDropdown, handleLogout }: UserMenuProps) {
   const { locale } = useLanguage();
+  const { theme } = useTheme();
   const t = locale === 'ar' ? messagesAr.navbar : messages.navbar;
+
+  const handleProfileClick = () => {
+    setShowDropdown(false);
+  };
 
   if (!user) {
     return (
@@ -22,6 +28,8 @@ export default function UserMenu({ user, showDropdown, setShowDropdown, handleLo
     );
   }
 
+  const isRTL = locale === 'ar';
+
   return (
     <div className="relative hidden xl:block">
       <button
@@ -31,22 +39,23 @@ export default function UserMenu({ user, showDropdown, setShowDropdown, handleLo
         {(typeof user.name === 'string' && user.name.charAt(0).toUpperCase()) || <FaUser />}
       </button>
       {showDropdown && (
-        <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2 z-50">
-          <div className="px-4 py-2 border-b border-gray-100">
-            <p className="text-sm font-semibold text-gray-900">{user.name}</p>
-            <p className="text-xs text-gray-500">{user.email}</p>
+        <div className={`absolute ${isRTL ? 'left-0' : 'right-0'} mt-2 w-64 ${theme === 'dark' ? 'bg-gray-800' : 'bg-white'} rounded-lg shadow-lg py-3 z-50`}>
+          <div className={`px-5 py-3 border-b ${theme === 'dark' ? 'border-gray-700' : 'border-gray-100'}`}>
+            <p className={`text-base font-semibold ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{user.name}</p>
+            <p className={`text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'} mt-1`}>{user.email}</p>
           </div>
           {user.role === 'patient' && (
             <Link
               href="/pages/patient/profile"
-              className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+              onClick={handleProfileClick}
+              className={`block w-full text-left px-5 py-3 text-base ${theme === 'dark' ? 'text-gray-300 hover:bg-gray-700' : 'text-gray-700 hover:bg-gray-50'} transition-colors`}
             >
               {locale === 'ar' ? 'الملف الشخصي' : 'Profile'}
             </Link>
           )}
           <button
             onClick={handleLogout}
-            className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors"
+            className={`w-full text-left px-5 py-3 text-base text-red-600 ${theme === 'dark' ? 'hover:bg-gray-700' : 'hover:bg-red-50'} transition-colors`}
           >
             {t.logout}
           </button>
