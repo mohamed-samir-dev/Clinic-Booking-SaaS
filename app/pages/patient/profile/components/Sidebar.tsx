@@ -4,6 +4,8 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { FaUser, FaHeartbeat, FaCalendarAlt, FaHeart } from 'react-icons/fa';
 import { useState } from 'react';
+import { useTheme } from '@/app/contexts/ThemeContext';
+import { useLanguage } from '@/app/contexts/LanguageContext';
 
 const menuItems = [
   { href: '/pages/patient/profile', label: 'Personal Info', labelAr: 'المعلومات الشخصية', icon: FaUser },
@@ -15,6 +17,8 @@ const menuItems = [
 export default function Sidebar() {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
+  const { theme } = useTheme();
+  const { locale } = useLanguage();
 
   return (
     <>
@@ -43,7 +47,7 @@ export default function Sidebar() {
       {/* Sidebar */}
       <aside className={`
         fixed lg:sticky top-[73px] left-0 z-40
-        w-64 bg-white shadow-lg h-[calc(100vh-73px)]
+        w-64 ${theme === 'dark' ? 'bg-gray-800' : 'bg-white'} shadow-lg h-[calc(100vh-73px)]
         transform transition-transform duration-300 ease-in-out
         ${isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
       `}>
@@ -61,11 +65,13 @@ export default function Sidebar() {
                     className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${
                       isActive
                         ? 'bg-teal-600 text-white shadow-md'
-                        : 'text-gray-700 hover:bg-teal-50 hover:text-teal-600'
+                        : theme === 'dark' 
+                          ? 'text-gray-300 hover:bg-gray-700 hover:text-teal-400'
+                          : 'text-gray-700 hover:bg-teal-50 hover:text-teal-600'
                     }`}
                   >
                     <Icon className="text-lg" />
-                    <span className="font-medium">{item.label}</span>
+                    <span className="font-medium">{locale === 'ar' ? item.labelAr : item.label}</span>
                   </Link>
                 </li>
               );
