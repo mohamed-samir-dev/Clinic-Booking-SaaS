@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import { usePersonalInfo, usePasswordChange, useDeleteAccount } from './personalinfo/hooks';
 import {
   SuccessMessage,
@@ -12,8 +13,11 @@ import {
   PasswordModal,
   DeleteModal
 } from './personalinfo/components';
+import { PasswordChangedToast } from '@/app/components/Toast/PasswordChangedToast';
 
 export default function PersonalInfoPage() {
+  const [showPasswordChangedToast, setShowPasswordChangedToast] = useState(false);
+  
   const {
     isEditing,
     setIsEditing,
@@ -94,11 +98,16 @@ export default function PersonalInfoPage() {
         errorMsg={passwordErrorMsg}
         loading={passwordLoading}
         onClose={() => setShowPasswordModal(false)}
-        onSubmit={(e) => handleChangePassword(e, passwordData, setPasswordData, () => {}, () => {}, () => {})}
+        onSubmit={(e) => handleChangePassword(e, passwordData, setPasswordData, () => setShowPasswordChangedToast(true))}
         onChange={setPasswordData}
         onToggleCurrent={() => setShowCurrent(!showCurrent)}
         onToggleNew={() => setShowNew(!showNew)}
         onToggleConfirm={() => setShowConfirm(!showConfirm)}
+      />
+
+      <PasswordChangedToast
+        show={showPasswordChangedToast}
+        onClose={() => setShowPasswordChangedToast(false)}
       />
 
       <DeleteModal
