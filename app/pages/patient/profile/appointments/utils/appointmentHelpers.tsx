@@ -1,7 +1,7 @@
 import { AppointmentStatus } from '@/app/types/appointment';
 import { FaExclamationCircle, FaCheckCircle, FaTimesCircle } from 'react-icons/fa';
 
-export const getStatusBadge = (status: AppointmentStatus) => {
+export const getStatusBadge = (status: AppointmentStatus, t?: (key: string) => string) => {
   const styles = {
     pending: 'bg-yellow-50 text-yellow-700 border-yellow-200',
     confirmed: 'bg-teal-50 text-teal-700 border-teal-200',
@@ -18,10 +18,12 @@ export const getStatusBadge = (status: AppointmentStatus) => {
     'no-show': <FaTimesCircle className="mr-1" />,
   };
 
+  const statusText = t ? t(status) : status.charAt(0).toUpperCase() + status.slice(1).replace('-', ' ');
+
   return (
     <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold border ${styles[status]}`}>
       {icons[status]}
-      {status.charAt(0).toUpperCase() + status.slice(1).replace('-', ' ')}
+      {statusText}
     </span>
   );
 };
