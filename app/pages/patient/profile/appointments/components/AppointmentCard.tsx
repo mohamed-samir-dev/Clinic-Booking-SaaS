@@ -4,9 +4,11 @@ import React from 'react';
 import { useRouter } from 'next/navigation';
 import { FaClock, FaEye, FaTimes, FaRedo, FaStar, FaMoneyBillWave, FaStethoscope, FaHospital } from 'react-icons/fa';
 import { Appointment, AppointmentStatus } from '@/app/types/appointment';
-import { getText } from '@/app/utils/i18n';
 import { saveQuickBookingData } from '@/app/pages/booking/utils/quickBooking';
 import { getServiceKeyFromSpecialty } from '@/app/pages/booking/utils/serviceHelpers';
+import { useTheme } from '@/app/contexts/ThemeContext';
+import { useLanguage } from '@/app/contexts/LanguageContext';
+import { useTranslations } from 'next-intl';
 
 interface AppointmentCardProps {
   appointment: Appointment;
@@ -27,31 +29,51 @@ export function AppointmentCard({
   formatDate, 
   getStatusBadge 
 }: AppointmentCardProps) {
+  const { theme } = useTheme();
+  const { locale } = useLanguage();
+  const t = useTranslations('patient.appointments.card');
   const router = useRouter();
   const { day } = formatDate(appointment.appointmentDate);
   const isUpcoming = ['pending', 'confirmed'].includes(appointment.status);
   const isCompleted = appointment.status === 'completed';
   const isCancelled = appointment.status === 'cancelled';
 
+  // Get localized text
+  const getName = (name: string | { en: string; ar: string } | undefined) => {
+    if (!name) return '';
+    if (typeof name === 'string') return name;
+    return locale === 'ar' && name.ar ? name.ar : name.en;
+  };
+
+  const displayName = getName(appointment.doctorId?.name);
+  const displaySpecialty = getName(appointment.doctorId?.specialty);
+  const specialtyEn = typeof appointment.doctorId?.specialty === 'string' 
+    ? appointment.doctorId.specialty 
+    : appointment.doctorId?.specialty?.en || '';
+  
+  const displayClinicName = appointment.doctorId?.clinicId?.name
+    ? getName(appointment.doctorId.clinicId.name)
+    : appointment.businessId?.name
+    ? getName(appointment.businessId.name)
+    : 'N/A';
+  
+  const displayService = appointment.service ? getName(appointment.service) : '';
+
   const handleBookAgain = () => {
-    const doctorName = getText(appointment.doctorId?.name);
-    const specialty = getText(appointment.doctorId?.specialty);
-    const specialtyValue = typeof appointment.doctorId?.specialty === 'string' 
-      ? appointment.doctorId.specialty 
-      : appointment.doctorId?.specialty?.en || '';
-    
     saveQuickBookingData({
       doctorId: appointment.doctorId._id,
-      doctorName,
-      specialty,
-      serviceId: getServiceKeyFromSpecialty(specialtyValue),
+      doctorName: displayName,
+      specialty: displaySpecialty,
+      serviceId: getServiceKeyFromSpecialty(specialtyEn),
       skipSteps: true
     });
     router.push('/pages/booking?quick=true');
   };
 
   return (
-    <div className="bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow p-4 sm:p-5 border border-gray-100">
+    <div className={`rounded-xl shadow-sm hover:shadow-md transition-shadow p-4 sm:p-5 border ${
+      theme === 'dark' ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-100'
+    }`}>
       <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
         {/* Date Badge */}
         <div className="shrink-0 self-start">
@@ -65,13 +87,17 @@ export function AppointmentCard({
         <div className="flex-1 min-w-0">
           <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 sm:gap-0 mb-3">
             <div className="min-w-0">
-              <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-1 truncate">
-                {getText(appointment.doctorId?.name)}
+              <h3 className={`text-base sm:text-lg font-semibold mb-1 truncate ${
+                theme === 'dark' ? 'text-white' : 'text-gray-900'
+              }`}>
+                {displayName}
               </h3>
-              {appointment.doctorId?.specialty && (
-                <p className="text-xs sm:text-sm text-gray-600 flex items-center gap-1">
+              {displaySpecialty && (
+                <p className={`text-xs sm:text-sm flex items-center gap-1 ${
+                  theme === 'dark' ? 'text-gray-400' : 'text-gray-600'
+                }`}>
                   <FaStethoscope className="text-teal-600 shrink-0" />
-                  <span className="truncate">{getText(appointment.doctorId.specialty)}</span>
+                  <span className="truncate">{displaySpecialty}</span>
                 </p>
               )}
             </div>
@@ -79,28 +105,32 @@ export function AppointmentCard({
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3 mb-3 sm:mb-4">
-            <div className="flex items-center gap-2 text-xs sm:text-sm text-gray-600">
+            <div className={`flex items-center gap-2 text-xs sm:text-sm ${
+              theme === 'dark' ? 'text-gray-400' : 'text-gray-600'
+            }`}>
               <FaHospital className="text-teal-600 shrink-0" />
-              <span className="truncate">
-                {appointment.doctorId?.clinicId?.name 
-                  ? getText(appointment.doctorId.clinicId.name) 
-                  : (appointment.businessId?.name ? getText(appointment.businessId.name) : 'N/A')}
-              </span>
+              <span className="truncate">{displayClinicName}</span>
             </div>
-            <div className="flex items-center gap-2 text-xs sm:text-sm text-gray-600">
+            <div className={`flex items-center gap-2 text-xs sm:text-sm ${
+              theme === 'dark' ? 'text-gray-400' : 'text-gray-600'
+            }`}>
               <FaClock className="text-teal-600 shrink-0" />
               <span>{appointment.startTime} - {appointment.endTime}</span>
             </div>
-            {appointment.service && (
-              <div className="flex items-center gap-2 text-xs sm:text-sm text-gray-600">
+            {displayService && (
+              <div className={`flex items-center gap-2 text-xs sm:text-sm ${
+                theme === 'dark' ? 'text-gray-400' : 'text-gray-600'
+              }`}>
                 <FaStethoscope className="text-teal-600 shrink-0" />
-                <span className="truncate">{getText(appointment.service)}</span>
+                <span className="truncate">{displayService}</span>
               </div>
             )}
             {appointment.fee && (
-              <div className="flex items-center gap-2 text-xs sm:text-sm text-gray-600">
+              <div className={`flex items-center gap-2 text-xs sm:text-sm ${
+                theme === 'dark' ? 'text-gray-400' : 'text-gray-600'
+              }`}>
                 <FaMoneyBillWave className="text-teal-600 shrink-0" />
-                <span>${appointment.fee} {appointment.paid ? '(Paid)' : '(Cash)'}</span>
+                <span>${appointment.fee} {appointment.paid ? `(${t('paid')})` : `(${t('cash')})`}</span>
               </div>
             )}
           </div>
@@ -112,8 +142,8 @@ export function AppointmentCard({
               className="flex items-center justify-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors text-xs sm:text-sm font-medium"
             >
               <FaEye />
-              <span className="hidden sm:inline">View Details</span>
-              <span className="sm:hidden">Details</span>
+              <span className="hidden sm:inline">{t('viewDetails')}</span>
+              <span className="sm:hidden">{t('details')}</span>
             </button>
 
             {isUpcoming && (
@@ -123,14 +153,14 @@ export function AppointmentCard({
                   className="flex items-center justify-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 bg-teal-50 text-teal-700 rounded-lg hover:bg-teal-100 transition-colors text-xs sm:text-sm font-medium"
                 >
                   <FaRedo />
-                  Reschedule
+                  {t('reschedule')}
                 </button>
                 <button
                   onClick={onCancel}
                   className="flex items-center justify-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 bg-red-50 text-red-700 rounded-lg hover:bg-red-100 transition-colors text-xs sm:text-sm font-medium"
                 >
                   <FaTimes />
-                  Cancel
+                  {t('cancel')}
                 </button>
               </>
             )}
@@ -142,16 +172,16 @@ export function AppointmentCard({
                   className="flex items-center justify-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 bg-yellow-50 text-yellow-700 rounded-lg hover:bg-yellow-100 transition-colors text-xs sm:text-sm font-medium"
                 >
                   <FaStar />
-                  <span className="hidden sm:inline">Leave Review</span>
-                  <span className="sm:hidden">Review</span>
+                  <span className="hidden sm:inline">{t('leaveReview')}</span>
+                  <span className="sm:hidden">{t('review')}</span>
                 </button>
                 <button 
                   onClick={handleBookAgain}
                   className="flex items-center justify-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 bg-teal-50 text-teal-700 rounded-lg hover:bg-teal-100 transition-colors text-xs sm:text-sm font-medium"
                 >
                   <FaRedo />
-                  <span className="hidden sm:inline">Book Again</span>
-                  <span className="sm:hidden">Book</span>
+                  <span className="hidden sm:inline">{t('bookAgain')}</span>
+                  <span className="sm:hidden">{t('book')}</span>
                 </button>
               </>
             )}
@@ -162,8 +192,8 @@ export function AppointmentCard({
                 className="flex items-center justify-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 bg-teal-50 text-teal-700 rounded-lg hover:bg-teal-100 transition-colors text-xs sm:text-sm font-medium"
               >
                 <FaRedo />
-                <span className="hidden sm:inline">Book Again</span>
-                <span className="sm:hidden">Book</span>
+                <span className="hidden sm:inline">{t('bookAgain')}</span>
+                <span className="sm:hidden">{t('book')}</span>
               </button>
             )}
           </div>
