@@ -761,6 +761,7 @@
       "noAppointmentRequests": "You have no appointment requests",
       "noFilteredRequests": "No {filter} requests",
       "patientInfo": "Patient Information",
+      "patientMedicalInfo": "Patient Medical Information",
       "requestedTime": "Requested Time",
       "bookingType": "Booking Type",
       "reason": "Reason",
@@ -823,6 +824,245 @@
         "thursday": "Thursday",
         "friday": "Friday",
         "saturday": "Saturday"
+      }
+    }
+  },
+  "patient": {
+    "medical": {
+      "pageTitle": "Medical Information",
+      "pageSubtitle": "Manage your health records and medical history",
+      "privacyNotice": "Privacy Notice",
+      "privacyText": "This information is private and only shared with your treating doctor. All fields are optional and can be updated anytime.",
+      "basicHealth": {
+        "title": "Basic Health Information",
+        "bloodType": "Blood Type",
+        "selectBloodType": "Select Blood Type",
+        "height": "Height (cm)",
+        "weight": "Weight (kg)",
+        "notProvided": "Not provided"
+      },
+      "allergies": {
+        "title": "Allergies",
+        "addAllergy": "Add Allergy",
+        "allergyName": "Allergy Name",
+        "severity": "Severity",
+        "selectSeverity": "Select Severity",
+        "mild": "Mild",
+        "moderate": "Moderate",
+        "severe": "Severe",
+        "reaction": "Reaction",
+        "noAllergies": "No allergies recorded"
+      },
+      "chronicConditions": {
+        "title": "Chronic Conditions",
+        "diabetes": "Diabetes",
+        "hypertension": "Hypertension",
+        "asthma": "Asthma",
+        "heartDisease": "Heart Disease",
+        "kidneyDisease": "Kidney Disease",
+        "liverDisease": "Liver Disease",
+        "thyroidDisorder": "Thyroid Disorder",
+        "cancer": "Cancer",
+        "other": "Other",
+        "otherPlaceholder": "Enter any other chronic conditions...",
+        "noConditions": "No chronic conditions recorded"
+      },
+      "medications": {
+        "title": "Current Medications",
+        "addMedication": "Add Medication",
+        "medicationName": "Medication Name",
+        "dosage": "Dosage",
+        "frequency": "Frequency",
+        "noMedications": "No medications recorded"
+      },
+      "notes": {
+        "title": "Additional Notes",
+        "placeholder": "Add any additional medical information here...",
+        "noNotes": "No notes"
+      },
+      "actions": {
+        "edit": "Edit",
+        "save": "Save",
+        "cancel": "Cancel",
+        "add": "Add",
+        "remove": "Remove"
+      },
+      "messages": {
+        "updateSuccess": "Medical information updated successfully!",
+        "updateError": "Failed to update medical information"
+      }
+    },
+    "appointments": {
+      "title": "My Appointments",
+      "subtitle": "View and manage your medical appointments",
+      "tabs": {
+        "upcoming": "Upcoming",
+        "past": "Past",
+        "cancelled": "Cancelled"
+      },
+      "filters": {
+        "searchPlaceholder": "Search by doctor or service...",
+        "sortBy": "Sort by",
+        "allStatus": "All Status",
+        "dateAsc": "Date (Oldest First)",
+        "dateDesc": "Date (Newest First)",
+        "doctorName": "Doctor Name"
+      },
+      "nextAppointment": {
+        "title": "Your Next Appointment",
+        "in": "in",
+        "days": "days",
+        "hours": "hours",
+        "minutes": "minutes"
+      },
+      "card": {
+        "viewDetails": "View Details",
+        "details": "Details",
+        "reschedule": "Reschedule",
+        "cancel": "Cancel",
+        "leaveReview": "Leave Review",
+        "review": "Review",
+        "bookAgain": "Book Again",
+        "book": "Book",
+        "paid": "Paid",
+        "cash": "Cash"
+      },
+      "status": {
+        "pending": "Pending",
+        "confirmed": "Confirmed",
+        "completed": "Completed",
+        "cancelled": "Cancelled"
+      },
+      "emptyState": {
+        "title": "No Appointments Found",
+        "noAppointments": "You don't have any {tab} appointments yet.",
+        "bookAppointment": "Book an Appointment",
+        "loading": "Loading appointments..."
+      },
+      "cancelModal": {
+        "title": "Cancel Appointment",
+        "message": "Are you sure you want to cancel this appointment? This action cannot be undone.",
+        "keepAppointment": "Keep Appointment",
+        "yesCancel": "Yes, Cancel",
+        "cancelling": "Cancelling..."
+      },
+      "messages": {
+        "cancelSuccess": "Appointment cancelled successfully",
+        "cancelError": "Failed to cancel appointment"
+      },
+      "details": {
+        "title": "Appointment Details",
+        "subtitle": "Complete information about your appointment",
+        "bookingId": "BOOKING ID",
+        "status": "STATUS",
+        "doctorInfo": "Doctor Information",
+        "name": "Name",
+        "specialization": "Specialization",
+        "appointmentInfo": "Appointment Information",
+        "clinic": "Clinic",
+        "date": "Date",
+        "time": "Time",
+        "service": "Service",
+        "type": "Type",
+        "paymentInfo": "Payment Information",
+        "fee": "Fee",
+        "paymentMethod": "Payment Method",
+        "online": "Online",
+        "cash": "Cash",
+        "paymentStatus": "Payment Status",
+        "paid": "Paid",
+        "pending": "Pending",
+        "notes": "Notes",
+        "cancellationInfo": "Cancellation Information",
+        "cancelledBy": "Cancelled by",
+        "cancelledAt": "Cancelled at",
+        "reason": "Reason",
+        "cancellationPolicy": "Cancellation Policy",
+        "policyText": "Appointments can be cancelled up to 24 hours before the scheduled time. Cancellations made less than 24 hours in advance may be subject to a cancellation fee.",
+        "downloadInvoice": "Download Invoice",
+        "close": "Close"
+      },
+      "reschedule": {
+        "title": "Reschedule Appointment",
+        "subtitle": "Choose from available dates and times",
+        "selectDate": "Select Date",
+        "selectTime": "Select Time",
+        "selectDateFirst": "Please select a date first",
+        "noSlots": "No available slots for this date",
+        "morning": "Morning",
+        "afternoon": "Afternoon",
+        "evening": "Evening",
+        "newAppointment": "New appointment",
+        "at": "at",
+        "note": "Note: You can reschedule your appointment to any future date and time.",
+        "cancel": "Cancel",
+        "reschedule": "Reschedule",
+        "rescheduling": "Rescheduling...",
+        "selectDateTime": "Please select both date and time",
+        "failed": "Failed to reschedule appointment",
+        "error": "Error rescheduling appointment"
+      }
+    },
+    "profile": {
+      "personalInfo": {
+        "editProfile": "Edit Profile",
+        "cancel": "Cancel",
+        "save": "Save",
+        "saving": "Saving...",
+        "contactInformation": "Contact Information",
+        "fullName": "Full Name",
+        "emailAddress": "Email Address",
+        "phoneNumber": "Phone Number",
+        "notProvided": "Not provided",
+        "personalDetails": "Personal Details",
+        "dateOfBirth": "Date of Birth",
+        "gender": "Gender",
+        "selectGender": "Select Gender",
+        "male": "Male",
+        "female": "Female",
+        "address": "Address",
+        "street": "Street",
+        "city": "City",
+        "state": "State",
+        "zipCode": "Zip Code",
+        "changePassword": "Change Password",
+        "change": "Change",
+        "keepAccountSecure": "Keep your account secure by updating your password regularly",
+        "deleteAccount": "Delete Account",
+        "successUpdated": "Updated successfully!",
+        "errorUpdating": "Error updating profile",
+        "passwordModal": {
+          "title": "Change Password",
+          "subtitle": "Enter your current password and choose a new one",
+          "currentPassword": "Current Password",
+          "newPassword": "New Password",
+          "confirmPassword": "Confirm Password",
+          "cancel": "Cancel",
+          "change": "Change",
+          "changing": "Changing..."
+        },
+        "deleteModal": {
+          "title": "Delete Account",
+          "subtitle": "This action cannot be undone. All your data will be permanently deleted.",
+          "enterPassword": "Enter your password to confirm",
+          "passwordPlaceholder": "Your password",
+          "cancel": "Cancel",
+          "delete": "Delete",
+          "deleting": "Deleting..."
+        },
+        "messages": {
+          "passwordsNotMatch": "Passwords do not match",
+          "passwordChangedSuccess": "Password changed successfully!",
+          "passwordRecentlyChanged": "Password recently changed. Please login again",
+          "goToDashboard": "Login",
+          "failedChangePassword": "Failed to change password",
+          "errorChangingPassword": "Error changing password",
+          "currentPasswordIncorrect": "Current password is incorrect",
+          "profileUpdatedSuccess": "Profile updated successfully!",
+          "errorUpdatingProfile": "Error updating profile",
+          "failedDeleteAccount": "Failed to delete account",
+          "errorDeletingAccount": "Error deleting account"
+        }
       }
     }
   }
