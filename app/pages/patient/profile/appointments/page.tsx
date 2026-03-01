@@ -6,8 +6,10 @@ import RescheduleModal from '@/app/components/patient/RescheduleModal';
 import ReviewModal from '@/app/components/patient/ReviewModal';
 import CancelConfirmModal from '@/app/components/patient/CancelConfirmModal';
 import Toast from '@/app/components/patient/Toast';
-import { getText } from '@/app/utils/i18n';
 import { Appointment } from '@/app/types/appointment';
+import { useTheme } from '@/app/contexts/ThemeContext';
+import { useLanguage } from '@/app/contexts/LanguageContext';
+import { useTranslations } from 'next-intl';
 
 // Hooks
 import { useAppointments } from './hooks/useAppointments';
@@ -27,6 +29,10 @@ import {
 import { getStatusBadge, formatDate } from './utils/appointmentHelpers';
 
 export default function AppointmentsPage() {
+  const { theme } = useTheme();
+  const { locale } = useLanguage();
+  const t = useTranslations('patient.appointments');
+  const tStatus = useTranslations('patient.appointments.status');
   const [activeTab, setActiveTab] = useState<'upcoming' | 'past' | 'cancelled'>('upcoming');
   const [selectedAppointment, setSelectedAppointment] = useState<Appointment | null>(null);
   const [showDetails, setShowDetails] = useState(false);
@@ -38,6 +44,12 @@ export default function AppointmentsPage() {
 
   const { appointments, loading, fetchAppointments, handleCancelAppointment } = useAppointments();
   const { filters, setFilters, filteredAppointments } = useAppointmentFilters(appointments, activeTab);
+
+  const getName = (name: string | { en: string; ar: string } | undefined) => {
+    if (!name) return '';
+    if (typeof name === 'string') return name;
+    return locale === 'ar' && name.ar ? name.ar : name.en;
+  };
 
   const handleCancelClick = (appointment: Appointment) => {
     setSelectedAppointment(appointment);
@@ -54,7 +66,7 @@ export default function AppointmentsPage() {
     setSelectedAppointment(null);
     
     setToast({
-      message: result.message || (result.success ? 'Appointment cancelled successfully' : 'Failed to cancel appointment'),
+      message: result.message || (result.success ? t('messages.cancelSuccess') : t('messages.cancelError')),
       type: result.success ? 'success' : 'error'
     });
   };
@@ -67,15 +79,21 @@ export default function AppointmentsPage() {
   const nextAppointment = activeTab === 'upcoming' ? getNextAppointment() : null;
 
   return (
-    <div className="min-h-screen bg-gray-50 py-4 sm:py-6 px-4 sm:px-6 lg:px-8">
+    <div className={`min-h-screen py-4 sm:py-6 px-4 sm:px-6 lg:px-8 ${
+      theme === 'dark' ? 'bg-gray-900' : 'bg-gray-50'
+    }`}>
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-4 sm:mb-6">
-          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 flex items-center gap-2 sm:gap-3">
+          <h1 className={`text-2xl sm:text-3xl font-bold flex items-center gap-2 sm:gap-3 ${
+            theme === 'dark' ? 'text-white' : 'text-gray-900'
+          }`}>
             <FaCalendarAlt className="text-teal-600 text-xl sm:text-2xl" />
-            My Appointments
+            {t('title')}
           </h1>
-          <p className="text-gray-600 mt-1 text-sm sm:text-base">View and manage your medical appointments</p>
+          <p className={`mt-1 text-sm sm:text-base ${
+            theme === 'dark' ? 'text-gray-400' : 'text-gray-600'
+          }`}>{t('subtitle')}</p>
         </div>
 
         {/* Tabs */}
@@ -112,7 +130,7 @@ export default function AppointmentsPage() {
                   setShowReview(true);
                 }}
                 formatDate={formatDate}
-                getStatusBadge={getStatusBadge}
+                getStatusBadge={(status) => getStatusBadge(status, tStatus)}
               />
             ))}
           </div>
@@ -128,7 +146,7 @@ export default function AppointmentsPage() {
             setSelectedAppointment(null);
           }}
           formatDate={formatDate}
-          getStatusBadge={getStatusBadge}
+          getStatusBadge={(status) => getStatusBadge(status, tStatus)}
         />
       )}
 
@@ -152,7 +170,7 @@ export default function AppointmentsPage() {
       {showReview && selectedAppointment && (
         <ReviewModal
           appointmentId={selectedAppointment._id}
-          doctorName={getText(selectedAppointment.doctorId?.name)}
+          doctorName={getName(selectedAppointment.doctorId?.name)}
           onClose={() => {
             setShowReview(false);
             setSelectedAppointment(null);
