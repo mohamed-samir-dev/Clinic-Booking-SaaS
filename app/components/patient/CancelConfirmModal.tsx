@@ -1,6 +1,7 @@
 'use client';
 
 import { FaTimes, FaExclamationTriangle } from 'react-icons/fa';
+import { useTranslations } from 'next-intl';
 
 interface CancelConfirmModalProps {
   onConfirm: () => void;
@@ -9,6 +10,8 @@ interface CancelConfirmModalProps {
 }
 
 export default function CancelConfirmModal({ onConfirm, onClose, loading }: CancelConfirmModalProps) {
+  const t = useTranslations('patient.appointments.cancelModal');
+  
   return (
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50" onClick={onClose}>
       <div className="bg-white rounded-2xl max-w-md w-full shadow-2xl" onClick={(e) => e.stopPropagation()}>
@@ -18,7 +21,7 @@ export default function CancelConfirmModal({ onConfirm, onClose, loading }: Canc
               <div className="bg-red-100 p-2 sm:p-3 rounded-full">
                 <FaExclamationTriangle className="text-red-600 text-base sm:text-xl" />
               </div>
-              <h2 className="text-base sm:text-xl font-bold text-gray-900">Cancel Appointment</h2>
+              <h2 className="text-base sm:text-xl font-bold text-gray-900">{t('title')}</h2>
             </div>
             <button onClick={onClose} className="text-gray-400 hover:text-gray-600 transition-colors">
               <FaTimes className="text-lg sm:text-xl" />
@@ -26,7 +29,7 @@ export default function CancelConfirmModal({ onConfirm, onClose, loading }: Canc
           </div>
 
           <p className="text-gray-600 mb-4 sm:mb-6 text-sm sm:text-base">
-            Are you sure you want to cancel this appointment? This action cannot be undone.
+            {t('message')}
           </p>
 
           <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
@@ -35,14 +38,14 @@ export default function CancelConfirmModal({ onConfirm, onClose, loading }: Canc
               disabled={loading}
               className="flex-1 px-4 py-2 sm:py-2.5 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors font-medium text-sm sm:text-base disabled:opacity-50"
             >
-              Keep Appointment
+              {t('keepAppointment')}
             </button>
             <button
               onClick={onConfirm}
               disabled={loading}
               className="flex-1 px-4 py-2 sm:py-2.5 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors font-medium text-sm sm:text-base disabled:opacity-50"
             >
-              {loading ? 'Cancelling...' : 'Yes, Cancel'}
+              {loading ? t('cancelling') : t('yesCancel')}
             </button>
           </div>
         </div>
