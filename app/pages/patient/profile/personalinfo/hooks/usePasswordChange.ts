@@ -1,5 +1,12 @@
 import { useState } from 'react';
 import { PasswordData } from '../types';
+import ar from '@/messages/ar.json';
+import en from '@/messages/en.json';
+
+const getMessages = () => {
+  const locale = (typeof window !== 'undefined' ? localStorage.getItem('locale') : 'en') || 'en';
+  return locale === 'ar' ? ar.patient.profile.personalInfo.messages : en.patient.profile.personalInfo.messages;
+};
 
 export const usePasswordChange = () => {
   const [showPasswordModal, setShowPasswordModal] = useState(false);
@@ -14,13 +21,12 @@ export const usePasswordChange = () => {
     e: React.FormEvent,
     passwordData: PasswordData,
     setPasswordData: (data: PasswordData) => void,
-    setShowSuccess: (show: boolean) => void,
-    setSuccessMessage: (msg: string) => void,
-    setErrorMessage: (msg: string) => void
+    setShowSuccess: (show: boolean) => void
   ) => {
     e.preventDefault();
+    const messages = getMessages();
     if (passwordData.newPassword !== passwordData.confirmPassword) {
-      setPasswordErrorMsg('Passwords do not match');
+      setPasswordErrorMsg(messages.passwordsNotMatch);
       setShowPasswordError(true);
       setTimeout(() => setShowPasswordError(false), 3000);
       return;
@@ -36,19 +42,22 @@ export const usePasswordChange = () => {
       });
       const data = await response.json();
       if (data.success) {
-        setSuccessMessage('Password changed successfully!');
-        setErrorMessage('');
-        setShowSuccess(true);
         setPasswordData({ currentPassword: '', newPassword: '', confirmPassword: '' });
         setShowPasswordModal(false);
+        setShowSuccess(true);
         setTimeout(() => setShowSuccess(false), 3000);
       } else {
-        setPasswordErrorMsg(data.message || 'Failed to change password');
+        const errorMsg = data.message === 'Current password is incorrect' 
+          ? messages.currentPasswordIncorrect
+          : data.message === 'Password recently changed. Please login again'
+          ? messages.passwordRecentlyChanged
+          : (data.message || messages.failedChangePassword);
+        setPasswordErrorMsg(errorMsg);
         setShowPasswordError(true);
         setTimeout(() => setShowPasswordError(false), 3000);
       }
     } catch {
-      setPasswordErrorMsg('Error changing password');
+      setPasswordErrorMsg(messages.errorChangingPassword);
       setShowPasswordError(true);
       setTimeout(() => setShowPasswordError(false), 3000);
     } finally {
