@@ -2,6 +2,13 @@ import { useState, useEffect } from 'react';
 import { useAppSelector, useAppDispatch } from '@/app/store/hooks';
 import { setCredentials } from '@/app/store/slices/authSlice';
 import { FormData, PasswordData } from '../types';
+import ar from '@/messages/ar.json';
+import en from '@/messages/en.json';
+
+const getMessages = () => {
+  const locale = (typeof window !== 'undefined' ? localStorage.getItem('locale') : 'en') || 'en';
+  return locale === 'ar' ? ar.patient.profile.personalInfo.messages : en.patient.profile.personalInfo.messages;
+};
 
 export const usePersonalInfo = () => {
   const user = useAppSelector((state) => state.auth.user);
@@ -48,6 +55,7 @@ export const usePersonalInfo = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
+    const messages = getMessages();
     try {
       const token = localStorage.getItem('token');
       const response = await fetch('http://localhost:5000/api/patients/profile', {
@@ -59,16 +67,16 @@ export const usePersonalInfo = () => {
       if (data.success) {
         const updatedUser = { ...user, ...formData, role: user?.role || 'patient' };
         dispatch(setCredentials({ user: updatedUser, token: token! }));
-        setSuccessMessage('Profile updated successfully!');
+        setSuccessMessage(messages.profileUpdatedSuccess);
         setErrorMessage('');
         setShowSuccess(true);
         setIsEditing(false);
         setTimeout(() => setShowSuccess(false), 3000);
       } else {
-        alert(data.message || 'Failed to update profile');
+        alert(data.message || messages.errorUpdatingProfile);
       }
     } catch {
-      setErrorMessage('Error updating profile');
+      setErrorMessage(messages.errorUpdatingProfile);
       setShowSuccess(true);
       setTimeout(() => setShowSuccess(false), 3000);
     } finally {
