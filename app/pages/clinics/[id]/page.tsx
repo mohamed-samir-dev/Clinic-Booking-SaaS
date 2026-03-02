@@ -10,6 +10,7 @@ import ClinicHeader from './components/ClinicHeader';
 import FacilitiesSection from './components/FacilitiesSection';
 import WorkingHoursSection from './components/WorkingHoursSection';
 import DoctorsSection from './components/DoctorsSection';
+import ReviewsSection from './components/ReviewsSection';
 import Sidebar from './components/Sidebar';
 import ImageModal from './components/ImageModal';
 
@@ -61,6 +62,7 @@ export default function ClinicDetailsPage() {
               <FacilitiesSection facilities={clinic.facilities} theme={theme} locale={locale} />
               <WorkingHoursSection workingHours={clinic.workingHours} theme={theme} />
               <DoctorsSection doctors={doctors} theme={theme} locale={locale} />
+              <ReviewsSection clinicId={clinicId} theme={theme} locale={locale} messages={messages} />
             </div>
 
             <Sidebar 
