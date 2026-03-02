@@ -62,14 +62,12 @@ export default function DoctorPage() {
   const [pendingCount, setPendingCount] = useState(0);
 
   useEffect(() => {
+    if (!token) return;
+
     const fetchStats = async () => {
-      if (!token) return;
-      
       try {
         const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/appointments/doctor-stats`, {
-          headers: {
-            'Authorization': `Bearer ${token}`
-          }
+          headers: { 'Authorization': `Bearer ${token}` }
         });
         
         if (!response.ok) return;
@@ -84,6 +82,7 @@ export default function DoctorPage() {
             { icon: 'payments', label: t.monthlyRevenue, value: `$${data.monthlyRevenue.toLocaleString()}`, color: 'from-green-500 to-green-600' },
             { icon: 'star', label: t.averageRating, value: data.averageRating, color: 'from-yellow-500 to-yellow-600' },
           ]);
+          setPendingCount(data.pendingRequests);
         }
       } catch (error) {
         console.error('Error fetching stats:', error);
@@ -91,13 +90,9 @@ export default function DoctorPage() {
     };
 
     const fetchTodayAppointments = async () => {
-      if (!token) return;
-      
       try {
         const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/appointments/doctor/today`, {
-          headers: {
-            'Authorization': `Bearer ${token}`
-          }
+          headers: { 'Authorization': `Bearer ${token}` }
         });
         
         if (!response.ok) return;
@@ -110,22 +105,13 @@ export default function DoctorPage() {
     };
 
     const fetchPendingRequests = async () => {
-      if (!token) {
-        console.warn('No token available for fetching pending requests');
-        return;
-      }
-      
       try {
         const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/appointments/doctor/pending`, {
-          headers: {
-            'Authorization': `Bearer ${token}`
-          }
+          headers: { 'Authorization': `Bearer ${token}` }
         });
         
         if (!response.ok) {
-          if (response.status === 401) {
-            console.error('Authentication failed. Please log in again.');
-          } else {
+          if (response.status !== 429) {
             console.error('Failed to fetch pending requests:', response.status);
           }
           return;
@@ -134,7 +120,6 @@ export default function DoctorPage() {
         const data = await response.json();
         const requests = data.requests || [];
         setNewRequests(requests.slice(0, 3));
-        setPendingCount(requests.length);
       } catch (error) {
         console.error('Error fetching pending requests:', error);
       }
