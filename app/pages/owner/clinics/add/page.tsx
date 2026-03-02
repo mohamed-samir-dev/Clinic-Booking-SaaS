@@ -1,169 +1,72 @@
 'use client';
 
-import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { ArrowLeft } from 'lucide-react';
+import { useClinicForm } from '../hooks/useClinicForm';
+import BasicInfo from '../components/BasicInfo';
+import MediaSection from '../components/MediaSection';
+import ContactInfo from '../components/ContactInfo';
+import CapacitySection from '../components/CapacitySection';
+import WorkingHours from '../components/WorkingHours';
+import FacilitiesList from '../components/FacilitiesList';
+import BookingSettings from '../components/BookingSettings';
+import SocialMedia from '../components/SocialMedia';
+import StatusSection from '../components/StatusSection';
 
 export default function AddClinicPage() {
   const router = useRouter();
-  const [formData, setFormData] = useState({
-    name: { en: '', ar: '' },
-    address: { en: '', ar: '' },
-    phone: '',
-    email: '',
-  });
-
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-    setError('');
-
-    try {
-      const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:5000/api/owner/clinics', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(formData),
-      });
-
-      if (response.ok) {
-        router.push('/pages/owner/clinics');
-      } else {
-        const data = await response.json();
-        setError(data.message || 'Failed to create clinic');
-      }
-    } catch (err) {
-      setError('Network error. Please try again.');
-    } finally {
-      setLoading(false);
-    }
-  };
+  const { formData, setFormData, loading, error, handleSubmit } = useClinicForm();
 
   return (
-    <div className="p-8">
+    <div className="min-h-screen bg-gray-900 p-6">
       <div className="mb-6">
         <button
           onClick={() => router.back()}
-          className="flex items-center gap-2 text-gray-600 hover:text-gray-900"
+          className="flex items-center gap-2 text-gray-400 hover:text-white"
         >
           <ArrowLeft size={20} />
           Back
         </button>
       </div>
 
-      <div className="bg-white rounded-lg shadow p-6 max-w-4xl">
-        <h1 className="text-2xl font-bold text-gray-900 mb-6">إضافة عيادة جديدة</h1>
+      <div className="bg-gray-800 rounded-2xl shadow-lg p-8 max-w-5xl mx-auto">
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-white mb-2">Add New Clinic</h1>
+          <p className="text-gray-400">Fill in the details to create a new clinic</p>
+        </div>
 
         {error && (
-          <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded mb-6">
-            {error}
+          <div className="bg-red-900/20 border-l-4 border-red-500 text-red-400 px-6 py-4 rounded-lg mb-6">
+            <p className="font-medium">Error</p>
+            <p className="text-sm">{error}</p>
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                اسم العيادة (عربي) *
-              </label>
-              <input
-                type="text"
-                required
-                value={formData.name.ar}
-                onChange={(e) => setFormData({ ...formData, name: { ...formData.name, ar: e.target.value } })}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                placeholder="عيادة النور الطبية"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Clinic Name (English) *
-              </label>
-              <input
-                type="text"
-                required
-                value={formData.name.en}
-                onChange={(e) => setFormData({ ...formData, name: { ...formData.name, en: e.target.value } })}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                placeholder="Al-Noor Medical Clinic"
-              />
-            </div>
-          </div>
+        <form onSubmit={handleSubmit} className="space-y-8">
+          <BasicInfo formData={formData} setFormData={setFormData} />
+          <MediaSection formData={formData} setFormData={setFormData} />
+          <ContactInfo formData={formData} setFormData={setFormData} />
+          <CapacitySection formData={formData} setFormData={setFormData} />
+          <WorkingHours formData={formData} setFormData={setFormData} />
+          <FacilitiesList formData={formData} setFormData={setFormData} />
+          <BookingSettings formData={formData} setFormData={setFormData} />
+          <SocialMedia formData={formData} setFormData={setFormData} />
+          <StatusSection formData={formData} setFormData={setFormData} />
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                العنوان (عربي)
-              </label>
-              <input
-                type="text"
-                value={formData.address.ar}
-                onChange={(e) => setFormData({ ...formData, address: { ...formData.address, ar: e.target.value } })}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                placeholder="123 شارع الجامعة، مدينة نصر"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Address (English)
-              </label>
-              <input
-                type="text"
-                value={formData.address.en}
-                onChange={(e) => setFormData({ ...formData, address: { ...formData.address, en: e.target.value } })}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                placeholder="123 University Street, Nasr City"
-              />
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                رقم الهاتف
-              </label>
-              <input
-                type="tel"
-                value={formData.phone}
-                onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                placeholder="+20123456789"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                البريد الإلكتروني
-              </label>
-              <input
-                type="email"
-                value={formData.email}
-                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                placeholder="clinic@example.com"
-              />
-            </div>
-          </div>
-
-          <div className="flex gap-4 pt-6 border-t">
-            <button
-              type="submit"
-              disabled={loading}
-              className="flex-1 bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed font-medium"
-            >
-              {loading ? 'جاري الحفظ...' : 'حفظ العيادة'}
-            </button>
+          <div className="flex justify-end gap-4 pt-6">
             <button
               type="button"
               onClick={() => router.back()}
-              className="flex-1 bg-gray-200 text-gray-700 px-6 py-3 rounded-lg hover:bg-gray-300 transition-colors font-medium"
+              className="px-8 py-3 border-2 border-gray-600 rounded-xl text-gray-300 font-semibold hover:bg-gray-700 transition-all"
             >
-              إلغاء
+              Cancel
+            </button>
+            <button
+              type="submit"
+              disabled={loading}
+              className="px-8 py-3 bg-teal-600 text-white font-semibold rounded-xl hover:bg-teal-700 disabled:bg-gray-600 transition-all shadow-lg"
+            >
+              {loading ? 'Saving...' : 'Create Clinic'}
             </button>
           </div>
         </form>
