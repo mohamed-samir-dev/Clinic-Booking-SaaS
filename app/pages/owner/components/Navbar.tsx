@@ -52,7 +52,7 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="bg-white border-b border-gray-200 h-16 fixed top-0 right-0 left-64 z-10">
+    <nav className="bg-gray-800 h-16 fixed top-0 right-0 left-64 z-10">
       <div className="h-full px-6 flex items-center justify-between">
         <div className="flex-1 max-w-xl">
           <div className="relative">
@@ -60,25 +60,25 @@ export default function Navbar() {
             <input
               type="text"
               placeholder="Search..."
-              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full pl-10 pr-4 py-2 bg-gray-700 border border-gray-600 text-white placeholder-gray-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
             />
           </div>
         </div>
 
         <div className="flex items-center gap-4">
-          <button className="relative p-2 text-gray-600 hover:bg-gray-100 rounded-lg">
+          <button className="relative p-2 text-gray-300 hover:bg-gray-700 rounded-lg">
             <Bell size={22} />
             <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
           </button>
 
-          <div className="flex items-center gap-3 pl-4 border-l border-gray-200 relative" ref={dropdownRef}>
+          <div className="flex items-center gap-3 pl-4 border-l border-gray-700 relative" ref={dropdownRef}>
             <div className="text-right">
-              <p className="text-sm font-semibold text-gray-900">{ownerData.name || 'Loading...'}</p>
-              <p className="text-xs text-gray-500">Admin</p>
+              <p className="text-sm font-semibold text-white">{ownerData.name || 'Loading...'}</p>
+              <p className="text-xs text-gray-400">Admin</p>
             </div>
             <button
               onClick={() => setShowDropdown(!showDropdown)}
-              className="w-10 h-10 rounded-full bg-gray-200 overflow-hidden hover:ring-2 hover:ring-blue-500 transition-all"
+              className="w-10 h-10 rounded-full bg-gray-700 overflow-hidden hover:ring-2 hover:ring-teal-500 transition-all"
             >
               {ownerData.profileImage ? (
                 <Image
@@ -89,16 +89,16 @@ export default function Navbar() {
                   className="object-cover"
                 />
               ) : (
-                <div className="w-full h-full flex items-center justify-center bg-blue-500 text-white font-semibold">
+                <div className="w-full h-full flex items-center justify-center bg-teal-600 text-white font-semibold">
                   {ownerData.name.charAt(0).toUpperCase()}
                 </div>
               )}
             </button>
             {showDropdown && (
-              <div className="absolute top-full left-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-1">
+              <div className="absolute top-full left-0 mt-2 w-48 bg-gray-800 rounded-lg shadow-lg border border-gray-700 py-1">
                 <button
                   onClick={handleLogout}
-                  className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 flex items-center gap-2"
+                  className="w-full px-4 py-2 text-left text-sm text-gray-300 hover:bg-gray-700 flex items-center gap-2"
                 >
                   <LogOut size={16} />
                   Logout
