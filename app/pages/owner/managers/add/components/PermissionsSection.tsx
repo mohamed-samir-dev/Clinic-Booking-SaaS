@@ -3,8 +3,8 @@ import { ManagerFormData } from '../types';
 import { PERMISSION_ITEMS } from '../utils/constants';
 
 interface PermissionsSectionProps {
-  formData: ManagerFormData;
-  setFormData: (data: ManagerFormData) => void;
+  formData: Partial<ManagerFormData>;
+  setFormData: (data: Partial<ManagerFormData>) => void;
 }
 
 export const PermissionsSection = ({ formData, setFormData }: PermissionsSectionProps) => (
@@ -23,12 +23,12 @@ export const PermissionsSection = ({ formData, setFormData }: PermissionsSection
         >
           <input
             type="checkbox"
-            checked={formData.permissions[perm.key as keyof typeof formData.permissions]}
+            checked={formData.permissions?.[perm.key as keyof typeof formData.permissions] || false}
             onChange={(e) =>
               setFormData({
                 ...formData,
                 permissions: {
-                  ...formData.permissions,
+                  ...formData.permissions!,
                   [perm.key]: e.target.checked,
                 },
               })

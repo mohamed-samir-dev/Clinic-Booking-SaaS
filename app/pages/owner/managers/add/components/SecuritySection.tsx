@@ -3,8 +3,8 @@ import { ManagerFormData } from '../types';
 import { generateStrongPassword } from '../../../doctors/add/utils/passwordGenerator';
 
 interface SecuritySectionProps {
-  formData: ManagerFormData;
-  setFormData: (data: ManagerFormData) => void;
+  formData: Partial<ManagerFormData>;
+  setFormData: (data: Partial<ManagerFormData>) => void;
 }
 
 export const SecuritySection = ({ formData, setFormData }: SecuritySectionProps) => (
@@ -21,7 +21,7 @@ export const SecuritySection = ({ formData, setFormData }: SecuritySectionProps)
         <input
           type="text"
           required
-          value={formData.password}
+          value={formData.password || ''}
           onChange={(e) => setFormData({ ...formData, password: e.target.value })}
           className="flex-1 px-4 py-3 bg-gray-800 border-2 border-gray-600 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-teal-500 text-white"
           placeholder="Enter or generate password"
@@ -39,7 +39,7 @@ export const SecuritySection = ({ formData, setFormData }: SecuritySectionProps)
       <label className="flex items-center gap-2 mt-3 cursor-pointer">
         <input
           type="checkbox"
-          checked={formData.requirePasswordChange}
+          checked={formData.requirePasswordChange || false}
           onChange={(e) => setFormData({ ...formData, requirePasswordChange: e.target.checked })}
           className="w-4 h-4 text-teal-600 border-gray-500 rounded focus:ring-teal-500"
         />

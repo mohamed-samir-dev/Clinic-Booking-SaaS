@@ -7,8 +7,8 @@ interface Clinic {
 }
 
 interface ClinicAssignmentSectionProps {
-  formData: ManagerFormData;
-  setFormData: (data: ManagerFormData) => void;
+  formData: Partial<ManagerFormData>;
+  setFormData: (data: Partial<ManagerFormData>) => void;
   clinics: Clinic[];
 }
 
@@ -24,7 +24,7 @@ export const ClinicAssignmentSection = ({ formData, setFormData, clinics }: Clin
       <label className="block text-sm font-semibold text-gray-300 mb-2">Clinic *</label>
       <select
         required
-        value={formData.clinicId}
+        value={formData.clinicId || ''}
         onChange={(e) => setFormData({ ...formData, clinicId: e.target.value })}
         className="w-full px-4 py-3 bg-gray-800 border-2 border-gray-600 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-all text-white"
       >

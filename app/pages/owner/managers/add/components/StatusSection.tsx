@@ -2,8 +2,8 @@ import { Shield } from 'lucide-react';
 import { ManagerFormData } from '../types';
 
 interface StatusSectionProps {
-  formData: ManagerFormData;
-  setFormData: (data: ManagerFormData) => void;
+  formData: Partial<ManagerFormData>;
+  setFormData: (data: Partial<ManagerFormData>) => void;
 }
 
 export const StatusSection = ({ formData, setFormData }: StatusSectionProps) => (
@@ -17,7 +17,7 @@ export const StatusSection = ({ formData, setFormData }: StatusSectionProps) => 
     <label className="flex items-center gap-3 p-4 bg-gray-800 rounded-xl border-2 border-gray-600 cursor-pointer hover:bg-gray-700 transition-all">
       <input
         type="checkbox"
-        checked={formData.isActive}
+        checked={formData.isActive || false}
         onChange={(e) => setFormData({ ...formData, isActive: e.target.checked })}
         className="w-5 h-5 text-teal-600 border-gray-500 rounded focus:ring-teal-500"
       />

@@ -2,8 +2,8 @@ import { User } from 'lucide-react';
 import { ManagerFormData } from '../types';
 
 interface BasicInfoSectionProps {
-  formData: ManagerFormData;
-  setFormData: (data: ManagerFormData) => void;
+  formData: Partial<ManagerFormData>;
+  setFormData: (data: Partial<ManagerFormData>) => void;
 }
 
 export const BasicInfoSection = ({ formData, setFormData }: BasicInfoSectionProps) => (
@@ -20,7 +20,7 @@ export const BasicInfoSection = ({ formData, setFormData }: BasicInfoSectionProp
         <input
           type="text"
           required
-          value={formData.fullName}
+          value={formData.fullName || ''}
           onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
           className="w-full px-4 py-3 bg-gray-800 border-2 border-gray-600 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-teal-500 text-white"
           placeholder="John Doe"
@@ -31,7 +31,7 @@ export const BasicInfoSection = ({ formData, setFormData }: BasicInfoSectionProp
         <input
           type="email"
           required
-          value={formData.email}
+          value={formData.email || ''}
           onChange={(e) => setFormData({ ...formData, email: e.target.value })}
           className="w-full px-4 py-3 bg-gray-800 border-2 border-gray-600 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-teal-500 text-white"
           placeholder="manager@clinic.com"
@@ -42,7 +42,7 @@ export const BasicInfoSection = ({ formData, setFormData }: BasicInfoSectionProp
         <input
           type="tel"
           required
-          value={formData.phone}
+          value={formData.phone || ''}
           onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
           className="w-full px-4 py-3 bg-gray-800 border-2 border-gray-600 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-teal-500 text-white"
           placeholder="+20123456789"
@@ -52,7 +52,7 @@ export const BasicInfoSection = ({ formData, setFormData }: BasicInfoSectionProp
         <label className="block text-sm font-semibold text-gray-300 mb-2">National ID / Employee ID</label>
         <input
           type="text"
-          value={formData.nationalId}
+          value={formData.nationalId || ''}
           onChange={(e) => setFormData({ ...formData, nationalId: e.target.value })}
           className="w-full px-4 py-3 bg-gray-800 border-2 border-gray-600 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-teal-500 text-white"
           placeholder="12345678901234"
@@ -62,7 +62,7 @@ export const BasicInfoSection = ({ formData, setFormData }: BasicInfoSectionProp
         <label className="block text-sm font-semibold text-gray-300 mb-2">Address</label>
         <input
           type="text"
-          value={formData.address}
+          value={formData.address || ''}
           onChange={(e) => setFormData({ ...formData, address: e.target.value })}
           className="w-full px-4 py-3 bg-gray-800 border-2 border-gray-600 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-teal-500 text-white"
           placeholder="123 Main St, Cairo"

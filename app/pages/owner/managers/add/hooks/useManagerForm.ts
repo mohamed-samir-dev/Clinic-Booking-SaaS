@@ -68,5 +68,9 @@ export const useManagerForm = () => {
     }
   };
 
-  return { formData, setFormData, loading, error, handleSubmit };
+  const updateFormData = (data: Partial<ManagerFormData>) => {
+    setFormData((prev) => ({ ...prev, ...data }));
+  };
+
+  return { formData, setFormData: updateFormData, loading, error, handleSubmit };
 };
