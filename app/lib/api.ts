@@ -46,6 +46,11 @@ export const api = {
     getFilters: () => fetchAPI('/api/doctors/filters'),
     delete: (id: string) => fetchAPI(`/api/owner/doctors/${id}`, { method: 'DELETE', requireAuth: true }),
   },
+  owner: {
+    doctors: {
+      getAll: () => fetchAPI('/api/owner/doctors', { requireAuth: true }),
+    },
+  },
   reviews: {
     getAll: () => fetchAPI('/api/reviews'),
     getStats: () => fetchAPI('/api/reviews/stats'),
@@ -58,5 +63,23 @@ export const api = {
         requireAuth: true 
       }),
     },
+  },
+  managers: {
+    getAll: () => fetchAPI('/api/owner/managers', { requireAuth: true }),
+    getById: (id: string) => fetchAPI(`/api/owner/managers/${id}`, { requireAuth: true }),
+    create: (data: Record<string, unknown>) => fetchAPI('/api/owner/managers', { 
+      method: 'POST', 
+      body: JSON.stringify(data),
+      requireAuth: true 
+    }),
+    update: (id: string, data: Record<string, unknown>) => fetchAPI(`/api/owner/managers/${id}`, { 
+      method: 'PUT', 
+      body: JSON.stringify(data),
+      requireAuth: true 
+    }),
+    delete: (id: string) => fetchAPI(`/api/owner/managers/${id}`, { 
+      method: 'DELETE', 
+      requireAuth: true 
+    }),
   },
 };
