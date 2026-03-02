@@ -1,22 +1,27 @@
 'use client';
 
+import { useState } from 'react';
 import { Appointment } from '../types';
 import { getStatusConfig, getTimeAgo } from '../utils/helpers';
 import translations from '@/messages/translations';
+import { PatientMedicalModal } from './PatientMedicalModal';
 
 interface RequestCardProps {
   request: Appointment;
   onStatusUpdate: (id: string, status: string) => void;
   theme: 'light' | 'dark';
   locale: 'en' | 'ar';
+  token: string;
 }
 
-export const RequestCard = ({ request, onStatusUpdate, theme, locale }: RequestCardProps) => {
+export const RequestCard = ({ request, onStatusUpdate, theme, locale, token }: RequestCardProps) => {
+  const [showMedicalModal, setShowMedicalModal] = useState(false);
   const t = translations[locale].doctor.requests;
   const config = getStatusConfig(request.status, locale, theme);
   const patientName = request.patientId?.name || request.guestData?.fullName || (locale === 'ar' ? 'ضيف' : 'Guest Patient');
   const patientPhone = request.patientId?.phone || request.guestData?.phone;
   const patientEmail = request.patientId?.email || request.guestData?.email;
+  const hasPatientId = !!request.patientId?._id;
 
   return (
     <div className={`group bg-linear-to-br ${config.bgColor} rounded-lg sm:rounded-xl border ${config.borderColor} overflow-hidden transition-all hover:shadow-lg`}>
@@ -117,42 +122,68 @@ export const RequestCard = ({ request, onStatusUpdate, theme, locale }: RequestC
             <p className={`text-[9px] sm:text-xs font-bold uppercase tracking-wider mb-0.5 ${
               theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
             }`}>{t.reason}</p>
-            <p className={`text-[10px] sm:text-sm font-medium break-words ${
+            <p className={`text-[10px] sm:text-sm font-medium wrap-break-words ${
               theme === 'dark' ? 'text-gray-200' : 'text-gray-700'
             }`}>{request.reason}</p>
           </div>
         )}
 
         {/* Action Buttons */}
-        {request.status === 'pending' && (
-          <div className="flex flex-col gap-1.5 sm:gap-2">
+        <div className="space-y-2">
+          {/* Medical Info Button - Always visible for registered patients */}
+          {hasPatientId && (
             <button
-              onClick={() => onStatusUpdate(request._id, 'confirmed')}
-              className="w-full px-2.5 sm:px-3 py-1.5 sm:py-2 bg-linear-to-r from-teal-500 to-cyan-600 hover:from-teal-600 hover:to-cyan-700 text-white rounded-lg text-[10px] sm:text-sm font-bold transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-1"
+              onClick={() => setShowMedicalModal(true)}
+              className="w-full px-2.5 sm:px-3 py-1.5 sm:py-2 bg-linear-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white rounded-lg text-[10px] sm:text-sm font-bold transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-1"
             >
-              <span className="material-icons text-xs sm:text-sm">check_circle</span>
-              <span>{t.accept}</span>
+              <span className="material-icons text-xs sm:text-sm">medical_information</span>
+              <span>{t.patientMedicalInfo}</span>
             </button>
-            <button
-              onClick={() => onStatusUpdate(request._id, 'cancelled')}
-              className="w-full px-2.5 sm:px-3 py-1.5 sm:py-2 bg-linear-to-r from-red-500 to-rose-600 hover:from-red-600 hover:to-rose-700 text-white rounded-lg text-[10px] sm:text-sm font-bold transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-1"
-            >
-              <span className="material-icons text-xs sm:text-sm">cancel</span>
-              <span>{t.reject}</span>
-            </button>
-          </div>
-        )}
+          )}
 
-        {request.status === 'confirmed' && (
-          <button
-            onClick={() => onStatusUpdate(request._id, 'completed')}
-            className="w-full px-2.5 sm:px-3 py-1.5 sm:py-2 bg-linear-to-r from-gray-500 to-slate-600 hover:from-gray-600 hover:to-slate-700 text-white rounded-lg text-[10px] sm:text-sm font-bold transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-1"
-          >
-            <span className="material-icons text-xs sm:text-sm">task_alt</span>
-            <span>{locale === 'ar' ? 'تم الإنجاز' : 'Mark Completed'}</span>
-          </button>
-        )}
+          {request.status === 'pending' && (
+            <>
+              <button
+                onClick={() => onStatusUpdate(request._id, 'confirmed')}
+                className="w-full px-2.5 sm:px-3 py-1.5 sm:py-2 bg-wrap-to-r from-teal-500 to-cyan-600 hover:from-teal-600 hover:to-cyan-700 text-white rounded-lg text-[10px] sm:text-sm font-bold transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-1"
+              >
+                <span className="material-icons text-xs sm:text-sm">check_circle</span>
+                <span>{t.accept}</span>
+              </button>
+              <button
+                onClick={() => onStatusUpdate(request._id, 'cancelled')}
+                className="w-full px-2.5 sm:px-3 py-1.5 sm:py-2 bg-wrap-to-r from-red-500 to-rose-600 hover:from-red-600 hover:to-rose-700 text-white rounded-lg text-[10px] sm:text-sm font-bold transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-1"
+              >
+                <span className="material-icons text-xs sm:text-sm">cancel</span>
+                <span>{t.reject}</span>
+              </button>
+            </>
+          )}
+
+          {request.status === 'confirmed' && (
+            <button
+              onClick={() => onStatusUpdate(request._id, 'completed')}
+              className="w-full px-2.5 sm:px-3 py-1.5 sm:py-2 bg-wrap-to-r from-gray-500 to-slate-600 hover:from-gray-600 hover:to-slate-700 text-white rounded-lg text-[10px] sm:text-sm font-bold transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-1"
+            >
+              <span className="material-icons text-xs sm:text-sm">task_alt</span>
+              <span>{locale === 'ar' ? 'تم الإنجاز' : 'Mark Completed'}</span>
+            </button>
+          )}
+        </div>
       </div>
+
+      {/* Medical Modal */}
+      {hasPatientId && (
+        <PatientMedicalModal
+          isOpen={showMedicalModal}
+          onClose={() => setShowMedicalModal(false)}
+          patientId={request.patientId!._id!}
+          patientName={patientName}
+          token={token}
+          theme={theme}
+          locale={locale}
+        />
+      )}
     </div>
   );
 };

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState, FilterType } from './types';
 import { useRequests } from './hooks/useRequests';
@@ -48,6 +48,7 @@ export default function RequestsPage() {
           onStatusUpdate={handleStatusUpdate}
           theme={theme}
           locale={locale}
+          token={token || ''}
         />
       </div>
 

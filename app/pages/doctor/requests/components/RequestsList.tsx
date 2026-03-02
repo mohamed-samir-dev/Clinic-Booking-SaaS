@@ -11,9 +11,10 @@ interface RequestsListProps {
   onStatusUpdate: (id: string, status: string) => void;
   theme: 'light' | 'dark';
   locale: 'en' | 'ar';
+  token: string;
 }
 
-export const RequestsList = ({ requests, loading, filter, onStatusUpdate, theme, locale }: RequestsListProps) => {
+export const RequestsList = ({ requests, loading, filter, onStatusUpdate, theme, locale, token }: RequestsListProps) => {
   const t = translations[locale].doctor.requests;
   
   const getFilterTitle = () => {
@@ -64,6 +65,7 @@ export const RequestsList = ({ requests, loading, filter, onStatusUpdate, theme,
                 onStatusUpdate={onStatusUpdate}
                 theme={theme}
                 locale={locale}
+                token={token}
               />
             ))}
           </div>
