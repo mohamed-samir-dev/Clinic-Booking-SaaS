@@ -1,95 +1,215 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { Users, Calendar, DollarSign, TrendingUp } from 'lucide-react';
+import { useState, useEffect, useCallback } from 'react';
+import { useRouter } from 'next/navigation';
+import { 
+  Building2, 
+  Users, 
+  UserCog, 
+  Calendar, 
+  DollarSign, 
+  Star,
+  Stethoscope,
+  Wallet
+} from 'lucide-react';
+import { DashboardHeader } from './components/DashboardHeader';
+import { KPICard } from './components/KPICard';
+import { RevenueCharts } from './components/RevenueCharts';
+import { ClinicsTable } from './components/ClinicsTable';
+import { AlertsPanel } from './components/AlertsPanel';
+import { ActivityLog } from './components/ActivityLog';
+import { QuickActionsTiles } from './components/QuickActionsTiles';
+import { LoadingSkeleton } from './components/LoadingSkeleton';
+import { DateRange, DashboardData, Alert } from './types';
+import toast from 'react-hot-toast';
 
-interface Stats {
-  totalDoctors: number;
-  totalAppointments: number;
-  revenue: number;
-  growth: number;
-}
-
-export default function DashboardPage() {
-  const [stats, setStats] = useState<Stats>({
-    totalDoctors: 0,
-    totalAppointments: 0,
-    revenue: 0,
-    growth: 0,
+export default function OwnerDashboardPage() {
+  const router = useRouter();
+  const [dateRange, setDateRange] = useState<DateRange>({
+    from: new Date().toISOString().split('T')[0],
+    to: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
   });
 
-  useEffect(() => {
-    // Fetch dashboard stats
-    const fetchStats = async () => {
-      try {
-        const token = localStorage.getItem('token');
-        const response = await fetch('http://localhost:5000/api/owner/stats', {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        if (response.ok) {
-          const data = await response.json();
-          setStats(data);
+  const [data, setData] = useState<DashboardData | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const fetchDashboardData = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+
+    try {
+      const token = localStorage.getItem('token');
+      
+      const response = await fetch(
+        `http://localhost:5000/api/owner/dashboard?from=${dateRange.from}&to=${dateRange.to}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
         }
-      } catch (error) {
+      );
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch dashboard data');
       }
-    };
 
-    fetchStats();
-  }, []);
+      const dashboardData = await response.json();
+      setData(dashboardData);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'An error occurred');
+      toast.error('Failed to load dashboard data');
+    } finally {
+      setLoading(false);
+    }
+  }, [dateRange]);
 
-  const cards = [
-    {
-      title: 'Total Doctors',
-      value: stats.totalDoctors,
-      icon: Users,
-      color: 'bg-blue-500',
-    },
-    {
-      title: 'Appointments',
-      value: stats.totalAppointments,
-      icon: Calendar,
-      color: 'bg-green-500',
-    },
-    {
-      title: 'Revenue',
-      value: `$${stats.revenue.toLocaleString()}`,
-      icon: DollarSign,
-      color: 'bg-purple-500',
-    },
-    {
-      title: 'Growth',
-      value: `${stats.growth}%`,
-      icon: TrendingUp,
-      color: 'bg-orange-500',
-    },
-  ];
+  useEffect(() => {
+    fetchDashboardData();
+  }, [fetchDashboardData]);
+
+  const handleAlertAction = (alert: Alert) => {
+    if (alert.type === 'no_manager' && alert.clinicId) {
+      router.push(`/pages/owner/managers/add?clinicId=${alert.clinicId}`);
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-900">
+        <DashboardHeader
+          dateRange={dateRange}
+          onDateRangeChange={setDateRange}
+          onAddClinic={() => router.push('/pages/owner/clinics/add')}
+          onAssignManager={() => router.push('/pages/owner/managers/add')}
+        />
+        <div className="p-6">
+          <LoadingSkeleton />
+        </div>
+      </div>
+    );
+  }
+
+  if (error || !data) {
+    return (
+      <div className="min-h-screen bg-gray-900 flex items-center justify-center">
+        <div className="text-center">
+          <h2 className="text-2xl font-bold text-white mb-4">Error Loading Dashboard</h2>
+          <p className="text-gray-400 mb-6">{error}</p>
+          <button
+            onClick={fetchDashboardData}
+            className="px-6 py-3 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors"
+          >
+            Retry
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div className="p-8">
-      <h1 className="text-3xl font-bold text-gray-900 mb-8">Dashboard</h1>
-      
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {cards.map((card) => {
-          const Icon = card.icon;
-          return (
-            <div key={card.title} className="bg-white rounded-lg shadow p-6">
-              <div className="flex items-center justify-between mb-4">
-                <div className={`${card.color} p-3 rounded-lg`}>
-                  <Icon className="text-white" size={24} />
-                </div>
-              </div>
-              <h3 className="text-gray-500 text-sm font-medium mb-1">{card.title}</h3>
-              <p className="text-2xl font-bold text-gray-900">{card.value}</p>
-            </div>
-          );
-        })}
-      </div>
+    <div className="min-h-screen bg-gray-900">
+      <DashboardHeader
+        dateRange={dateRange}
+        onDateRangeChange={setDateRange}
+        onAddClinic={() => router.push('/pages/owner/clinics/add')}
+        onAssignManager={() => router.push('/pages/owner/managers/add')}
+        notificationCount={data.alerts.length}
+      />
 
-      <div className="mt-8 bg-white rounded-lg shadow p-6">
-        <h2 className="text-xl font-bold text-gray-900 mb-4">Recent Activity</h2>
-        <p className="text-gray-500">No recent activity to display</p>
+      <div className="p-6 space-y-6">
+        {/* KPI Cards */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <KPICard
+            title="Total Clinics"
+            value={data.kpis.totalClinics}
+            change={data.kpis.clinicsChange}
+            icon={Building2}
+            tooltip="Total number of registered clinics"
+          />
+          <KPICard
+            title="Total Managers"
+            value={data.kpis.totalManagers}
+            change={data.kpis.managersChange}
+            icon={UserCog}
+            tooltip="Total number of clinic managers"
+          />
+          <KPICard
+            title="Total Doctors"
+            value={data.kpis.totalDoctors}
+            change={data.kpis.doctorsChange}
+            icon={Stethoscope}
+            tooltip="Total number of doctors across all clinics"
+          />
+          <KPICard
+            title="Total Patients"
+            value={data.kpis.totalPatients}
+            change={data.kpis.patientsChange}
+            icon={Users}
+            tooltip="Total registered patients"
+          />
+          <KPICard
+            title="Appointments"
+            value={data.kpis.totalAppointments}
+            change={data.kpis.appointmentsChange}
+            icon={Calendar}
+            tooltip="Total appointments in selected period"
+          />
+          <KPICard
+            title="Total Revenue"
+            value={`$${data.kpis.totalRevenue.toLocaleString()}`}
+            change={data.kpis.revenueChange}
+            icon={DollarSign}
+            tooltip="Total revenue in selected period"
+          />
+          <KPICard
+            title="CareSync Revenue"
+            value={`$${(data.kpis.careSyncRevenue || 0).toLocaleString()}`}
+            change={data.kpis.careSyncRevenueChange || 0}
+            icon={Wallet}
+            tooltip="CareSync platform revenue"
+          />
+          <KPICard
+            title="Avg Rating"
+            value={data.kpis.avgClinicRating > 0 ? data.kpis.avgClinicRating.toFixed(1) : 'N/A'}
+            change={0}
+            icon={Star}
+            tooltip="Average clinic rating"
+          />
+        </div>
+
+        {/* Revenue Analytics */}
+        <RevenueCharts
+          timeline={data.revenueTimeline}
+          byClinic={data.revenueByClinic}
+          share={data.revenueShare}
+        />
+
+        {/* Alerts & Insights */}
+        {data.alerts.length > 0 && (
+          <AlertsPanel alerts={data.alerts} onAlertAction={handleAlertAction} />
+        )}
+
+        {/* Clinics Performance Table */}
+        <ClinicsTable
+          clinics={data.revenueByClinic}
+          onViewClinic={(id) => router.push(`/pages/owner/clinics/${id}`)}
+          onAssignManager={(id) => router.push(`/pages/owner/managers/add?clinicId=${id}`)}
+          onDisableManager={() => {
+            if (confirm('Are you sure you want to disable this manager?')) {
+              toast.success('Manager disabled successfully');
+            }
+          }}
+        />
+
+        {/* Quick Actions */}
+        <QuickActionsTiles
+          onAddClinic={() => router.push('/pages/owner/clinics/add')}
+          onAssignManager={() => router.push('/pages/owner/managers/add')}
+          onViewClinics={() => router.push('/pages/owner/clinics')}
+          onViewManagers={() => router.push('/pages/owner/managers')}
+        />
+
+        {/* Recent Activity */}
+        <ActivityLog activities={data.recentActivity} />
       </div>
     </div>
   );
