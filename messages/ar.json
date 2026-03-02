@@ -317,6 +317,25 @@
       },
       "closed": "مغلق",
       "open": "مفتوح"
+    },
+    "reviews": {
+      "title": "تقييمات العيادة",
+      "writeReview": "اكتب تقييم",
+      "reviewsCount": "تقييم",
+      "rating": "التقييم",
+      "yourReview": "تقييمك",
+      "shareExperience": "شارك تجربتك مع هذه العيادة...",
+      "characters": "حرف (الحد الأدنى 10)",
+      "selectRating": "الرجاء اختيار تقييم",
+      "commentMinLength": "يجب أن يكون التعليق 10 أحرف على الأقل",
+      "loginRequired": "يجب تسجيل الدخول لكتابة تقييم",
+      "loginToReview": "يجب تسجيل الدخول كمريض لكتابة تقييم للعيادة",
+      "submitError": "فشل إرسال التقييم. يرجى المحاولة مرة أخرى",
+      "submitting": "جاري الإرسال...",
+      "submitReview": "إرسال التقييم",
+      "cancel": "إلغاء",
+      "noReviews": "لا توجد تقييمات بعد. كن أول من يقيم هذه العيادة!",
+      "anonymous": "مجهول"
     }
   },
   "reviews": {

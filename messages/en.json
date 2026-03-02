@@ -317,6 +317,25 @@
       },
       "closed": "Closed",
       "open": "Open"
+    },
+    "reviews": {
+      "title": "Clinic Reviews",
+      "writeReview": "Write Review",
+      "reviewsCount": "reviews",
+      "rating": "Rating",
+      "yourReview": "Your Review",
+      "shareExperience": "Share your experience with this clinic...",
+      "characters": "characters (minimum 10)",
+      "selectRating": "Please select a rating",
+      "commentMinLength": "Comment must be at least 10 characters",
+      "loginRequired": "You must be logged in to write a review",
+      "loginToReview": "You must be logged in as a patient to write a review for this clinic",
+      "submitError": "Failed to submit review. Please try again",
+      "submitting": "Submitting...",
+      "submitReview": "Submit Review",
+      "cancel": "Cancel",
+      "noReviews": "No reviews yet. Be the first to review this clinic!",
+      "anonymous": "Anonymous"
     }
   },
   "reviews": {
