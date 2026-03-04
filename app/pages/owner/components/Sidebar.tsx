@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { LayoutDashboard, Users, Building2, UserCog, Settings } from 'lucide-react';
+import { LayoutDashboard, Users, Building2, UserCog, Settings, FileText } from 'lucide-react';
 
 export default function Sidebar() {
   const pathname = usePathname();
@@ -12,6 +12,7 @@ export default function Sidebar() {
     { name: 'Manage Clinics', icon: Building2, href: '/pages/owner/clinics' },
     { name: 'Manage Doctors', icon: Users, href: '/pages/owner/doctors' },
     { name: 'Manage Managers', icon: UserCog, href: '/pages/owner/managers' },
+    { name: 'Reports', icon: FileText, href: '/pages/owner/reports' },
     { name: 'System Settings', icon: Settings, href: '/pages/owner/settings' },
   ];
 

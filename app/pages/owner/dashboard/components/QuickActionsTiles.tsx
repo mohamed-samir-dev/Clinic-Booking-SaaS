@@ -1,4 +1,7 @@
+'use client';
+
 import { Plus, UserCog, Building2, Users, FileText, Settings } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 
 interface QuickActionsTilesProps {
   onAddClinic: () => void;
@@ -13,6 +16,8 @@ export const QuickActionsTiles = ({
   onViewClinics,
   onViewManagers,
 }: QuickActionsTilesProps) => {
+  const router = useRouter();
+
   const actions = [
     {
       title: 'Add New Clinic',
@@ -47,14 +52,14 @@ export const QuickActionsTiles = ({
       description: 'View detailed reports',
       icon: FileText,
       color: 'bg-green-50 dark:bg-green-900/20 text-green-600 dark:text-green-400',
-      action: () => {},
+      action: () => router.push('/pages/owner/reports'),
     },
     {
       title: 'System Settings',
       description: 'Configure system',
       icon: Settings,
       color: 'bg-gray-50 dark:bg-gray-900/20 text-gray-600 dark:text-gray-400',
-      action: () => {},
+      action: () => router.push('/pages/owner/settings'),
     },
   ];
 
