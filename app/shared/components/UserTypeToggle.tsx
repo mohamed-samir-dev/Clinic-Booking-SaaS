@@ -14,7 +14,6 @@ export default function UserTypeToggle({ userType, onUserTypeChange }: UserTypeT
   
   const userTypes: { value: UserType; label: string }[] = [
     { value: 'patient', label: t.patient },
-    { value: 'staff', label: t.staff },
     { value: 'doctor', label: t.doctor },
     { value: 'manager', label: t.manager },
     { value: 'owner', label: t.owner }
