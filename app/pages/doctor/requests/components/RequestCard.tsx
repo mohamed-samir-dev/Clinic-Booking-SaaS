@@ -145,14 +145,14 @@ export const RequestCard = ({ request, onStatusUpdate, theme, locale, token }: R
             <>
               <button
                 onClick={() => onStatusUpdate(request._id, 'confirmed')}
-                className="w-full px-2.5 sm:px-3 py-1.5 sm:py-2 bg-wrap-to-r from-teal-500 to-cyan-600 hover:from-teal-600 hover:to-cyan-700 text-white rounded-lg text-[10px] sm:text-sm font-bold transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-1"
+                className="w-full px-2.5 sm:px-3 py-1.5 sm:py-2 bg-linear-to-r from-teal-500 to-cyan-600 hover:from-teal-600 hover:to-cyan-700 text-white rounded-lg text-[10px] sm:text-sm font-bold transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-1"
               >
                 <span className="material-icons text-xs sm:text-sm">check_circle</span>
                 <span>{t.accept}</span>
               </button>
               <button
                 onClick={() => onStatusUpdate(request._id, 'cancelled')}
-                className="w-full px-2.5 sm:px-3 py-1.5 sm:py-2 bg-wrap-to-r from-red-500 to-rose-600 hover:from-red-600 hover:to-rose-700 text-white rounded-lg text-[10px] sm:text-sm font-bold transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-1"
+                className="w-full px-2.5 sm:px-3 py-1.5 sm:py-2 bg-linear-to-r from-red-500 to-rose-600 hover:from-red-600 hover:to-rose-700 text-white rounded-lg text-[10px] sm:text-sm font-bold transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-1"
               >
                 <span className="material-icons text-xs sm:text-sm">cancel</span>
                 <span>{t.reject}</span>
@@ -163,7 +163,7 @@ export const RequestCard = ({ request, onStatusUpdate, theme, locale, token }: R
           {request.status === 'confirmed' && (
             <button
               onClick={() => onStatusUpdate(request._id, 'completed')}
-              className="w-full px-2.5 sm:px-3 py-1.5 sm:py-2 bg-wrap-to-r from-gray-500 to-slate-600 hover:from-gray-600 hover:to-slate-700 text-white rounded-lg text-[10px] sm:text-sm font-bold transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-1"
+              className="w-full px-2.5 sm:px-3 py-1.5 sm:py-2 bg-linear-to-r from-gray-500 to-slate-600 hover:from-gray-600 hover:to-slate-700 text-white rounded-lg text-[10px] sm:text-sm font-bold transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-1"
             >
               <span className="material-icons text-xs sm:text-sm">task_alt</span>
               <span>{locale === 'ar' ? 'تم الإنجاز' : 'Mark Completed'}</span>
