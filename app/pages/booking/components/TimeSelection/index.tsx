@@ -33,6 +33,7 @@ export default function TimeSelection({ selectedTime, setSelectedTime, selectedD
   const [showAllAfternoon, setShowAllAfternoon] = useState(false);
   const [showAllEvening, setShowAllEvening] = useState(false);
   const [bookedSlots, setBookedSlots] = useState<string[]>([]);
+  const [blockedRanges, setBlockedRanges] = useState<Array<{start: number; end: number; reason: string}>>([]);
   const [blockedDates, setBlockedDates] = useState<string[]>([]);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
@@ -43,7 +44,9 @@ export default function TimeSelection({ selectedTime, setSelectedTime, selectedD
     [selectedDoctor]
   );
 
-  const { availability, consultationDuration, loading, doctorData } = useDoctorData(doctorId, selectedDoctor);
+  const { availability, consultationDuration: fetchedDuration, loading, doctorData } = useDoctorData(doctorId, selectedDoctor);
+  
+  const consultationDuration = fetchedDuration || 20;
   
   const doctorObject = typeof selectedDoctor === 'object' ? selectedDoctor : doctorData;
 
@@ -95,6 +98,7 @@ export default function TimeSelection({ selectedTime, setSelectedTime, selectedD
     const fetchBookedSlots = async () => {
       if (!selectedDate || !doctorId) {
         setBookedSlots([]);
+        setBlockedRanges([]);
         return;
       }
 
@@ -109,28 +113,45 @@ export default function TimeSelection({ selectedTime, setSelectedTime, selectedD
         const response = await fetch(url);
         if (!response.ok) {
           setBookedSlots([]);
+          setBlockedRanges([]);
           return;
         }
         const data = await response.json();
         
         if (data.bookedSlots) {
-          const slots = data.bookedSlots.map((slot: { startTime: string }) => {
-            const [hours, minutes] = slot.startTime.split(':');
-            const hour = parseInt(hours);
-            const period = hour >= 12 ? 'PM' : 'AM';
-            const displayHour = hour > 12 ? hour - 12 : hour === 0 ? 12 : hour;
-            return `${displayHour.toString().padStart(2, '0')}:${minutes} ${period}`;
+          const slots: string[] = [];
+          const ranges: Array<{start: number; end: number; reason: string}> = [];
+          
+          data.bookedSlots.forEach((slot: { startTime: string; endTime: string; type?: string; reason?: string }) => {
+            if (slot.type === 'blocked') {
+              const [startHour, startMin] = slot.startTime.split(':').map(Number);
+              const [endHour, endMin] = slot.endTime.split(':').map(Number);
+              ranges.push({
+                start: startHour * 60 + startMin,
+                end: endHour * 60 + endMin,
+                reason: slot.reason || ''
+              });
+            } else {
+              const [hours, minutes] = slot.startTime.split(':');
+              const hour = parseInt(hours);
+              const period = hour >= 12 ? 'PM' : 'AM';
+              const displayHour = hour > 12 ? hour - 12 : hour === 0 ? 12 : hour;
+              slots.push(`${String(displayHour).padStart(2, '0')}:${minutes} ${period}`);
+            }
           });
+          
           setBookedSlots(slots);
+          setBlockedRanges(ranges);
         }
       } catch (error) {
         console.error('Error fetching booked slots:', error);
         setBookedSlots([]);
+        setBlockedRanges([]);
       }
     };
 
     fetchBookedSlots();
-  }, [selectedDate, doctorId]);
+  }, [selectedDate, doctorId, consultationDuration]);
 
   const availableSlots = useMemo(() => 
     generateTimeSlots(selectedDate, availability, consultationDuration),
@@ -194,6 +215,7 @@ export default function TimeSelection({ selectedTime, setSelectedTime, selectedD
             showAllEvening={showAllEvening}
             setShowAllEvening={setShowAllEvening}
             bookedSlots={bookedSlots}
+            blockedRanges={blockedRanges}
           />
         </div>
       </div>
