@@ -24,6 +24,7 @@ interface TimeSlotsProps {
   showAllEvening: boolean;
   setShowAllEvening: (show: boolean) => void;
   bookedSlots: string[];
+  blockedRanges: Array<{start: number; end: number; reason: string}>;
 }
 
 export default function TimeSlots({
@@ -44,7 +45,8 @@ export default function TimeSlots({
   setShowAllAfternoon,
   showAllEvening,
   setShowAllEvening,
-  bookedSlots
+  bookedSlots,
+  blockedRanges
 }: TimeSlotsProps) {
   const { theme } = useTheme();
   const { locale } = useLanguage();
@@ -126,6 +128,7 @@ export default function TimeSlots({
           showAll={showAllMorning}
           setShowAll={setShowAllMorning}
           bookedSlots={bookedSlots}
+          blockedRanges={blockedRanges}
           selectedDate={selectedDate}
         />
         <TimePeriod
@@ -139,6 +142,7 @@ export default function TimeSlots({
           showAll={showAllAfternoon}
           setShowAll={setShowAllAfternoon}
           bookedSlots={bookedSlots}
+          blockedRanges={blockedRanges}
           selectedDate={selectedDate}
         />
         <TimePeriod
@@ -152,6 +156,7 @@ export default function TimeSlots({
           showAll={showAllEvening}
           setShowAll={setShowAllEvening}
           bookedSlots={bookedSlots}
+          blockedRanges={blockedRanges}
           selectedDate={selectedDate}
         />
       </div>
