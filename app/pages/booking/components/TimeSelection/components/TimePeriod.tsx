@@ -14,6 +14,7 @@ interface TimePeriodProps {
   showAll: boolean;
   setShowAll: (show: boolean) => void;
   bookedSlots: string[];
+  blockedRanges: Array<{start: number; end: number; reason: string}>;
   selectedDate: Date | null;
 }
 
@@ -28,11 +29,60 @@ export default function TimePeriod({
   showAll,
   setShowAll,
   bookedSlots,
+  blockedRanges,
   selectedDate
 }: TimePeriodProps) {
   const { theme } = useTheme();
   const { locale } = useLanguage();
   const t = translations[locale].booking.timeSelection.timeSlots;
+  
+  const isTimeBlocked = (time: string) => {
+    const [timeStr, period] = time.split(' ');
+    const [hours, minutes] = timeStr.split(':').map(Number);
+    let hour24 = hours;
+    if (period === 'PM' && hours !== 12) hour24 = hours + 12;
+    if (period === 'AM' && hours === 12) hour24 = 0;
+    const timeInMinutes = hour24 * 60 + minutes;
+    
+    const blockedRange = blockedRanges.find(range => timeInMinutes >= range.start && timeInMinutes < range.end);
+    return blockedRange ? blockedRange.reason : null;
+  };
+
+  const formatBlockReason = (reason: string) => {
+    const reasonLower = reason.toLowerCase();
+    if (locale === 'ar') {
+      if (reasonLower.includes('meeting') || reasonLower.includes('ميتنج') || reasonLower.includes('اجتماع')) {
+        return 'الدكتور في اجتماع';
+      }
+      if (reasonLower.includes('emergency') || reasonLower.includes('طوارئ')) {
+        return 'الدكتور في حالة طوارئ';
+      }
+      if (reasonLower.includes('surgery') || reasonLower.includes('عملية') || reasonLower.includes('جراحة')) {
+        return 'الدكتور في عملية جراحية';
+      }
+      if (reasonLower.includes('vacation') || reasonLower.includes('إجازة') || reasonLower.includes('اجازة')) {
+        return 'الدكتور في إجازة';
+      }
+      return reason;
+    } else {
+      if (reasonLower.includes('meeting') || reasonLower.includes('ميتنج') || reasonLower.includes('اجتماع')) {
+        return 'Doctor is in a meeting';
+      }
+      if (reasonLower.includes('emergency') || reasonLower.includes('طوارئ')) {
+        return 'Doctor is handling an emergency';
+      }
+      if (reasonLower.includes('surgery') || reasonLower.includes('عملية') || reasonLower.includes('جراحة')) {
+        return 'Doctor is in surgery';
+      }
+      if (reasonLower.includes('vacation') || reasonLower.includes('إجازة') || reasonLower.includes('اجازة')) {
+        return 'Doctor is on vacation';
+      }
+      return reason;
+    }
+  };
+
+  const hasBlockedSlots = displayedSlots.some(time => isTimeBlocked(time));
+  const blockReason = hasBlockedSlots ? formatBlockReason(isTimeBlocked(displayedSlots.find(time => isTimeBlocked(time))!)!) : null;
   
   if (slots.length === 0) return null;
 
@@ -45,16 +95,26 @@ export default function TimePeriod({
           <span className={`text-[10px] sm:text-xs ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>({slots.length} {locale === 'ar' ? 'موعد' : 'slots'})</span>
         )}
       </div>
+      {hasBlockedSlots && blockReason && (
+        <div className={`mb-2 p-2 rounded-lg flex items-start gap-2 text-xs ${theme === 'dark' ? 'bg-amber-900/20 border border-amber-800' : 'bg-amber-50 border border-amber-200'}`}>
+          <span className="material-icons text-amber-600 text-sm mt-0.5">info</span>
+          <p className={theme === 'dark' ? 'text-amber-200' : 'text-amber-800'}>
+            {locale === 'ar' ? 'بعض الأوقات غير متاحة لأن ' : 'Some times unavailable because '}{blockReason}
+          </p>
+        </div>
+      )}
       <div className="grid grid-cols-2 gap-1.5 sm:gap-2">
         {displayedSlots.map(time => {
           const isBooked = bookedSlots.includes(time);
+          const blockReason = isTimeBlocked(time);
           const isPassed = isTimePassed(time, selectedDate);
-          const isDisabled = isBooked || isPassed;
+          const isDisabled = isBooked || !!blockReason || isPassed;
           return (
             <button
               key={time}
               onClick={() => !isDisabled && setSelectedTime(time)}
               disabled={isDisabled}
+              title={blockReason ?? undefined}
               className={`py-1.5 sm:py-2 px-2 sm:px-3 rounded-lg text-xs sm:text-sm font-medium transition-all ${
                 isDisabled
                   ? theme === 'dark' ? 'bg-gray-700 text-gray-500 cursor-not-allowed opacity-50' : 'bg-gray-200 text-gray-400 cursor-not-allowed opacity-50'
