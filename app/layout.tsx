@@ -28,6 +28,7 @@ export default function RootLayout({
   const pathname = usePathname();
   const isOwnerPage = pathname?.startsWith('/pages/owner');
   const isDoctorPage = pathname?.startsWith('/pages/doctor/') || pathname === '/pages/doctor';
+  const isManagerPage = pathname?.startsWith('/pages/manager');
 
   return (
     <html lang="en">
@@ -42,7 +43,7 @@ export default function RootLayout({
             <ThemeProvider>
               {!isDoctorPage && <Navbar />}
               {children}
-              {!isOwnerPage && !isDoctorPage && <Footer />}
+              {!isOwnerPage && !isDoctorPage && !isManagerPage && <Footer />}
             </ThemeProvider>
           </LanguageProvider>
         </ReduxProvider>
