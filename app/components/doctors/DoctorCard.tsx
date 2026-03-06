@@ -171,7 +171,7 @@ export default function DoctorCard({
           <div className="absolute inset-0 bg-linear-to-br from-teal-400 to-teal-600 rounded-full animate-pulse opacity-20"></div>
           <div className="relative w-full h-full rounded-full overflow-hidden border-3 sm:border-4 border-teal-500 shadow-lg group-hover:scale-110 transition-transform duration-300">
             <Image
-              src={photoUrl}
+              src={photoUrl || '/images/default-doctor.png'}
               alt={displayName}
               fill
               sizes="(max-width: 640px) 96px, (max-width: 768px) 112px, 128px"
