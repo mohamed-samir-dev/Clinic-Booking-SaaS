@@ -27,6 +27,7 @@ export const useEditManager = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [fetchLoading, setFetchLoading] = useState(true);
+  const [password, setPassword] = useState('');
 
   const fetchManager = useCallback(async () => {
     try {
@@ -71,7 +72,17 @@ export const useEditManager = () => {
 
     try {
       const token = localStorage.getItem('token');
-      const payload = {
+      const payload: {
+        name?: string;
+        email?: string;
+        phone?: string;
+        nationalId?: string;
+        address?: string;
+        clinicId?: string;
+        permissions?: ManagerFormData['permissions'];
+        isActive?: boolean;
+        password?: string;
+      } = {
         name: formData.fullName,
         email: formData.email,
         phone: formData.phone,
@@ -81,6 +92,10 @@ export const useEditManager = () => {
         permissions: formData.permissions,
         isActive: formData.isActive,
       };
+
+      if (password.trim()) {
+        payload.password = password;
+      }
 
       const response = await fetch(`http://localhost:5000/api/owner/managers/${managerId}`, {
         method: 'PUT',
@@ -104,5 +119,5 @@ export const useEditManager = () => {
     }
   };
 
-  return { formData, setFormData, loading, error, handleSubmit, fetchLoading };
+  return { formData, setFormData, loading, error, handleSubmit, fetchLoading, password, setPassword };
 };

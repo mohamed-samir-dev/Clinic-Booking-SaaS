@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import { ArrowLeft } from 'lucide-react';
 import { useClinics } from '../../../doctors/add/hooks/useClinics';
 import { useEditManager } from './hooks/useEditManager';
+import { PasswordChangeSection } from './components/PasswordChangeSection';
 import {
   FormHeader,
   ErrorAlert,
@@ -17,7 +18,7 @@ import {
 export default function EditManagerPage() {
   const router = useRouter();
   const { clinics } = useClinics();
-  const { formData, setFormData, loading, error, handleSubmit, fetchLoading } = useEditManager();
+  const { formData, setFormData, loading, error, handleSubmit, fetchLoading, password, setPassword } = useEditManager();
 
   if (fetchLoading) {
     return (
@@ -47,6 +48,7 @@ export default function EditManagerPage() {
             <form onSubmit={handleSubmit} className="space-y-6">
               <BasicInfoSection formData={formData} setFormData={setFormData} />
               <ClinicAssignmentSection formData={formData} setFormData={setFormData} clinics={clinics} />
+              <PasswordChangeSection password={password} setPassword={setPassword} />
               <PermissionsSection formData={formData} setFormData={setFormData} />
               <StatusSection formData={formData} setFormData={setFormData} />
               <FormActions 
