@@ -172,7 +172,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
           {/* زر الإغلاق للشاشات الصغيرة */}
           <button
             onClick={onClose}
-            className={`xl:hidden absolute top-3 ${locale === 'ar' ? 'left-3' : 'right-3'} z-[60] p-1.5 rounded-lg shadow-lg transition-all ${
+            className={`xl:hidden absolute top-3 ${locale === 'ar' ? 'left-3' : 'right-3'} z-60 p-1.5 rounded-lg shadow-lg transition-all ${
               theme === 'dark' ? 'bg-red-500 hover:bg-red-600' : 'bg-red-500 hover:bg-red-600'
             }`}
           >
