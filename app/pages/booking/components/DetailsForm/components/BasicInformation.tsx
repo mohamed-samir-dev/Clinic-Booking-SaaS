@@ -67,7 +67,7 @@ export default function BasicInformation({ fullName, setFullName, phone, setPhon
               setEmail(value);
             }}
             className={`w-full px-3 sm:px-4 py-2 sm:py-3 rounded-xl border-2 focus:outline-none text-sm sm:text-base ${
-              email && !isEmailValid ? 'border-red-500 text-black focus:border-red-500' : theme === 'dark' ? 'bg-gray-700 border-gray-600 text-black focus:border-teal-500' : 'bg-white border-gray-200 text-white focus:border-teal-500'
+              email && !isEmailValid ? 'border-red-500 text-black focus:border-red-500' : theme === 'dark' ? 'bg-gray-700 border-gray-600 text-white focus:border-teal-500' : 'bg-white border-gray-200 text-gray-900 focus:border-teal-500'
             }`}
             placeholder="john.doe@gmail.com"
           />
