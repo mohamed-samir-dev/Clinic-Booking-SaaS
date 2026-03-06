@@ -23,14 +23,22 @@ export const loginUser = async (
   const data = await response.json();
 
   if (!response.ok) {
-    const errorMessage = getErrorMessage(data.message, response.status);
+    const errorMessage = getErrorMessage(data, response.status);
     throw new Error(errorMessage);
   }
 
   return data;
 };
 
-const getErrorMessage = (message: string, status: number): string => {
+const getErrorMessage = (data: { code?: string; message?: string; messageAr?: string }, status: number): string => {
+  // Check for deactivated account
+  if (data.code === 'ACCOUNT_DEACTIVATED' || status === 403) {
+    const locale = localStorage.getItem('locale') || 'en';
+    return locale === 'ar' ? (data.messageAr || 'تم إلغاء تفعيل حسابك') : (data.message || 'Your account has been deactivated');
+  }
+  
+  const message = data.message || '';
+  
   if (message?.toLowerCase().includes('invalid credentials') || message?.toLowerCase().includes('incorrect')) {
     return 'The email or password you entered is incorrect. Please try again.';
   }
@@ -41,10 +49,6 @@ const getErrorMessage = (message: string, status: number): string => {
   
   if (status === 404) {
     return 'Account not found. Please verify your email address or sign up.';
-  }
-  
-  if (status === 403) {
-    return 'Access denied. Your account may be inactive or suspended.';
   }
   
   if (status >= 500) {

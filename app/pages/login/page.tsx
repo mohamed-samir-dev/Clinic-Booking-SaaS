@@ -37,11 +37,7 @@ export default function LoginPage() {
       router.push(getRedirectRoute(data.user.role));
     } catch (err) {
       if (err instanceof Error) {
-        if (err.message.includes('incorrect') || err.message.includes('Invalid')) {
-          setError(t.errorIncorrect);
-        } else {
-          setError(t.errorConnection);
-        }
+        setError(err.message);
       } else {
         setError(t.errorConnection);
       }
