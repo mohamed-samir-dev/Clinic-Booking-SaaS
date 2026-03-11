@@ -22,12 +22,12 @@ export default function DoctorTransferRequestsPage() {
 
   return (
     <div className={`min-h-screen p-6 ${theme === 'dark' ? 'bg-gray-900' : 'bg-gray-50'}`}>
-      <PageHeader theme={theme} />
+      <PageHeader theme={theme} locale={locale} />
 
       {loading ? (
-        <LoadingState theme={theme} />
+        <LoadingState theme={theme} locale={locale} />
       ) : requests.length === 0 ? (
-        <EmptyState theme={theme} />
+        <EmptyState theme={theme} locale={locale} />
       ) : (
         <div className="space-y-4">
           {requests.map((request) => (
@@ -45,6 +45,7 @@ export default function DoctorTransferRequestsPage() {
       <ResponseModal
         show={showResponseModal}
         theme={theme}
+        locale={locale}
         actionType={actionType}
         responseMessage={responseMessage}
         onClose={closeModal}

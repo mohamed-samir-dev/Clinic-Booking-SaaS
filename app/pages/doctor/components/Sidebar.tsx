@@ -129,7 +129,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
     { icon: LayoutDashboard, label: t.dashboard, href: '/pages/doctor' },
     { icon: Calendar, label: t.mySchedule, href: '/pages/doctor/schedule' },
     { icon: UserPlus, label: t.patientRequests, href: '/pages/doctor/requests', badge: pendingRequestsCount },
-    { icon: MessageSquare, label: 'Transfer Requests', href: '/pages/doctor/transfer-requests' },
+    { icon: MessageSquare, label: t.transferRequests, href: '/pages/doctor/transfer-requests' },
     { icon: User, label: t.profile, href: '/pages/doctor/profile' },
   ];
 
