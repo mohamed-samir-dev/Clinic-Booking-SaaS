@@ -9,6 +9,7 @@ import { DoctorProfileModal } from './components/DoctorProfileModal';
 import { AddDoctorModal } from './components/AddDoctorModal';
 import { ScheduleModal } from './components/ScheduleModal';
 import { Pagination } from './components/Pagination';
+import { useLanguage } from '@/app/contexts/LanguageContext';
 import toast from 'react-hot-toast';
 
 export interface Doctor {
@@ -29,7 +30,34 @@ export interface Doctor {
   schedule?: Array<{ day: string; startTime: string; endTime: string }>;
 }
 
+const translations = {
+  ar: {
+    title: 'إدارة الأطباء',
+    subtitle: 'إدارة الأطباء العاملين في هذه العيادة، مراقبة جداولهم، توافرهم، وأدائهم',
+    addExisting: 'إضافة طبيب موجود',
+    createNew: 'إنشاء طبيب جديد',
+    searchPlaceholder: 'البحث باسم الطبيب أو التخصص...',
+    failedLoad: 'فشل تحميل الأطباء',
+    activateSuccess: 'تم تفعيل الطبيب بنجاح',
+    deactivateSuccess: 'تم إلغاء تفعيل الطبيب بنجاح',
+    failedUpdate: 'فشل تحديث حالة الطبيب'
+  },
+  en: {
+    title: 'Doctors Management',
+    subtitle: 'Manage doctors working in this clinic, monitor their schedules, availability, and performance',
+    addExisting: 'Add Existing Doctor',
+    createNew: 'Create New Doctor',
+    searchPlaceholder: 'Search by doctor name or specialty...',
+    failedLoad: 'Failed to load doctors',
+    activateSuccess: 'Doctor activated successfully',
+    deactivateSuccess: 'Doctor deactivated successfully',
+    failedUpdate: 'Failed to update doctor status'
+  }
+};
+
 export default function DoctorsPage() {
+  const { locale } = useLanguage();
+  const t = translations[locale];
   const [doctors, setDoctors] = useState<Doctor[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
@@ -75,11 +103,11 @@ export default function DoctorsPage() {
         setStats(prevStats => data.stats || prevStats);
       }
     } catch {
-      toast.error('Failed to load doctors');
+      toast.error(t.failedLoad);
     } finally {
       setLoading(false);
     }
-  }, [currentPage, pageSize, filters]);
+  }, [currentPage, pageSize, filters, t.failedLoad]);
 
   useEffect(() => {
     fetchDoctors();
@@ -94,11 +122,11 @@ export default function DoctorsPage() {
       });
       if (response.ok) {
         const data = await response.json();
-        toast.success(data.status === 'active' ? 'Doctor activated successfully' : 'Doctor deactivated successfully');
+        toast.success(data.status === 'active' ? t.activateSuccess : t.deactivateSuccess);
         fetchDoctors();
       }
     } catch {
-      toast.error('Failed to update doctor status');
+      toast.error(t.failedUpdate);
     }
   };
 
@@ -112,7 +140,7 @@ export default function DoctorsPage() {
   };
 
   const getName = (name: string | { en: string; ar: string }) => 
-    typeof name === 'string' ? name : name.en;
+    typeof name === 'string' ? name : name[locale];
 
   const filteredDoctors = doctors.filter(doc =>
     getName(doc.name).toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -122,53 +150,53 @@ export default function DoctorsPage() {
   const totalPages = Math.ceil(totalItems / pageSize);
 
   return (
-    <div className="min-h-screen bg-gray-900 p-6">
-      <div className="mb-6">
-        <div className="flex items-center gap-3 mb-2">
-          <Stethoscope className="text-teal-400" size={32} />
-          <h1 className="text-3xl font-bold text-white">Doctors Management</h1>
+    <div className="min-h-screen bg-gray-900 p-3 sm:p-4 md:p-6">
+      <div className="mb-4 md:mb-6">
+        <div className="flex items-center gap-2 sm:gap-3 mb-2">
+          <Stethoscope className="text-teal-400" size={24} />
+          <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-white">{t.title}</h1>
         </div>
-        <p className="text-gray-400">Manage doctors working in this clinic, monitor their schedules, availability, and performance</p>
+        <p className="text-sm sm:text-base text-gray-400">{t.subtitle}</p>
       </div>
 
       {/* Statistics Cards */}
-      <StatsCards stats={stats} />
+      <StatsCards stats={stats} language={locale} />
 
       {/* Add Doctor Buttons */}
-      <div className="bg-gray-800 rounded-xl border border-gray-700 p-4 mb-6">
-        <div className="flex gap-3">
+      <div className="bg-gray-800 rounded-xl border border-gray-700 p-3 sm:p-4 mb-4 md:mb-6">
+        <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
           <button
             onClick={() => setShowAddModal(true)}
-            className="flex items-center gap-2 px-4 py-2 bg-teal-600 hover:bg-teal-700 rounded-lg text-white transition-colors"
+            className="flex items-center justify-center gap-2 px-3 sm:px-4 py-2 bg-teal-600 hover:bg-teal-700 rounded-lg text-white text-sm sm:text-base transition-colors"
           >
-            <UserPlus size={20} />
-            <span>Add Existing Doctor</span>
+            <UserPlus size={18} className="sm:w-5 sm:h-5" />
+            <span className="whitespace-nowrap">{t.addExisting}</span>
           </button>
           <button
             onClick={() => window.location.href = '/pages/manager/doctors/add'}
-            className="flex items-center gap-2 px-4 py-2 bg-cyan-600 hover:bg-cyan-700 rounded-lg text-white transition-colors"
+            className="flex items-center justify-center gap-2 px-3 sm:px-4 py-2 bg-cyan-600 hover:bg-cyan-700 rounded-lg text-white text-sm sm:text-base transition-colors"
           >
-            <UserPlus size={20} />
-            <span>Create New Doctor</span>
+            <UserPlus size={18} className="sm:w-5 sm:h-5" />
+            <span className="whitespace-nowrap">{t.createNew}</span>
           </button>
         </div>
       </div>
 
       {/* Search and Filters */}
-      <div className="bg-gray-800 rounded-xl border border-gray-700 p-6 mb-6">
-        <div className="flex flex-col lg:flex-row gap-4">
-          <div className="flex-1 relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
+      <div className="bg-gray-800 rounded-xl border border-gray-700 p-3 sm:p-4 md:p-6 mb-4 md:mb-6">
+        <div className="flex flex-col gap-3 sm:gap-4">
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
             <input
               type="text"
-              placeholder="Search by doctor name or specialty..."
+              placeholder={t.searchPlaceholder}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-teal-500"
+              className="w-full pl-10 pr-4 py-2 text-sm sm:text-base bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-teal-500"
             />
           </div>
           
-          <DoctorFilters filters={filters} onFilterChange={setFilters} />
+          <DoctorFilters filters={filters} onFilterChange={setFilters} language={locale} />
         </div>
       </div>
 
@@ -180,6 +208,7 @@ export default function DoctorsPage() {
         onEditSchedule={handleEditSchedule}
         onViewAppointments={handleViewAppointments}
         onDeactivate={handleDeactivate}
+        language={locale}
       />
 
       {/* Pagination */}
@@ -194,6 +223,7 @@ export default function DoctorsPage() {
             setPageSize(size);
             setCurrentPage(1);
           }}
+          language={locale}
         />
       )}
 
@@ -202,6 +232,7 @@ export default function DoctorsPage() {
         <DoctorProfileModal
           doctor={selectedDoctor}
           onClose={() => setSelectedDoctor(null)}
+          language={locale}
         />
       )}
       
@@ -209,6 +240,7 @@ export default function DoctorsPage() {
         <AddDoctorModal
           onClose={() => setShowAddModal(false)}
           onSuccess={fetchDoctors}
+          language={locale}
         />
       )}
 
@@ -220,6 +252,7 @@ export default function DoctorsPage() {
             setDoctorForSchedule(null);
           }}
           onSuccess={fetchDoctors}
+          language={locale}
         />
       )}
     </div>
