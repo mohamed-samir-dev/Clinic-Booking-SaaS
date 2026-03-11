@@ -1,10 +1,18 @@
+'use client';
+
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+
 export default function ManagerPage() {
+  const router = useRouter();
+
+  useEffect(() => {
+    router.push('/pages/manager/dashboard');
+  }, [router]);
+
   return (
-    <div className="min-h-screen bg-gray-50 p-8">
-      <div className="max-w-7xl mx-auto">
-        <h1 className="text-4xl font-bold text-gray-900 mb-4">Manager Dashboard</h1>
-        <p className="text-gray-600">مرحباً بك في لوحة تحكم المدير</p>
-      </div>
+    <div className="min-h-screen bg-gray-900 flex items-center justify-center">
+      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-teal-400"></div>
     </div>
   );
 }
