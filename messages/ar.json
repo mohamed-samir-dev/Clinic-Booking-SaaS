@@ -330,6 +330,7 @@
       "commentMinLength": "يجب أن يكون التعليق 10 أحرف على الأقل",
       "loginRequired": "يجب تسجيل الدخول لكتابة تقييم",
       "loginToReview": "يجب تسجيل الدخول كمريض لكتابة تقييم للعيادة",
+      "patientRoleRequired": "يجب أن تكون مسجل دخول كمريض لكتابة مراجعة",
       "submitError": "فشل إرسال التقييم. يرجى المحاولة مرة أخرى",
       "submitting": "جاري الإرسال...",
       "submitReview": "إرسال التقييم",
@@ -687,6 +688,7 @@
       "dashboard": "لوحة التحكم",
       "mySchedule": "جدولي",
       "patientRequests": "طلبات المرضى",
+      "transferRequests": "طلبات النقل",
       "profile": "الملف الشخصي",
       "light": "فاتح",
       "dark": "داكن",
@@ -835,6 +837,169 @@
       "clinicHours": "ساعات العيادة",
       "closed": "مغلق",
       "loading": "جاري التحميل...",
+      "days": {
+        "sunday": "الأحد",
+        "monday": "الاثنين",
+        "tuesday": "الثلاثاء",
+        "wednesday": "الأربعاء",
+        "thursday": "الخميس",
+        "friday": "الجمعة",
+        "saturday": "السبت"
+      }
+    }
+  },
+  "manager": {
+    "navbar": {
+      "managing": "إدارة",
+      "loading": "جاري التحميل...",
+      "changeLanguage": "تغيير اللغة",
+      "logout": "تسجيل الخروج",
+      "manager": "مدير"
+    },
+    "sidebar": {
+      "careSync": "كير سينك",
+      "managerPortal": "بوابة المدير",
+      "dashboard": "لوحة التحكم",
+      "appointments": "المواعيد",
+      "doctors": "الأطباء",
+      "schedule": "الجدول",
+      "patients": "المرضى",
+      "reviews": "التقييمات",
+      "transferRequests": "طلبات التحويل",
+      "clinicSettings": "إعدادات العيادة"
+    },
+    "dashboard": {
+      "title": "نظرة عامة على لوحة التحكم",
+      "subtitle": "مرحباً بعودتك! إليك ما يحدث في عيادتك اليوم.",
+      "loading": "جاري التحميل...",
+      "errorTitle": "خطأ في تحميل لوحة التحكم",
+      "errorMessage": "فشل تحميل بيانات لوحة التحكم",
+      "stats": {
+        "todayAppointments": "مواعيد اليوم",
+        "pendingRequests": "الطلبات المعلقة",
+        "totalDoctors": "إجمالي الأطباء",
+        "todayRevenue": "إيرادات اليوم",
+        "vsYesterday": "مقارنة بالأمس"
+      },
+      "quickActions": {
+        "title": "إجراءات سريعة",
+        "addDoctor": "إضافة طبيب",
+        "viewAppointments": "عرض المواعيد",
+        "manageSchedule": "إدارة الجدول"
+      },
+      "charts": {
+        "weeklyAppointments": "المواعيد الأسبوعية",
+        "weeklyRevenue": "الإيرادات الأسبوعية"
+      }
+    },
+    "appointments": {
+      "title": "إدارة المواعيد",
+      "subtitle": "إدارة ومراقبة وتنظيم جميع مواعيد العيادة بكفاءة",
+      "addAppointment": "إضافة موعد",
+      "blockTimeSlot": "حجز فترة زمنية",
+      "searchPlaceholder": "البحث بالمريض أو الطبيب...",
+      "filters": {
+        "all": "الكل",
+        "today": "اليوم",
+        "tomorrow": "غداً",
+        "week": "هذا الأسبوع"
+      },
+      "viewMode": {
+        "table": "عرض الجدول",
+        "calendar": "عرض التقويم",
+        "daily": "يومي",
+        "weekly": "أسبوعي"
+      },
+      "table": {
+        "patient": "المريض",
+        "doctor": "الطبيب",
+        "date": "التاريخ",
+        "time": "الوقت",
+        "status": "الحالة",
+        "actions": "الإجراءات",
+        "loading": "جاري تحميل المواعيد...",
+        "noAppointments": "لم يتم العثور على مواعيد",
+        "view": "عرض",
+        "confirm": "تأكيد",
+        "cancel": "إلغاء",
+        "reschedule": "إعادة الجدولة",
+        "noShow": "لم يحضر"
+      },
+      "status": {
+        "confirmed": "مؤكد",
+        "pending": "معلق",
+        "cancelled": "ملغي",
+        "completed": "مكتمل",
+        "rescheduled": "تم إعادة الجدولة",
+        "no-show": "لم يحضر"
+      },
+      "messages": {
+        "confirmSuccess": "تم تأكيد الموعد",
+        "cancelSuccess": "تم إلغاء الموعد",
+        "noShowSuccess": "تم وضع علامة لم يحضر",
+        "loadError": "فشل تحميل المواعيد",
+        "confirmError": "فشل تأكيد الموعد",
+        "cancelError": "فشل إلغاء الموعد",
+        "updateError": "فشل تحديث الموعد"
+      }
+    },
+    "schedule": {
+      "title": "جدول العيادة",
+      "subtitle": "عرض وإدارة جداول الأطباء وتوافر العيادة والمواعيد اليومية من خلال تقويم تفاعلي",
+      "stats": {
+        "appointmentsToday": "مواعيد اليوم",
+        "availableSlots": "المواعيد المتاحة",
+        "busyDoctors": "أطباء مشغولون",
+        "freeDoctors": "أطباء متاحون"
+      },
+      "filters": {
+        "allDoctors": "جميع الأطباء"
+      },
+      "viewMode": {
+        "day": "يوم",
+        "week": "أسبوع",
+        "month": "شهر"
+      },
+      "blockTimeSlot": "حجز فترة زمنية",
+      "today": "اليوم",
+      "workingHours": {
+        "title": "ساعات عمل الأطباء",
+        "off": "إجازة",
+        "failedToLoad": "فشل تحميل الأطباء",
+        "updated": "تم تحديث ساعات العمل",
+        "failedToUpdate": "فشل تحديث ساعات العمل"
+      },
+      "blockModal": {
+        "title": "حجز فترة زمنية",
+        "doctor": "الطبيب",
+        "selectDoctor": "اختر طبيب",
+        "date": "التاريخ",
+        "startTime": "وقت البداية",
+        "endTime": "وقت النهاية",
+        "reason": "السبب",
+        "reasons": {
+          "surgery": "عملية جراحية",
+          "doctorBreak": "استراحة الطبيب",
+          "meeting": "اجتماع",
+          "emergency": "طوارئ",
+          "training": "تدريب",
+          "personalLeave": "إجازة شخصية",
+          "other": "أخرى"
+        },
+        "cancel": "إلغاء",
+        "block": "حجز الفترة",
+        "blocking": "جاري الحجز...",
+        "fillAllFields": "الرجاء ملء جميع الحقول المطلوبة",
+        "success": "تم حجز الفترة الزمنية بنجاح",
+        "failed": "فشل حجز الفترة الزمنية"
+      },
+      "messages": {
+        "loadError": "فشل تحميل بيانات الجدول",
+        "rescheduleSuccess": "تم إعادة جدولة الموعد بنجاح",
+        "rescheduleFailed": "فشل إعادة جدولة الموعد",
+        "cancelSuccess": "تم إلغاء الموعد",
+        "cancelFailed": "فشل إلغاء الموعد"
+      },
       "days": {
         "sunday": "الأحد",
         "monday": "الاثنين",

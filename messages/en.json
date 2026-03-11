@@ -330,6 +330,7 @@
       "commentMinLength": "Comment must be at least 10 characters",
       "loginRequired": "You must be logged in to write a review",
       "loginToReview": "You must be logged in as a patient to write a review for this clinic",
+      "patientRoleRequired": "You must be logged in as a patient to write a review",
       "submitError": "Failed to submit review. Please try again",
       "submitting": "Submitting...",
       "submitReview": "Submit Review",
@@ -687,6 +688,7 @@
       "dashboard": "Dashboard",
       "mySchedule": "My Schedule",
       "patientRequests": "Patient Requests",
+      "transferRequests": "Transfer Requests",
       "profile": "Profile",
       "light": "Light",
       "dark": "Dark",
@@ -835,6 +837,169 @@
       "clinicHours": "Clinic Hours",
       "closed": "Closed",
       "loading": "Loading...",
+      "days": {
+        "sunday": "Sunday",
+        "monday": "Monday",
+        "tuesday": "Tuesday",
+        "wednesday": "Wednesday",
+        "thursday": "Thursday",
+        "friday": "Friday",
+        "saturday": "Saturday"
+      }
+    }
+  },
+  "manager": {
+    "navbar": {
+      "managing": "Managing",
+      "loading": "Loading...",
+      "changeLanguage": "Change Language",
+      "logout": "Logout",
+      "manager": "Manager"
+    },
+    "sidebar": {
+      "careSync": "CareSync",
+      "managerPortal": "Manager Portal",
+      "dashboard": "Dashboard",
+      "appointments": "Appointments",
+      "doctors": "Doctors",
+      "schedule": "Schedule",
+      "patients": "Patients",
+      "reviews": "Reviews",
+      "transferRequests": "Transfer Requests",
+      "clinicSettings": "Clinic Settings"
+    },
+    "dashboard": {
+      "title": "Dashboard Overview",
+      "subtitle": "Welcome back! Here's what's happening with your clinic today.",
+      "loading": "Loading...",
+      "errorTitle": "Error Loading Dashboard",
+      "errorMessage": "Failed to load dashboard data",
+      "stats": {
+        "todayAppointments": "Today's Appointments",
+        "pendingRequests": "Pending Requests",
+        "totalDoctors": "Total Doctors",
+        "todayRevenue": "Today's Revenue",
+        "vsYesterday": "vs yesterday"
+      },
+      "quickActions": {
+        "title": "Quick Actions",
+        "addDoctor": "Add Doctor",
+        "viewAppointments": "View Appointments",
+        "manageSchedule": "Manage Schedule"
+      },
+      "charts": {
+        "weeklyAppointments": "Weekly Appointments",
+        "weeklyRevenue": "Weekly Revenue"
+      }
+    },
+    "appointments": {
+      "title": "Appointments Management",
+      "subtitle": "Manage, monitor, and organize all clinic appointments efficiently",
+      "addAppointment": "Add Appointment",
+      "blockTimeSlot": "Block Time Slot",
+      "searchPlaceholder": "Search by patient or doctor...",
+      "filters": {
+        "all": "All",
+        "today": "Today",
+        "tomorrow": "Tomorrow",
+        "week": "This Week"
+      },
+      "viewMode": {
+        "table": "Table View",
+        "calendar": "Calendar View",
+        "daily": "Daily",
+        "weekly": "Weekly"
+      },
+      "table": {
+        "patient": "Patient",
+        "doctor": "Doctor",
+        "date": "Date",
+        "time": "Time",
+        "status": "Status",
+        "actions": "Actions",
+        "loading": "Loading appointments...",
+        "noAppointments": "No appointments found",
+        "view": "View",
+        "confirm": "Confirm",
+        "cancel": "Cancel",
+        "reschedule": "Reschedule",
+        "noShow": "No-show"
+      },
+      "status": {
+        "confirmed": "Confirmed",
+        "pending": "Pending",
+        "cancelled": "Cancelled",
+        "completed": "Completed",
+        "rescheduled": "Rescheduled",
+        "no-show": "No-show"
+      },
+      "messages": {
+        "confirmSuccess": "Appointment confirmed",
+        "cancelSuccess": "Appointment cancelled",
+        "noShowSuccess": "Marked as no-show",
+        "loadError": "Failed to load appointments",
+        "confirmError": "Failed to confirm appointment",
+        "cancelError": "Failed to cancel appointment",
+        "updateError": "Failed to update appointment"
+      }
+    },
+    "schedule": {
+      "title": "Clinic Schedule",
+      "subtitle": "View and manage doctor schedules, clinic availability, and daily appointments through an interactive calendar",
+      "stats": {
+        "appointmentsToday": "Appointments Today",
+        "availableSlots": "Available Slots",
+        "busyDoctors": "Busy Doctors",
+        "freeDoctors": "Free Doctors"
+      },
+      "filters": {
+        "allDoctors": "All Doctors"
+      },
+      "viewMode": {
+        "day": "Day",
+        "week": "Week",
+        "month": "Month"
+      },
+      "blockTimeSlot": "Block Time Slot",
+      "today": "Today",
+      "workingHours": {
+        "title": "Doctor Working Hours",
+        "off": "Off",
+        "failedToLoad": "Failed to load doctors",
+        "updated": "Working hours updated",
+        "failedToUpdate": "Failed to update working hours"
+      },
+      "blockModal": {
+        "title": "Block Time Slot",
+        "doctor": "Doctor",
+        "selectDoctor": "Select Doctor",
+        "date": "Date",
+        "startTime": "Start Time",
+        "endTime": "End Time",
+        "reason": "Reason",
+        "reasons": {
+          "surgery": "Surgery",
+          "doctorBreak": "Doctor Break",
+          "meeting": "Meeting",
+          "emergency": "Emergency",
+          "training": "Training",
+          "personalLeave": "Personal Leave",
+          "other": "Other"
+        },
+        "cancel": "Cancel",
+        "block": "Block Slot",
+        "blocking": "Blocking...",
+        "fillAllFields": "Please fill all required fields",
+        "success": "Time slot blocked successfully",
+        "failed": "Failed to block time slot"
+      },
+      "messages": {
+        "loadError": "Failed to load schedule data",
+        "rescheduleSuccess": "Appointment rescheduled successfully",
+        "rescheduleFailed": "Failed to reschedule appointment",
+        "cancelSuccess": "Appointment cancelled",
+        "cancelFailed": "Failed to cancel appointment"
+      },
       "days": {
         "sunday": "Sunday",
         "monday": "Monday",
