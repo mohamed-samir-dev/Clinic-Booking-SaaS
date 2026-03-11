@@ -25,11 +25,14 @@ export default function ServiceSelection({ selectedService, setSelectedService, 
   const bt = translations[locale].booking.serviceSelection;
   const isRTL = locale === 'ar';
   
-  const servicesWithTranslations = services.map(service => ({
-    ...service,
-    title: t[service.key as keyof typeof t]?.title || '',
-    description: t[service.key as keyof typeof t]?.description || ''
-  }));
+  const servicesWithTranslations = services.map(service => {
+    const translation = t[service.key as keyof typeof t];
+    return {
+      ...service,
+      title: typeof translation === 'object' && 'title' in translation ? translation.title : '',
+      description: typeof translation === 'object' && 'description' in translation ? translation.description : ''
+    };
+  });
   
   const filteredServices = servicesWithTranslations.filter(service => {
     if (searchQuery === '') return true;

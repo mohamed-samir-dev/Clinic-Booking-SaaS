@@ -50,15 +50,19 @@ export default function BookingPage() {
       // selectedService is not a valid key, try to find the key from translated title
       const t = translations[locale].services;
       const foundKey = services.find(s => {
-        const translatedTitle = t[s.key as keyof typeof t]?.title;
+        const translation = t[s.key as keyof typeof t];
+        const translatedTitle = typeof translation === 'object' && 'title' in translation ? translation.title : '';
         return translatedTitle === selectedService;
       })?.key;
       
-      if (foundKey) {
-        setSelectedService(foundKey);
-      } else {
-        setSelectedService('');
-      }
+      // Use startTransition to avoid cascading renders
+      startTransition(() => {
+        if (foundKey) {
+          setSelectedService(foundKey);
+        } else {
+          setSelectedService('');
+        }
+      });
     }
   }, [selectedService, locale]);
 

@@ -11,7 +11,8 @@ export const getServiceName = (serviceKey: string, locale: 'en' | 'ar', doctorSp
   
   if (service) {
     const t = translations[locale].services;
-    return t[service.key as keyof typeof t]?.title || serviceKey;
+    const translation = t[service.key as keyof typeof t];
+    return typeof translation === 'object' && 'title' in translation ? translation.title : serviceKey;
   }
 
   // إذا لم يتم العثور على الخدمة، نحاول البحث في مصطلحات البحث
@@ -23,7 +24,8 @@ export const getServiceName = (serviceKey: string, locale: 'en' | 'ar', doctorSp
 
   if (serviceBySearchTerm) {
     const t = translations[locale].services;
-    return t[serviceBySearchTerm.key as keyof typeof t]?.title || serviceKey;
+    const translation = t[serviceBySearchTerm.key as keyof typeof t];
+    return typeof translation === 'object' && 'title' in translation ? translation.title : serviceKey;
   }
 
   // إذا لم يتم العثور على أي شيء، نعيد تخصص الدكتور أو القيمة الأصلية
