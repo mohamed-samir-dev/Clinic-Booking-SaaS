@@ -4,14 +4,47 @@ import { Appointment } from '../types';
 
 interface ExportOptionsProps {
   appointments: Appointment[];
+  language?: 'ar' | 'en';
 }
 
-export const ExportOptions = ({ appointments }: ExportOptionsProps) => {
+const translations = {
+  ar: {
+    exportedCSV: 'تم التصدير إلى CSV',
+    exportedExcel: 'تم التصدير إلى Excel',
+    patient: 'المريض',
+    doctor: 'الطبيب',
+    date: 'التاريخ',
+    time: 'الوقت',
+    status: 'الحالة',
+    phone: 'الهاتف',
+    dailySheet: 'قائمة المواعيد اليومية',
+    exportCSV: 'تصدير إلى CSV',
+    exportExcel: 'تصدير إلى Excel',
+    print: 'طباعة'
+  },
+  en: {
+    exportedCSV: 'Exported to CSV',
+    exportedExcel: 'Exported to Excel',
+    patient: 'Patient',
+    doctor: 'Doctor',
+    date: 'Date',
+    time: 'Time',
+    status: 'Status',
+    phone: 'Phone',
+    dailySheet: 'Daily Appointment Sheet',
+    exportCSV: 'Export to CSV',
+    exportExcel: 'Export to Excel',
+    print: 'Print'
+  }
+};
+
+export const ExportOptions = ({ appointments, language = 'ar' }: ExportOptionsProps) => {
+  const t = translations[language];
   const getName = (name: string | { en: string; ar: string }) => 
-    typeof name === 'string' ? name : name.en;
+    typeof name === 'string' ? name : name[language];
 
   const exportToCSV = () => {
-    const headers = ['Patient', 'Doctor', 'Date', 'Time', 'Status', 'Phone'];
+    const headers = [t.patient, t.doctor, t.date, t.time, t.status, t.phone];
     const rows = appointments.map(apt => [
       getName(apt.patientName),
       getName(apt.doctorName),
@@ -32,12 +65,12 @@ export const ExportOptions = ({ appointments }: ExportOptionsProps) => {
     a.href = url;
     a.download = `appointments-${new Date().toISOString().split('T')[0]}.csv`;
     a.click();
-    toast.success('Exported to CSV');
+    toast.success(t.exportedCSV);
   };
 
   const exportToExcel = () => {
     // Simple Excel export using HTML table
-    const headers = ['Patient', 'Doctor', 'Date', 'Time', 'Status', 'Phone'];
+    const headers = [t.patient, t.doctor, t.date, t.time, t.status, t.phone];
     const rows = appointments.map(apt => [
       getName(apt.patientName),
       getName(apt.doctorName),
@@ -63,7 +96,7 @@ export const ExportOptions = ({ appointments }: ExportOptionsProps) => {
     a.href = url;
     a.download = `appointments-${new Date().toISOString().split('T')[0]}.xls`;
     a.click();
-    toast.success('Exported to Excel');
+    toast.success(t.exportedExcel);
   };
 
   const printAppointments = () => {
@@ -74,7 +107,7 @@ export const ExportOptions = ({ appointments }: ExportOptionsProps) => {
       <!DOCTYPE html>
       <html>
         <head>
-          <title>Appointments - ${new Date().toLocaleDateString()}</title>
+          <title>${t.dailySheet} - ${new Date().toLocaleDateString()}</title>
           <style>
             body { font-family: Arial, sans-serif; padding: 20px; }
             h1 { color: #333; }
@@ -88,17 +121,17 @@ export const ExportOptions = ({ appointments }: ExportOptionsProps) => {
           </style>
         </head>
         <body>
-          <h1>Daily Appointment Sheet</h1>
-          <p>Date: ${new Date().toLocaleDateString()}</p>
+          <h1>${t.dailySheet}</h1>
+          <p>${t.date}: ${new Date().toLocaleDateString()}</p>
           <table>
             <thead>
               <tr>
-                <th>Patient</th>
-                <th>Doctor</th>
-                <th>Date</th>
-                <th>Time</th>
-                <th>Status</th>
-                <th>Phone</th>
+                <th>${t.patient}</th>
+                <th>${t.doctor}</th>
+                <th>${t.date}</th>
+                <th>${t.time}</th>
+                <th>${t.status}</th>
+                <th>${t.phone}</th>
               </tr>
             </thead>
             <tbody>
@@ -129,29 +162,29 @@ export const ExportOptions = ({ appointments }: ExportOptionsProps) => {
     <div className="flex items-center gap-2">
       <button
         onClick={exportToCSV}
-        className="flex items-center gap-2 px-4 py-2 bg-gray-700 hover:bg-gray-600 border border-gray-600 rounded-lg text-white transition-colors"
-        title="Export to CSV"
+        className="flex items-center gap-2 px-3 sm:px-4 py-2 text-sm bg-gray-700 hover:bg-gray-600 border border-gray-600 rounded-lg text-white transition-colors"
+        title={t.exportCSV}
       >
-        <Download size={18} />
+        <Download size={16} />
         <span className="hidden sm:inline">CSV</span>
       </button>
 
       <button
         onClick={exportToExcel}
-        className="flex items-center gap-2 px-4 py-2 bg-gray-700 hover:bg-gray-600 border border-gray-600 rounded-lg text-white transition-colors"
-        title="Export to Excel"
+        className="flex items-center gap-2 px-3 sm:px-4 py-2 text-sm bg-gray-700 hover:bg-gray-600 border border-gray-600 rounded-lg text-white transition-colors"
+        title={t.exportExcel}
       >
-        <FileSpreadsheet size={18} />
+        <FileSpreadsheet size={16} />
         <span className="hidden sm:inline">Excel</span>
       </button>
 
       <button
         onClick={printAppointments}
-        className="flex items-center gap-2 px-4 py-2 bg-gray-700 hover:bg-gray-600 border border-gray-600 rounded-lg text-white transition-colors"
-        title="Print"
+        className="flex items-center gap-2 px-3 sm:px-4 py-2 text-sm bg-gray-700 hover:bg-gray-600 border border-gray-600 rounded-lg text-white transition-colors"
+        title={t.print}
       >
-        <Printer size={18} />
-        <span className="hidden sm:inline">Print</span>
+        <Printer size={16} />
+        <span className="hidden sm:inline">{t.print}</span>
       </button>
     </div>
   );

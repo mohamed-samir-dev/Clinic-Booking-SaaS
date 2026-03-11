@@ -5,13 +5,44 @@ import { Appointment } from '../types';
 interface CalendarViewProps {
   appointments: Appointment[];
   viewMode: 'daily' | 'weekly';
+  language?: 'ar' | 'en';
 }
 
-export const CalendarView = ({ appointments, viewMode }: CalendarViewProps) => {
+const translations = {
+  ar: {
+    week: 'أسبوع',
+    sun: 'الأحد',
+    mon: 'الإثنين',
+    tue: 'الثلاثاء',
+    wed: 'الأربعاء',
+    thu: 'الخميس',
+    fri: 'الجمعة',
+    sat: 'السبت',
+    am: 'ص',
+    pm: 'م',
+    dr: 'د.'
+  },
+  en: {
+    week: 'Week of',
+    sun: 'Sun',
+    mon: 'Mon',
+    tue: 'Tue',
+    wed: 'Wed',
+    thu: 'Thu',
+    fri: 'Fri',
+    sat: 'Sat',
+    am: 'AM',
+    pm: 'PM',
+    dr: 'Dr.'
+  }
+};
+
+export const CalendarView = ({ appointments, viewMode, language = 'ar' }: CalendarViewProps) => {
+  const t = translations[language];
   const [currentDate, setCurrentDate] = useState(new Date());
 
   const getName = (name: string | { en: string; ar: string }) => 
-    typeof name === 'string' ? name : name.en;
+    typeof name === 'string' ? name : name[language];
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -23,6 +54,18 @@ export const CalendarView = ({ appointments, viewMode }: CalendarViewProps) => {
       case 'no-show': return 'bg-orange-600 border-orange-500';
       default: return 'bg-gray-600 border-gray-500';
     }
+  };
+
+  const formatHour = (hour: number) => {
+    if (language === 'ar') {
+      return hour > 12 ? `${hour - 12}:00 ${t.pm}` : `${hour}:00 ${t.am}`;
+    }
+    return hour > 12 ? `${hour - 12}:00 ${t.pm}` : `${hour}:00 ${t.am}`;
+  };
+
+  const getDayName = (date: Date) => {
+    const dayNames = [t.sun, t.mon, t.tue, t.wed, t.thu, t.fri, t.sat];
+    return dayNames[date.getDay()];
   };
 
   const hours = Array.from({ length: 12 }, (_, i) => i + 8); // 8 AM to 7 PM
@@ -60,18 +103,18 @@ export const CalendarView = ({ appointments, viewMode }: CalendarViewProps) => {
   return (
     <div className="bg-gray-800 rounded-xl border border-gray-700 overflow-hidden">
       {/* Header */}
-      <div className="bg-gray-750 border-b border-gray-700 p-4 flex items-center justify-between">
+      <div className="bg-gray-750 border-b border-gray-700 p-3 sm:p-4 flex items-center justify-between">
         <button
           onClick={() => navigateDate('prev')}
           className="p-2 hover:bg-gray-700 rounded-lg transition-colors"
         >
-          <ChevronLeft className="text-gray-400" size={20} />
+          <ChevronLeft className="text-gray-400" size={18} />
         </button>
         
-        <h3 className="text-lg font-semibold text-white">
+        <h3 className="text-sm sm:text-base md:text-lg font-semibold text-white text-center px-2">
           {viewMode === 'daily' 
-            ? currentDate.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })
-            : `Week of ${currentDate.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}`
+            ? currentDate.toLocaleDateString(language === 'ar' ? 'ar-EG' : 'en-US', { weekday: 'short', month: 'short', day: 'numeric' })
+            : `${t.week} ${currentDate.toLocaleDateString(language === 'ar' ? 'ar-EG' : 'en-US', { month: 'short', day: 'numeric' })}`
           }
         </h3>
 
@@ -79,7 +122,7 @@ export const CalendarView = ({ appointments, viewMode }: CalendarViewProps) => {
           onClick={() => navigateDate('next')}
           className="p-2 hover:bg-gray-700 rounded-lg transition-colors"
         >
-          <ChevronRight className="text-gray-400" size={20} />
+          <ChevronRight className="text-gray-400" size={18} />
         </button>
       </div>
 
@@ -87,7 +130,7 @@ export const CalendarView = ({ appointments, viewMode }: CalendarViewProps) => {
       <div className="overflow-x-auto">
         {viewMode === 'daily' ? (
           // Daily View
-          <div className="p-4">
+          <div className="p-3 sm:p-4">
             <div className="space-y-2">
               {hours.map(hour => {
                 const hourAppointments = filterAppointmentsByDate(currentDate).filter(apt => {
@@ -96,18 +139,18 @@ export const CalendarView = ({ appointments, viewMode }: CalendarViewProps) => {
                 });
 
                 return (
-                  <div key={hour} className="flex gap-4 min-h-[60px]">
-                    <div className="w-20 text-gray-400 text-sm pt-1">
-                      {hour > 12 ? `${hour - 12}:00 PM` : `${hour}:00 AM`}
+                  <div key={hour} className="flex gap-2 sm:gap-4 min-h-[60px]">
+                    <div className="w-16 sm:w-20 text-gray-400 text-xs sm:text-sm pt-1 shrink-0">
+                      {formatHour(hour)}
                     </div>
-                    <div className="flex-1 border-l border-gray-700 pl-4 space-y-2">
+                    <div className="flex-1 border-l border-gray-700 pl-2 sm:pl-4 space-y-2">
                       {hourAppointments.map(apt => (
                         <div
                           key={apt._id}
-                          className={`p-3 rounded-lg border-l-4 ${getStatusColor(apt.status)}`}
+                          className={`p-2 sm:p-3 rounded-lg border-l-4 ${getStatusColor(apt.status)}`}
                         >
-                          <p className="text-white font-medium text-sm">{getName(apt.patientName)}</p>
-                          <p className="text-gray-300 text-xs">Dr. {getName(apt.doctorName)}</p>
+                          <p className="text-white font-medium text-xs sm:text-sm">{getName(apt.patientName)}</p>
+                          <p className="text-gray-300 text-xs">{t.dr} {getName(apt.doctorName)}</p>
                           <p className="text-gray-400 text-xs">{apt.time}</p>
                         </div>
                       ))}
@@ -120,23 +163,23 @@ export const CalendarView = ({ appointments, viewMode }: CalendarViewProps) => {
         ) : (
           // Weekly View
           <div className="overflow-x-auto">
-            <div className="min-w-[800px]">
+            <div className="min-w-[600px] sm:min-w-[800px]">
               {/* Week Days Header */}
               <div className="grid grid-cols-8 border-b border-gray-700">
-                <div className="p-3 text-gray-400 text-sm"></div>
+                <div className="p-2 sm:p-3 text-gray-400 text-xs sm:text-sm"></div>
                 {getWeekDays().map((day, index) => (
-                  <div key={index} className="p-3 text-center border-l border-gray-700">
-                    <p className="text-gray-400 text-xs">{day.toLocaleDateString('en-US', { weekday: 'short' })}</p>
-                    <p className="text-white font-medium">{day.getDate()}</p>
+                  <div key={index} className="p-2 sm:p-3 text-center border-l border-gray-700">
+                    <p className="text-gray-400 text-xs">{getDayName(day)}</p>
+                    <p className="text-white font-medium text-sm">{day.getDate()}</p>
                   </div>
                 ))}
               </div>
 
               {/* Time Slots */}
               {hours.map(hour => (
-                <div key={hour} className="grid grid-cols-8 border-b border-gray-700 min-h-[80px]">
-                  <div className="p-3 text-gray-400 text-sm">
-                    {hour > 12 ? `${hour - 12}:00 PM` : `${hour}:00 AM`}
+                <div key={hour} className="grid grid-cols-8 border-b border-gray-700 min-h-[60px] sm:min-h-[80px]">
+                  <div className="p-2 sm:p-3 text-gray-400 text-xs sm:text-sm">
+                    {formatHour(hour)}
                   </div>
                   {getWeekDays().map((day, dayIndex) => {
                     const dayAppointments = filterAppointmentsByDate(day).filter(apt => {
@@ -145,11 +188,11 @@ export const CalendarView = ({ appointments, viewMode }: CalendarViewProps) => {
                     });
 
                     return (
-                      <div key={dayIndex} className="p-2 border-l border-gray-700">
+                      <div key={dayIndex} className="p-1 sm:p-2 border-l border-gray-700">
                         {dayAppointments.map(apt => (
                           <div
                             key={apt._id}
-                            className={`p-2 rounded-lg border-l-2 ${getStatusColor(apt.status)} mb-1`}
+                            className={`p-1 sm:p-2 rounded-lg border-l-2 ${getStatusColor(apt.status)} mb-1`}
                           >
                             <p className="text-white text-xs font-medium truncate">{getName(apt.patientName)}</p>
                             <p className="text-gray-300 text-xs truncate">{apt.time}</p>

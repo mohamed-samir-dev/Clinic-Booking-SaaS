@@ -7,7 +7,25 @@ interface PaginationProps {
   totalItems: number;
   onPageChange: (page: number) => void;
   onPageSizeChange: (size: number) => void;
+  language?: 'ar' | 'en';
 }
+
+const translations = {
+  ar: {
+    showing: 'عرض',
+    to: 'إلى',
+    of: 'من',
+    results: 'نتيجة',
+    show: 'عرض:'
+  },
+  en: {
+    showing: 'Showing',
+    to: 'to',
+    of: 'of',
+    results: 'results',
+    show: 'Show:'
+  }
+};
 
 export const Pagination = ({
   currentPage,
@@ -15,8 +33,10 @@ export const Pagination = ({
   pageSize,
   totalItems,
   onPageChange,
-  onPageSizeChange
+  onPageSizeChange,
+  language = 'ar'
 }: PaginationProps) => {
+  const t = translations[language];
   const pageSizes = [10, 25, 50];
 
   const getPageNumbers = () => {
@@ -52,62 +72,109 @@ export const Pagination = ({
   const endItem = Math.min(currentPage * pageSize, totalItems);
 
   return (
-    <div className="bg-gray-800 border-t border-gray-700 px-6 py-4 flex items-center justify-between">
-      <div className="flex items-center gap-4">
-        <span className="text-gray-400 text-sm">
-          Showing {startItem} to {endItem} of {totalItems} results
-        </span>
-        
-        <div className="flex items-center gap-2">
-          <span className="text-gray-400 text-sm">Show:</span>
-          <select
-            value={pageSize}
-            onChange={(e) => onPageSizeChange(Number(e.target.value))}
-            className="px-3 py-1 bg-gray-700 border border-gray-600 rounded-lg text-white text-sm focus:outline-none focus:border-teal-500"
+    <div className="bg-gray-800 border-t border-gray-700 px-3 sm:px-6 py-3 sm:py-4">
+      {/* Mobile Layout */}
+      <div className="flex flex-col gap-3 md:hidden">
+        <div className="flex items-center justify-between">
+          <span className="text-gray-400 text-xs">
+            {startItem}-{endItem} {t.of} {totalItems}
+          </span>
+          
+          <div className="flex items-center gap-2">
+            <span className="text-gray-400 text-xs">{t.show}</span>
+            <select
+              value={pageSize}
+              onChange={(e) => onPageSizeChange(Number(e.target.value))}
+              className="px-2 py-1 bg-gray-700 border border-gray-600 rounded-lg text-white text-xs focus:outline-none focus:border-teal-500"
+            >
+              {pageSizes.map(size => (
+                <option key={size} value={size}>{size}</option>
+              ))}
+            </select>
+          </div>
+        </div>
+
+        <div className="flex items-center justify-center gap-2">
+          <button
+            onClick={() => onPageChange(currentPage - 1)}
+            disabled={currentPage === 1}
+            className="p-2 bg-gray-700 hover:bg-gray-600 border border-gray-600 rounded-lg text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {pageSizes.map(size => (
-              <option key={size} value={size}>{size}</option>
-            ))}
-          </select>
+            <ChevronLeft size={16} />
+          </button>
+
+          <span className="text-white text-sm px-3">
+            {currentPage} / {totalPages}
+          </span>
+
+          <button
+            onClick={() => onPageChange(currentPage + 1)}
+            disabled={currentPage === totalPages}
+            className="p-2 bg-gray-700 hover:bg-gray-600 border border-gray-600 rounded-lg text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            <ChevronRight size={16} />
+          </button>
         </div>
       </div>
 
-      <div className="flex items-center gap-2">
-        <button
-          onClick={() => onPageChange(currentPage - 1)}
-          disabled={currentPage === 1}
-          className="p-2 bg-gray-700 hover:bg-gray-600 border border-gray-600 rounded-lg text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-        >
-          <ChevronLeft size={18} />
-        </button>
-
-        <div className="flex items-center gap-1">
-          {getPageNumbers().map((page, index) => (
-            typeof page === 'number' ? (
-              <button
-                key={index}
-                onClick={() => onPageChange(page)}
-                className={`px-3 py-1 rounded-lg text-sm transition-colors ${
-                  currentPage === page
-                    ? 'bg-teal-600 text-white'
-                    : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
-                }`}
-              >
-                {page}
-              </button>
-            ) : (
-              <span key={index} className="px-2 text-gray-400">...</span>
-            )
-          ))}
+      {/* Desktop Layout */}
+      <div className="hidden md:flex items-center justify-between">
+        <div className="flex items-center gap-4">
+          <span className="text-gray-400 text-sm">
+            {t.showing} {startItem} {t.to} {endItem} {t.of} {totalItems} {t.results}
+          </span>
+          
+          <div className="flex items-center gap-2">
+            <span className="text-gray-400 text-sm">{t.show}</span>
+            <select
+              value={pageSize}
+              onChange={(e) => onPageSizeChange(Number(e.target.value))}
+              className="px-3 py-1 bg-gray-700 border border-gray-600 rounded-lg text-white text-sm focus:outline-none focus:border-teal-500"
+            >
+              {pageSizes.map(size => (
+                <option key={size} value={size}>{size}</option>
+              ))}
+            </select>
+          </div>
         </div>
 
-        <button
-          onClick={() => onPageChange(currentPage + 1)}
-          disabled={currentPage === totalPages}
-          className="p-2 bg-gray-700 hover:bg-gray-600 border border-gray-600 rounded-lg text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-        >
-          <ChevronRight size={18} />
-        </button>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => onPageChange(currentPage - 1)}
+            disabled={currentPage === 1}
+            className="p-2 bg-gray-700 hover:bg-gray-600 border border-gray-600 rounded-lg text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            <ChevronLeft size={18} />
+          </button>
+
+          <div className="flex items-center gap-1">
+            {getPageNumbers().map((page, index) => (
+              typeof page === 'number' ? (
+                <button
+                  key={index}
+                  onClick={() => onPageChange(page)}
+                  className={`px-3 py-1 rounded-lg text-sm transition-colors ${
+                    currentPage === page
+                      ? 'bg-teal-600 text-white'
+                      : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+                  }`}
+                >
+                  {page}
+                </button>
+              ) : (
+                <span key={index} className="px-2 text-gray-400">...</span>
+              )
+            ))}
+          </div>
+
+          <button
+            onClick={() => onPageChange(currentPage + 1)}
+            disabled={currentPage === totalPages}
+            className="p-2 bg-gray-700 hover:bg-gray-600 border border-gray-600 rounded-lg text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            <ChevronRight size={18} />
+          </button>
+        </div>
       </div>
     </div>
   );

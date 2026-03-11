@@ -5,9 +5,10 @@ interface StatCardProps {
   value: string | number;
   change: number;
   icon: LucideIcon;
+  vsText: string;
 }
 
-export const StatCard = ({ title, value, change, icon: Icon }: StatCardProps) => {
+export const StatCard = ({ title, value, change, icon: Icon, vsText }: StatCardProps) => {
   const isPositive = change >= 0;
 
   return (
@@ -21,7 +22,7 @@ export const StatCard = ({ title, value, change, icon: Icon }: StatCardProps) =>
           }`}>
             {isPositive ? <TrendingUp className="w-4 h-4 mr-1" /> : <TrendingDown className="w-4 h-4 mr-1" />}
             <span>{Math.abs(change)}%</span>
-            <span className="text-gray-500 ml-1 text-xs">vs yesterday</span>
+            <span className="text-gray-500 ml-1 text-xs">{vsText}</span>
           </div>
         </div>
         <div className="bg-teal-900/20 p-3 rounded-lg">

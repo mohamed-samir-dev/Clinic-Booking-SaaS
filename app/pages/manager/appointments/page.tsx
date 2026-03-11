@@ -15,7 +15,51 @@ import { Pagination } from './components/Pagination';
 import toast from 'react-hot-toast';
 import {Appointment}from './types'
 
+type Language = 'ar' | 'en';
+
+const translations = {
+  ar: {
+    title: 'إدارة المواعيد',
+    subtitle: 'إدارة ومراقبة وتنظيم جميع مواعيد العيادة بكفاءة',
+    addAppointment: 'إضافة موعد',
+    blockTimeSlot: 'حجز فترة زمنية',
+    searchPlaceholder: 'البحث بالمريض أو الطبيب...',
+    calendarView: 'عرض التقويم:',
+    daily: 'يومي',
+    weekly: 'أسبوعي',
+    confirmSuccess: 'تم تأكيد الموعد',
+    cancelSuccess: 'تم إلغاء الموعد',
+    noShowSuccess: 'تم وضع علامة لم يحضر',
+    loadError: 'فشل تحميل المواعيد',
+    confirmError: 'فشل تأكيد الموعد',
+    cancelError: 'فشل إلغاء الموعد',
+    updateError: 'فشل تحديث الموعد',
+    tableView: 'عرض الجدول',
+    calendarViewTitle: 'عرض التقويم'
+  },
+  en: {
+    title: 'Appointments Management',
+    subtitle: 'Manage, monitor, and organize all clinic appointments efficiently',
+    addAppointment: 'Add Appointment',
+    blockTimeSlot: 'Block Time Slot',
+    searchPlaceholder: 'Search by patient or doctor...',
+    calendarView: 'Calendar View:',
+    daily: 'Daily',
+    weekly: 'Weekly',
+    confirmSuccess: 'Appointment confirmed',
+    cancelSuccess: 'Appointment cancelled',
+    noShowSuccess: 'Marked as no-show',
+    loadError: 'Failed to load appointments',
+    confirmError: 'Failed to confirm appointment',
+    cancelError: 'Failed to cancel appointment',
+    updateError: 'Failed to update appointment',
+    tableView: 'Table View',
+    calendarViewTitle: 'Calendar View'
+  }
+};
+
 export default function AppointmentsPage() {
+  const [language, setLanguage] = useState<Language>('ar');
   const [appointments, setAppointments] = useState<Appointment[]>([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState('all');
@@ -31,6 +75,25 @@ export default function AppointmentsPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [totalItems, setTotalItems] = useState(0);
+
+  useEffect(() => {
+    const savedLang = localStorage.getItem('managerLang') as Language;
+    if (savedLang) {
+      setLanguage(savedLang);
+    }
+
+    const handleLanguageChange = () => {
+      const newLang = localStorage.getItem('managerLang') as Language;
+      if (newLang) {
+        setLanguage(newLang);
+      }
+    };
+
+    window.addEventListener('languageChange', handleLanguageChange);
+    return () => window.removeEventListener('languageChange', handleLanguageChange);
+  }, []);
+
+  const t = translations[language];
 
   const fetchAppointments = useCallback(async () => {
     try {
@@ -56,11 +119,11 @@ export default function AppointmentsPage() {
         setTotalItems(data.total || data.length);
       }
     } catch {
-      toast.error('Failed to load appointments');
+      toast.error(t.loadError);
     } finally {
       setLoading(false);
     }
-  }, [filter, currentPage, pageSize, advancedFilters]);
+  }, [filter, currentPage, pageSize, advancedFilters, t.loadError]);
 
   useEffect(() => {
     fetchAppointments();
@@ -74,11 +137,11 @@ export default function AppointmentsPage() {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (response.ok) {
-        toast.success('Appointment confirmed');
+        toast.success(t.confirmSuccess);
         fetchAppointments();
       }
     } catch {
-      toast.error('Failed to confirm appointment');
+      toast.error(t.confirmError);
     }
   };
 
@@ -90,11 +153,11 @@ export default function AppointmentsPage() {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (response.ok) {
-        toast.success('Appointment cancelled');
+        toast.success(t.cancelSuccess);
         fetchAppointments();
       }
     } catch {
-      toast.error('Failed to cancel appointment');
+      toast.error(t.cancelError);
     }
   };
 
@@ -111,73 +174,87 @@ export default function AppointmentsPage() {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (response.ok) {
-        toast.success('Marked as no-show');
+        toast.success(t.noShowSuccess);
         fetchAppointments();
       }
     } catch {
-      toast.error('Failed to update appointment');
+      toast.error(t.updateError);
     }
   };
 
   const getName = (name: string | { en: string; ar: string }) => 
-    typeof name === 'string' ? name : name.en;
+    typeof name === 'string' ? name : name[language];
 
-  const filteredAppointments = appointments.filter(apt =>
-    getName(apt.patientName).toLowerCase().includes(searchTerm.toLowerCase()) ||
-    getName(apt.doctorName).toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const normalizeArabicText = (text: string) => {
+    return text
+      .toLowerCase()
+      .replace(/[ًٌٍَُِّْ]/g, '')
+      .replace(/[أإآ]/g, 'ا')
+      .replace(/[ؤ]/g, 'و')
+      .replace(/[ئ]/g, 'ي')
+      .replace(/[ة]/g, 'ه')
+      .trim();
+  };
+
+  const filteredAppointments = appointments.filter(apt => {
+    const searchNormalized = normalizeArabicText(searchTerm);
+    const patientName = normalizeArabicText(getName(apt.patientName));
+    const doctorName = normalizeArabicText(getName(apt.doctorName));
+    
+    return patientName.includes(searchNormalized) || doctorName.includes(searchNormalized);
+  });
 
   const totalPages = Math.ceil(totalItems / pageSize);
 
   return (
-    <div className="min-h-screen bg-gray-900 p-6">
-      <div className="mb-6">
-        <div className="flex items-center gap-3 mb-2">
-          <Calendar className="text-teal-400" size={32} />
-          <h1 className="text-3xl font-bold text-white">Appointments Management</h1>
+    <div dir={language === 'ar' ? 'rtl' : 'ltr'} className="min-h-screen bg-gray-900 p-3 sm:p-4 md:p-6">
+      <div className="mb-4 md:mb-6">
+        <div className="flex items-center gap-2 sm:gap-3 mb-2">
+          <Calendar className="text-teal-400" size={24} />
+          <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-white">{t.title}</h1>
         </div>
-        <p className="text-gray-400">Manage, monitor, and organize all clinic appointments efficiently</p>
+        <p className="text-sm sm:text-base text-gray-400">{t.subtitle}</p>
       </div>
 
       {/* Quick Actions */}
-      <div className="bg-gray-800 rounded-xl border border-gray-700 p-4 mb-6">
-        <div className="flex flex-wrap gap-3">
+      <div className="bg-gray-800 rounded-xl border border-gray-700 p-3 sm:p-4 mb-4 md:mb-6">
+        <div className="flex flex-col sm:flex-row flex-wrap gap-2 sm:gap-3">
           <button
             onClick={() => setShowAddModal(true)}
-            className="flex items-center gap-2 px-4 py-2 bg-teal-600 hover:bg-teal-700 rounded-lg text-white transition-colors"
+            className="flex items-center justify-center gap-2 px-4 py-2 bg-teal-600 hover:bg-teal-700 rounded-lg text-white transition-colors text-sm sm:text-base"
           >
-            <Plus size={20} />
-            <span>Add Appointment</span>
+            <Plus size={18} />
+            <span>{t.addAppointment}</span>
           </button>
           
           <button
             onClick={() => setShowBlockModal(true)}
-            className="flex items-center gap-2 px-4 py-2 bg-gray-700 hover:bg-gray-600 border border-gray-600 rounded-lg text-white transition-colors"
+            className="flex items-center justify-center gap-2 px-4 py-2 bg-gray-700 hover:bg-gray-600 border border-gray-600 rounded-lg text-white transition-colors text-sm sm:text-base"
           >
-            <Clock size={20} />
-            <span>Block Time Slot</span>
+            <Clock size={18} />
+            <span>{t.blockTimeSlot}</span>
           </button>
         </div>
       </div>
 
       {/* Filters and Search */}
-      <div className="bg-gray-800 rounded-xl border border-gray-700 p-6 mb-6">
-        <div className="flex flex-col lg:flex-row gap-4">
-          <div className="flex-1 relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
+      <div className="bg-gray-800 rounded-xl border border-gray-700 p-3 sm:p-4 md:p-6 mb-4 md:mb-6">
+        <div className="flex flex-col gap-3 sm:gap-4">
+          <div className="w-full relative">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
             <input
               type="text"
-              placeholder="Search by patient or doctor name..."
+              placeholder={t.searchPlaceholder}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-teal-500"
+              className="w-full pl-10 pr-4 py-2 text-sm sm:text-base bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-teal-500"
             />
           </div>
           
-          <div className="flex flex-wrap gap-3">
-            <AppointmentFilters currentFilter={filter} onFilterChange={setFilter} />
-            <AdvancedFilters onApplyFilters={setAdvancedFilters} />
-            <ExportOptions appointments={filteredAppointments} />
+          <div className="flex flex-wrap gap-2 sm:gap-3">
+            <AppointmentFilters currentFilter={filter} onFilterChange={setFilter} language={language} />
+            <AdvancedFilters onApplyFilters={setAdvancedFilters} language={language} />
+            <ExportOptions appointments={filteredAppointments} language={language} />
             
             {/* View Toggle */}
             <div className="flex items-center gap-1 bg-gray-700 rounded-lg p-1 border border-gray-600">
@@ -186,18 +263,18 @@ export default function AppointmentsPage() {
                 className={`p-2 rounded transition-colors ${
                   viewMode === 'table' ? 'bg-teal-600 text-white' : 'text-gray-400 hover:text-white'
                 }`}
-                title="Table View"
+                title={t.tableView}
               >
-                <LayoutList size={18} />
+                <LayoutList size={16} />
               </button>
               <button
                 onClick={() => setViewMode('calendar')}
                 className={`p-2 rounded transition-colors ${
                   viewMode === 'calendar' ? 'bg-teal-600 text-white' : 'text-gray-400 hover:text-white'
                 }`}
-                title="Calendar View"
+                title={t.calendarViewTitle}
               >
-                <LayoutGrid size={18} />
+                <LayoutGrid size={16} />
               </button>
             </div>
           </div>
@@ -205,28 +282,28 @@ export default function AppointmentsPage() {
         
         {/* Calendar View Mode Toggle */}
         {viewMode === 'calendar' && (
-          <div className="mt-4 flex items-center gap-2">
-            <span className="text-gray-400 text-sm">Calendar View:</span>
-            <div className="flex gap-2">
+          <div className="mt-3 sm:mt-4 flex flex-col sm:flex-row items-start sm:items-center gap-2">
+            <span className="text-gray-400 text-xs sm:text-sm">{t.calendarView}</span>
+            <div className="flex gap-2 w-full sm:w-auto">
               <button
                 onClick={() => setCalendarViewMode('daily')}
-                className={`px-4 py-2 rounded-lg text-sm transition-colors ${
+                className={`flex-1 sm:flex-none px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm transition-colors ${
                   calendarViewMode === 'daily'
                     ? 'bg-teal-600 text-white'
                     : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
                 }`}
               >
-                Daily
+                {t.daily}
               </button>
               <button
                 onClick={() => setCalendarViewMode('weekly')}
-                className={`px-4 py-2 rounded-lg text-sm transition-colors ${
+                className={`flex-1 sm:flex-none px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm transition-colors ${
                   calendarViewMode === 'weekly'
                     ? 'bg-teal-600 text-white'
                     : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
                 }`}
               >
-                Weekly
+                {t.weekly}
               </button>
             </div>
           </div>
@@ -244,6 +321,7 @@ export default function AppointmentsPage() {
             onView={setSelectedAppointment}
             onReschedule={handleReschedule}
             onNoShow={handleNoShow}
+            language={language}
           />
           
           {!loading && filteredAppointments.length > 0 && (
@@ -257,6 +335,7 @@ export default function AppointmentsPage() {
                 setPageSize(size);
                 setCurrentPage(1);
               }}
+              language={language}
             />
           )}
         </>
@@ -264,6 +343,7 @@ export default function AppointmentsPage() {
         <CalendarView
           appointments={filteredAppointments}
           viewMode={calendarViewMode}
+          language={language}
         />
       )}
 
@@ -272,6 +352,7 @@ export default function AppointmentsPage() {
         <AppointmentDetailsModal
           appointment={selectedAppointment}
           onClose={() => setSelectedAppointment(null)}
+          language={language}
         />
       )}
       
@@ -279,6 +360,7 @@ export default function AppointmentsPage() {
         <AddAppointmentModal
           onClose={() => setShowAddModal(false)}
           onSuccess={fetchAppointments}
+          language={language}
         />
       )}
       
@@ -293,6 +375,7 @@ export default function AppointmentsPage() {
             setRescheduleAppointment(null);
           }}
           onSuccess={fetchAppointments}
+          language={language}
         />
       )}
 
@@ -300,6 +383,7 @@ export default function AppointmentsPage() {
         <BlockTimeModal
           onClose={() => setShowBlockModal(false)}
           onSuccess={fetchAppointments}
+          language={language}
         />
       )}
     </div>

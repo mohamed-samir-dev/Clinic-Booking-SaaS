@@ -61,6 +61,7 @@ const getErrorMessage = (data: { code?: string; message?: string; messageAr?: st
 export const saveAuthData = (token: string, user: AuthResponse['user']) => {
   localStorage.setItem('token', token);
   localStorage.setItem('user', JSON.stringify(user));
+  localStorage.setItem('userRole', user.role);
 };
 
 export const getRedirectRoute = (role: string): string => {
