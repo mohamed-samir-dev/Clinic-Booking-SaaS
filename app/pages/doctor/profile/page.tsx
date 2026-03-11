@@ -99,7 +99,7 @@ export default function DoctorProfilePage() {
   };
 
   const handleFieldSave = async (field: EditingField) => {
-    if (!token || !field) return;
+    if (!token || !field || !profile) return;
     setFieldSaving(true);
     
     try {

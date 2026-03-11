@@ -8,7 +8,7 @@ import TreatmentProcess from './components/TreatmentProcess';
 import PreparationTips from './components/PreparationTips';
 import FAQSection from './components/FAQSection';
 import TopDoctors from './TopDoctors';
-import { serviceOverviews, serviceDetails } from './data/overviewData';
+import { serviceDetails } from './data/overviewData';
 import { treatmentProcess } from './data/treatmentData';
 import { treatmentProcessAr } from './data/treatmentData.ar';
 import { preparationTips } from './data/preparationData';
@@ -49,7 +49,7 @@ export default function ServiceDetailPage() {
 
   const serviceTitle = keyToTitle[service.key.toLowerCase()] || 'Dentistry';
   const serviceKey = service.key.toLowerCase();
-  const currentOverview = t.overview[serviceKey as keyof typeof t.overview] || t.overview.dentistry;
+  const currentOverview = (t.overview[serviceKey as keyof typeof t.overview] || t.overview.dentistry) as { intro: string; features: string[] };
   const currentProcess = locale === 'ar' 
     ? (treatmentProcessAr[serviceTitle] || treatmentProcessAr['Dentistry'])
     : (treatmentProcess[serviceTitle] || treatmentProcess['Dentistry']);
