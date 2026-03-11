@@ -1,6 +1,6 @@
 import { Send } from 'lucide-react';
 import { TransferRequest } from '../types';
-import { getStatusIcon, getStatusColor } from '../utils';
+import { getStatusIcon, getStatusColor, getStatusText } from '../utils';
 
 interface RequestCardProps {
   request: TransferRequest;
@@ -8,17 +8,55 @@ interface RequestCardProps {
   onReply: (requestId: string) => void;
 }
 
+const translations = {
+  ar: {
+    yourMessage: 'رسالتك:',
+    doctorResponse: 'رد الطبيب:',
+    yourReply: 'ردك:',
+    sent: 'تم الإرسال:',
+    responded: 'تم الرد:',
+    replyToDoctor: 'الرد على الطبيب',
+    doctor: 'د.'
+  },
+  en: {
+    yourMessage: 'Your Message:',
+    doctorResponse: 'Doctor Response:',
+    yourReply: 'Your Reply:',
+    sent: 'Sent:',
+    responded: 'Responded:',
+    replyToDoctor: 'Reply to Doctor',
+    doctor: 'Dr.'
+  }
+};
+
 export default function RequestCard({ request, locale, onReply }: RequestCardProps) {
+  const t = translations[locale];
+  
+  // استخدام الاسم من حقل name حسب اللغة، وإلا استخدام firstName و lastName
+  const getDoctorName = () => {
+    if (request.doctorId.name) {
+      if (typeof request.doctorId.name === 'object') {
+        // إذا كان name عبارة عن object، استخدم اللغة المناسبة
+        return request.doctorId.name[locale] || request.doctorId.name.en || `${request.doctorId.firstName} ${request.doctorId.lastName}`;
+      }
+      return request.doctorId.name;
+    }
+    // إذا لم يكن name موجوداً، استخدم firstName و lastName
+    return `${t.doctor} ${request.doctorId.firstName} ${request.doctorId.lastName}`;
+  };
+  
+  const doctorName = getDoctorName();
+
   return (
-    <div className="bg-gray-800 rounded-xl border border-gray-700 p-6">
-      <div className="flex items-start justify-between mb-4">
-        <div className="flex items-center gap-3">
+    <div className="bg-gray-800 rounded-xl border border-gray-700 p-4 sm:p-5 md:p-6">
+      <div className="flex flex-col sm:flex-row items-start justify-between gap-3 sm:gap-0 mb-4">
+        <div className="flex items-center gap-3 min-w-0 w-full sm:w-auto">
           {getStatusIcon(request.status)}
-          <div>
-            <h3 className="text-white font-semibold text-lg">
-              Dr. {request.doctorId.firstName} {request.doctorId.lastName}
+          <div className="min-w-0 flex-1">
+            <h3 className="text-white font-semibold text-base sm:text-lg truncate">
+              {doctorName}
             </h3>
-            <p className="text-gray-400 text-sm">
+            <p className="text-gray-400 text-xs sm:text-sm truncate">
               {typeof request.doctorId.specialty === 'object' 
                 ? request.doctorId.specialty[locale] 
                 : request.doctorId.specialty}
@@ -26,38 +64,38 @@ export default function RequestCard({ request, locale, onReply }: RequestCardPro
           </div>
         </div>
         <span
-          className={`px-3 py-1 rounded-full text-sm border capitalize ${getStatusColor(
+          className={`px-3 py-1 rounded-full text-xs sm:text-sm border whitespace-nowrap ${getStatusColor(
             request.status
           )}`}
         >
-          {request.status}
+          {getStatusText(request.status, locale)}
         </span>
       </div>
 
       <div className="space-y-3">
-        <div className="bg-gray-750 rounded-lg p-4">
-          <p className="text-gray-400 text-sm mb-1">Your Message:</p>
-          <p className="text-white">{request.message}</p>
+        <div className="bg-gray-750 rounded-lg p-3 sm:p-4">
+          <p className="text-gray-400 text-xs sm:text-sm mb-1">{t.yourMessage}</p>
+          <p className="text-white text-sm sm:text-base wrap-break-word">{request.message}</p>
         </div>
 
         {request.doctorResponse && (
-          <div className="bg-teal-500/10 border border-teal-500/30 rounded-lg p-4">
-            <p className="text-teal-400 text-sm mb-1">Doctor Response:</p>
-            <p className="text-white">{request.doctorResponse}</p>
+          <div className="bg-teal-500/10 border border-teal-500/30 rounded-lg p-3 sm:p-4">
+            <p className="text-teal-400 text-xs sm:text-sm mb-1">{t.doctorResponse}</p>
+            <p className="text-white text-sm sm:text-base wrap-break-word">{request.doctorResponse}</p>
           </div>
         )}
 
         {request.managerResponse && (
-          <div className="bg-blue-500/10 border border-blue-500/30 rounded-lg p-4">
-            <p className="text-blue-400 text-sm mb-1">Your Reply:</p>
-            <p className="text-white">{request.managerResponse}</p>
+          <div className="bg-blue-500/10 border border-blue-500/30 rounded-lg p-3 sm:p-4">
+            <p className="text-blue-400 text-xs sm:text-sm mb-1">{t.yourReply}</p>
+            <p className="text-white text-sm sm:text-base wrap-break-word">{request.managerResponse}</p>
           </div>
         )}
 
-        <div className="flex items-center justify-between text-sm text-gray-500">
-          <span>Sent: {new Date(request.createdAt).toLocaleDateString()}</span>
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-1 sm:gap-0 text-xs sm:text-sm text-gray-500">
+          <span>{t.sent} {new Date(request.createdAt).toLocaleDateString(locale === 'ar' ? 'ar-EG' : 'en-US')}</span>
           {request.respondedAt && (
-            <span>Responded: {new Date(request.respondedAt).toLocaleDateString()}</span>
+            <span>{t.responded} {new Date(request.respondedAt).toLocaleDateString(locale === 'ar' ? 'ar-EG' : 'en-US')}</span>
           )}
         </div>
       </div>
@@ -65,10 +103,10 @@ export default function RequestCard({ request, locale, onReply }: RequestCardPro
       {request.doctorResponse && (
         <button
           onClick={() => onReply(request._id)}
-          className="w-full mt-3 px-4 py-2 bg-teal-600 hover:bg-teal-700 rounded-lg text-white transition-colors flex items-center justify-center gap-2"
+          className="w-full mt-3 px-4 py-2 bg-teal-600 hover:bg-teal-700 rounded-lg text-white transition-colors flex items-center justify-center gap-2 text-sm sm:text-base"
         >
           <Send size={16} />
-          Reply to Doctor
+          {t.replyToDoctor}
         </button>
       )}
     </div>

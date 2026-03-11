@@ -25,3 +25,19 @@ export const getStatusColor = (status: string) => {
       return '';
   }
 };
+
+export const getStatusText = (status: string, locale: 'ar' | 'en') => {
+  const translations = {
+    ar: {
+      pending: 'قيد الانتظار',
+      accepted: 'مقبول',
+      rejected: 'مرفوض'
+    },
+    en: {
+      pending: 'Pending',
+      accepted: 'Accepted',
+      rejected: 'Rejected'
+    }
+  };
+  return translations[locale][status as keyof typeof translations.ar] || status;
+};

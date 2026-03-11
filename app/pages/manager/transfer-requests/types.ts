@@ -3,6 +3,7 @@ export interface TransferRequest {
   doctorId: {
     firstName: string;
     lastName: string;
+    name?: { en: string; ar: string };
     email: string;
     specialty: { en: string; ar: string } | string;
   };

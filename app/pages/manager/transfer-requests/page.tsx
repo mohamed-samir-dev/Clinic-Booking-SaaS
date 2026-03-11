@@ -32,7 +32,7 @@ export default function TransferRequestsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-900 p-6">
+    <div className="min-h-screen bg-gray-900 p-3 sm:p-4 md:p-6" dir={locale === 'ar' ? 'rtl' : 'ltr'}>
       <PageHeader />
       <FilterBar filter={filter} setFilter={setFilter} />
 
@@ -41,7 +41,7 @@ export default function TransferRequestsPage() {
       ) : requests.length === 0 ? (
         <EmptyState />
       ) : (
-        <div className="space-y-4">
+        <div className="space-y-3 sm:space-y-4">
           {requests.map((request) => (
             <RequestCard
               key={request._id}
