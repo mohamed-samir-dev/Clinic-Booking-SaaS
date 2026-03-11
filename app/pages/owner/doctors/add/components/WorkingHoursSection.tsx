@@ -9,9 +9,40 @@ interface Availability {
 interface WorkingHoursSectionProps {
   availability: Availability[];
   onUpdate: (availability: Availability[]) => void;
+  language?: 'ar' | 'en';
 }
 
-export default function WorkingHoursSection({ availability, onUpdate }: WorkingHoursSectionProps) {
+const translations = {
+  ar: {
+    title: 'أيام وساعات العمل',
+    setHours: 'تحديد ساعات العمل لكل يوم:',
+    from: 'من',
+    to: 'إلى',
+    sunday: 'الأحد',
+    monday: 'الإثنين',
+    tuesday: 'الثلاثاء',
+    wednesday: 'الأربعاء',
+    thursday: 'الخميس',
+    friday: 'الجمعة',
+    saturday: 'السبت'
+  },
+  en: {
+    title: 'Working Days & Hours',
+    setHours: 'Set Working Hours for Each Day:',
+    from: 'From',
+    to: 'To',
+    sunday: 'Sunday',
+    monday: 'Monday',
+    tuesday: 'Tuesday',
+    wednesday: 'Wednesday',
+    thursday: 'Thursday',
+    friday: 'Friday',
+    saturday: 'Saturday'
+  }
+};
+
+export default function WorkingHoursSection({ availability, onUpdate, language = 'en' }: WorkingHoursSectionProps) {
+  const t = translations[language];
   const days = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
 
   const handleDayToggle = (day: string, checked: boolean) => {
@@ -41,7 +72,7 @@ export default function WorkingHoursSection({ availability, onUpdate }: WorkingH
         <div className="bg-teal-600 p-2 rounded-lg">
           <Calendar size={18} className="text-white" />
         </div>
-        <h3 className="text-lg font-bold text-white">Working Days & Hours</h3>
+        <h3 className="text-lg font-bold text-white">{t.title}</h3>
       </div>
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
         {days.map((day) => {
@@ -54,7 +85,7 @@ export default function WorkingHoursSection({ availability, onUpdate }: WorkingH
                 onChange={(e) => handleDayToggle(day, e.target.checked)}
                 className="w-4 h-4 text-teal-600 border-gray-500 rounded focus:ring-teal-500"
               />
-              <span className="text-sm font-semibold text-gray-300 capitalize">{day}</span>
+              <span className="text-sm font-semibold text-gray-300 capitalize">{t[day as keyof typeof t]}</span>
             </label>
           );
         })}
@@ -62,15 +93,15 @@ export default function WorkingHoursSection({ availability, onUpdate }: WorkingH
       
       {availability.length > 0 && (
         <div className="mt-4 space-y-3">
-          <h4 className="text-md font-semibold text-gray-300">Set Working Hours for Each Day:</h4>
+          <h4 className="text-md font-semibold text-gray-300">{t.setHours}</h4>
           {availability.map((avail, index) => (
             <div key={avail.day} className="bg-gray-800 p-4 rounded-lg border-2 border-gray-600">
               <div className="flex items-center justify-between mb-3">
-                <span className="font-semibold text-white capitalize">{avail.day}</span>
+                <span className="font-semibold text-white capitalize">{t[avail.day as keyof typeof t]}</span>
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-semibold text-gray-400 mb-1">From</label>
+                  <label className="block text-xs font-semibold text-gray-400 mb-1">{t.from}</label>
                   <input
                     type="time"
                     value={avail.workingHours?.from || '09:00'}
@@ -79,7 +110,7 @@ export default function WorkingHoursSection({ availability, onUpdate }: WorkingH
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-semibold text-gray-400 mb-1">To</label>
+                  <label className="block text-xs font-semibold text-gray-400 mb-1">{t.to}</label>
                   <input
                     type="time"
                     value={avail.workingHours?.to || '17:00'}

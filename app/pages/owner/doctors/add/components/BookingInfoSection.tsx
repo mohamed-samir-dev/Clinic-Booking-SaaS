@@ -4,21 +4,49 @@ import { FormData } from '../types';
 interface BookingInfoSectionProps {
   formData: FormData;
   onUpdate: (data: Partial<FormData>) => void;
+  language?: 'ar' | 'en';
 }
 
-export default function BookingInfoSection({ formData, onUpdate }: BookingInfoSectionProps) {
+const translations = {
+  ar: {
+    title: 'معلومات الحجز',
+    consultationFee: 'رسوم الاستشارة',
+    currency: 'العملة',
+    slotDuration: 'مدة الفترة (دقائق)',
+    bufferBefore: 'وقت احتياطي قبل (دقيقة)',
+    bufferAfter: 'وقت احتياطي بعد (دقيقة)',
+    patientsPerSlot: 'مرضى لكل فترة',
+    minNotice: 'الحد الأدنى للإشعار (دقيقة)',
+    allowOnlineBooking: 'السماح بالحجز عبر الإنترنت'
+  },
+  en: {
+    title: 'Booking Information',
+    consultationFee: 'Consultation Fee',
+    currency: 'Currency',
+    slotDuration: 'Slot Duration (minutes)',
+    bufferBefore: 'Buffer Before (min)',
+    bufferAfter: 'Buffer After (min)',
+    patientsPerSlot: 'Patients Per Slot',
+    minNotice: 'Min Notice (min)',
+    allowOnlineBooking: 'Allow Online Booking'
+  }
+};
+
+export default function BookingInfoSection({ formData, onUpdate, language = 'en' }: BookingInfoSectionProps) {
+  const t = translations[language];
+  
   return (
     <div className="bg-gray-700/50 p-5 rounded-xl border border-gray-600">
       <div className="flex items-center gap-3 mb-3">
         <div className="bg-teal-600 p-2 rounded-lg">
           <DollarSign size={18} className="text-white" />
         </div>
-        <h3 className="text-lg font-bold text-white">Booking Information</h3>
+        <h3 className="text-lg font-bold text-white">{t.title}</h3>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
         <div>
           <label className="block text-sm font-semibold text-gray-300 mb-2">
-            Consultation Fee *
+            {t.consultationFee} *
           </label>
           <input
             type="number"
@@ -32,7 +60,7 @@ export default function BookingInfoSection({ formData, onUpdate }: BookingInfoSe
         </div>
         <div>
           <label className="block text-sm font-semibold text-gray-300 mb-2">
-            Currency
+            {t.currency}
           </label>
           <input
             type="text"
@@ -44,7 +72,7 @@ export default function BookingInfoSection({ formData, onUpdate }: BookingInfoSe
         </div>
         <div>
           <label className="block text-sm font-semibold text-gray-300 mb-2">
-            Slot Duration (minutes)
+            {t.slotDuration}
           </label>
           <input
             type="number"
@@ -60,7 +88,7 @@ export default function BookingInfoSection({ formData, onUpdate }: BookingInfoSe
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
         <div>
           <label className="block text-sm font-semibold text-gray-300 mb-2">
-            Buffer Before (min)
+            {t.bufferBefore}
           </label>
           <input
             type="number"
@@ -73,7 +101,7 @@ export default function BookingInfoSection({ formData, onUpdate }: BookingInfoSe
         </div>
         <div>
           <label className="block text-sm font-semibold text-gray-300 mb-2">
-            Buffer After (min)
+            {t.bufferAfter}
           </label>
           <input
             type="number"
@@ -86,7 +114,7 @@ export default function BookingInfoSection({ formData, onUpdate }: BookingInfoSe
         </div>
         <div>
           <label className="block text-sm font-semibold text-gray-300 mb-2">
-            Patients Per Slot
+            {t.patientsPerSlot}
           </label>
           <input
             type="number"
@@ -99,7 +127,7 @@ export default function BookingInfoSection({ formData, onUpdate }: BookingInfoSe
         </div>
         <div>
           <label className="block text-sm font-semibold text-gray-300 mb-2">
-            Min Notice (min)
+            {t.minNotice}
           </label>
           <input
             type="number"
@@ -119,7 +147,7 @@ export default function BookingInfoSection({ formData, onUpdate }: BookingInfoSe
           onChange={(e) => onUpdate({ allowOnlineBooking: e.target.checked })}
           className="w-5 h-5 text-teal-600 border-gray-500 rounded focus:ring-teal-500"
         />
-        <span className="text-sm font-semibold text-gray-300">Allow Online Booking</span>
+        <span className="text-sm font-semibold text-gray-300">{t.allowOnlineBooking}</span>
       </label>
     </div>
   );

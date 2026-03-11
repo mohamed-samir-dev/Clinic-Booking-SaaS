@@ -11,9 +11,32 @@ interface Review {
 interface ReviewsSectionProps {
   reviews: Review[];
   onUpdate: (reviews: Review[]) => void;
+  language?: 'ar' | 'en';
 }
 
-export default function ReviewsSection({ reviews, onUpdate }: ReviewsSectionProps) {
+const translations = {
+  ar: {
+    title: 'التقييمات الأولية',
+    patientName: 'اسم المريض',
+    rating: 'التقييم',
+    comment: 'التعليق',
+    addReview: 'إضافة تقييم',
+    patientPlaceholder: 'محمد أحمد',
+    commentPlaceholder: 'دكتور ممتاز ومتمكن في تخصصه'
+  },
+  en: {
+    title: 'Initial Reviews',
+    patientName: 'Patient Name',
+    rating: 'Rating',
+    comment: 'Comment',
+    addReview: 'Add Review',
+    patientPlaceholder: 'محمد أحمد',
+    commentPlaceholder: 'دكتور ممتاز ومتمكن في تخصصه'
+  }
+};
+
+export default function ReviewsSection({ reviews, onUpdate, language = 'en' }: ReviewsSectionProps) {
+  const t = translations[language];
   const [newReview, setNewReview] = useState<Review>({
     patientName: '',
     rating: 5,
@@ -38,7 +61,7 @@ export default function ReviewsSection({ reviews, onUpdate }: ReviewsSectionProp
         <div className="bg-teal-600 p-2 rounded-lg">
           <Star size={18} className="text-white" />
         </div>
-        <h3 className="text-lg font-bold text-white">Initial Reviews</h3>
+        <h3 className="text-lg font-bold text-white">{t.title}</h3>
       </div>
       
       {reviews.length > 0 && (
@@ -76,17 +99,17 @@ export default function ReviewsSection({ reviews, onUpdate }: ReviewsSectionProp
       <div className="bg-gray-800 p-4 rounded-lg border-2 border-gray-600 space-y-3">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
           <div>
-            <label className="block text-sm font-semibold text-gray-300 mb-2">Patient Name</label>
+            <label className="block text-sm font-semibold text-gray-300 mb-2">{t.patientName}</label>
             <input
               type="text"
               value={newReview.patientName}
               onChange={(e) => setNewReview({ ...newReview, patientName: e.target.value })}
               className="w-full px-3 py-2 bg-gray-700 border-2 border-gray-600 rounded-lg focus:ring-2 focus:ring-teal-500 text-white"
-              placeholder="محمد أحمد"
+              placeholder={t.patientPlaceholder}
             />
           </div>
           <div>
-            <label className="block text-sm font-semibold text-gray-300 mb-2">Rating</label>
+            <label className="block text-sm font-semibold text-gray-300 mb-2">{t.rating}</label>
             <select
               value={newReview.rating}
               onChange={(e) => setNewReview({ ...newReview, rating: Number(e.target.value) })}
@@ -101,13 +124,13 @@ export default function ReviewsSection({ reviews, onUpdate }: ReviewsSectionProp
           </div>
         </div>
         <div>
-          <label className="block text-sm font-semibold text-gray-300 mb-2">Comment</label>
+          <label className="block text-sm font-semibold text-gray-300 mb-2">{t.comment}</label>
           <textarea
             value={newReview.comment}
             onChange={(e) => setNewReview({ ...newReview, comment: e.target.value })}
             rows={2}
             className="w-full px-3 py-2 bg-gray-700 border-2 border-gray-600 rounded-lg focus:ring-2 focus:ring-teal-500 text-white"
-            placeholder="دكتور ممتاز ومتمكن في تخصصه"
+            placeholder={t.commentPlaceholder}
           />
         </div>
         <button
@@ -116,7 +139,7 @@ export default function ReviewsSection({ reviews, onUpdate }: ReviewsSectionProp
           className="flex items-center gap-2 bg-teal-600 text-white px-4 py-2 rounded-lg hover:bg-teal-700 transition-all font-semibold"
         >
           <Plus size={18} />
-          Add Review
+          {t.addReview}
         </button>
       </div>
     </div>

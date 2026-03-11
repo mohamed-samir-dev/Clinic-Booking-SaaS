@@ -7,10 +7,57 @@ interface PersonalInfoSectionProps {
   onUpdate: (data: Partial<FormData>) => void;
   onGeneratePassword?: () => void;
   isEditMode?: boolean;
+  language?: 'ar' | 'en';
 }
 
-export default function PersonalInfoSection({ formData, onUpdate, onGeneratePassword, isEditMode = false }: PersonalInfoSectionProps) {
+const translations = {
+  ar: {
+    title: 'المعلومات الشخصية',
+    firstName: 'الاسم الأول',
+    lastName: 'اسم العائلة',
+    nameEn: 'الاسم بالإنجليزية',
+    nameAr: 'الاسم بالعربية',
+    doctorTitle: 'اللقب',
+    gender: 'الجنس',
+    male: 'ذكر',
+    female: 'أنثى',
+    email: 'البريد الإلكتروني',
+    phone: 'الهاتف',
+    password: 'كلمة المرور',
+    leaveEmpty: '(اتركه فارغًا إذا لم ترد التغيير)',
+    enterNewPassword: 'أدخل كلمة مرور جديدة',
+    enterOrGenerate: 'أدخل أو قم بإنشاء كلمة مرور',
+    generate: 'إنشاء',
+    bloodType: 'فصيلة الدم',
+    selectBloodType: '-- اختر فصيلة الدم --',
+    bloodTypeNote: 'اختياري: فصيلة دم الطبيب للسجلات الطبية'
+  },
+  en: {
+    title: 'Personal Information',
+    firstName: 'First Name',
+    lastName: 'Last Name',
+    nameEn: 'Name (English)',
+    nameAr: 'Name (Arabic)',
+    doctorTitle: 'Title',
+    gender: 'Gender',
+    male: 'Male',
+    female: 'Female',
+    email: 'Email',
+    phone: 'Phone',
+    password: 'Password',
+    leaveEmpty: '(leave empty if you don\'t want to change)',
+    enterNewPassword: 'Enter new password',
+    enterOrGenerate: 'Enter or generate password',
+    generate: 'Generate',
+    bloodType: 'Blood Type',
+    selectBloodType: '-- Select Blood Type --',
+    bloodTypeNote: 'Optional: Doctor\'s blood type for medical records'
+  }
+};
+
+export default function PersonalInfoSection({ formData, onUpdate, onGeneratePassword, isEditMode = false, language = 'en' }: PersonalInfoSectionProps) {
   const [showPassword, setShowPassword] = useState(false);
+  const t = translations[language];
   
   return (
     <div className="bg-gray-700/50 p-5 rounded-xl border border-gray-600">
@@ -18,11 +65,11 @@ export default function PersonalInfoSection({ formData, onUpdate, onGeneratePass
         <div className="bg-teal-600 p-2 rounded-lg">
           <User size={18} className="text-white" />
         </div>
-        <h3 className="text-lg font-bold text-white">المعلومات الشخصية - Personal Information</h3>
+        <h3 className="text-lg font-bold text-white">{t.title}</h3>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
-          <label className="block text-sm font-semibold text-gray-300 mb-2">الاسم الأول - First Name *</label>
+          <label className="block text-sm font-semibold text-gray-300 mb-2">{t.firstName} *</label>
           <input
             type="text"
             required
@@ -33,7 +80,7 @@ export default function PersonalInfoSection({ formData, onUpdate, onGeneratePass
           />
         </div>
         <div>
-          <label className="block text-sm font-semibold text-gray-300 mb-2">اسم العائلة - Last Name *</label>
+          <label className="block text-sm font-semibold text-gray-300 mb-2">{t.lastName} *</label>
           <input
             type="text"
             required
@@ -44,7 +91,7 @@ export default function PersonalInfoSection({ formData, onUpdate, onGeneratePass
           />
         </div>
         <div>
-          <label className="block text-sm font-semibold text-gray-300 mb-2">الاسم بالإنجليزية - Name (English)</label>
+          <label className="block text-sm font-semibold text-gray-300 mb-2">{t.nameEn}</label>
           <input
             type="text"
             value={formData.name.en}
@@ -54,7 +101,7 @@ export default function PersonalInfoSection({ formData, onUpdate, onGeneratePass
           />
         </div>
         <div>
-          <label className="block text-sm font-semibold text-gray-300 mb-2">الاسم بالعربية - Name (Arabic)</label>
+          <label className="block text-sm font-semibold text-gray-300 mb-2">{t.nameAr}</label>
           <input
             type="text"
             value={formData.name.ar}
@@ -64,7 +111,7 @@ export default function PersonalInfoSection({ formData, onUpdate, onGeneratePass
           />
         </div>
         <div>
-          <label className="block text-sm font-semibold text-gray-300 mb-2">اللقب - Title *</label>
+          <label className="block text-sm font-semibold text-gray-300 mb-2">{t.doctorTitle} *</label>
           <select
             required
             value={formData.title}
@@ -77,18 +124,18 @@ export default function PersonalInfoSection({ formData, onUpdate, onGeneratePass
           </select>
         </div>
         <div>
-          <label className="block text-sm font-semibold text-gray-300 mb-2">الجنس - Gender</label>
+          <label className="block text-sm font-semibold text-gray-300 mb-2">{t.gender}</label>
           <select
             value={formData.gender}
             onChange={(e) => onUpdate({ gender: e.target.value })}
             className="w-full px-4 py-3 bg-gray-800 border-2 border-gray-600 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-teal-500 text-white"
           >
-            <option value="male">Male</option>
-            <option value="female">Female</option>
+            <option value="male">{t.male}</option>
+            <option value="female">{t.female}</option>
           </select>
         </div>
         <div>
-          <label className="block text-sm font-semibold text-gray-300 mb-2">البريد الإلكتروني - Email *</label>
+          <label className="block text-sm font-semibold text-gray-300 mb-2">{t.email} *</label>
           <input
             type="email"
             required
@@ -99,7 +146,7 @@ export default function PersonalInfoSection({ formData, onUpdate, onGeneratePass
           />
         </div>
         <div>
-          <label className="block text-sm font-semibold text-gray-300 mb-2">الهاتف - Phone</label>
+          <label className="block text-sm font-semibold text-gray-300 mb-2">{t.phone}</label>
           <input
             type="tel"
             value={formData.phone}
@@ -110,8 +157,8 @@ export default function PersonalInfoSection({ formData, onUpdate, onGeneratePass
         </div>
         <div>
           <label className="block text-sm font-semibold text-gray-300 mb-2">
-            كلمة المرور - Password {!isEditMode && '*'}
-            {isEditMode && <span className="text-xs text-gray-500 ml-2">(اتركه فارغاً إذا لم ترد التغيير)</span>}
+            {t.password} {!isEditMode && '*'}
+            {isEditMode && <span className="text-xs text-gray-500 ml-2">{t.leaveEmpty}</span>}
           </label>
           <div className="flex gap-2">
             <div className="relative flex-1">
@@ -121,7 +168,7 @@ export default function PersonalInfoSection({ formData, onUpdate, onGeneratePass
                 value={formData.password}
                 onChange={(e) => onUpdate({ password: e.target.value })}
                 className="w-full px-4 py-3 pr-12 bg-gray-800 border-2 border-gray-600 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-teal-500 text-white"
-                placeholder={isEditMode ? "أدخل كلمة مرور جديدة" : "Enter or generate password"}
+                placeholder={isEditMode ? t.enterNewPassword : t.enterOrGenerate}
               />
               <button
                 type="button"
@@ -139,20 +186,20 @@ export default function PersonalInfoSection({ formData, onUpdate, onGeneratePass
                 title="Generate strong password"
               >
                 <RefreshCw size={18} />
-                Generate
+                {t.generate}
               </button>
             )}
           </div>
         </div>
         <div>
-          <label className="block text-sm font-semibold text-gray-300 mb-2">فصيلة الدم - Blood Type</label>
+          <label className="block text-sm font-semibold text-gray-300 mb-2">{t.bloodType}</label>
           <div className="relative">
             <select
               value={formData.bloodType}
               onChange={(e) => onUpdate({ bloodType: e.target.value })}
               className="w-full px-4 py-3 bg-gray-800 border-2 border-gray-600 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-teal-500 text-white appearance-none"
             >
-              <option value="">-- Select Blood Type --</option>
+              <option value="">{t.selectBloodType}</option>
               <option value="A+">🩸 A+</option>
               <option value="A-">🩸 A-</option>
               <option value="B+">🩸 B+</option>
@@ -168,7 +215,7 @@ export default function PersonalInfoSection({ formData, onUpdate, onGeneratePass
               </svg>
             </div>
           </div>
-          <p className="text-xs text-gray-500 mt-1">Optional: Doctor&rsquo;s blood type for medical records</p>
+          <p className="text-xs text-gray-500 mt-1">{t.bloodTypeNote}</p>
         </div>
       </div>
     </div>
