@@ -12,7 +12,7 @@ interface ReviewFormProps {
   onSuccess: () => void;
 }
 
-export default function ReviewForm({ clinicId, theme, messages, onClose, onSuccess }: ReviewFormProps) {
+export default function ReviewForm({ clinicId, theme, locale, messages, onClose, onSuccess }: ReviewFormProps) {
   const [rating, setRating] = useState(0);
   const [hoveredRating, setHoveredRating] = useState(0);
   const [comment, setComment] = useState('');
@@ -34,8 +34,15 @@ export default function ReviewForm({ clinicId, theme, messages, onClose, onSucce
     }
 
     const token = localStorage.getItem('token');
+    const userRole = localStorage.getItem('userRole');
+    
     if (!token) {
       setError(messages.clinics.reviews.loginRequired);
+      return;
+    }
+
+    if (userRole !== 'patient') {
+      setError(locale === 'ar' ? messages.clinics.reviews.patientRoleRequired : 'You must be logged in as a patient to write a review');
       return;
     }
 

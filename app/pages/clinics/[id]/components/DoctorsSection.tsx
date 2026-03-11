@@ -39,7 +39,13 @@ export default function DoctorsSection({ doctors, theme, locale }: DoctorsSectio
             <div className="flex items-center gap-3 sm:gap-4">
               <div className="relative w-16 h-16 sm:w-20 sm:h-20 shrink-0">
                 <div className="relative w-full h-full rounded-full overflow-hidden border-2 border-teal-500">
-                  <Image src={doctor.photoUrl} alt={doctor.name.en} fill sizes="(max-width: 640px) 64px, 80px" className="object-cover" />
+                  {doctor.photoUrl ? (
+                    <Image src={doctor.photoUrl} alt={doctor.name.en} fill sizes="(max-width: 640px) 64px, 80px" className="object-cover" />
+                  ) : (
+                    <div className={`w-full h-full flex items-center justify-center ${theme === 'dark' ? 'bg-gray-600' : 'bg-gray-200'}`}>
+                      <Stethoscope className="text-gray-400" size={32} />
+                    </div>
+                  )}
                 </div>
                 <div className={`absolute -bottom-1 -right-1 w-5 h-5 sm:w-6 sm:h-6 rounded-full flex items-center justify-center shadow-lg ${
                   doctor.isAvailableToday ? 'bg-green-500' : 'bg-red-500'

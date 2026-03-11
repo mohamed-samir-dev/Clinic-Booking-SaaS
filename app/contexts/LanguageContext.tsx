@@ -15,16 +15,37 @@ const LanguageContext = createContext<LanguageContextType | undefined>(undefined
 export function LanguageProvider({ children }: { children: ReactNode }) {
   const [locale, setLocale] = useState<Locale>('en');
   const [mounted, setMounted] = useState(false);
-  const [messages, setMessages] = useState<any>(null);
+  const [messages, setMessages] = useState<Record<string, string> | null>(null);
 
   useEffect(() => {
-    const savedLocale = (localStorage.getItem('locale') as Locale) || 'en';
+    const savedLocale = (localStorage.getItem('managerLang') || localStorage.getItem('locale') || 'en') as Locale;
     setLocale(savedLocale);
     
     import(`../../messages/${savedLocale}.json`).then((msgs) => {
       setMessages(msgs.default);
       setMounted(true);
+    }).catch(() => {
+      setMessages({});
+      setMounted(true);
     });
+
+    // استمع لتغييرات اللغة من Navbar
+    const handleLanguageChange = () => {
+      const newLocale = (localStorage.getItem('managerLang') || localStorage.getItem('locale') || 'en') as Locale;
+      setLocale(newLocale);
+      localStorage.setItem('locale', newLocale);
+      document.documentElement.dir = newLocale === 'ar' ? 'rtl' : 'ltr';
+      document.documentElement.lang = newLocale;
+      
+      import(`../../messages/${newLocale}.json`).then((msgs) => {
+        setMessages(msgs.default);
+      }).catch(() => {
+        setMessages({});
+      });
+    };
+
+    window.addEventListener('languageChange', handleLanguageChange);
+    return () => window.removeEventListener('languageChange', handleLanguageChange);
   }, []);
 
   useEffect(() => {
@@ -34,6 +55,8 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
       
       import(`../../messages/${locale}.json`).then((msgs) => {
         setMessages(msgs.default);
+      }).catch(() => {
+        setMessages({});
       });
     }
   }, [locale, mounted]);
@@ -42,8 +65,10 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     const newLocale = locale === 'en' ? 'ar' : 'en';
     setLocale(newLocale);
     localStorage.setItem('locale', newLocale);
+    localStorage.setItem('managerLang', newLocale);
     document.documentElement.dir = newLocale === 'ar' ? 'rtl' : 'ltr';
     document.documentElement.lang = newLocale;
+    window.dispatchEvent(new Event('languageChange'));
   };
 
   if (!mounted || !messages) {
