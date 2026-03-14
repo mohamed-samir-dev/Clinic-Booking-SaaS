@@ -1011,6 +1011,14 @@
       }
     }
   },
+  "notFound": {
+    "title": "404",
+    "heading": "Page Not Found",
+    "description": "Oops! The page you're looking for doesn't exist or has been moved.",
+    "goHome": "Go Home",
+    "goToDashboard": "Go to Dashboard",
+    "lostMessage": "Looks like you took a wrong turn"
+  },
   "patient": {
     "medical": {
       "pageTitle": "Medical Information",
