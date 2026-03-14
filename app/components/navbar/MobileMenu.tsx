@@ -7,6 +7,16 @@ import messagesAr from '@/messages/ar.json';
 
 
 
+const getDisplayName = (name: unknown, locale: string): string => {
+  if (!name) return '';
+  if (typeof name === 'string') return name;
+  if (typeof name === 'object' && name !== null) {
+    const n = name as { en?: string; ar?: string };
+    return (locale === 'ar' ? n.ar : n.en) || n.en || '';
+  }
+  return '';
+};
+
 export default function MobileMenu({
   pathname,
   user,
@@ -18,6 +28,7 @@ export default function MobileMenu({
   handleLogout,
 }: MobileMenuProps) {
   const t = locale === 'ar' ? messagesAr.navbar : messages.navbar;
+  const displayName = getDisplayName(user?.name, locale);
 
   const navItems = [
     { label: t.home, href: '/' },
@@ -83,12 +94,12 @@ export default function MobileMenu({
         }`}>
           <div className="flex items-center gap-3 mb-3">
             <div className="w-10 h-10 rounded-full bg-linear-to-br from-teal-500 to-teal-600 flex items-center justify-center text-white font-semibold">
-              {user.name?.charAt(0).toUpperCase() || <FaUser />}
+              {displayName ? displayName.charAt(0).toUpperCase() : <FaUser />}
             </div>
             <div>
               <p className={`text-sm font-semibold ${
                 theme === 'dark' ? 'text-gray-100' : 'text-gray-900'
-              }`}>{user.name}</p>
+              }`}>{displayName}</p>
               <p className={`text-xs ${
                 theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
               }`}>{user.email}</p>

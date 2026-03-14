@@ -6,6 +6,7 @@ import Footer from "@/app/components/footer/Footer";
 import { ReduxProvider } from "./store/ReduxProvider";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import { LanguageProvider } from "./contexts/LanguageContext";
+import { GoogleOAuthProvider } from "@react-oauth/google";
 import { usePathname } from "next/navigation";
 
 const geistSans = Geist({
@@ -39,6 +40,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <ReduxProvider>
+          <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || ''}>
           <LanguageProvider>
             <ThemeProvider>
               {!isDoctorPage && <Navbar />}
@@ -46,6 +48,7 @@ export default function RootLayout({
               {!isOwnerPage && !isDoctorPage && !isManagerPage && <Footer />}
             </ThemeProvider>
           </LanguageProvider>
+          </GoogleOAuthProvider>
         </ReduxProvider>
       </body>
     </html>

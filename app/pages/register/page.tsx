@@ -15,6 +15,7 @@ import { PasswordField } from './components/PasswordField';
 import { PasswordStrengthIndicator } from './components/PasswordStrengthIndicator';
 import { PasswordRequirements } from './components/PasswordRequirements';
 import { UserIcon, EmailIcon, PhoneIcon } from './components/Icons';
+import GoogleSignInButton from '@/app/shared/components/GoogleSignInButton';
 import { useAppDispatch } from '@/app/store/hooks';
 import { setCredentials } from '@/app/store/slices/authSlice';
 import { useTheme } from '@/app/contexts/ThemeContext';
@@ -36,6 +37,7 @@ export default function RegisterPage() {
   const router = useRouter();
   const dispatch = useAppDispatch();
   const [loading, setLoading] = useState(false);
+  const [googleLoading, setGoogleLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
@@ -171,6 +173,48 @@ export default function RegisterPage() {
                     {loading ? t.creatingAccount : t.createAccount}
                   </button>
                 </form>
+
+                <div className="relative my-4 sm:my-6">
+                  <div className="absolute inset-0 flex items-center">
+                    <div className={`w-full border-t ${theme === 'dark' ? 'border-gray-700' : 'border-gray-300'}`}></div>
+                  </div>
+                  <div className="relative flex justify-center text-xs sm:text-sm">
+                    <span className={`px-3 sm:px-4 ${theme === 'dark' ? 'bg-gray-800 text-gray-400' : 'bg-white text-gray-500'}`}>{locale === 'ar' ? 'أو' : 'OR'}</span>
+                  </div>
+                </div>
+
+                <GoogleSignInButton
+                  loading={googleLoading}
+                  onSuccess={async (accessToken) => {
+                    setGoogleLoading(true);
+                    try {
+                      const res = await fetch('http://localhost:5000/api/v1/auth/patient/google-register', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ accessToken }),
+                      });
+                      const data = await res.json();
+
+                      if (data.code === 'ACCOUNT_EXISTS') {
+                        toast.error(locale === 'ar' ? data.messageAr : data.message, { duration: 4000, position: 'top-center' });
+                        setTimeout(() => router.push('/pages/login'), 2000);
+                        return;
+                      }
+
+                      if (!res.ok) throw new Error(data.message || 'Google sign-up failed');
+
+                      saveAuthData(data.token, data.user);
+                      dispatch(setCredentials({ user: data.user, token: data.token }));
+                      toast.success(t.success, { duration: 3000, position: 'top-center' });
+                      setTimeout(() => router.push(getRedirectRoute(data.user.role)), 1500);
+                    } catch (err) {
+                      toast.error(err instanceof Error ? err.message : 'Google sign-up failed', { duration: 3000, position: 'top-center' });
+                    } finally {
+                      setGoogleLoading(false);
+                    }
+                  }}
+                  onError={(err) => toast.error(err, { duration: 3000, position: 'top-center' })}
+                />
 
                 <div className="mt-4 sm:mt-6 text-center">
                   <p className={`text-xs sm:text-sm ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>

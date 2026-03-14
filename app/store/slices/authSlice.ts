@@ -49,8 +49,6 @@ const linkGuestAppointments = async (token: string, user: User) => {
   if (!guestId || user.role !== 'patient') return;
 
   try {
-    console.log('Linking guest appointments:', { guestId, email: user.email, phone: user.phone });
-    
     const response = await fetch('http://localhost:5000/api/appointments/link-guest', {
       method: 'POST',
       headers: {
@@ -65,14 +63,12 @@ const linkGuestAppointments = async (token: string, user: User) => {
     });
 
     const result = await response.json();
-    console.log('Link result:', result);
 
     if (response.ok) {
       localStorage.removeItem('guestId');
-      console.log('Guest appointments linked successfully');
     }
   } catch (error) {
-    console.error('Failed to link guest appointments:', error);
+    // Silent fail for guest linking
   }
 };
 

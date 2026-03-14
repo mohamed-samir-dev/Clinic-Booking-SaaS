@@ -22,6 +22,7 @@ export default function LoginPage() {
   const dispatch = useAppDispatch();
   const [userType, setUserType] = useState<UserType>('patient');
   const [loading, setLoading] = useState(false);
+  const [googleLoading, setGoogleLoading] = useState(false);
   const [error, setError] = useState('');
 
   const t = locale === 'ar' ? messagesAr.auth.login : messages.auth.login;
@@ -74,7 +75,30 @@ export default function LoginPage() {
                   </div>
                 </div>
 
-                <GoogleSignInButton />
+                <GoogleSignInButton
+                  loading={googleLoading}
+                  onSuccess={async (accessToken) => {
+                    setGoogleLoading(true);
+                    setError('');
+                    try {
+                      const res = await fetch('http://localhost:5000/api/v1/auth/patient/google', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ accessToken }),
+                      });
+                      const data = await res.json();
+                      if (!res.ok) throw new Error(data.message || 'Google sign-in failed');
+                      saveAuthData(data.token, data.user);
+                      dispatch(setCredentials({ user: data.user, token: data.token }));
+                      router.push(getRedirectRoute(data.user.role));
+                    } catch (err) {
+                      setError(err instanceof Error ? err.message : 'Google sign-in failed');
+                    } finally {
+                      setGoogleLoading(false);
+                    }
+                  }}
+                  onError={(err) => setError(err)}
+                />
 
               <div className={`mt-3 xs:mt-4 sm:mt-5 md:mt-6 text-center pt-3 sm:pt-4 border-t ${theme === 'dark' ? 'border-gray-700' : 'border-gray-100'}`}>
                 <p className={`text-xs sm:text-sm font-semibold ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>

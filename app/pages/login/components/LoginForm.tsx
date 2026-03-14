@@ -49,7 +49,6 @@ export default function LoginForm({ userType, onSubmit, loading, error }: LoginF
       const response = await fetch('http://localhost:5000/api/v1/auth/businesses');
       const data = await response.json();
       if (data.success) {
-        console.log('Clinics data:', data.data);
         setBusinesses(data.data);
       }
     } catch (error) {
@@ -81,7 +80,6 @@ export default function LoginForm({ userType, onSubmit, loading, error }: LoginF
             id="businessId"
             value={businessId}
             onChange={(e) => {
-              console.log('Selected value:', e.target.value);
               setBusinessId(e.target.value);
             }}
             className={`w-full px-2.5 xs:px-3 sm:px-4 py-2 xs:py-2.5 sm:py-3 text-sm sm:text-base border-2 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none transition ${theme === 'dark' ? 'bg-gray-700 border-gray-600 text-white' : 'border-gray-300 text-gray-900'}`}
