@@ -62,10 +62,10 @@ export const useReportsData = () => {
         const token = localStorage.getItem('token');
         
         const [managersRes, clinicsRes] = await Promise.all([
-          fetch('http://localhost:5000/api/owner/managers', {
+          fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/owner/managers`, {
             headers: { Authorization: `Bearer ${token}` },
           }),
-          fetch('http://localhost:5000/api/owner/clinics', {
+          fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/owner/clinics`, {
             headers: { Authorization: `Bearer ${token}` },
           }),
         ]);

@@ -95,7 +95,7 @@ export default function PatientsPage() {
         limit: pageSize.toString()
       });
       
-      const response = await fetch(`http://localhost:5000/api/manager/patients?${params}`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/manager/patients?${params}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       

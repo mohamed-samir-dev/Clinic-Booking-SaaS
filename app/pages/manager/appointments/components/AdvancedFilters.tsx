@@ -68,7 +68,7 @@ export const AdvancedFilters = ({ onApplyFilters, language = 'ar' }: AdvancedFil
     const fetchDoctors = async () => {
       try {
         const token = localStorage.getItem('token');
-        const response = await fetch('http://localhost:5000/api/manager/doctors', {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/manager/doctors`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         if (response.ok) {

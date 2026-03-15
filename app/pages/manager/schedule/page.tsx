@@ -90,13 +90,13 @@ export default function SchedulePage() {
       }
 
       const [appointmentsRes, blockedRes, statsRes] = await Promise.all([
-        fetch(`http://localhost:5000/api/manager/appointments?${params}`, {
+        fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/manager/appointments?${params}`, {
           headers: { Authorization: `Bearer ${token}` }
         }),
-        fetch(`http://localhost:5000/api/manager/blocked-slots`, {
+        fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/manager/blocked-slots`, {
           headers: { Authorization: `Bearer ${token}` }
         }),
-        fetch(`http://localhost:5000/api/manager/schedule-stats`, {
+        fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/manager/schedule-stats`, {
           headers: { Authorization: `Bearer ${token}` }
         })
       ]);
@@ -189,7 +189,7 @@ export default function SchedulePage() {
   const handleReschedule = async (appointmentId: string, newDate: string, newTime: string) => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:5000/api/manager/appointments/${appointmentId}/reschedule`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/manager/appointments/${appointmentId}/reschedule`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -210,7 +210,7 @@ export default function SchedulePage() {
   const handleCancelAppointment = async (appointmentId: string) => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:5000/api/manager/appointments/${appointmentId}/cancel`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/manager/appointments/${appointmentId}/cancel`, {
         method: 'PATCH',
         headers: { Authorization: `Bearer ${token}` }
       });

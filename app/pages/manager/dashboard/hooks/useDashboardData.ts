@@ -10,7 +10,7 @@ export const useDashboardData = () => {
     const fetchData = async () => {
       try {
         const token = localStorage.getItem('token');
-        const response = await fetch('http://localhost:5000/api/manager/dashboard', {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/manager/dashboard`, {
           headers: { Authorization: `Bearer ${token}` },
         });
 

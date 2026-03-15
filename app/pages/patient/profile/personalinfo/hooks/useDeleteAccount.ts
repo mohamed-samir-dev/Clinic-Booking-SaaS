@@ -21,7 +21,7 @@ export const useDeleteAccount = () => {
     const messages = getMessages();
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:5000/api/patients/account', {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/patients/account`, {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
         body: JSON.stringify({ password: deletePassword })

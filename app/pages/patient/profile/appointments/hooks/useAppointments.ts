@@ -14,7 +14,7 @@ export function useAppointments() {
     try {
       setLoading(true);
       const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:5000/api/patients/appointments', {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/patients/appointments`, {
         headers: {
           'Authorization': `Bearer ${token}`,
         },
@@ -35,7 +35,7 @@ export function useAppointments() {
   const handleCancelAppointment = async (id: string): Promise<CancelResult> => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:5000/api/patients/appointments/${id}/cancel`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/patients/appointments/${id}/cancel`, {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${token}`,

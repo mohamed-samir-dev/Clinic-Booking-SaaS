@@ -93,7 +93,7 @@ export default function DoctorsPage() {
       if (filters.availability) params.append('availability', filters.availability);
       if (filters.experience) params.append('experience', filters.experience);
       
-      const response = await fetch(`http://localhost:5000/api/manager/doctors?${params}`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/manager/doctors?${params}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (response.ok) {
@@ -116,7 +116,7 @@ export default function DoctorsPage() {
   const handleDeactivate = async (id: string) => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:5000/api/manager/doctors/${id}/deactivate`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/manager/doctors/${id}/deactivate`, {
         method: 'PATCH',
         headers: { Authorization: `Bearer ${token}` },
       });

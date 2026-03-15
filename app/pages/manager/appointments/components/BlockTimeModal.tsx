@@ -80,7 +80,7 @@ export function BlockTimeModal({ onClose, onSuccess, language = 'ar' }: BlockTim
     const fetchDoctors = async () => {
       try {
         const token = localStorage.getItem('token');
-        const response = await fetch('http://localhost:5000/api/manager/doctors', {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/manager/doctors`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         if (response.ok) {
@@ -105,7 +105,7 @@ export function BlockTimeModal({ onClose, onSuccess, language = 'ar' }: BlockTim
     setLoading(true);
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:5000/api/manager/blocked-slots', {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/manager/blocked-slots`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

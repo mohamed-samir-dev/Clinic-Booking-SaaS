@@ -57,7 +57,7 @@ export default function SettingsPage() {
   const fetchClinicData = useCallback(async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:5000/api/manager/clinic', {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/manager/clinic`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (response.ok) {
@@ -94,7 +94,7 @@ export default function SettingsPage() {
     setSaving(true);
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:5000/api/manager/clinic', {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/manager/clinic`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

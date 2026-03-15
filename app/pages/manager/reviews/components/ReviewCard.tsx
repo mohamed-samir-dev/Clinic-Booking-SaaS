@@ -54,7 +54,7 @@ export const ReviewCard = ({ review, onDelete, language = 'ar' }: ReviewCardProp
               try {
                 const token = localStorage.getItem('token');
                 const type = review.doctorId ? 'doctor' : 'clinic';
-                const url = `http://localhost:5000/api/manager/reviews/${review._id}?type=${type}`;
+                const url = `${process.env.NEXT_PUBLIC_API_URL}/api/manager/reviews/${review._id}?type=${type}`;
                 
                 const response = await fetch(url, {
                   method: 'DELETE',

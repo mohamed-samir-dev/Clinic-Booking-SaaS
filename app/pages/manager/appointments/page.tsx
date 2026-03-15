@@ -110,7 +110,7 @@ export default function AppointmentsPage() {
       if (advancedFilters.dateFrom) params.append('dateFrom', advancedFilters.dateFrom);
       if (advancedFilters.dateTo) params.append('dateTo', advancedFilters.dateTo);
       
-      const response = await fetch(`http://localhost:5000/api/manager/appointments?${params}`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/manager/appointments?${params}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (response.ok) {
@@ -132,7 +132,7 @@ export default function AppointmentsPage() {
   const handleConfirm = async (id: string) => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:5000/api/manager/appointments/${id}/confirm`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/manager/appointments/${id}/confirm`, {
         method: 'PATCH',
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -148,7 +148,7 @@ export default function AppointmentsPage() {
   const handleCancel = async (id: string) => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:5000/api/manager/appointments/${id}/cancel`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/manager/appointments/${id}/cancel`, {
         method: 'PATCH',
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -169,7 +169,7 @@ export default function AppointmentsPage() {
   const handleNoShow = async (id: string) => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:5000/api/manager/appointments/${id}/no-show`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/manager/appointments/${id}/no-show`, {
         method: 'PATCH',
         headers: { Authorization: `Bearer ${token}` },
       });

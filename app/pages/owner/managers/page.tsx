@@ -29,7 +29,7 @@ export default function ManageManagersPage() {
   const fetchManagers = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:5000/api/owner/managers', {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/owner/managers`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (response.ok) {
@@ -48,7 +48,7 @@ export default function ManageManagersPage() {
 
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:5000/api/owner/managers/${id}`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/owner/managers/${id}`, {
         method: 'DELETE',
         headers: { Authorization: `Bearer ${token}` },
       });

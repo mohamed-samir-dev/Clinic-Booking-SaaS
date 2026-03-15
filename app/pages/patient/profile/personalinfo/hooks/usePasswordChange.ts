@@ -35,7 +35,7 @@ export const usePasswordChange = () => {
     setLoading(true);
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:5000/api/patients/change-password', {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/patients/change-password`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
         body: JSON.stringify({ currentPassword: passwordData.currentPassword, newPassword: passwordData.newPassword })

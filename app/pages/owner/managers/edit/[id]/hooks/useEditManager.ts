@@ -32,7 +32,7 @@ export const useEditManager = () => {
   const fetchManager = useCallback(async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:5000/api/owner/managers/${managerId}`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/owner/managers/${managerId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (response.ok) {
@@ -97,7 +97,7 @@ export const useEditManager = () => {
         payload.password = password;
       }
 
-      const response = await fetch(`http://localhost:5000/api/owner/managers/${managerId}`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/owner/managers/${managerId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

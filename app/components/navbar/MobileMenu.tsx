@@ -42,7 +42,7 @@ export default function MobileMenu({
       theme === 'dark' ? 'border-gray-700' : 'border-gray-100'
     }`}>
       <Link
-        href="/book"
+        href="/pages/booking"
         onClick={() => setMobileMenuOpen(false)}
         className="min-[500px]:hidden mt-4 block px-6 py-2.5 bg-teal-600 rounded-full text-white hover:bg-teal-800 transition-colors font-semibold shadow-md text-center"
       >

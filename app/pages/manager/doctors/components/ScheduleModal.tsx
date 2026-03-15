@@ -92,7 +92,7 @@ export const ScheduleModal = ({ doctor, onClose, onSuccess, language = 'en' }: S
   const handleSave = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:5000/api/manager/doctors/${doctor._id}/schedule`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/manager/doctors/${doctor._id}/schedule`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',

@@ -66,7 +66,7 @@ export const RescheduleModal = ({ appointmentId, doctorId, currentDate, currentT
     setLoadingSlots(true);
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:5000/api/manager/doctors/${doctorId}/available-dates`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/manager/doctors/${doctorId}/available-dates`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       if (response.ok) {
@@ -84,7 +84,7 @@ export const RescheduleModal = ({ appointmentId, doctorId, currentDate, currentT
     setLoadingSlots(true);
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:5000/api/manager/doctors/${doctorId}/available-times?date=${newDate}`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/manager/doctors/${doctorId}/available-times?date=${newDate}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       if (response.ok) {
@@ -127,7 +127,7 @@ export const RescheduleModal = ({ appointmentId, doctorId, currentDate, currentT
         return `${hours}:${minutes}`;
       };
 
-      const response = await fetch(`http://localhost:5000/api/manager/appointments/${appointmentId}/reschedule`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/manager/appointments/${appointmentId}/reschedule`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',

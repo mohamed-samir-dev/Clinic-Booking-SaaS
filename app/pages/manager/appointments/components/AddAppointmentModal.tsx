@@ -88,7 +88,7 @@ export const AddAppointmentModal = ({ onClose, onSuccess, language = 'ar' }: Add
     const fetchDoctors = async () => {
       try {
         const token = localStorage.getItem('token');
-        const response = await fetch('http://localhost:5000/api/manager/doctors', {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/manager/doctors`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         if (response.ok) {
@@ -110,7 +110,7 @@ export const AddAppointmentModal = ({ onClose, onSuccess, language = 'ar' }: Add
         setLoadingSlots(true);
         try {
           const token = localStorage.getItem('token');
-          const response = await fetch(`http://localhost:5000/api/manager/doctors/${formData.doctorId}/available-dates`, {
+          const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/manager/doctors/${formData.doctorId}/available-dates`, {
             headers: { Authorization: `Bearer ${token}` }
           });
           if (response.ok) {
@@ -135,7 +135,7 @@ export const AddAppointmentModal = ({ onClose, onSuccess, language = 'ar' }: Add
         setLoadingSlots(true);
         try {
           const token = localStorage.getItem('token');
-          const response = await fetch(`http://localhost:5000/api/manager/doctors/${formData.doctorId}/available-times?date=${formData.date}`, {
+          const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/manager/doctors/${formData.doctorId}/available-times?date=${formData.date}`, {
             headers: { Authorization: `Bearer ${token}` }
           });
           if (response.ok) {
@@ -183,7 +183,7 @@ export const AddAppointmentModal = ({ onClose, onSuccess, language = 'ar' }: Add
       const endMin = endMinutes % 60;
       const endTime = `${String(endHour).padStart(2, '0')}:${String(endMin).padStart(2, '0')}`;
 
-      const response = await fetch('http://localhost:5000/api/manager/appointments', {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/manager/appointments`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

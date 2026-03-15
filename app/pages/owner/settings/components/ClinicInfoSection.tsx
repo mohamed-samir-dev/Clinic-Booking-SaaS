@@ -17,7 +17,7 @@ export const ClinicInfoSection = ({ clinicData, setClinicData, fetchData }: Clin
     setSavingSection(true);
     try {
       const token = localStorage.getItem('token');
-      await fetch('http://localhost:5000/api/owner/main-clinic', {
+      await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/owner/main-clinic`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
         body: JSON.stringify(clinicData),

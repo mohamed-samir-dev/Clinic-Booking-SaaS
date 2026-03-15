@@ -46,7 +46,7 @@ export const useManagerForm = () => {
         requirePasswordChange: formData.requirePasswordChange,
       };
 
-      const response = await fetch('http://localhost:5000/api/owner/managers', {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/owner/managers`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

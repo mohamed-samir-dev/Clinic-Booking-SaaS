@@ -66,7 +66,7 @@ export const AddDoctorModal = ({ onClose, onSuccess, language = 'en' }: AddDocto
   const fetchAvailableDoctors = useCallback(async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:5000/api/manager/doctors/available', {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/manager/doctors/available`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (response.ok) {
@@ -97,7 +97,7 @@ export const AddDoctorModal = ({ onClose, onSuccess, language = 'en' }: AddDocto
 
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:5000/api/manager/transfer-requests', {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/manager/transfer-requests`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
