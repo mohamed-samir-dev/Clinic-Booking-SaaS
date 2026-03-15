@@ -81,7 +81,7 @@ export default function LoginPage() {
                     setGoogleLoading(true);
                     setError('');
                     try {
-                      const res = await fetch('http://localhost:5000/api/v1/auth/patient/google', {
+                      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/auth/patient/google`, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ accessToken }),

@@ -188,7 +188,7 @@ export default function RegisterPage() {
                   onSuccess={async (accessToken) => {
                     setGoogleLoading(true);
                     try {
-                      const res = await fetch('http://localhost:5000/api/v1/auth/patient/google-register', {
+                      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/auth/patient/google-register`, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ accessToken }),

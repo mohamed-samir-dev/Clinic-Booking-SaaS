@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Clinic, Doctor } from '../types';
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 /**
  * Fetch clinic + doctors data, then returns doctors filtered by clinicId.

@@ -35,7 +35,7 @@ export default function ReviewsTab({ doctor }: ReviewsTabProps) {
 
     const fetchReviews = async () => {
       try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'}/api/reviews/doctor/${doctor._id}`);
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/reviews/doctor/${doctor._id}`);
         if (response.ok) {
           const data = await response.json();
           setReviews(data.data || []);
@@ -70,7 +70,7 @@ export default function ReviewsTab({ doctor }: ReviewsTabProps) {
         doctorName={typeof doctor.name === 'string' ? doctor.name : doctor.name?.en || 'Doctor'}
         onSuccess={async () => {
           try {
-            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'}/api/reviews/doctor/${doctor._id}`);
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/reviews/doctor/${doctor._id}`);
             if (response.ok) {
               const data = await response.json();
               setReviews(data.data || []);

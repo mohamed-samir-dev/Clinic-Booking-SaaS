@@ -1,5 +1,5 @@
 
-const API_URL = 'http://localhost:5000/api/manager/transfer-requests';
+const API_URL = `${process.env.NEXT_PUBLIC_API_URL}/api/manager/transfer-requests`;
 
 export const fetchTransferRequests = async () => {
   const token = localStorage.getItem('token');

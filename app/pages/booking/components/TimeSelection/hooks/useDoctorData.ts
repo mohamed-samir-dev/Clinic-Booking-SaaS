@@ -19,7 +19,7 @@ export const useDoctorData = (doctorId: string | undefined, selectedDoctor: Doct
     
     const fetchData = async () => {
       try {
-        const availabilityRes = await fetch(`http://localhost:5000/api/doctors/${doctorId}/availability`);
+        const availabilityRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/doctors/${doctorId}/availability`);
         const availabilityData = await availabilityRes.json();
         
         if (isMounted) {
@@ -28,7 +28,7 @@ export const useDoctorData = (doctorId: string | undefined, selectedDoctor: Doct
         }
 
         if (typeof selectedDoctor === 'string') {
-          const doctorRes = await fetch(`http://localhost:5000/api/doctors/${doctorId}`);
+          const doctorRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/doctors/${doctorId}`);
           const doctorData = await doctorRes.json();
           
           if (isMounted) {

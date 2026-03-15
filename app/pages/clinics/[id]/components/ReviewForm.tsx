@@ -49,7 +49,7 @@ export default function ReviewForm({ clinicId, theme, locale, messages, onClose,
     setIsSubmitting(true);
 
     try {
-      const response = await fetch(`http://localhost:5000/api/clinics/${clinicId}/reviews`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/clinics/${clinicId}/reviews`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

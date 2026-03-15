@@ -17,7 +17,7 @@ export default function Navbar() {
     const fetchOwnerData = async () => {
       try {
         const token = localStorage.getItem('token');
-        const response = await fetch('http://localhost:5000/api/owner/profile', {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/owner/profile`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         if (response.ok) {

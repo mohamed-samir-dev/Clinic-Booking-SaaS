@@ -49,7 +49,7 @@ export default function Navbar({ onMenuClick }: NavbarProps) {
     const fetchManagerData = async () => {
       try {
         const token = localStorage.getItem('token');
-        const response = await fetch('http://localhost:5000/api/manager/profile', {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/manager/profile`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         if (response.ok) {

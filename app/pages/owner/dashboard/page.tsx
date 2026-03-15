@@ -42,7 +42,7 @@ export default function OwnerDashboardPage() {
       const token = localStorage.getItem('token');
       
       const response = await fetch(
-        `http://localhost:5000/api/owner/dashboard?from=${dateRange.from}&to=${dateRange.to}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/api/owner/dashboard?from=${dateRange.from}&to=${dateRange.to}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }

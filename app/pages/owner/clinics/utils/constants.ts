@@ -1,6 +1,6 @@
 import { ClinicFormData } from '../types';
 
-export const API_BASE_URL = 'http://localhost:5000/api/owner/clinics';
+export const API_BASE_URL = `${process.env.NEXT_PUBLIC_API_URL}/api/owner/clinics`;
 
 export const INITIAL_CLINIC_DATA: ClinicFormData = {
   name: { en: '', ar: '' },

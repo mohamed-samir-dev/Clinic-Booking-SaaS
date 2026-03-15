@@ -35,7 +35,7 @@ export default function ReviewsSection({ clinicId, theme, locale, messages }: Re
   useEffect(() => {
     const fetchReviews = async () => {
       try {
-        const response = await fetch(`http://localhost:5000/api/clinics/${clinicId}/reviews`);
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/clinics/${clinicId}/reviews`);
         if (response.ok) {
           const data = await response.json();
           setReviews(data.reviews || []);
@@ -52,7 +52,7 @@ export default function ReviewsSection({ clinicId, theme, locale, messages }: Re
   const handleReviewSuccess = () => {
     const fetchReviews = async () => {
       try {
-        const response = await fetch(`http://localhost:5000/api/clinics/${clinicId}/reviews`);
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/clinics/${clinicId}/reviews`);
         if (response.ok) {
           const data = await response.json();
           setReviews(data.reviews || []);

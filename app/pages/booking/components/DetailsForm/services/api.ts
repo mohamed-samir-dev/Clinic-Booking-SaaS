@@ -53,7 +53,7 @@ export const createAppointment = async ({
     headers['Authorization'] = `Bearer ${token}`;
   }
 
-  const response = await fetch('http://localhost:5000/api/appointments', {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/appointments`, {
     method: 'POST',
     headers,
     body: JSON.stringify(appointmentData)

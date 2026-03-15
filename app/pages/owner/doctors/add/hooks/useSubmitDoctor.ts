@@ -58,7 +58,7 @@ export const useSubmitDoctor = () => {
       }
       if (formData.reviews.length > 0) payload.reviews = formData.reviews;
 
-      const response = await fetch('http://localhost:5000/api/owner/doctors', {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/owner/doctors`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

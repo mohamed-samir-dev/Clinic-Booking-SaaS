@@ -12,7 +12,7 @@ export const useAppointments = (currentDate: Date) => {
         const monthEnd = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
         
         const allResponse = await fetch(
-          `http://localhost:5000/api/appointments/doctor/range?start=${monthStart.toISOString()}&end=${monthEnd.toISOString()}`,
+          `${process.env.NEXT_PUBLIC_API_URL}/api/appointments/doctor/range?start=${monthStart.toISOString()}&end=${monthEnd.toISOString()}`,
           { headers: { Authorization: `Bearer ${token}` } }
         );
         

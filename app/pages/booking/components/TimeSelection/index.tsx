@@ -60,7 +60,7 @@ export default function TimeSelection({ selectedTime, setSelectedTime, selectedD
       const params = new URLSearchParams({ doctorId });
       if (guestId) params.append('guestId', guestId);
       
-      const url = `http://localhost:5000/api/appointments/blocked-dates?${params.toString()}`;
+      const url = `${process.env.NEXT_PUBLIC_API_URL}/api/appointments/blocked-dates?${params.toString()}`;
       const headers: Record<string, string> = {};
       if (token) {
         headers['Authorization'] = `Bearer ${token}`;
@@ -107,7 +107,7 @@ export default function TimeSelection({ selectedTime, setSelectedTime, selectedD
       const day = String(selectedDate.getDate()).padStart(2, '0');
       const dateStr = `${year}-${month}-${day}`;
       
-      const url = `http://localhost:5000/api/appointments/booked-slots?doctorId=${doctorId}&date=${dateStr}`;
+      const url = `${process.env.NEXT_PUBLIC_API_URL}/api/appointments/booked-slots?doctorId=${doctorId}&date=${dateStr}`;
 
       try {
         const response = await fetch(url);

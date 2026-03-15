@@ -13,7 +13,7 @@ export const useTransferRequests = () => {
   const fetchRequests = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:5000/api/doctors/transfer-requests', {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/doctors/transfer-requests`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (response.ok) {
@@ -36,7 +36,7 @@ export const useTransferRequests = () => {
     try {
       const token = localStorage.getItem('token');
       const response = await fetch(
-        `http://localhost:5000/api/doctors/transfer-requests/${selectedRequest}/respond`,
+        `${process.env.NEXT_PUBLIC_API_URL}/api/doctors/transfer-requests/${selectedRequest}/respond`,
         {
           method: 'PATCH',
           headers: {
