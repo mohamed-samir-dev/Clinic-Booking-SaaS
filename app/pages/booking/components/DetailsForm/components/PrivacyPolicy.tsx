@@ -3,7 +3,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { useTheme } from '@/app/contexts/ThemeContext';
 import { useLanguage } from '@/app/contexts/LanguageContext';
-import translations from '@/messages/translations';
 
 interface PrivacyPolicyProps {
   agreeToPolicy: boolean;
@@ -13,7 +12,6 @@ interface PrivacyPolicyProps {
 export default function PrivacyPolicy({ agreeToPolicy, setAgreeToPolicy }: PrivacyPolicyProps) {
   const { theme } = useTheme();
   const { locale } = useLanguage();
-  const t = translations[locale].booking.detailsForm.privacy;
   const [showPrivacyModal, setShowPrivacyModal] = useState(false);
   const [showCancellationModal, setShowCancellationModal] = useState(false);
   const [hasReadPrivacy, setHasReadPrivacy] = useState(false);
@@ -58,7 +56,7 @@ export default function PrivacyPolicy({ agreeToPolicy, setAgreeToPolicy }: Priva
               checked={agreeToPolicy}
               onChange={(e) => setAgreeToPolicy(e.target.checked)}
               disabled={!canAgree}
-              className="w-4 h-4 text-teal-600 border-gray-300 rounded focus:ring-teal-500 disabled:opacity-50 disabled:cursor-not-allowed flex-shrink-0"
+              className="w-4 h-4 text-teal-600 border-gray-300 rounded focus:ring-teal-500 disabled:opacity-50 disabled:cursor-not-allowed shrink-0"
             />
             <label htmlFor="privacy-policy" className={`text-xs sm:text-sm font-medium ${theme === 'dark' ? 'text-gray-200' : 'text-gray-900'}`}>
               {locale === 'ar' ? 'أوافق على السياسات:' : 'I agree to the policies:'}
