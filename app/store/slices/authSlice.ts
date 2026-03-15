@@ -49,7 +49,7 @@ const linkGuestAppointments = async (token: string, user: User) => {
   if (!guestId || user.role !== 'patient') return;
 
   try {
-    const response = await fetch('http://localhost:5000/api/appointments/link-guest', {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/appointments/link-guest`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
