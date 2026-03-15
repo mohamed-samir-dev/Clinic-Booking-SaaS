@@ -70,7 +70,7 @@ export default function RescheduleModal({
   useEffect(() => {
     const fetchAvailability = async () => {
       try {
-        const response = await fetch(`http://localhost:5000/api/doctors/${doctorId}/availability`);
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/doctors/${doctorId}/availability`);
         const data = await response.json();
         setAvailability(data.availability || []);
         setConsultationDuration(data.consultationDuration || 30);
@@ -85,7 +85,7 @@ export default function RescheduleModal({
     const fetchBlockedDates = async () => {
       try {
         const token = localStorage.getItem('token');
-        const response = await fetch(`http://localhost:5000/api/appointments/blocked-dates?doctorId=${doctorId}`, {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/appointments/blocked-dates?doctorId=${doctorId}`, {
           headers: { 'Authorization': `Bearer ${token}` }
         });
         const data = await response.json();
@@ -110,7 +110,7 @@ export default function RescheduleModal({
       const dateStr = `${year}-${month}-${day}`;
       
       try {
-        const response = await fetch(`http://localhost:5000/api/appointments/booked-slots?doctorId=${doctorId}&date=${dateStr}`);
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/appointments/booked-slots?doctorId=${doctorId}&date=${dateStr}`);
         const data = await response.json();
         if (data.bookedSlots) {
           const slots = data.bookedSlots
@@ -239,7 +239,7 @@ export default function RescheduleModal({
       const appointmentDate = `${year}-${month}-${day}`;
 
       const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:5000/api/patients/appointments/${appointmentId}/reschedule`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/patients/appointments/${appointmentId}/reschedule`, {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${token}`,

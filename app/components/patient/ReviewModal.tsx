@@ -35,7 +35,7 @@ export default function ReviewModal({
 
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:5000/api/patients/appointments/${appointmentId}/review`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/patients/appointments/${appointmentId}/review`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,

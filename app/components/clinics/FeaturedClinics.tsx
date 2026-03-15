@@ -29,7 +29,7 @@ export default function FeaturedClinics() {
   useEffect(() => {
     const fetchClinics = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/clinics');
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/clinics`);
         if (response.ok) {
           const data = await response.json();
           setClinics(Array.isArray(data) ? data : []);
