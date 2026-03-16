@@ -24,7 +24,7 @@ export default function LayoutClient({ children }: { children: React.ReactNode }
             <DynamicMetadata />
             <JsonLd />
             {!isDoctorPage && <Navbar />}
-            {children}
+            <main>{children}</main>
             {!isOwnerPage && !isDoctorPage && !isManagerPage && <Footer />}
           </ThemeProvider>
         </LanguageProvider>
