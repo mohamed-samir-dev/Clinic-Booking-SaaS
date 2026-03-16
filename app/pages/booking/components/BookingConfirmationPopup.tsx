@@ -114,9 +114,9 @@ export default function BookingConfirmationPopup({ isOpen, onClose, bookingData 
                 <span className="material-icons text-teal-600 text-lg">badge</span>
                 {locale === 'ar' ? 'المريض' : 'Patient'}
               </h2>
-              <div className="space-y-1">
+              <div className="space-y-1 min-w-0">
                 <p className={`text-xs font-semibold ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{bookingData.patient.fullName}</p>
-                <p className={`text-xs ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>{bookingData.patient.email}</p>
+                <p className={`text-xs truncate ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`} title={bookingData.patient.email}>{bookingData.patient.email}</p>
                 <p className={`text-xs ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>{bookingData.patient.phone}</p>
               </div>
             </div>

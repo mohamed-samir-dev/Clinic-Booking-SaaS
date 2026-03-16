@@ -173,7 +173,7 @@ export default function ReviewModal({ isOpen, onClose, doctorId, doctorName, onS
               {locale === 'ar' ? 'شكراً لك!' : 'Thank You!'}
             </h3>
             <p className={`text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>
-              {locale === 'ar' ? 'تم إرسال تقييمك بنجاح. سيظهر بعد موافقة الإدارة.' : 'Your review has been submitted successfully. It will be visible after admin approval.'}
+              {locale === 'ar' ? 'تم إرسال تقييمك بنجاح.' : 'Your review has been submitted successfully.'}
             </p>
           </div>
         )}
