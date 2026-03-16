@@ -1,5 +1,5 @@
 'use client';
-import { useRef } from 'react';
+import { useRef, useEffect } from 'react';
 import Image from 'next/image';
 import { useTheme } from '@/app/contexts/ThemeContext';
 import { useLanguage } from '@/app/contexts/LanguageContext';
@@ -33,47 +33,33 @@ export default function BookingConfirmationPopup({ isOpen, onClose, bookingData 
   const { locale } = useLanguage();
   const printRef = useRef<HTMLDivElement>(null);
 
+  useEffect(() => {
+    if (!isOpen) return;
+    const styleId = 'booking-print-styles';
+    if (document.getElementById(styleId)) return;
+    const style = document.createElement('style');
+    style.id = styleId;
+    style.textContent = `
+      @media print {
+        body * { visibility: hidden !important; }
+        .print-overlay, .print-overlay * { visibility: visible !important; }
+        .print-overlay { position: fixed !important; inset: 0 !important; background: white !important; padding: 0 !important; }
+        .print-overlay > div { box-shadow: none !important; max-height: none !important; overflow: visible !important; max-width: 100% !important; border-radius: 0 !important; }
+        .no-print, .no-print * { display: none !important; }
+      }
+    `;
+    document.head.appendChild(style);
+    return () => { document.getElementById(styleId)?.remove(); };
+  }, [isOpen]);
+
   if (!isOpen) return null;
 
   const handlePrint = () => {
-    const printContent = printRef.current;
-    if (!printContent) return;
-
-    const printWindow = window.open('', '', 'width=800,height=600');
-    if (!printWindow) return;
-
-    printWindow.document.write(`
-      <html>
-        <head>
-          <title>${locale === 'ar' ? 'تأكيد الحجز' : 'Booking Confirmation'} - ${bookingData.appointmentId}</title>
-          <style>
-            body { font-family: Arial, sans-serif; padding: 20px; direction: ${locale === 'ar' ? 'rtl' : 'ltr'}; }
-            .header { text-align: center; margin-bottom: 30px; }
-            .header h1 { color: #14b8a6; margin: 0; }
-            .section { margin: 20px 0; }
-            .section h2 { color: #1f2937; border-bottom: 2px solid #14b8a6; padding-bottom: 5px; }
-            .info-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #e5e7eb; }
-            .label { font-weight: bold; color: #6b7280; }
-            .value { color: #1f2937; }
-            .footer { margin-top: 30px; text-align: center; color: #6b7280; font-size: 12px; }
-          </style>
-        </head>
-        <body>
-          ${printContent.innerHTML}
-        </body>
-      </html>
-    `);
-
-    printWindow.document.close();
-    printWindow.focus();
-    setTimeout(() => {
-      printWindow.print();
-      printWindow.close();
-    }, 250);
+    window.print();
   };
 
   return (
-    <div className="fixed inset-0 backdrop-blur-sm bg-black/20 flex items-center justify-center z-50 p-4 animate-fadeIn">
+    <div className="fixed inset-0 backdrop-blur-sm bg-black/20 flex items-center justify-center z-50 p-4 animate-fadeIn print-overlay">
       <div className={`rounded-2xl shadow-xl max-w-3xl w-full max-h-[90vh] overflow-y-auto animate-slideUp ${theme === 'dark' ? 'bg-gray-800' : 'bg-white'}`} dir={locale === 'ar' ? 'rtl' : 'ltr'}>
         <div ref={printRef} className="p-6">
           {/* Header */}
@@ -176,7 +162,7 @@ export default function BookingConfirmationPopup({ isOpen, onClose, bookingData 
         </div>
 
         {/* Action Buttons */}
-        <div className={`flex gap-3 p-4 border-t ${theme === 'dark' ? 'bg-gray-700 border-gray-600' : 'bg-gray-50 border-gray-200'}`}>
+        <div className={`flex gap-3 p-4 border-t no-print ${theme === 'dark' ? 'bg-gray-700 border-gray-600' : 'bg-gray-50 border-gray-200'}`}>
           <button
             onClick={handlePrint}
             className="flex-1 py-2.5 px-4 bg-teal-600 text-white rounded-lg font-semibold hover:bg-teal-700 transition-colors flex items-center justify-center gap-2 text-sm"
