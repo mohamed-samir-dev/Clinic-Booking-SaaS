@@ -1,5 +1,5 @@
-import { LucideIcon } from 'lucide-react';
-import { TrendingUp, TrendingDown } from 'lucide-react';
+import { memo } from 'react';
+import { LucideIcon, TrendingUp, TrendingDown } from 'lucide-react';
 
 interface KPICardProps {
   title: string;
@@ -9,7 +9,7 @@ interface KPICardProps {
   tooltip?: string;
 }
 
-export const KPICard = ({ title, value, change, icon: Icon, tooltip }: KPICardProps) => {
+export const KPICard = memo(function KPICard({ title, value, change, icon: Icon, tooltip }: KPICardProps) {
   const isPositive = change >= 0;
 
   return (
@@ -40,4 +40,4 @@ export const KPICard = ({ title, value, change, icon: Icon, tooltip }: KPICardPr
       </div>
     </div>
   );
-};
+});

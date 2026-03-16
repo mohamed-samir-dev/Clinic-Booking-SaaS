@@ -200,7 +200,22 @@
         "title": "Frequently Asked Questions"
       },
       "topDoctors": {
-        "title": "Top Doctors for"
+        "title": "Top Doctors for",
+        "subtitle": "Our team of experts dedicated to your care",
+        "noAvailable": "No doctors available at the moment.",
+        "loading": "Loading doctors...",
+        "specialists": "Specialists"
+      },
+      "serviceNotFound": "Service not found",
+      "specialtyNames": {
+        "General Medicine": "General Medicine",
+        "Pediatrics": "Pediatrics",
+        "Dermatology": "Dermatology",
+        "Dentistry": "Dentistry",
+        "Gynecology": "Gynecology",
+        "Orthopedics": "Orthopedics",
+        "Cardiology": "Cardiology",
+        "ENT": "ENT"
       },
       "pricing": {
         "duration": "Duration",

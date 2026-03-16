@@ -200,7 +200,22 @@
         "title": "الأسئلة الشائعة"
       },
       "topDoctors": {
-        "title": "أفضل الأطباء لـ"
+        "title": "أفضل الأطباء لـ",
+        "subtitle": "فريقنا من الخبراء المكرسين لرعايتك",
+        "noAvailable": "لا يوجد أطباء متاحون حالياً.",
+        "loading": "جاري تحميل الأطباء...",
+        "specialists": "متخصصون"
+      },
+      "serviceNotFound": "الخدمة غير موجودة",
+      "specialtyNames": {
+        "General Medicine": "الطب العام",
+        "Pediatrics": "طب الأطفال",
+        "Dermatology": "الأمراض الجلدية",
+        "Dentistry": "طب الأسنان",
+        "Gynecology": "أمراض النساء",
+        "Orthopedics": "جراحة العظام",
+        "Cardiology": "أمراض القلب",
+        "ENT": "الأنف والأذن والحنجرة"
       },
       "pricing": {
         "duration": "المدة",

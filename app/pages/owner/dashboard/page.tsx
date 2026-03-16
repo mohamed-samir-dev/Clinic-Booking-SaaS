@@ -14,14 +14,32 @@ import {
 } from 'lucide-react';
 import { DashboardHeader } from './components/DashboardHeader';
 import { KPICard } from './components/KPICard';
-import { RevenueCharts } from './components/RevenueCharts';
-import { ClinicsTable } from './components/ClinicsTable';
-import { AlertsPanel } from './components/AlertsPanel';
-import { ActivityLog } from './components/ActivityLog';
-import { QuickActionsTiles } from './components/QuickActionsTiles';
 import { LoadingSkeleton } from './components/LoadingSkeleton';
 import { DateRange, DashboardData, Alert } from './types';
 import toast from 'react-hot-toast';
+import dynamic from 'next/dynamic';
+
+const RevenueCharts = dynamic(() => import('./components/RevenueCharts').then(mod => ({ default: mod.RevenueCharts })), { ssr: false, loading: () => <ChartSkeleton /> });
+const ClinicsTable = dynamic(() => import('./components/ClinicsTable').then(mod => ({ default: mod.ClinicsTable })), { ssr: false, loading: () => <SectionSkeleton /> });
+const AlertsPanel = dynamic(() => import('./components/AlertsPanel').then(mod => ({ default: mod.AlertsPanel })), { ssr: false });
+const ActivityLog = dynamic(() => import('./components/ActivityLog').then(mod => ({ default: mod.ActivityLog })), { ssr: false, loading: () => <SectionSkeleton /> });
+const QuickActionsTiles = dynamic(() => import('./components/QuickActionsTiles').then(mod => ({ default: mod.QuickActionsTiles })), { ssr: false });
+
+const ChartSkeleton = () => (
+  <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 border border-gray-100 dark:border-gray-700 animate-pulse">
+    <div className="h-6 bg-gray-200 dark:bg-gray-700 rounded w-48 mb-4" />
+    <div className="h-[300px] bg-gray-200 dark:bg-gray-700 rounded" />
+  </div>
+);
+
+const SectionSkeleton = () => (
+  <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 border border-gray-100 dark:border-gray-700 animate-pulse">
+    <div className="h-6 bg-gray-200 dark:bg-gray-700 rounded w-48 mb-4" />
+    <div className="space-y-3">
+      {[...Array(3)].map((_, i) => <div key={i} className="h-12 bg-gray-200 dark:bg-gray-700 rounded" />)}
+    </div>
+  </div>
+);
 
 export default function OwnerDashboardPage() {
   const router = useRouter();
@@ -88,6 +106,17 @@ export default function OwnerDashboardPage() {
     );
   }
 
+  const kpiCards = [
+    { title: 'Total Clinics', value: data?.kpis.totalClinics, change: data?.kpis.clinicsChange, icon: Building2, tooltip: 'Total number of registered clinics' },
+    { title: 'Total Managers', value: data?.kpis.totalManagers, change: data?.kpis.managersChange, icon: UserCog, tooltip: 'Total number of clinic managers' },
+    { title: 'Total Doctors', value: data?.kpis.totalDoctors, change: data?.kpis.doctorsChange, icon: Stethoscope, tooltip: 'Total number of doctors across all clinics' },
+    { title: 'Total Patients', value: data?.kpis.totalPatients, change: data?.kpis.patientsChange, icon: Users, tooltip: 'Total registered patients' },
+    { title: 'Appointments', value: data?.kpis.totalAppointments, change: data?.kpis.appointmentsChange, icon: Calendar, tooltip: 'Total appointments in selected period' },
+    { title: 'Total Revenue', value: `$${(data?.kpis.totalRevenue ?? 0).toLocaleString()}`, change: data?.kpis.revenueChange, icon: DollarSign, tooltip: 'Total revenue in selected period' },
+    { title: 'CareSync Revenue', value: `$${(data?.kpis.careSyncRevenue ?? 0).toLocaleString()}`, change: data?.kpis.careSyncRevenueChange ?? 0, icon: Wallet, tooltip: 'CareSync platform revenue' },
+    { title: 'Avg Rating', value: (data?.kpis.avgClinicRating ?? 0) > 0 ? data!.kpis.avgClinicRating.toFixed(1) : 'N/A', change: 0, icon: Star, tooltip: 'Average clinic rating' },
+  ] as const;
+
   if (error || !data) {
     return (
       <div className="min-h-screen bg-gray-900 flex items-center justify-center">
@@ -116,79 +145,24 @@ export default function OwnerDashboardPage() {
       />
 
       <div className="p-6 space-y-6">
-        {/* KPI Cards */}
+        {/* KPI Cards - Above the fold, render immediately */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          <KPICard
-            title="Total Clinics"
-            value={data.kpis.totalClinics}
-            change={data.kpis.clinicsChange}
-            icon={Building2}
-            tooltip="Total number of registered clinics"
-          />
-          <KPICard
-            title="Total Managers"
-            value={data.kpis.totalManagers}
-            change={data.kpis.managersChange}
-            icon={UserCog}
-            tooltip="Total number of clinic managers"
-          />
-          <KPICard
-            title="Total Doctors"
-            value={data.kpis.totalDoctors}
-            change={data.kpis.doctorsChange}
-            icon={Stethoscope}
-            tooltip="Total number of doctors across all clinics"
-          />
-          <KPICard
-            title="Total Patients"
-            value={data.kpis.totalPatients}
-            change={data.kpis.patientsChange}
-            icon={Users}
-            tooltip="Total registered patients"
-          />
-          <KPICard
-            title="Appointments"
-            value={data.kpis.totalAppointments}
-            change={data.kpis.appointmentsChange}
-            icon={Calendar}
-            tooltip="Total appointments in selected period"
-          />
-          <KPICard
-            title="Total Revenue"
-            value={`$${data.kpis.totalRevenue.toLocaleString()}`}
-            change={data.kpis.revenueChange}
-            icon={DollarSign}
-            tooltip="Total revenue in selected period"
-          />
-          <KPICard
-            title="CareSync Revenue"
-            value={`$${(data.kpis.careSyncRevenue || 0).toLocaleString()}`}
-            change={data.kpis.careSyncRevenueChange || 0}
-            icon={Wallet}
-            tooltip="CareSync platform revenue"
-          />
-          <KPICard
-            title="Avg Rating"
-            value={data.kpis.avgClinicRating > 0 ? data.kpis.avgClinicRating.toFixed(1) : 'N/A'}
-            change={0}
-            icon={Star}
-            tooltip="Average clinic rating"
-          />
+          {kpiCards.map((kpi) => (
+            <KPICard key={kpi.title} title={kpi.title} value={kpi.value!} change={kpi.change!} icon={kpi.icon} tooltip={kpi.tooltip} />
+          ))}
         </div>
 
-        {/* Revenue Analytics */}
+        {/* Below the fold - lazy loaded */}
         <RevenueCharts
           timeline={data.revenueTimeline}
           byClinic={data.revenueByClinic}
           share={data.revenueShare}
         />
 
-        {/* Alerts & Insights */}
         {data.alerts.length > 0 && (
           <AlertsPanel alerts={data.alerts} onAlertAction={handleAlertAction} />
         )}
 
-        {/* Clinics Performance Table */}
         <ClinicsTable
           clinics={data.revenueByClinic}
           onViewClinic={(id) => router.push(`/pages/owner/clinics/${id}`)}
@@ -200,7 +174,6 @@ export default function OwnerDashboardPage() {
           }}
         />
 
-        {/* Quick Actions */}
         <QuickActionsTiles
           onAddClinic={() => router.push('/pages/owner/clinics/add')}
           onAssignManager={() => router.push('/pages/owner/managers/add')}
@@ -208,7 +181,6 @@ export default function OwnerDashboardPage() {
           onViewManagers={() => router.push('/pages/owner/managers')}
         />
 
-        {/* Recent Activity */}
         <ActivityLog activities={data.recentActivity} />
       </div>
     </div>

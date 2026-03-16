@@ -9,9 +9,12 @@ export default function ServiceHero({ service, serviceTitle, duration, price }: 
   const { theme } = useTheme();
   const { locale } = useLanguage();
   const t = translations[locale].services;
+  const p = t.serviceDetails.pricing;
   const Icon = service.icon;
   const serviceKey = serviceTitle.toLowerCase().replace(/\s+/g, '');
   const serviceTranslation = t[serviceKey as keyof typeof t] as { title: string; description: string };
+  const formattedDuration = `${duration} ${p.minutes}`;
+  const formattedPrice = `${p.startingFrom} ${price} ${p.egp}`;
 
   return (
     <div className={`relative ${theme === 'dark' ? 'bg-gray-800' : 'bg-[#D5F5F0]'} py-12 sm:py-16 md:py-20 px-4 md:px-8 overflow-hidden`}>
@@ -44,11 +47,11 @@ export default function ServiceHero({ service, serviceTitle, duration, price }: 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-8 mb-6 sm:mb-10">
             <div className={`flex items-center gap-2 sm:gap-3 ${theme === 'dark' ? 'bg-gray-700/80' : 'bg-white/80'} backdrop-blur-sm px-4 sm:px-6 py-2 sm:py-3 rounded-full shadow-md`}>
               <FaClock className="text-teal-600 text-xl sm:text-2xl" />
-              <span className={`${theme === 'dark' ? 'text-white' : 'text-gray-900'} font-semibold text-base sm:text-lg`}>{duration}</span>
+              <span className={`${theme === 'dark' ? 'text-white' : 'text-gray-900'} font-semibold text-base sm:text-lg`}>{formattedDuration}</span>
             </div>
             <div className={`flex items-center gap-2 sm:gap-3 ${theme === 'dark' ? 'bg-gray-700/80' : 'bg-white/80'} backdrop-blur-sm px-4 sm:px-6 py-2 sm:py-3 rounded-full shadow-md`}>
               <FaDollarSign className="text-teal-600 text-xl sm:text-2xl" />
-              <span className={`${theme === 'dark' ? 'text-white' : 'text-gray-900'} font-semibold text-base sm:text-lg`}>{price}</span>
+              <span className={`${theme === 'dark' ? 'text-white' : 'text-gray-900'} font-semibold text-base sm:text-lg`}>{formattedPrice}</span>
             </div>
           </div>
 

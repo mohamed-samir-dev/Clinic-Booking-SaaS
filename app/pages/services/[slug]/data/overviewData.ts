@@ -82,13 +82,13 @@ export const serviceOverviews: Record<string, { intro: string; features: string[
   },
 };
 
-export const serviceDetails: Record<string, { duration: string; price: string }> = {
-  'General Medicine': { duration: '30 Minutes', price: 'Starting from 300 EGP' },
-  'Pediatrics': { duration: '30 Minutes', price: 'Starting from 250 EGP' },
-  'Dermatology': { duration: '30-45 Minutes', price: 'Starting from 500 EGP' },
-  'Dentistry': { duration: '45 Minutes', price: 'Starting from 450 EGP' },
-  'Gynecology': { duration: '45 Minutes', price: 'Starting from 450 EGP' },
-  'Orthopedics': { duration: '45-60 Minutes', price: 'Starting from 550 EGP' },
-  'Cardiology': { duration: '60 Minutes', price: 'Starting from 600 EGP' },
-  'ENT': { duration: '30-40 Minutes', price: 'Starting from 400 EGP' },
+export const serviceDetails: Record<string, { duration: string; price: number }> = {
+  'General Medicine': { duration: '30', price: 300 },
+  'Pediatrics': { duration: '30', price: 250 },
+  'Dermatology': { duration: '30-45', price: 500 },
+  'Dentistry': { duration: '45', price: 450 },
+  'Gynecology': { duration: '45', price: 450 },
+  'Orthopedics': { duration: '45-60', price: 550 },
+  'Cardiology': { duration: '60', price: 600 },
+  'ENT': { duration: '30-40', price: 400 },
 };

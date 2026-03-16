@@ -6,7 +6,7 @@ export interface ServiceHeroProps {
     };
     serviceTitle: string;
     duration: string;
-    price: string;
+    price: number;
   }
   
 

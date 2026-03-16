@@ -42,7 +42,7 @@ export default function ServiceDetailPage() {
   if (!service) {
     return (
       <div className={`min-h-screen flex items-center justify-center ${theme === 'dark' ? 'bg-gray-900' : 'bg-white'}`}>
-        <p className={`text-xl ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Service not found</p>
+        <p className={`text-xl ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>{t.serviceNotFound}</p>
       </div>
     );
   }
