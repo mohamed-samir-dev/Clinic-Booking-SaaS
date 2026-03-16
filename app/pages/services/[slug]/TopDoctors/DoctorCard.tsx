@@ -1,4 +1,3 @@
-import { motion } from 'framer-motion';
 import { FaStar, FaUserMd, FaUser } from 'react-icons/fa';
 import Image from 'next/image';
 import { Doctor } from '../../types/types';
@@ -25,12 +24,7 @@ export default function DoctorCard({ doctor, index }: DoctorCardProps) {
   const doctorBio = locale === 'ar' ? doctor.bio?.ar : doctor.bio?.en;
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 30 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.4, delay: index * 0.1 }}
-      viewport={{ once: true }}
-      whileHover={{ y: -8, scale: 1.02 }}
+    <div
       className={`${theme === 'dark' ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-100'} rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 border`}
     >
       <div className="relative h-64 sm:h-72 md:h-80 bg-linear-to-br from-teal-50 to-cyan-50">
@@ -89,6 +83,6 @@ export default function DoctorCard({ doctor, index }: DoctorCardProps) {
           <span className="text-sm">{locale === 'ar' ? 'عرض الملف الشخصي' : 'View Profile'}</span>
         </button>
       </div>
-    </motion.div>
+    </div>
   );
 }

@@ -18,7 +18,7 @@ export default function MedicalServices() {
 
   return (
     <section className={`py-12 sm:py-16 md:py-20 ${theme === 'dark' ? 'bg-gray-900' : 'bg-linear-to-b from-gray-50 to-white'}`}>
-      <div className="w-full px-4 md:px-8">
+      <div className="w-full px-4 md:px-8 overflow-hidden">
         <div className="mb-8 sm:mb-10 md:mb-14 text-center">
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-2 sm:mb-3">
             <span className={theme === 'dark' ? 'text-white' : 'text-gray-900'}>{t.title} </span>

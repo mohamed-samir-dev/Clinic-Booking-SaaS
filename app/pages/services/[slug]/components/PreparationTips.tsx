@@ -1,4 +1,3 @@
-import { motion } from 'framer-motion';
 import { IconType } from 'react-icons';
 import { useTheme } from '@/app/contexts/ThemeContext';
 import { useLanguage } from '@/app/contexts/LanguageContext';
@@ -27,32 +26,22 @@ export default function PreparationTips({ tips }: PreparationTipsProps) {
             {tips.map((tip, index) => {
               const IconComponent = tip.icon;
               return (
-                <motion.div
+                <div
                   key={index}
-                  initial={{ opacity: 0, y: 50 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: index * 0.2 }}
-                  viewport={{ once: true }}
                   className="flex flex-col items-center text-center"
                 >
-                  <motion.div
-                    initial={{ scale: 0, rotate: -180 }}
-                    whileInView={{ scale: 1, rotate: 0 }}
-                    transition={{ duration: 0.5, delay: index * 0.2 + 0.2 }}
-                    viewport={{ once: true }}
-                    whileHover={{ scale: 1.1, rotate: 5 }}
+                  <div
                     className="w-16 h-16 sm:w-20 sm:h-20 bg-linear-to-br from-teal-400 via-teal-500 to-teal-600 rounded-full flex items-center justify-center mb-4 sm:mb-6 shadow-xl border-2 sm:border-4 border-white"
                   >
                     <IconComponent className="text-white text-2xl sm:text-3xl" />
-                  </motion.div>
-                  <motion.div
-                    whileHover={{ y: -5 }}
+                  </div>
+                  <div
                     className={`${theme === 'dark' ? 'from-gray-700 to-gray-600 border-gray-600' : 'from-teal-50 to-cyan-50 border-teal-100'} bg-linear-to-br rounded-xl sm:rounded-2xl p-4 sm:p-6 shadow-lg hover:shadow-2xl transition-all border`}
                   >
                     <h4 className="text-lg sm:text-xl font-bold text-teal-600 mb-2 sm:mb-3">{tip.title}</h4>
                     <p className={`text-sm sm:text-base ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'} leading-relaxed`}>{tip.description}</p>
-                  </motion.div>
-                </motion.div>
+                  </div>
+                </div>
               );
             })}
           </div>
