@@ -3,6 +3,8 @@
 import { useState } from 'react';
 import { FaStar, FaTimes } from 'react-icons/fa';
 import { useTheme } from '../../../../contexts/ThemeContext';
+import { useLanguage } from '../../../../contexts/LanguageContext';
+import translations from '@/messages/translations';
 
 interface ReviewModalProps {
   isOpen: boolean;
@@ -14,6 +16,8 @@ interface ReviewModalProps {
 
 export default function ReviewModal({ isOpen, onClose, doctorId, doctorName, onSuccess }: ReviewModalProps) {
   const { theme } = useTheme();
+  const { locale } = useLanguage();
+  const t = translations[locale].reviews.modal;
   const [rating, setRating] = useState(0);
   const [hoveredRating, setHoveredRating] = useState(0);
   const [comment, setComment] = useState('');
@@ -26,7 +30,7 @@ export default function ReviewModal({ isOpen, onClose, doctorId, doctorName, onS
     e.preventDefault();
     
     if (rating === 0 || comment.trim().length < 10) {
-      alert('Please provide a rating and a comment (at least 10 characters)');
+      alert(rating === 0 ? t.selectRating : t.commentMinLength);
       return;
     }
 
@@ -58,10 +62,10 @@ export default function ReviewModal({ isOpen, onClose, doctorId, doctorName, onS
           setComment('');
         }, 3000);
       } else {
-        alert(data.message || 'Failed to submit review');
+        alert(data.message || t.submitReview);
       }
     } catch {
-      alert('An error occurred. Please try again.');
+      alert(locale === 'ar' ? 'حدث خطأ. حاول مرة أخرى.' : 'An error occurred. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -74,7 +78,7 @@ export default function ReviewModal({ isOpen, onClose, doctorId, doctorName, onS
           <>
             <div className={`flex items-center justify-between p-6 border-b ${theme === 'dark' ? 'border-gray-700' : 'border-gray-200'}`}>
               <h2 className={`text-2xl font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
-                Write a Review
+                {t.title}
               </h2>
               <button
                 onClick={onClose}
@@ -87,7 +91,7 @@ export default function ReviewModal({ isOpen, onClose, doctorId, doctorName, onS
             <form onSubmit={handleSubmit} className="p-6 space-y-6">
               <div>
                 <p className={`text-sm mb-2 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>
-                  How would you rate Dr. {doctorName}?
+                  {locale === 'ar' ? `كيف تقيم د. ${doctorName}؟` : `How would you rate Dr. ${doctorName}?`}
                 </p>
                 <div className="flex gap-2">
                   {[1, 2, 3, 4, 5].map((star) => (
@@ -115,12 +119,12 @@ export default function ReviewModal({ isOpen, onClose, doctorId, doctorName, onS
 
               <div>
                 <label className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
-                  Your Review
+                  {t.yourReview}
                 </label>
                 <textarea
                   value={comment}
                   onChange={(e) => setComment(e.target.value)}
-                  placeholder="Share your experience with this doctor..."
+                  placeholder={t.shareExperience}
                   rows={5}
                   className={`w-full px-4 py-3 rounded-lg border resize-none focus:outline-none focus:ring-2 focus:ring-teal-500 ${
                     theme === 'dark'
@@ -132,7 +136,7 @@ export default function ReviewModal({ isOpen, onClose, doctorId, doctorName, onS
                   required
                 />
                 <p className={`text-xs mt-1 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
-                  {comment.length}/500 characters (minimum 10)
+                  {comment.length}/500 {t.characters}
                 </p>
               </div>
 
@@ -146,14 +150,14 @@ export default function ReviewModal({ isOpen, onClose, doctorId, doctorName, onS
                       : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
                   }`}
                 >
-                  Cancel
+                  {locale === 'ar' ? 'إلغاء' : 'Cancel'}
                 </button>
                 <button
                   type="submit"
                   disabled={loading || rating === 0 || comment.trim().length < 10}
-                  className="flex-1 px-6 py-3 bg-linear.-to-r from-teal-500 to-cyan-500 text-white rounded-lg font-semibold hover:from-teal-600 hover:to-cyan-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                  className="flex-1 px-6 py-3 bg-linear-to-r from-teal-500 to-cyan-500 text-white rounded-lg font-semibold hover:from-teal-600 hover:to-cyan-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
                 >
-                  {loading ? 'Submitting...' : 'Submit Review'}
+                  {loading ? t.submitting : t.submitReview}
                 </button>
               </div>
             </form>
@@ -166,10 +170,10 @@ export default function ReviewModal({ isOpen, onClose, doctorId, doctorName, onS
               </svg>
             </div>
             <h3 className={`text-2xl font-bold mb-2 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
-              Thank You!
+              {locale === 'ar' ? 'شكراً لك!' : 'Thank You!'}
             </h3>
             <p className={`text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>
-              Your review has been submitted successfully. It will be visible after admin approval.
+              {locale === 'ar' ? 'تم إرسال تقييمك بنجاح. سيظهر بعد موافقة الإدارة.' : 'Your review has been submitted successfully. It will be visible after admin approval.'}
             </p>
           </div>
         )}
