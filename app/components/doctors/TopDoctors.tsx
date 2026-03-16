@@ -64,7 +64,7 @@ export default function TopDoctors() {
           </p>
           <Link 
             href="/pages/doctors" 
-            className="inline-block text-teal-600 hover:text-teal-700 font-semibold text-sm sm:text-base transition-colors"
+            className="inline-block text-teal-700 hover:text-teal-800 font-semibold text-sm sm:text-base transition-colors"
           >
             {t.viewAllDoctors}
           </Link>

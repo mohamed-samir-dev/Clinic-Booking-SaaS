@@ -37,7 +37,7 @@ export default function ServiceCard({ icon: Icon, title, description, serviceKey
         <h3 className={`text-base md:text-lg font-bold mb-2 ${theme === 'dark' ? 'text-gray-100' : 'text-gray-900'}`}>{title}</h3>
         <p className={`font-semibold text-xs md:text-sm mb-4 leading-relaxed ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>{description}</p>
         <Link href={`/pages/services/${slug}`}>
-          <button className="bg-teal-500 hover:bg-teal-600 text-white px-5 py-2 rounded-lg transition-colors text-xs md:text-sm font-semibold">
+          <button className="bg-teal-700 hover:bg-teal-800 text-white px-5 py-2 rounded-lg transition-colors text-xs md:text-sm font-semibold">
             {t.viewMore}
           </button>
         </Link>

@@ -58,6 +58,7 @@ export default function Navbar() {
 
             <button
               onClick={toggleTheme}
+              aria-label={theme === 'light' ? 'Switch to dark mode' : 'Switch to light mode'}
               className={`hidden min-[350px]:flex w-9 h-9 md:w-10 md:h-10 rounded-full items-center justify-center transition-all hover:scale-105 ${
                 theme === 'dark' ? 'bg-gray-800 hover:bg-gray-700 text-yellow-400' : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
               }`}
@@ -83,6 +84,7 @@ export default function Navbar() {
 
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}
               className={`xl:hidden w-9 h-9 md:w-10 md:h-10 rounded-full flex items-center justify-center transition-all ${
                 theme === 'dark' ? 'bg-gray-800 hover:bg-gray-700 text-gray-200' : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
               }`}

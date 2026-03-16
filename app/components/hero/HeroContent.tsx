@@ -28,7 +28,7 @@ export default function HeroContent() {
       <div className="flex flex-col sm:flex-row flex-wrap gap-3 sm:gap-4 justify-center lg:justify-start">
         <Link
           href="/pages/booking"
-          className={`bg-teal-600 text-white rounded-full font-semibold hover:bg-teal-700 transition-all shadow-lg hover:shadow-xl hover:scale-105 ${
+          className={`bg-teal-700 text-white rounded-full font-semibold hover:bg-teal-800 transition-all shadow-lg hover:shadow-xl hover:scale-105 ${
             locale === 'ar' ? 'px-10 sm:px-12 py-3.5 sm:py-4.5 text-base sm:text-lg' : 'px-6 sm:px-8 py-3 sm:py-4 text-sm sm:text-base'
           }`}
         >

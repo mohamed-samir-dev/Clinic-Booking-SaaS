@@ -71,14 +71,15 @@ export default function Footer() {
             <h4 className="text-white font-bold mb-3 sm:mb-4 text-base sm:text-lg">{t.followUs}</h4>
             <div className="flex gap-2.5 sm:gap-3">
               {[
-                { icon: FaFacebook },
-                { icon: FaXTwitter },
-                { icon: FaInstagram },
-                { icon: FaLinkedin },
+                { icon: FaFacebook, label: 'Facebook' },
+                { icon: FaXTwitter, label: 'X (Twitter)' },
+                { icon: FaInstagram, label: 'Instagram' },
+                { icon: FaLinkedin, label: 'LinkedIn' },
               ].map((social, idx) => (
                 <button
                   key={idx}
                   onClick={() => setShowPopup(true)}
+                  aria-label={social.label}
                   className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-gray-800 hover:bg-teal-600 flex items-center justify-center transition-all hover:scale-110"
                 >
                   <social.icon className="text-base sm:text-lg" />

@@ -62,6 +62,7 @@ export default function ClinicCard({ id, name, logo, address, phone }: ClinicCar
       )}
       <button 
         onClick={handleFavoriteClick}
+        aria-label={isFavorited ? 'Remove from favorites' : 'Add to favorites'}
         className={`absolute top-4 ${locale === 'ar' ? 'left-4' : 'right-4'} z-10 transition-all duration-300 ${isFavorited ? 'text-red-500 scale-110' : 'text-gray-400 hover:text-red-500'}`}
       >
         <Heart className={`w-6 h-6 ${isFavorited ? 'fill-current' : ''}`} />

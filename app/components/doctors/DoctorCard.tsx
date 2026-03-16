@@ -162,6 +162,7 @@ export default function DoctorCard({
       )}
       <button 
         onClick={handleFavoriteClick}
+        aria-label={isFavorited ? 'Remove from favorites' : 'Add to favorites'}
         className={`absolute top-4 ${locale === 'ar' ? 'left-4' : 'right-4'} transition-all duration-300 ${isFavorited ? 'text-red-500 scale-110' : 'text-gray-400 hover:text-red-500'}`}
       >
         <FaHeart className={`text-xl ${isFavorited ? 'fill-current' : ''}`} />
@@ -191,13 +192,13 @@ export default function DoctorCard({
         
         <h3 className={`text-lg sm:text-xl md:text-2xl font-bold mb-1 text-center ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{displayName}</h3>
         
-        <div className="flex items-center gap-1.5 sm:gap-2 text-teal-600 font-semibold mb-2">
+        <div className="flex items-center gap-1.5 sm:gap-2 text-teal-700 font-semibold mb-2">
           <FaUserMd className="text-base sm:text-lg" />
           <span className="text-sm sm:text-base">{displaySpecialty}</span>
         </div>
         
         {displayClinicName && (
-          <div className="flex items-center gap-1.5 sm:gap-2 text-teal-600 mb-3 sm:mb-4">
+          <div className="flex items-center gap-1.5 sm:gap-2 text-teal-700 mb-3 sm:mb-4">
             <FaHospital className="text-sm sm:text-base" />
             <span className="text-xs sm:text-sm font-semibold">{displayClinicName}</span>
           </div>
@@ -243,7 +244,7 @@ export default function DoctorCard({
           )}
           <Link 
             href={`/pages/doctors/${id}`}
-            className="block w-full px-4 sm:px-5 md:px-6 py-2.5 sm:py-3 border-2 border-teal-500 text-teal-600 rounded-full hover:bg-teal-50 transition-all font-semibold text-sm sm:text-base text-center"
+            className="block w-full px-4 sm:px-5 md:px-6 py-2.5 sm:py-3 border-2 border-teal-600 text-teal-700 rounded-full hover:bg-teal-50 transition-all font-semibold text-sm sm:text-base text-center"
           >
             {t.viewProfile}
           </Link>

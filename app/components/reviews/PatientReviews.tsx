@@ -158,9 +158,9 @@ export default function PatientReviews() {
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center justify-between mb-2 gap-2">
-                        <h4 className={`font-bold text-sm sm:text-base truncate ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
+                        <h3 className={`font-bold text-sm sm:text-base truncate ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
                           {review.patientId?.name || 'Anonymous'}
-                        </h4>
+                        </h3>
                         <div className="flex gap-0.5 shrink-0">
                           {renderStars(review.rating)}
                         </div>
@@ -171,7 +171,7 @@ export default function PatientReviews() {
                           {review.comment}
                         </p>
                       </div>
-                      <p className={`text-xs mt-2 sm:mt-3 ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'}`}>
+                      <p className={`text-xs mt-2 sm:mt-3 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
                         {new Date(review.createdAt).toLocaleDateString(locale === 'ar' ? 'ar-EG' : 'en-US', {
                           year: 'numeric',
                           month: 'long',
