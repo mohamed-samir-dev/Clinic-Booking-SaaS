@@ -1,20 +1,12 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { 
-  Building2, 
-  Users, 
-  UserCog, 
-  Calendar, 
-  DollarSign, 
-  Star,
-  Stethoscope,
-  Wallet
+  Building2, Users, UserCog, Calendar, DollarSign, Star, Stethoscope, Wallet
 } from 'lucide-react';
 import { DashboardHeader } from './components/DashboardHeader';
 import { KPICard } from './components/KPICard';
-import { LoadingSkeleton } from './components/LoadingSkeleton';
 import { DateRange, DashboardData, Alert } from './types';
 import toast from 'react-hot-toast';
 import dynamic from 'next/dynamic';
@@ -41,6 +33,47 @@ const SectionSkeleton = () => (
   </div>
 );
 
+const CACHE_KEY = 'owner_dashboard_cache';
+
+function getCachedData(): DashboardData | null {
+  try {
+    const cached = localStorage.getItem(CACHE_KEY);
+    if (!cached) return null;
+    const { data, timestamp } = JSON.parse(cached);
+    // Cache valid for 5 minutes
+    if (Date.now() - timestamp > 5 * 60 * 1000) return null;
+    return data;
+  } catch { return null; }
+}
+
+function setCachedData(data: DashboardData) {
+  try {
+    localStorage.setItem(CACHE_KEY, JSON.stringify({ data, timestamp: Date.now() }));
+  } catch { /* quota exceeded */ }
+}
+
+import { KPIData } from './types';
+
+type KPIKey = keyof KPIData;
+
+const KPI_CONFIG: { title: string; key: KPIKey; changeKey: KPIKey | null; icon: typeof Building2; tooltip: string; format?: 'currency' | 'rating' }[] = [
+  { title: 'Total Clinics', key: 'totalClinics', changeKey: 'clinicsChange', icon: Building2, tooltip: 'Total number of registered clinics' },
+  { title: 'Total Managers', key: 'totalManagers', changeKey: 'managersChange', icon: UserCog, tooltip: 'Total number of clinic managers' },
+  { title: 'Total Doctors', key: 'totalDoctors', changeKey: 'doctorsChange', icon: Stethoscope, tooltip: 'Total number of doctors across all clinics' },
+  { title: 'Total Patients', key: 'totalPatients', changeKey: 'patientsChange', icon: Users, tooltip: 'Total registered patients' },
+  { title: 'Appointments', key: 'totalAppointments', changeKey: 'appointmentsChange', icon: Calendar, tooltip: 'Total appointments in selected period' },
+  { title: 'Total Revenue', key: 'totalRevenue', changeKey: 'revenueChange', icon: DollarSign, tooltip: 'Total revenue in selected period', format: 'currency' },
+  { title: 'CareSync Revenue', key: 'careSyncRevenue', changeKey: 'careSyncRevenueChange', icon: Wallet, tooltip: 'CareSync platform revenue', format: 'currency' },
+  { title: 'Avg Rating', key: 'avgClinicRating', changeKey: null, icon: Star, tooltip: 'Average clinic rating', format: 'rating' },
+];
+
+function formatKPIValue(value: number | undefined, format?: string): string | number {
+  const v = value ?? 0;
+  if (format === 'currency') return `$${v.toLocaleString()}`;
+  if (format === 'rating') return v > 0 ? v.toFixed(1) : 'N/A';
+  return v;
+}
+
 export default function OwnerDashboardPage() {
   const router = useRouter();
   const [dateRange, setDateRange] = useState<DateRange>({
@@ -48,33 +81,33 @@ export default function OwnerDashboardPage() {
     to: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
   });
 
-  const [data, setData] = useState<DashboardData | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [data, setData] = useState<DashboardData | null>(() => getCachedData());
+  const [loading, setLoading] = useState(!getCachedData());
   const [error, setError] = useState<string | null>(null);
+  const dataRef = useRef(data);
+  dataRef.current = data;
 
   const fetchDashboardData = useCallback(async () => {
-    setLoading(true);
+    if (!dataRef.current) setLoading(true);
     setError(null);
 
     try {
       const token = localStorage.getItem('token');
-      
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/api/owner/dashboard?from=${dateRange.from}&to=${dateRange.to}`,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
+        { headers: { Authorization: `Bearer ${token}` } }
       );
 
-      if (!response.ok) {
-        throw new Error('Failed to fetch dashboard data');
-      }
+      if (!response.ok) throw new Error('Failed to fetch dashboard data');
 
       const dashboardData = await response.json();
       setData(dashboardData);
+      setCachedData(dashboardData);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'An error occurred');
-      toast.error('Failed to load dashboard data');
+      if (!dataRef.current) {
+        setError(err instanceof Error ? err.message : 'An error occurred');
+        toast.error('Failed to load dashboard data');
+      }
     } finally {
       setLoading(false);
     }
@@ -90,34 +123,8 @@ export default function OwnerDashboardPage() {
     }
   };
 
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-gray-900">
-        <DashboardHeader
-          dateRange={dateRange}
-          onDateRangeChange={setDateRange}
-          onAddClinic={() => router.push('/pages/owner/clinics/add')}
-          onAssignManager={() => router.push('/pages/owner/managers/add')}
-        />
-        <div className="p-6">
-          <LoadingSkeleton />
-        </div>
-      </div>
-    );
-  }
-
-  const kpiCards = [
-    { title: 'Total Clinics', value: data?.kpis.totalClinics, change: data?.kpis.clinicsChange, icon: Building2, tooltip: 'Total number of registered clinics' },
-    { title: 'Total Managers', value: data?.kpis.totalManagers, change: data?.kpis.managersChange, icon: UserCog, tooltip: 'Total number of clinic managers' },
-    { title: 'Total Doctors', value: data?.kpis.totalDoctors, change: data?.kpis.doctorsChange, icon: Stethoscope, tooltip: 'Total number of doctors across all clinics' },
-    { title: 'Total Patients', value: data?.kpis.totalPatients, change: data?.kpis.patientsChange, icon: Users, tooltip: 'Total registered patients' },
-    { title: 'Appointments', value: data?.kpis.totalAppointments, change: data?.kpis.appointmentsChange, icon: Calendar, tooltip: 'Total appointments in selected period' },
-    { title: 'Total Revenue', value: `$${(data?.kpis.totalRevenue ?? 0).toLocaleString()}`, change: data?.kpis.revenueChange, icon: DollarSign, tooltip: 'Total revenue in selected period' },
-    { title: 'CareSync Revenue', value: `$${(data?.kpis.careSyncRevenue ?? 0).toLocaleString()}`, change: data?.kpis.careSyncRevenueChange ?? 0, icon: Wallet, tooltip: 'CareSync platform revenue' },
-    { title: 'Avg Rating', value: (data?.kpis.avgClinicRating ?? 0) > 0 ? data!.kpis.avgClinicRating.toFixed(1) : 'N/A', change: 0, icon: Star, tooltip: 'Average clinic rating' },
-  ] as const;
-
-  if (error || !data) {
+  // Error state only when no cached data available
+  if (error && !data) {
     return (
       <div className="min-h-screen bg-gray-900 flex items-center justify-center">
         <div className="text-center">
@@ -141,47 +148,83 @@ export default function OwnerDashboardPage() {
         onDateRangeChange={setDateRange}
         onAddClinic={() => router.push('/pages/owner/clinics/add')}
         onAssignManager={() => router.push('/pages/owner/managers/add')}
-        notificationCount={data.alerts.length}
+        onViewReports={() => router.push('/pages/owner/reports')}
+        notificationCount={data?.alerts.length}
       />
 
       <div className="p-6 space-y-6">
-        {/* KPI Cards - Above the fold, render immediately */}
+        {/* KPI Cards - Always render immediately (cached or skeleton) */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {kpiCards.map((kpi) => (
-            <KPICard key={kpi.title} title={kpi.title} value={kpi.value!} change={kpi.change!} icon={kpi.icon} tooltip={kpi.tooltip} />
-          ))}
+          {data ? (
+            KPI_CONFIG.map((kpi) => (
+              <KPICard
+                key={kpi.title}
+                title={kpi.title}
+                value={formatKPIValue(data.kpis[kpi.key], kpi.format)}
+                change={kpi.changeKey ? data.kpis[kpi.changeKey] ?? 0 : 0}
+                icon={kpi.icon}
+                tooltip={kpi.tooltip}
+              />
+            ))
+          ) : (
+            KPI_CONFIG.map((kpi) => (
+              <div key={kpi.title} className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 border border-gray-100 dark:border-gray-700 animate-pulse">
+                <div className="flex items-start justify-between">
+                  <div className="flex-1">
+                    <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-24 mb-3" />
+                    <div className="h-8 bg-gray-200 dark:bg-gray-700 rounded w-32 mb-2" />
+                    <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-20" />
+                  </div>
+                  <div className="w-12 h-12 bg-gray-200 dark:bg-gray-700 rounded-lg" />
+                </div>
+              </div>
+            ))
+          )}
         </div>
 
-        {/* Below the fold - lazy loaded */}
-        <RevenueCharts
-          timeline={data.revenueTimeline}
-          byClinic={data.revenueByClinic}
-          share={data.revenueShare}
-        />
+        {/* Below the fold - only render when data is available */}
+        {data && (
+          <>
+            <RevenueCharts
+              timeline={data.revenueTimeline}
+              byClinic={data.revenueByClinic}
+              share={data.revenueShare}
+            />
 
-        {data.alerts.length > 0 && (
-          <AlertsPanel alerts={data.alerts} onAlertAction={handleAlertAction} />
+            {data.alerts.length > 0 && (
+              <AlertsPanel alerts={data.alerts} onAlertAction={handleAlertAction} />
+            )}
+
+            <ClinicsTable
+              clinics={data.revenueByClinic}
+              onViewClinic={(id) => router.push(`/pages/owner/clinics/${id}`)}
+              onAssignManager={(id) => router.push(`/pages/owner/managers/add?clinicId=${id}`)}
+              onDisableManager={() => {
+                if (confirm('Are you sure you want to disable this manager?')) {
+                  toast.success('Manager disabled successfully');
+                }
+              }}
+            />
+
+            <QuickActionsTiles
+              onAddClinic={() => router.push('/pages/owner/clinics/add')}
+              onAssignManager={() => router.push('/pages/owner/managers/add')}
+              onViewClinics={() => router.push('/pages/owner/clinics')}
+              onViewManagers={() => router.push('/pages/owner/managers')}
+            />
+
+            <ActivityLog activities={data.recentActivity} />
+          </>
         )}
 
-        <ClinicsTable
-          clinics={data.revenueByClinic}
-          onViewClinic={(id) => router.push(`/pages/owner/clinics/${id}`)}
-          onAssignManager={(id) => router.push(`/pages/owner/managers/add?clinicId=${id}`)}
-          onDisableManager={() => {
-            if (confirm('Are you sure you want to disable this manager?')) {
-              toast.success('Manager disabled successfully');
-            }
-          }}
-        />
-
-        <QuickActionsTiles
-          onAddClinic={() => router.push('/pages/owner/clinics/add')}
-          onAssignManager={() => router.push('/pages/owner/managers/add')}
-          onViewClinics={() => router.push('/pages/owner/clinics')}
-          onViewManagers={() => router.push('/pages/owner/managers')}
-        />
-
-        <ActivityLog activities={data.recentActivity} />
+        {/* Show skeleton for below-fold only on first load with no cache */}
+        {!data && loading && (
+          <>
+            <ChartSkeleton />
+            <SectionSkeleton />
+            <SectionSkeleton />
+          </>
+        )}
       </div>
     </div>
   );

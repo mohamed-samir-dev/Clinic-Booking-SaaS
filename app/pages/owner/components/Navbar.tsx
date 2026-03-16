@@ -9,8 +9,15 @@ interface OwnerData {
   profileImage: string | null;
 }
 
+const PROFILE_CACHE_KEY = 'owner_profile_cache';
+
 export default function Navbar() {
-  const [ownerData, setOwnerData] = useState<OwnerData>({ name: '', profileImage: null });
+  const [ownerData, setOwnerData] = useState<OwnerData>(() => {
+    try {
+      const cached = typeof window !== 'undefined' ? localStorage.getItem(PROFILE_CACHE_KEY) : null;
+      return cached ? JSON.parse(cached) : { name: '', profileImage: null };
+    } catch { return { name: '', profileImage: null }; }
+  });
   const router = useRouter();
 
   useEffect(() => {
@@ -23,6 +30,7 @@ export default function Navbar() {
         if (response.ok) {
           const data = await response.json();
           setOwnerData(data);
+          localStorage.setItem(PROFILE_CACHE_KEY, JSON.stringify(data));
         }
       } catch {}
     };

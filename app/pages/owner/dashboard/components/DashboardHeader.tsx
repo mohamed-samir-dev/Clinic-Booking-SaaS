@@ -7,6 +7,7 @@ interface DashboardHeaderProps {
   onDateRangeChange: (range: DateRange) => void;
   onAddClinic: () => void;
   onAssignManager: () => void;
+  onViewReports: () => void;
   notificationCount?: number;
 }
 
@@ -14,13 +15,14 @@ export const DashboardHeader = ({
   onDateRangeChange,
   onAddClinic,
   onAssignManager,
+  onViewReports,
 }: DashboardHeaderProps) => {
   const [showQuickActions, setShowQuickActions] = useState(false);
 
   const quickActions = [
     { label: 'Add New Clinic', icon: Plus, action: onAddClinic },
     { label: 'Assign Manager', icon: UserCog, action: onAssignManager },
-    { label: 'View Reports', icon: FileText, action: () => {} },
+    { label: 'View Reports', icon: FileText, action: onViewReports },
   ];
 
   const handlePresetRange = (days: number, type: 'past' | 'future') => {
