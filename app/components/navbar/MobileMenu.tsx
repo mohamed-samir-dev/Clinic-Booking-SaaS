@@ -44,7 +44,7 @@ export default function MobileMenu({
       <Link
         href="/pages/booking"
         onClick={() => setMobileMenuOpen(false)}
-        className="min-[500px]:hidden mt-4 block px-6 py-2.5 bg-teal-600 rounded-full text-white hover:bg-teal-800 transition-colors font-semibold shadow-md text-center"
+        className="min-[500px]:hidden mt-4 block px-6 py-2.5 bg-teal-700 rounded-full text-white hover:bg-teal-800 transition-colors font-semibold shadow-md text-center"
       >
         {t.bookNow}
       </Link>
@@ -58,7 +58,7 @@ export default function MobileMenu({
               href={item.href}
               onClick={() => setMobileMenuOpen(false)}
               className={`px-4 py-2 rounded-lg transition-all font-medium ${
-                isActive ? 'text-teal-600 bg-teal-50' : theme === 'dark' ? 'text-gray-200 hover:text-teal-400 hover:bg-gray-800' : 'text-gray-700 hover:text-teal-700 hover:bg-gray-50'
+                isActive ? 'text-teal-700 bg-teal-50' : theme === 'dark' ? 'text-gray-200 hover:text-teal-400 hover:bg-gray-800' : 'text-gray-700 hover:text-teal-700 hover:bg-gray-50'
               }`}
             >
               {item.label}
@@ -129,7 +129,7 @@ export default function MobileMenu({
         <Link
           href="/pages/login"
           onClick={() => setMobileMenuOpen(false)}
-          className="mt-4 block px-6 py-2.5 bg-teal-600 rounded-full text-white hover:bg-teal-800 transition-colors font-semibold shadow-md text-center"
+          className="mt-4 block px-6 py-2.5 bg-teal-700 rounded-full text-white hover:bg-teal-800 transition-colors font-semibold shadow-md text-center"
         >
           {t.login}
         </Link>

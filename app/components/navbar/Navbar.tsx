@@ -51,7 +51,7 @@ export default function Navbar() {
           <div className="flex items-center gap-2 xl:gap-4">
             <Link
               href="/pages/booking"
-              className="hidden min-[500px]:block px-4 md:px-7 py-2 md:py-2.5 bg-teal-600 rounded-full text-white hover:bg-teal-800 transition-colors font-semibold shadow-md hover:shadow-lg text-sm md:text-base"
+              className="hidden min-[500px]:block px-4 md:px-7 py-2 md:py-2.5 bg-teal-700 rounded-full text-white hover:bg-teal-800 transition-colors font-semibold shadow-md hover:shadow-lg text-sm md:text-base"
             >
               {t.bookNow}
             </Link>
