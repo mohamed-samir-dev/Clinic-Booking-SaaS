@@ -15,7 +15,7 @@ const LanguageContext = createContext<LanguageContextType | undefined>(undefined
 
 export function LanguageProvider({ children }: { children: ReactNode }) {
   const [locale, setLocale] = useState<Locale>('en');
-  const [messages, setMessages] = useState<Record<string, any>>(defaultMessages);
+  const [messages, setMessages] = useState<typeof defaultMessages>(defaultMessages);
 
   useEffect(() => {
     const savedLocale = (localStorage.getItem('managerLang') || localStorage.getItem('locale') || 'en') as Locale;
