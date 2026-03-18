@@ -2,6 +2,7 @@
 
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { NextIntlClientProvider } from 'next-intl';
+import defaultMessages from '@/messages/en.json';
 
 type Locale = 'en' | 'ar';
 
@@ -14,52 +15,36 @@ const LanguageContext = createContext<LanguageContextType | undefined>(undefined
 
 export function LanguageProvider({ children }: { children: ReactNode }) {
   const [locale, setLocale] = useState<Locale>('en');
-  const [mounted, setMounted] = useState(false);
-  const [messages, setMessages] = useState<Record<string, string> | null>(null);
+  const [messages, setMessages] = useState<Record<string, any>>(defaultMessages);
 
   useEffect(() => {
     const savedLocale = (localStorage.getItem('managerLang') || localStorage.getItem('locale') || 'en') as Locale;
-    setLocale(savedLocale);
-    
-    import(`../../messages/${savedLocale}.json`).then((msgs) => {
-      setMessages(msgs.default);
-      setMounted(true);
-    }).catch(() => {
-      setMessages({});
-      setMounted(true);
-    });
+    if (savedLocale !== 'en') {
+      setLocale(savedLocale);
+      import(`../../messages/${savedLocale}.json`).then((msgs) => {
+        setMessages(msgs.default);
+      }).catch(() => {});
+    }
+    document.documentElement.dir = savedLocale === 'ar' ? 'rtl' : 'ltr';
+    document.documentElement.lang = savedLocale;
 
-    // استمع لتغييرات اللغة من Navbar
     const handleLanguageChange = () => {
       const newLocale = (localStorage.getItem('managerLang') || localStorage.getItem('locale') || 'en') as Locale;
       setLocale(newLocale);
-      localStorage.setItem('locale', newLocale);
       document.documentElement.dir = newLocale === 'ar' ? 'rtl' : 'ltr';
       document.documentElement.lang = newLocale;
-      
-      import(`../../messages/${newLocale}.json`).then((msgs) => {
-        setMessages(msgs.default);
-      }).catch(() => {
-        setMessages({});
-      });
+      if (newLocale === 'en') {
+        setMessages(defaultMessages);
+      } else {
+        import(`../../messages/${newLocale}.json`).then((msgs) => {
+          setMessages(msgs.default);
+        }).catch(() => {});
+      }
     };
 
     window.addEventListener('languageChange', handleLanguageChange);
     return () => window.removeEventListener('languageChange', handleLanguageChange);
   }, []);
-
-  useEffect(() => {
-    if (mounted) {
-      document.documentElement.dir = locale === 'ar' ? 'rtl' : 'ltr';
-      document.documentElement.lang = locale;
-      
-      import(`../../messages/${locale}.json`).then((msgs) => {
-        setMessages(msgs.default);
-      }).catch(() => {
-        setMessages({});
-      });
-    }
-  }, [locale, mounted]);
 
   const toggleLanguage = () => {
     const newLocale = locale === 'en' ? 'ar' : 'en';
@@ -68,16 +53,15 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     localStorage.setItem('managerLang', newLocale);
     document.documentElement.dir = newLocale === 'ar' ? 'rtl' : 'ltr';
     document.documentElement.lang = newLocale;
+    if (newLocale === 'en') {
+      setMessages(defaultMessages);
+    } else {
+      import(`../../messages/${newLocale}.json`).then((msgs) => {
+        setMessages(msgs.default);
+      }).catch(() => {});
+    }
     window.dispatchEvent(new Event('languageChange'));
   };
-
-  if (!mounted || !messages) {
-    return (
-      <LanguageContext.Provider value={{ locale, toggleLanguage }}>
-        <div style={{ minHeight: '100vh' }} />
-      </LanguageContext.Provider>
-    );
-  }
 
   return (
     <LanguageContext.Provider value={{ locale, toggleLanguage }}>
