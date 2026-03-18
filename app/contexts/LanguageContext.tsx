@@ -74,7 +74,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   if (!mounted || !messages) {
     return (
       <LanguageContext.Provider value={{ locale, toggleLanguage }}>
-        <div suppressHydrationWarning />
+        <div style={{ minHeight: '100vh' }} />
       </LanguageContext.Provider>
     );
   }
