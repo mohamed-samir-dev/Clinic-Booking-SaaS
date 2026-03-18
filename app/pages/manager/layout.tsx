@@ -9,10 +9,12 @@ type Language = 'ar' | 'en';
 
 export default function ManagerLayout({ children }: { children: React.ReactNode }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [language, setLanguage] = useState<Language>(() => {
+  const [language, setLanguage] = useState<Language>('ar');
+
+  useEffect(() => {
     const savedLang = localStorage.getItem('managerLang') as Language;
-    return savedLang || 'ar';
-  });
+    if (savedLang) setLanguage(savedLang);
+  }, []);
 
   useEffect(() => {
     const handleLanguageChange = () => {

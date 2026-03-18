@@ -39,13 +39,12 @@ export default function Navbar({ onMenuClick }: NavbarProps) {
     profileImage: null, 
     clinicName: '' 
   });
-  const [language, setLanguage] = useState<Language>(() => {
-    const savedLang = localStorage.getItem('managerLang') as Language;
-    return savedLang || 'ar';
-  });
+  const [language, setLanguage] = useState<Language>('ar');
   const router = useRouter();
 
   useEffect(() => {
+    const savedLang = localStorage.getItem('managerLang') as Language;
+    if (savedLang) setLanguage(savedLang);
     const fetchManagerData = async () => {
       try {
         const token = localStorage.getItem('token');

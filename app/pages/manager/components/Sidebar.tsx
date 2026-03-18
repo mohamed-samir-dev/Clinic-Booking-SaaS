@@ -41,17 +41,15 @@ const translations = {
 
 export default function Sidebar({ isOpen, onClose }: SidebarProps) {
   const pathname = usePathname();
-  const [language, setLanguage] = useState<Language>(() => {
-    const savedLang = localStorage.getItem('managerLang') as Language;
-    return savedLang || 'ar';
-  });
+  const [language, setLanguage] = useState<Language>('ar');
 
   useEffect(() => {
+    const savedLang = localStorage.getItem('managerLang') as Language;
+    if (savedLang) setLanguage(savedLang);
+
     const handleLanguageChange = () => {
       const newLang = localStorage.getItem('managerLang') as Language;
-      if (newLang) {
-        setLanguage(newLang);
-      }
+      if (newLang) setLanguage(newLang);
     };
 
     window.addEventListener('languageChange', handleLanguageChange);

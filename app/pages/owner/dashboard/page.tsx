@@ -36,11 +36,11 @@ const SectionSkeleton = () => (
 const CACHE_KEY = 'owner_dashboard_cache';
 
 function getCachedData(): DashboardData | null {
+  if (typeof window === 'undefined') return null;
   try {
     const cached = localStorage.getItem(CACHE_KEY);
     if (!cached) return null;
     const { data, timestamp } = JSON.parse(cached);
-    // Cache valid for 5 minutes
     if (Date.now() - timestamp > 5 * 60 * 1000) return null;
     return data;
   } catch { return null; }
