@@ -71,15 +71,19 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     window.dispatchEvent(new Event('languageChange'));
   };
 
+  if (!mounted || !messages) {
+    return (
+      <LanguageContext.Provider value={{ locale, toggleLanguage }}>
+        <div suppressHydrationWarning />
+      </LanguageContext.Provider>
+    );
+  }
+
   return (
     <LanguageContext.Provider value={{ locale, toggleLanguage }}>
-      {mounted && messages ? (
-        <NextIntlClientProvider locale={locale} messages={messages}>
-          {children}
-        </NextIntlClientProvider>
-      ) : (
-        <div style={{ visibility: 'hidden' }}>{children}</div>
-      )}
+      <NextIntlClientProvider locale={locale} messages={messages}>
+        {children}
+      </NextIntlClientProvider>
     </LanguageContext.Provider>
   );
 }
