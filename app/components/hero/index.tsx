@@ -1,14 +1,10 @@
-'use client';
-
 import Image from 'next/image';
-import { useTheme } from '@/app/contexts/ThemeContext';
 import HeroContent from './HeroContent';
 import HeroInfoCards from './HeroInfoCards';
 
 export default function HeroSection() {
-  const { theme } = useTheme();
   return (
-    <section className={`relative w-full h-screen sm:h-[700px] lg:h-[700px] overflow-hidden ${theme === 'dark' ? 'bg-gray-900' : ''}`}>
+    <section className="relative w-full h-screen sm:h-[700px] lg:h-[700px] overflow-hidden">
       <div className="absolute inset-0">
         <Image
           src="/bg-Alnoor.webp"
@@ -16,8 +12,10 @@ export default function HeroSection() {
           fill
           className="object-cover"
           priority
+          fetchPriority="high"
+          sizes="100vw"
         />
-        <div className={`absolute inset-0 ${theme === 'dark' ? 'bg-linear-to-r from-black/85 via-black/70 to-black/50' : 'bg-linear-to-r from-black/70 via-black/50 to-transparent'}`}></div>
+        <div className="absolute inset-0 bg-linear-to-r from-black/70 via-black/50 to-transparent"></div>
       </div>
 
       <div className="relative w-full h-full px-4 md:px-8 py-12 sm:py-20 flex items-center">

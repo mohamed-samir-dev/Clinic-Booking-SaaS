@@ -74,10 +74,20 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" dir="ltr">
       <head>
+        <link rel="preload" href="/bg-Alnoor.webp" as="image" type="image/webp" fetchPriority="high" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" media="print" />
-        <script dangerouslySetInnerHTML={{ __html: `document.addEventListener('DOMContentLoaded',function(){document.querySelector('link[media="print"]').media='all'})` }} />
+        <link
+          rel="preload"
+          href="https://fonts.googleapis.com/icon?family=Material+Icons"
+          as="style"
+        />
+        <link
+          href="https://fonts.googleapis.com/icon?family=Material+Icons"
+          rel="stylesheet"
+          media="print"
+        />
+        <script dangerouslySetInnerHTML={{ __html: `window.addEventListener('load',function(){document.querySelector('link[media="print"]').media='all'})` }} />
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <LayoutClient>{children}</LayoutClient>

@@ -1,9 +1,11 @@
 import type { Metadata } from 'next';
+import dynamic from 'next/dynamic';
 import HeroSection from '@/app/components/hero';
-import MedicalServices from '@/app/components/services/MedicalServices';
-import TopDoctors from '@/app/components/doctors/TopDoctors';
-import FeaturedClinics from '@/app/components/clinics/FeaturedClinics';
-import PatientReviews from '@/app/components/reviews/PatientReviews';
+
+const MedicalServices = dynamic(() => import('@/app/components/services/MedicalServices'));
+const TopDoctors = dynamic(() => import('@/app/components/doctors/TopDoctors'));
+const FeaturedClinics = dynamic(() => import('@/app/components/clinics/FeaturedClinics'));
+const PatientReviews = dynamic(() => import('@/app/components/reviews/PatientReviews'));
 
 export const metadata: Metadata = {
   title: 'CareSync – Book Doctor Appointments Online | Clinic Booking Platform',

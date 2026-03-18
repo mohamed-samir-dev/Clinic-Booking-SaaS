@@ -2,9 +2,10 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   experimental: {
-    optimizePackageImports: ['lucide-react', 'react-icons', 'recharts', 'framer-motion', 'date-fns'],
+    optimizePackageImports: ['lucide-react', 'react-icons', 'recharts', 'framer-motion', 'date-fns', 'swiper'],
   },
   images: {
+    formats: ['image/avif', 'image/webp'],
     remotePatterns: [
       {
         protocol: 'https',

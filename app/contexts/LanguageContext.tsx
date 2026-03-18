@@ -71,15 +71,15 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     window.dispatchEvent(new Event('languageChange'));
   };
 
-  if (!mounted || !messages) {
-    return null;
-  }
-
   return (
     <LanguageContext.Provider value={{ locale, toggleLanguage }}>
-      <NextIntlClientProvider locale={locale} messages={messages}>
-        {children}
-      </NextIntlClientProvider>
+      {mounted && messages ? (
+        <NextIntlClientProvider locale={locale} messages={messages}>
+          {children}
+        </NextIntlClientProvider>
+      ) : (
+        <div style={{ visibility: 'hidden' }}>{children}</div>
+      )}
     </LanguageContext.Provider>
   );
 }
