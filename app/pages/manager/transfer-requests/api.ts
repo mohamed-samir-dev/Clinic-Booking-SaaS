@@ -2,7 +2,7 @@
 const API_URL = `${process.env.NEXT_PUBLIC_API_URL}/api/manager/transfer-requests`;
 
 export const fetchTransferRequests = async () => {
-  const token = localStorage.getItem('token');
+  const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
   const response = await fetch(API_URL, {
     headers: { Authorization: `Bearer ${token}` },
   });
@@ -12,7 +12,7 @@ export const fetchTransferRequests = async () => {
 };
 
 export const sendReply = async (requestId: string, message: string) => {
-  const token = localStorage.getItem('token');
+  const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
   const response = await fetch(`${API_URL}/reply`, {
     method: 'POST',
     headers: {

@@ -1,5 +1,6 @@
 'use client';
 
+import { Suspense } from 'react';
 import { useState, useTransition, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { useTheme } from '@/app/contexts/ThemeContext';
@@ -18,7 +19,7 @@ import { getNextAvailableDay } from './utils/doctorHelpers';
 import { getQuickBookingData, clearQuickBookingData } from './utils/quickBooking';
 import { Doctor } from '@/app/types/index';
 
-export default function BookingPage() {
+function BookingPageContent() {
   const searchParams = useSearchParams();
   const isQuickBooking = searchParams.get('quick') === 'true';
   const quickData = isQuickBooking ? getQuickBookingData() : null;
@@ -180,5 +181,13 @@ export default function BookingPage() {
         />
       </div>
     </div>
+  );
+}
+
+export default function BookingPage() {
+  return (
+    <Suspense>
+      <BookingPageContent />
+    </Suspense>
   );
 }
