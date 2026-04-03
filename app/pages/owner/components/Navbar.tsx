@@ -12,12 +12,14 @@ interface OwnerData {
 const PROFILE_CACHE_KEY = 'owner_profile_cache';
 
 export default function Navbar() {
-  const [ownerData, setOwnerData] = useState<OwnerData>(() => {
+  const [ownerData, setOwnerData] = useState<OwnerData>({ name: '', profileImage: null });
+
+  useEffect(() => {
     try {
-      const cached = typeof window !== 'undefined' ? localStorage.getItem(PROFILE_CACHE_KEY) : null;
-      return cached ? JSON.parse(cached) : { name: '', profileImage: null };
-    } catch { return { name: '', profileImage: null }; }
-  });
+      const cached = localStorage.getItem(PROFILE_CACHE_KEY);
+      if (cached) setOwnerData(JSON.parse(cached));
+    } catch {}
+  }, []);
   const router = useRouter();
 
   useEffect(() => {
