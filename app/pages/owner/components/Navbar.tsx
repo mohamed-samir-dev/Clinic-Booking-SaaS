@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { LogOut, Menu } from 'lucide-react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
+import { useLanguage } from '@/app/contexts/LanguageContext';
 
 interface OwnerData {
   name: string;
@@ -39,6 +40,8 @@ export default function Navbar({ onMenuClick }: { onMenuClick?: () => void }) {
     fetchOwnerData();
   }, []);
 
+  const { locale, toggleLanguage } = useLanguage();
+
   const handleLogout = () => {
     localStorage.removeItem('token');
     router.push('/pages/login');
@@ -54,6 +57,12 @@ export default function Navbar({ onMenuClick }: { onMenuClick?: () => void }) {
           <Menu size={22} />
         </button>
         <div className="flex items-center gap-4">
+          <button
+            onClick={toggleLanguage}
+            className="px-3 py-1.5 rounded-lg bg-gray-700 hover:bg-gray-600 text-gray-200 text-sm font-semibold transition-colors"
+          >
+            {locale === 'en' ? 'عربي' : 'EN'}
+          </button>
           <div className="flex items-center gap-3">
             <div className="text-right">
               <p className="text-sm font-semibold text-white">{ownerData.name || 'Loading...'}</p>

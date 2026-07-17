@@ -83,7 +83,7 @@ export default function DoctorsPage() {
               </p>
             </div>
             <DoctorsList doctors={currentDoctors} />
-            <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={setCurrentPage} />
+            <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={setCurrentPage} dir={locale === 'ar' ? 'rtl' : 'ltr'} />
           </>
         )}
       </div>

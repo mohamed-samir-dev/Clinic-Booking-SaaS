@@ -1,8 +1,9 @@
 'use client';
 import { useState, useEffect } from 'react';
-import { LogOut, Languages, Menu } from 'lucide-react';
+import { LogOut, Menu } from 'lucide-react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
+import { useLanguage } from '@/app/contexts/LanguageContext';
 
 interface ManagerData {
   name: string;
@@ -14,37 +15,16 @@ interface NavbarProps {
   onMenuClick: () => void;
 }
 
-type Language = 'ar' | 'en';
-
-const translations = {
-  ar: {
-    managing: 'إدارة',
-    loading: 'جاري التحميل...',
-    manager: 'مدير',
-    logout: 'تسجيل الخروج',
-    changeLanguage: 'تغيير اللغة'
-  },
-  en: {
-    managing: 'Managing',
-    loading: 'Loading...',
-    manager: 'Manager',
-    logout: 'Logout',
-    changeLanguage: 'Change Language'
-  }
-};
-
 export default function Navbar({ onMenuClick }: NavbarProps) {
   const [managerData, setManagerData] = useState<ManagerData>({ 
     name: '', 
     profileImage: null, 
     clinicName: '' 
   });
-  const [language, setLanguage] = useState<Language>('ar');
+  const { locale, toggleLanguage } = useLanguage();
   const router = useRouter();
 
   useEffect(() => {
-    const savedLang = localStorage.getItem('locale') as Language;
-    if (savedLang) setLanguage(savedLang);
     const fetchManagerData = async () => {
       try {
         const token = localStorage.getItem('token');
@@ -64,24 +44,15 @@ export default function Navbar({ onMenuClick }: NavbarProps) {
     fetchManagerData();
   }, []);
 
-  const toggleLanguage = () => {
-    const newLang: Language = language === 'ar' ? 'en' : 'ar';
-    setLanguage(newLang);
-    localStorage.setItem('managerLang', newLang);
-    window.dispatchEvent(new Event('languageChange'));
-  };
-
   const handleLogout = () => {
     localStorage.removeItem('token');
     router.push('/pages/login');
   };
 
-  const t = translations[language];
-
   const getClinicName = () => {
-    if (!managerData.clinicName) return t.loading;
+    if (!managerData.clinicName) return locale === 'ar' ? 'جاري التحميل...' : 'Loading...';
     if (typeof managerData.clinicName === 'object') {
-      return language === 'ar' 
+      return locale === 'ar' 
         ? (managerData.clinicName.ar || managerData.clinicName.en || 'N/A')
         : (managerData.clinicName.en || managerData.clinicName.ar || 'N/A');
     }
@@ -90,7 +61,7 @@ export default function Navbar({ onMenuClick }: NavbarProps) {
 
   return (
     <nav className={`bg-gray-800 h-16 fixed top-0 z-20 border-b border-gray-700 ${
-      language === 'ar' ? 'right-0 left-0 xl:right-64' : 'left-0 right-0 xl:left-64'
+      locale === 'ar' ? 'right-0 left-0 xl:right-64' : 'left-0 right-0 xl:left-64'
     }`}>
       <div className="h-full px-4 lg:px-6 flex items-center justify-between">
         <div className="flex items-center gap-4">
@@ -98,22 +69,21 @@ export default function Navbar({ onMenuClick }: NavbarProps) {
             <Menu size={24} />
           </button>
           <div className="text-white">
-            <p className="text-sm text-gray-400 hidden sm:block">{t.managing}</p>
+            <p className="text-sm text-gray-400 hidden sm:block">{locale === 'ar' ? 'إدارة' : 'Managing'}</p>
             <p className="font-semibold text-sm sm:text-base">{getClinicName()}</p>
           </div>
         </div>
         <div className="flex items-center gap-2 sm:gap-4">
           <button 
             onClick={toggleLanguage}
-            className="p-2 text-gray-300 hover:bg-gray-700 rounded-lg transition-colors" 
-            title={t.changeLanguage}
+            className="px-3 py-1.5 rounded-lg bg-gray-700 hover:bg-gray-600 text-gray-200 text-sm font-semibold transition-colors"
           >
-            <Languages size={20} className="sm:w-[22px] sm:h-[22px]" />
+            {locale === 'en' ? 'عربي' : 'EN'}
           </button>
-          <div className={`hidden sm:flex items-center gap-3 ${language === 'ar' ? 'flex-row-reverse' : ''}`}>
-            <div className={language === 'ar' ? 'text-right' : 'text-left'}>
-              <p className="text-sm font-semibold text-white">{managerData.name || t.loading}</p>
-              <p className="text-xs text-gray-400">{t.manager}</p>
+          <div className={`hidden sm:flex items-center gap-3 ${locale === 'ar' ? 'flex-row-reverse' : ''}`}>
+            <div className={locale === 'ar' ? 'text-right' : 'text-left'}>
+              <p className="text-sm font-semibold text-white">{managerData.name || (locale === 'ar' ? 'جاري التحميل...' : 'Loading...')}</p>
+              <p className="text-xs text-gray-400">{locale === 'ar' ? 'مدير' : 'Manager'}</p>
             </div>
             <div className="w-10 h-10 rounded-full bg-gray-700 overflow-hidden">
               {managerData.profileImage ? (
@@ -134,7 +104,7 @@ export default function Navbar({ onMenuClick }: NavbarProps) {
               </div>
             )}
           </div>
-          <button onClick={handleLogout} className="p-2 text-gray-300 hover:bg-gray-700 rounded-lg transition-colors" title={t.logout}>
+          <button onClick={handleLogout} className="p-2 text-gray-300 hover:bg-gray-700 rounded-lg transition-colors" title={locale === 'ar' ? 'تسجيل الخروج' : 'Logout'}>
             <LogOut size={20} className="sm:w-[22px] sm:h-[22px]" />
           </button>
         </div>

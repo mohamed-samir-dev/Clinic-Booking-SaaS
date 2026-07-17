@@ -25,7 +25,17 @@ export const OwnerAccountSection = ({ ownerData, setOwnerData, fetchData }: Owne
         phone: ownerData.phone,
       };
 
-      if (ownerPassword.new && ownerPassword.new === ownerPassword.confirm) {
+      if (ownerPassword.new) {
+        if (ownerPassword.new.length < 8) {
+          toast.error('Password must be at least 8 characters');
+          setSavingSection(false);
+          return;
+        }
+        if (ownerPassword.new !== ownerPassword.confirm) {
+          toast.error('Passwords do not match');
+          setSavingSection(false);
+          return;
+        }
         ownerUpdateData.password = ownerPassword.new;
       }
 

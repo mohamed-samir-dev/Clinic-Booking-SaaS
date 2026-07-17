@@ -1,7 +1,7 @@
 'use client';
 
 import { Suspense } from 'react';
-import { useState, useTransition, useEffect } from 'react';
+import { useState, useTransition, useEffect, useCallback, useRef } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { useTheme } from '@/app/contexts/ThemeContext';
 import { useLanguage } from '@/app/contexts/LanguageContext';
@@ -34,7 +34,7 @@ function BookingPageContent() {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [isPending, startTransition] = useTransition();
-  const [bookingHandler, setBookingHandler] = useState<(() => void) | null>(null);
+  const bookingHandlerRef = useRef<(() => void) | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [canSubmit, setCanSubmit] = useState(false);
   const [missingFields, setMissingFields] = useState<string[]>([]);
@@ -100,12 +100,19 @@ function BookingPageContent() {
     }
   };
 
-  const handleBookingSubmit = (handler: () => void, submitting: boolean, canSubmitForm: boolean, fields: string[]) => {
-    setBookingHandler(() => handler);
-    setIsSubmitting(submitting);
-    setCanSubmit(canSubmitForm);
-    setMissingFields(fields);
-  };
+  const prevSubmitStateRef = useRef({ submitting: false, canSubmit: false, fields: [] as string[] });
+
+  const handleBookingSubmit = useCallback((handler: () => void, submitting: boolean, canSubmitForm: boolean, fields: string[]) => {
+    bookingHandlerRef.current = handler;
+    const prev = prevSubmitStateRef.current;
+    const fieldsChanged = prev.fields.join(',') !== fields.join(',');
+    if (prev.submitting !== submitting || prev.canSubmit !== canSubmitForm || fieldsChanged) {
+      prevSubmitStateRef.current = { submitting, canSubmit: canSubmitForm, fields };
+      setIsSubmitting(submitting);
+      setCanSubmit(canSubmitForm);
+      setMissingFields(fields);
+    }
+  }, []);
 
   const { theme } = useTheme();
   const t = translations[locale].booking;
@@ -178,7 +185,7 @@ function BookingPageContent() {
           doctors={filterProps.doctors}
           handleBack={handleBack}
           handleNext={handleNext}
-          onFinishBooking={() => bookingHandler?.()}
+          onFinishBooking={() => bookingHandlerRef.current?.()}
           isSubmitting={isSubmitting}
           canSubmit={canSubmit}
           missingFields={missingFields}

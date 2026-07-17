@@ -50,6 +50,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     const newLocale = locale === 'en' ? 'ar' : 'en';
     setLocale(newLocale);
     localStorage.setItem('locale', newLocale);
+    document.cookie = `locale=${newLocale};path=/;max-age=31536000`;
     document.documentElement.dir = newLocale === 'ar' ? 'rtl' : 'ltr';
     document.documentElement.lang = newLocale;
     if (newLocale === 'en') {

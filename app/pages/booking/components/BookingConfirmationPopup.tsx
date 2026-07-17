@@ -55,6 +55,11 @@ export default function BookingConfirmationPopup({ isOpen, onClose, bookingData 
     return () => { document.getElementById(styleId)?.remove(); };
   }, [isOpen]);
 
+  const onCloseRef = useRef(onClose);
+  const routerRef = useRef(router);
+  useEffect(() => { onCloseRef.current = onClose; }, [onClose]);
+  useEffect(() => { routerRef.current = router; }, [router]);
+
   useEffect(() => {
     if (!isOpen) return;
     setCountdown(5);
@@ -62,15 +67,15 @@ export default function BookingConfirmationPopup({ isOpen, onClose, bookingData 
       setCountdown((prev) => {
         if (prev <= 1) {
           clearInterval(interval);
-          onClose();
-          router.push('/');
+          onCloseRef.current();
+          routerRef.current.push('/');
           return 0;
         }
         return prev - 1;
       });
     }, 1000);
     return () => clearInterval(interval);
-  }, [isOpen, onClose, router]);
+  }, [isOpen]);
 
   if (!isOpen) return null;
 

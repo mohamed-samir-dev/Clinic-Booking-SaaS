@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from 'next';
-import { Geist, Geist_Mono } from 'next/font/google';
+import { Geist, Geist_Mono, Cairo } from 'next/font/google';
 import './globals.css';
 import LayoutClient from '@/app/components/LayoutClient';
 import GoogleAnalytics from '@/app/components/GoogleAnalytics';
@@ -12,6 +12,12 @@ const geistSans = Geist({
 const geistMono = Geist_Mono({
   variable: '--font-geist-mono',
   subsets: ['latin'],
+});
+
+const cairo = Cairo({
+  variable: '--font-cairo',
+  subsets: ['arabic', 'latin'],
+  weight: ['400', '500', '600', '700'],
 });
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://clinic-booking-saas-backend-production.up.railway.app';
@@ -84,10 +90,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           rel="stylesheet"
         />
       </head>
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`} suppressHydrationWarning>
+      <body className={`${geistSans.variable} ${geistMono.variable} ${cairo.variable} antialiased`} suppressHydrationWarning>
         <script
           dangerouslySetInnerHTML={{
-            __html: `(function(){try{var t=localStorage.getItem('theme');if(t==='dark')document.documentElement.setAttribute('data-theme','dark')}catch(e){}try{var l=localStorage.getItem('locale');if(l==='ar'){document.documentElement.setAttribute('lang','ar');document.documentElement.setAttribute('dir','rtl')}else{document.documentElement.setAttribute('lang','en');document.documentElement.setAttribute('dir','ltr')}}catch(e){}})()`,
+            __html: `(function(){try{var t=localStorage.getItem('theme');if(t==='dark')document.documentElement.setAttribute('data-theme','dark')}catch(e){}try{var l=localStorage.getItem('locale')||document.cookie.split(';').find(function(c){return c.trim().startsWith('locale=')})?.split('=')[1]||'en';if(l==='ar'){document.documentElement.setAttribute('lang','ar');document.documentElement.setAttribute('dir','rtl')}else{document.documentElement.setAttribute('lang','en');document.documentElement.setAttribute('dir','ltr')}}catch(e){}})()`,
           }}
         />
         <LayoutClient>{children}</LayoutClient>

@@ -1,10 +1,10 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/app/store/store';
 import { useLanguage } from '@/app/contexts/LanguageContext';
 import { BookingData, UseBookingParams } from '../types/types';
 import { createAppointment } from '../services/api';
-import { isValidPhoneNumber } from 'react-phone-number-input';
+import { isValidPhoneNumber, parsePhoneNumber } from 'react-phone-number-input';
 
 export const useBooking = ({ selectedDoctor, selectedService, selectedDate, selectedTime }: UseBookingParams) => {
   const { user, token } = useSelector((state: RootState) => state.auth);
@@ -21,7 +21,12 @@ export const useBooking = ({ selectedDoctor, selectedService, selectedDate, sele
   };
 
   const [fullName, setFullName] = useState(user?.role === 'patient' ? getName(user.name) : '');
-  const [phone, setPhone] = useState(user?.role === 'patient' && user.phone ? user.phone : '');
+  const normalizePhone = (raw: string): string => {
+    if (!raw) return '';
+    if (raw.startsWith('+')) return raw;
+    try { return parsePhoneNumber(raw, 'EG')?.number ?? raw; } catch { return raw; }
+  };
+  const [phone, setPhone] = useState(user?.role === 'patient' && user.phone ? normalizePhone(user.phone) : '');
   const [email, setEmail] = useState(user?.role === 'patient' ? user.email : '');
   const [dateOfBirth, setDateOfBirth] = useState('');
   const [gender, setGender] = useState('');
@@ -93,7 +98,7 @@ const handleFinishBooking = useCallback(async () => {
 
   const canSubmit = agreeToPolicy && !!fullName && !!phone && isValidPhoneNumber(phone) && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) && !!dateOfBirth && !!gender && !!reason;
 
-  const missingFields = (() => {
+  const missingFields = useMemo(() => {
     const fields: string[] = [];
     if (!fullName) fields.push(locale === 'ar' ? 'الاسم الكامل' : 'Full name');
     if (!phone || !isValidPhoneNumber(phone)) fields.push(locale === 'ar' ? 'رقم الهاتف' : 'Phone number');
@@ -103,7 +108,7 @@ const handleFinishBooking = useCallback(async () => {
     if (!reason) fields.push(locale === 'ar' ? 'سبب الزيارة' : 'Reason for visit');
     if (!agreeToPolicy) fields.push(locale === 'ar' ? 'الموافقة على السياسات' : 'Policy agreement');
     return fields;
-  })();
+  }, [fullName, phone, email, dateOfBirth, gender, reason, agreeToPolicy, locale]);
 
   return {
     fullName, setFullName,
