@@ -58,6 +58,18 @@ export default function BookingConfirmationPopup({ isOpen, onClose, bookingData 
     window.print();
   };
 
+  const handleAddToCalendar = () => {
+    const [year, month, day] = bookingData.appointmentDate.split('T')[0].split('-').map(Number);
+    const [startH, startM] = bookingData.startTime.replace(/[^0-9:]/g, '').split(':').map(Number);
+    const [endH, endM]     = bookingData.endTime.replace(/[^0-9:]/g, '').split(':').map(Number);
+    const pad = (n: number) => String(n).padStart(2, '0');
+    const startStr = `${year}${pad(month)}${pad(day)}T${pad(startH)}${pad(startM)}00`;
+    const endStr   = `${year}${pad(month)}${pad(day)}T${pad(endH)}${pad(endM)}00`;
+    const title = encodeURIComponent(`Appointment with ${bookingData.doctor.name}`);
+    const details = encodeURIComponent(`${bookingData.service} — ${bookingData.doctor.specialty}`);
+    window.open(`https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${startStr}/${endStr}&details=${details}`, '_blank');
+  };
+
   return (
     <div className="fixed inset-0 backdrop-blur-sm bg-black/20 flex items-center justify-center z-50 p-4 animate-fadeIn print-overlay">
       <div className={`rounded-2xl shadow-xl max-w-3xl w-full max-h-[90vh] overflow-y-auto animate-slideUp ${theme === 'dark' ? 'bg-gray-800' : 'bg-white'}`} dir={locale === 'ar' ? 'rtl' : 'ltr'}>
@@ -163,6 +175,13 @@ export default function BookingConfirmationPopup({ isOpen, onClose, bookingData 
 
         {/* Action Buttons */}
         <div className={`flex gap-3 p-4 border-t no-print ${theme === 'dark' ? 'bg-gray-700 border-gray-600' : 'bg-gray-50 border-gray-200'}`}>
+          <button
+            onClick={handleAddToCalendar}
+            className="flex-1 py-2.5 px-4 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition-colors flex items-center justify-center gap-2 text-sm"
+          >
+            <span className="material-icons text-lg">event</span>
+            {locale === 'ar' ? 'أضف للتقويم' : 'Add to Calendar'}
+          </button>
           <button
             onClick={handlePrint}
             className="flex-1 py-2.5 px-4 bg-teal-600 text-white rounded-lg font-semibold hover:bg-teal-700 transition-colors flex items-center justify-center gap-2 text-sm"

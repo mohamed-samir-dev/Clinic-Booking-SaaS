@@ -23,12 +23,26 @@ export default function FavoritesPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [sortBy, setSortBy] = useState<'recent' | 'alphabetical'>('recent');
 
-  const { favoriteDoctors, favoriteClinics, loading } = useFavorites(token, user?.role, activeTab);
+  const { favoriteDoctors, favoriteClinics, loading, notAuthenticated } = useFavorites(token, user?.role, activeTab);
 
   const filteredAndSortedDoctors = filterAndSortDoctors(favoriteDoctors, searchQuery, sortBy, locale);
   const filteredAndSortedClinics = filterAndSortClinics(favoriteClinics, searchQuery, sortBy, locale);
 
   if (loading) return <LoadingSpinner />;
+
+  if (notAuthenticated) {
+    return (
+      <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-6 py-4 sm:py-6">
+        <div className={`text-center py-12 rounded-xl ${
+          theme === 'dark' ? 'bg-gray-800 text-gray-300' : 'bg-white text-gray-600'
+        }`}>
+          <p className="text-lg font-medium">
+            {locale === 'ar' ? 'يجب تسجيل الدخول كمريض لعرض المفضلة' : 'Please log in as a patient to view your favorites'}
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-6 py-4 sm:py-6">

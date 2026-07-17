@@ -28,9 +28,10 @@ export const getStatusBadge = (status: AppointmentStatus, t?: (key: string) => s
   );
 };
 
-export const formatDate = (dateString: string) => {
+export const formatDate = (dateString: string, locale: string = 'en') => {
   const date = new Date(dateString);
-  const day = date.toLocaleDateString('en-US', { weekday: 'short' });
-  const fullDate = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+  const lang = locale === 'ar' ? 'ar-EG' : 'en-US';
+  const day = date.toLocaleDateString(lang, { weekday: 'short' });
+  const fullDate = date.toLocaleDateString(lang, { month: 'short', day: 'numeric', year: 'numeric' });
   return { day, fullDate };
 };

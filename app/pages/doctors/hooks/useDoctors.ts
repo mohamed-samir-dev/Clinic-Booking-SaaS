@@ -1,13 +1,15 @@
 import { useState, useEffect } from 'react';
 import { api } from '../../../lib/api';
 import { Doctor } from '../../../types/index';
-import {Filters}from '../types/type'
+import { Filters } from '../types/type';
+import { useDebounce } from '@/app/hooks/useDebounce';
 
 
 export const useDoctors = (filters: Filters) => {
   const [doctors, setDoctors] = useState<Doctor[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
+  const debouncedFilters = useDebounce(filters, 400);
 
   useEffect(() => {
     const fetchDoctors = async () => {
@@ -15,10 +17,10 @@ export const useDoctors = (filters: Filters) => {
       setError(null);
       try {
         const filterParams: Record<string, string | number | boolean> = {};
-        if (filters.specialty) filterParams.specialty = filters.specialty;
-        if (filters.gender) filterParams.gender = filters.gender;
-        if (filters.isAvailableToday) filterParams.isAvailableToday = true;
-        if (filters.minExperience > 0) filterParams.minExperience = filters.minExperience;
+        if (debouncedFilters.specialty) filterParams.specialty = debouncedFilters.specialty;
+        if (debouncedFilters.gender) filterParams.gender = debouncedFilters.gender;
+        if (debouncedFilters.isAvailableToday) filterParams.isAvailableToday = true;
+        if (debouncedFilters.minExperience > 0) filterParams.minExperience = debouncedFilters.minExperience;
 
         const data = await api.doctors.getAll(filterParams);
         setDoctors(Array.isArray(data) ? data : []);
@@ -32,7 +34,7 @@ export const useDoctors = (filters: Filters) => {
     };
 
     fetchDoctors();
-  }, [filters]);
+  }, [debouncedFilters]);
 
   return { doctors, loading, error };
 };

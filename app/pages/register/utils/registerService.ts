@@ -1,3 +1,5 @@
+import { AuthResponse } from '@/app/shared/types/auth.types';
+
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export const registerPatient = async (data: { name: string; email: string; password: string; phone: string }) => {
@@ -7,10 +9,16 @@ export const registerPatient = async (data: { name: string; email: string; passw
     body: JSON.stringify(data),
   });
 
-  if (!response.ok) {
-    const error = await response.json();
-    throw new Error(error.message || 'Registration failed');
+  let json: { message?: string; token: string; user: AuthResponse['user'] };
+  try {
+    json = await response.json();
+  } catch {
+    throw new Error('Registration failed. Please try again.');
   }
 
-  return response.json();
+  if (!response.ok) {
+    throw new Error(json.message || 'Registration failed');
+  }
+
+  return json;
 };

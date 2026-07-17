@@ -44,21 +44,6 @@ export interface PatientProfile {
   updatedAt: Date;
 }
 
-export interface Appointment {
-  _id: string;
-  patientId: string;
-  doctorId: string;
-  clinicId: string;
-  serviceId?: string;
-  date: Date | string;
-  time: string;
-  status: 'Pending' | 'Confirmed' | 'Completed' | 'Cancelled' | 'No-show';
-  price: number;
-  notes?: string;
-  createdAt: Date;
-  updatedAt: Date;
-}
-
 export interface FavoriteItem {
   _id: string;
   type: 'doctor' | 'clinic' | 'service';

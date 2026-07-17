@@ -19,10 +19,12 @@ export function useAppointments() {
           'Authorization': `Bearer ${token}`,
         },
       });
+      if (!response.ok) throw new Error(`HTTP error: ${response.status}`);
       const data = await response.json();
       setAppointments(data.appointments || []);
     } catch (error) {
       console.error('Error fetching appointments:', error);
+      setAppointments([]);
     } finally {
       setLoading(false);
     }

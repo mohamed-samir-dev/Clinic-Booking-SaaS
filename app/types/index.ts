@@ -69,6 +69,7 @@ export interface InfoCardProps {
       slots: Array<{ from: string; to: string }>;
       workingHours?: { from: string; to: string };
     }>;
+    consultationDuration?: number;
   }
   
 //   Review Section

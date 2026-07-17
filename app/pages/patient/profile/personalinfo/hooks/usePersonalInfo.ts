@@ -73,7 +73,9 @@ export const usePersonalInfo = () => {
         setIsEditing(false);
         setTimeout(() => setShowSuccess(false), 3000);
       } else {
-        alert(data.message || messages.errorUpdatingProfile);
+        setErrorMessage(data.message || messages.errorUpdatingProfile);
+        setShowSuccess(true);
+        setTimeout(() => setShowSuccess(false), 3000);
       }
     } catch {
       setErrorMessage(messages.errorUpdatingProfile);

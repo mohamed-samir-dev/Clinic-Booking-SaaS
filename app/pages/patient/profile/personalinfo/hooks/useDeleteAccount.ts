@@ -1,4 +1,6 @@
 import { useState } from 'react';
+import { useAppDispatch } from '@/app/store/hooks';
+import { logout } from '@/app/store/slices/authSlice';
 import ar from '@/messages/ar.json';
 import en from '@/messages/en.json';
 
@@ -8,6 +10,7 @@ const getMessages = () => {
 };
 
 export const useDeleteAccount = () => {
+  const dispatch = useAppDispatch();
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showDeleteError, setShowDeleteError] = useState(false);
   const [deleteErrorMsg, setDeleteErrorMsg] = useState('');
@@ -28,8 +31,7 @@ export const useDeleteAccount = () => {
       });
       const data = await response.json();
       if (data.success) {
-        localStorage.removeItem('token');
-        localStorage.removeItem('user');
+        dispatch(logout());
         window.location.href = '/';
       } else {
         setDeleteErrorMsg(data.message || messages.failedDeleteAccount);

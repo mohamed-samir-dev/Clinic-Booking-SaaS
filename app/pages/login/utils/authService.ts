@@ -33,7 +33,7 @@ export const loginUser = async (
 const getErrorMessage = (data: { code?: string; message?: string; messageAr?: string }, status: number): string => {
   // Check for deactivated account
   if (data.code === 'ACCOUNT_DEACTIVATED' || status === 403) {
-    const locale = localStorage.getItem('locale') || 'en';
+    const locale = typeof window !== 'undefined' ? localStorage.getItem('locale') || 'en' : 'en';
     return locale === 'ar' ? (data.messageAr || 'تم إلغاء تفعيل حسابك') : (data.message || 'Your account has been deactivated');
   }
   

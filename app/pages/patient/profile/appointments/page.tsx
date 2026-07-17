@@ -51,6 +51,8 @@ export default function AppointmentsPage() {
     return locale === 'ar' && name.ar ? name.ar : name.en;
   };
 
+  const localizedFormatDate = (date: string) => formatDate(date, locale);
+
   const handleCancelClick = (appointment: Appointment) => {
     setSelectedAppointment(appointment);
     setShowCancelConfirm(true);
@@ -104,7 +106,7 @@ export default function AppointmentsPage() {
 
         {/* Next Appointment Highlight */}
         {nextAppointment && activeTab === 'upcoming' && (
-          <NextAppointmentCard appointment={nextAppointment} formatDate={formatDate} />
+          <NextAppointmentCard appointment={nextAppointment} formatDate={localizedFormatDate} />
         )}
 
         {/* Appointments List */}
@@ -129,7 +131,7 @@ export default function AppointmentsPage() {
                   setSelectedAppointment(appointment);
                   setShowReview(true);
                 }}
-                formatDate={formatDate}
+                formatDate={localizedFormatDate}
                 getStatusBadge={(status) => getStatusBadge(status, tStatus)}
               />
             ))}
@@ -145,7 +147,7 @@ export default function AppointmentsPage() {
             setShowDetails(false);
             setSelectedAppointment(null);
           }}
-          formatDate={formatDate}
+          formatDate={localizedFormatDate}
           getStatusBadge={(status) => getStatusBadge(status, tStatus)}
         />
       )}

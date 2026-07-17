@@ -14,6 +14,7 @@ export function NextAppointmentCard({ appointment, formatDate }: NextAppointment
   const { theme } = useTheme();
   const { locale } = useLanguage();
   const t = useTranslations('patient.appointments.nextAppointment');
+  const tCard = useTranslations('patient.appointments.card');
   
   // Get localized text
   const getName = (name: string | { en: string; ar: string } | undefined) => {
@@ -41,21 +42,21 @@ export function NextAppointmentCard({ appointment, formatDate }: NextAppointment
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
         <div>
-          <p className="text-teal-100 text-xs mb-1">Doctor</p>
+          <p className="text-teal-100 text-xs mb-1">{tCard('doctor') ?? 'Doctor'}</p>
           <p className="font-semibold text-sm sm:text-base truncate">{displayName}</p>
           {displaySpecialty && (
             <p className="text-teal-100 text-xs sm:text-sm truncate">{displaySpecialty}</p>
           )}
         </div>
         <div>
-          <p className="text-teal-100 text-xs mb-1">Date & Time</p>
+          <p className="text-teal-100 text-xs mb-1">{t('dateTime') ?? 'Date & Time'}</p>
           <p className="font-semibold text-sm sm:text-base">
             {formatDate(appointment.appointmentDate).fullDate}
           </p>
           <p className="text-teal-100 text-xs sm:text-sm">{appointment.startTime}</p>
         </div>
         <div>
-          <p className="text-teal-100 text-xs mb-1">Clinic</p>
+          <p className="text-teal-100 text-xs mb-1">{t('clinic') ?? 'Clinic'}</p>
           <p className="font-semibold text-sm sm:text-base truncate">{displayClinicName}</p>
         </div>
       </div>

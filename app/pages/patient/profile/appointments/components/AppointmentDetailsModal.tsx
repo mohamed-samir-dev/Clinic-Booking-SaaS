@@ -301,7 +301,28 @@ export function AppointmentDetailsModal({
           {/* Actions */}
           <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 pt-2">
             {appointment.paid && (
-              <button className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 sm:py-3 bg-teal-600 text-white rounded-xl hover:bg-teal-700 transition-colors font-bold text-sm sm:text-base shadow-lg hover:shadow-xl">
+              <button 
+                onClick={() => {
+                  const invoiceData = [
+                    `Booking ID: ${appointment._id}`,
+                    `Doctor: ${displayName}`,
+                    `Date: ${fullDate}`,
+                    `Time: ${appointment.startTime} - ${appointment.endTime}`,
+                    `Clinic: ${displayClinicName}`,
+                    `Service: ${displayService || 'N/A'}`,
+                    `Fee: $${appointment.fee}`,
+                    `Payment: Online`,
+                    `Status: Paid`,
+                  ].join('\n');
+                  const blob = new Blob([invoiceData], { type: 'text/plain' });
+                  const url = URL.createObjectURL(blob);
+                  const a = document.createElement('a');
+                  a.href = url;
+                  a.download = `invoice-${appointment._id}.txt`;
+                  a.click();
+                  URL.revokeObjectURL(url);
+                }}
+                className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 sm:py-3 bg-teal-600 text-white rounded-xl hover:bg-teal-700 transition-colors font-bold text-sm sm:text-base shadow-lg hover:shadow-xl">
                 <FaFileInvoice />
                 {t('downloadInvoice')}
               </button>

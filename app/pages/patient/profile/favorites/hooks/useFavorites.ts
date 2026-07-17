@@ -7,14 +7,17 @@ export const useFavorites = (token: string | null, userRole: string | undefined,
   const [favoriteDoctors, setFavoriteDoctors] = useState<Doctor[]>([]);
   const [favoriteClinics, setFavoriteClinics] = useState<Clinic[]>([]);
   const [loading, setLoading] = useState(true);
+  const [notAuthenticated, setNotAuthenticated] = useState(false);
 
   useEffect(() => {
     const fetchFavorites = async () => {
       if (!token || userRole !== 'patient') {
         setLoading(false);
+        setNotAuthenticated(true);
         return;
       }
 
+      setNotAuthenticated(false);
       try {
         if (activeTab === 'doctors') {
           const data = await fetchFavoriteDoctors(token);
@@ -52,5 +55,5 @@ export const useFavorites = (token: string | null, userRole: string | undefined,
     return () => window.removeEventListener('favoriteChanged', handleFavoriteChange);
   }, []);
 
-  return { favoriteDoctors, favoriteClinics, loading };
+  return { favoriteDoctors, favoriteClinics, loading, notAuthenticated };
 };

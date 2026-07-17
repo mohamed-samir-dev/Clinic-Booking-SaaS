@@ -1,11 +1,42 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import Sidebar from './components/Sidebar';
 import Navbar from './components/Navbar';
 
 export default function OwnerLayout({ children }: { children: React.ReactNode }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [authorized, setAuthorized] = useState(false);
+  const router = useRouter();
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    const userRaw = localStorage.getItem('user');
+
+    if (!token || !userRaw) {
+      router.replace('/pages/login');
+      return;
+    }
+
+    try {
+      const user = JSON.parse(userRaw);
+      if (user.role !== 'owner') {
+        const roleRedirects: Record<string, string> = {
+          manager: '/pages/manager',
+          doctor: '/pages/doctor',
+          patient: '/',
+        };
+        router.replace(roleRedirects[user.role] || '/');
+        return;
+      }
+      setAuthorized(true);
+    } catch {
+      router.replace('/pages/login');
+    }
+  }, [router]);
+
+  if (!authorized) return null;
 
   return (
     <div className="min-h-screen bg-gray-900">

@@ -34,16 +34,30 @@ const SectionSkeleton = () => (
 );
 
 const CACHE_DURATION_MS = 5 * 60 * 1000;
-let memoryCache: { data: DashboardData; timestamp: number } | null = null;
 
 function getCachedData(): DashboardData | null {
-  if (!memoryCache) return null;
-  if (Date.now() - memoryCache.timestamp > CACHE_DURATION_MS) return null;
-  return memoryCache.data;
+  if (typeof window === 'undefined') return null;
+  try {
+    const raw = sessionStorage.getItem('ownerDashboardCache');
+    if (!raw) return null;
+    const { data, timestamp } = JSON.parse(raw);
+    if (Date.now() - timestamp > CACHE_DURATION_MS) {
+      sessionStorage.removeItem('ownerDashboardCache');
+      return null;
+    }
+    return data as DashboardData;
+  } catch {
+    return null;
+  }
 }
 
 function setCachedData(data: DashboardData) {
-  memoryCache = { data, timestamp: Date.now() };
+  if (typeof window === 'undefined') return;
+  try {
+    sessionStorage.setItem('ownerDashboardCache', JSON.stringify({ data, timestamp: Date.now() }));
+  } catch {
+    // sessionStorage might be full, ignore
+  }
 }
 
 import { KPIData } from './types';

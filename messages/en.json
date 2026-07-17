@@ -1226,7 +1226,9 @@
         "in": "in",
         "days": "days",
         "hours": "hours",
-        "minutes": "minutes"
+        "minutes": "minutes",
+        "dateTime": "Date & Time",
+        "clinic": "Clinic"
       },
       "card": {
         "viewDetails": "View Details",

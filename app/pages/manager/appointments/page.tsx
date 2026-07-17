@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/app/store/store';
+import { useDebounce } from '@/app/hooks/useDebounce';
 import { Calendar, Search, Plus, Clock, LayoutGrid, LayoutList } from 'lucide-react';
 import { AppointmentsTable } from './components/AppointmentsTable';
 import { AppointmentFilters } from './components/AppointmentFilters';
@@ -67,6 +68,7 @@ export default function AppointmentsPage() {
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
+  const debouncedSearch = useDebounce(searchTerm, 300);
   const [viewMode, setViewMode] = useState<'table' | 'calendar'>('table');
   const [calendarViewMode, setCalendarViewMode] = useState<'daily' | 'weekly'>('daily');
   const [selectedAppointment, setSelectedAppointment] = useState<Appointment | null>(null);
@@ -196,7 +198,7 @@ export default function AppointmentsPage() {
   };
 
   const filteredAppointments = appointments.filter(apt => {
-    const searchNormalized = normalizeArabicText(searchTerm);
+    const searchNormalized = normalizeArabicText(debouncedSearch);
     const patientName = normalizeArabicText(getName(apt.patientName));
     const doctorName = normalizeArabicText(getName(apt.doctorName));
     
