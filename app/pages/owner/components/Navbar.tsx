@@ -14,6 +14,9 @@ const PROFILE_CACHE_KEY = 'owner_profile_cache';
 
 export default function Navbar({ onMenuClick }: { onMenuClick?: () => void }) {
   const [ownerData, setOwnerData] = useState<OwnerData>({ name: '', profileImage: null });
+  const router = useRouter();
+  const { locale, toggleLanguage } = useLanguage();
+  const isRtl = locale === 'ar';
 
   useEffect(() => {
     try {
@@ -21,7 +24,6 @@ export default function Navbar({ onMenuClick }: { onMenuClick?: () => void }) {
       if (cached) setOwnerData(JSON.parse(cached));
     } catch {}
   }, []);
-  const router = useRouter();
 
   useEffect(() => {
     const fetchOwnerData = async () => {
@@ -40,16 +42,18 @@ export default function Navbar({ onMenuClick }: { onMenuClick?: () => void }) {
     fetchOwnerData();
   }, []);
 
-  const { locale, toggleLanguage } = useLanguage();
-
   const handleLogout = () => {
     localStorage.removeItem('token');
     router.push('/');
   };
 
+  const loadingText = isRtl ? 'جاري التحميل...' : 'Loading...';
+  const adminText = isRtl ? 'مدير النظام' : 'Admin';
+  const logoutTitle = isRtl ? 'تسجيل الخروج' : 'Logout';
+
   return (
-    <nav className="bg-gray-800 h-16 fixed top-0 right-0 left-0 xl:left-64 z-10">
-      <div className="h-full px-6 flex items-center justify-between xl:justify-end">
+    <nav className={`bg-gray-800 h-16 fixed top-0 z-10 ${isRtl ? 'right-0 left-0 xl:right-64' : 'left-0 right-0 xl:left-64'}`}>
+      <div className="h-full px-6 flex items-center justify-between xl:justify-end" dir={isRtl ? 'rtl' : 'ltr'}>
         <button
           onClick={onMenuClick}
           className="xl:hidden p-2 text-gray-300 hover:bg-gray-700 rounded-lg transition-colors"
@@ -63,10 +67,10 @@ export default function Navbar({ onMenuClick }: { onMenuClick?: () => void }) {
           >
             {locale === 'en' ? 'عربي' : 'EN'}
           </button>
-          <div className="flex items-center gap-3">
-            <div className="text-right">
-              <p className="text-sm font-semibold text-white">{ownerData.name || 'Loading...'}</p>
-              <p className="text-xs text-gray-400">Admin</p>
+          <div className={`flex items-center gap-3 ${isRtl ? 'flex-row-reverse' : ''}`}>
+            <div className={isRtl ? 'text-right' : 'text-left'}>
+              <p className="text-sm font-semibold text-white">{ownerData.name || loadingText}</p>
+              <p className="text-xs text-gray-400">{adminText}</p>
             </div>
             <div className="w-10 h-10 rounded-full bg-gray-700 overflow-hidden">
               {ownerData.profileImage ? (
@@ -78,7 +82,7 @@ export default function Navbar({ onMenuClick }: { onMenuClick?: () => void }) {
               )}
             </div>
           </div>
-          <button onClick={handleLogout} className="p-2 text-gray-300 hover:bg-gray-700 rounded-lg transition-colors" title="Logout">
+          <button onClick={handleLogout} className="p-2 text-gray-300 hover:bg-gray-700 rounded-lg transition-colors" title={logoutTitle}>
             <LogOut size={22} />
           </button>
         </div>

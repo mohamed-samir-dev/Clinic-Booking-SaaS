@@ -5,12 +5,13 @@ import { useTranslations } from 'next-intl';
 
 interface SidebarProps {
   clinic: Clinic;
+  doctorsCount: number;
   theme: 'light' | 'dark';
   locale: 'en' | 'ar';
   onImageClick: (image: string, index: number) => void;
 }
 
-export default function Sidebar({ clinic, theme, locale, onImageClick }: SidebarProps) {
+export default function Sidebar({ clinic, doctorsCount, theme, locale, onImageClick }: SidebarProps) {
   const t = useTranslations('clinics.details');
   
   return (
@@ -65,13 +66,13 @@ export default function Sidebar({ clinic, theme, locale, onImageClick }: Sidebar
                 <span className="font-bold text-teal-600 text-sm sm:text-base">{clinic.capacity.rooms}</span>
               </div>
             )}
-            {clinic.capacity.doctors > 0 && (
+            {doctorsCount > 0 && (
               <div className={`flex items-center justify-between p-2 sm:p-3 rounded-lg ${theme === 'dark' ? 'bg-teal-900/30' : 'bg-teal-50'}`}>
                 <div className="flex items-center gap-2">
                   <Users className="text-teal-600" size={18} />
                   <span className={`text-sm sm:text-base ${theme === 'dark' ? 'text-gray-200' : 'text-gray-700'}`}>{t('doctors')}</span>
                 </div>
-                <span className="font-bold text-teal-600 text-sm sm:text-base">{clinic.capacity.doctors}</span>
+                <span className="font-bold text-teal-600 text-sm sm:text-base">{doctorsCount}</span>
               </div>
             )}
             {clinic.capacity.patientsPerDay > 0 && (

@@ -46,7 +46,7 @@ export default function ClinicDetailsPage() {
   return (
     <NextIntlClientProvider locale={locale} messages={messages}>
       <div className={`min-h-screen ${theme === 'dark' ? 'bg-gray-900' : 'bg-gray-50'}`}>
-        <ClinicHeader clinic={clinic} theme={theme} locale={locale} />
+              <ClinicHeader clinic={clinic} doctorsCount={doctors.length} theme={theme} locale={locale} />
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 sm:py-8">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
@@ -67,6 +67,7 @@ export default function ClinicDetailsPage() {
 
             <Sidebar 
               clinic={clinic}
+              doctorsCount={doctors.length}
               theme={theme}
               locale={locale}
               onImageClick={(image, index) => {

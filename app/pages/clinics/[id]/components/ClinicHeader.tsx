@@ -5,11 +5,12 @@ import { useTranslations } from 'next-intl';
 
 interface ClinicHeaderProps {
   clinic: Clinic;
+  doctorsCount: number;
   theme: 'light' | 'dark';
   locale: 'en' | 'ar';
 }
 
-export default function ClinicHeader({ clinic, theme, locale }: ClinicHeaderProps) {
+export default function ClinicHeader({ clinic, doctorsCount, theme, locale }: ClinicHeaderProps) {
   const t = useTranslations('clinics.details');
   
   return (
@@ -55,7 +56,7 @@ export default function ClinicHeader({ clinic, theme, locale }: ClinicHeaderProp
               <Users className="text-white shrink-0" size={20} />
               <div className="text-white min-w-0">
                 <p className="text-xs sm:text-sm text-teal-100">{t('capacity')}</p>
-                <p className="font-semibold text-sm sm:text-base">{clinic.capacity.doctors} {t('doctors')} • {clinic.capacity.rooms} {t('rooms')}</p>
+                <p className="font-semibold text-sm sm:text-base">{doctorsCount} {t('doctors')} • {clinic.capacity.rooms} {t('rooms')}</p>
               </div>
             </div>
           )}

@@ -4,7 +4,23 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Sidebar from './components/Sidebar';
 import Navbar from './components/Navbar';
-import { LanguageProvider } from '@/app/contexts/LanguageContext';
+import { LanguageProvider, useLanguage } from '@/app/contexts/LanguageContext';
+
+function OwnerContent({ children }: { children: React.ReactNode }) {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const { locale } = useLanguage();
+  const isRtl = locale === 'ar';
+
+  return (
+    <div className="min-h-screen bg-gray-900">
+      <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+      <Navbar onMenuClick={() => setSidebarOpen(true)} />
+      <main className={`pt-16 bg-gray-900 ${isRtl ? 'xl:mr-64' : 'xl:ml-64'}`}>
+        {children}
+      </main>
+    </div>
+  );
+}
 
 export default function OwnerLayout({ children }: { children: React.ReactNode }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -41,13 +57,7 @@ export default function OwnerLayout({ children }: { children: React.ReactNode })
 
   return (
     <LanguageProvider>
-      <div className="min-h-screen bg-gray-900">
-        <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
-        <Navbar onMenuClick={() => setSidebarOpen(true)} />
-        <main className="xl:ml-64 pt-16 bg-gray-900">
-          {children}
-        </main>
-      </div>
+      <OwnerContent>{children}</OwnerContent>
     </LanguageProvider>
   );
 }
