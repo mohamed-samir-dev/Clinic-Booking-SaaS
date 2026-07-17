@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
 import { FaUser } from 'react-icons/fa';
 import { UserMenuProps } from '../../types/index';
 import { useLanguage } from '@/app/contexts/LanguageContext';
@@ -21,14 +22,17 @@ const getDisplayName = (name: unknown, locale: string): string => {
 export default function UserMenu({ user, showDropdown, setShowDropdown, handleLogout }: UserMenuProps) {
   const { locale } = useLanguage();
   const { theme } = useTheme();
+  const [mounted, setMounted] = useState(false);
   const t = locale === 'ar' ? messagesAr.navbar : messages.navbar;
   const displayName = getDisplayName(user?.name, locale);
+
+  useEffect(() => { setMounted(true); }, []);
 
   const handleProfileClick = () => {
     setShowDropdown(false);
   };
 
-  if (!user) {
+  if (!mounted || !user) {
     return (
       <Link
         href="/pages/login"
