@@ -23,12 +23,13 @@ function BookingPageContent() {
   const searchParams = useSearchParams();
   const isQuickBooking = searchParams.get('quick') === 'true';
   const quickData = isQuickBooking ? getQuickBookingData() : null;
+  const isValidQuickBooking = quickData && quickData.doctorId && quickData.serviceId;
   const { locale } = useLanguage();
   const isRTL = locale === 'ar';
   
-  const [currentStep, setCurrentStep] = useState(quickData ? 3 : 1);
-  const [selectedService, setSelectedService] = useState(quickData?.serviceId || '');
-  const [selectedDoctor, setSelectedDoctor] = useState(quickData?.doctorId || '');
+  const [currentStep, setCurrentStep] = useState(isValidQuickBooking ? 3 : 1);
+  const [selectedService, setSelectedService] = useState(isValidQuickBooking ? quickData.serviceId : '');
+  const [selectedDoctor, setSelectedDoctor] = useState(isValidQuickBooking ? quickData.doctorId : '');
   const [selectedTime, setSelectedTime] = useState('');
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
@@ -39,11 +40,11 @@ function BookingPageContent() {
 
   useEffect(() => {
     return () => {
-      if (isQuickBooking) {
+      if (isQuickBooking && isValidQuickBooking) {
         clearQuickBookingData();
       }
     };
-  }, [isQuickBooking]);
+  }, [isQuickBooking, isValidQuickBooking]);
 
   // Clean up old selectedService values (convert translated titles to keys)
   useEffect(() => {
@@ -67,7 +68,7 @@ function BookingPageContent() {
     }
   }, [selectedService, locale]);
 
-  const { allDoctors, loadingDoctors } = useDoctors(selectedService, currentStep, isQuickBooking);
+  const { allDoctors, loadingDoctors } = useDoctors(selectedService, currentStep, isValidQuickBooking ? true : false);
   const filterProps = useFilters(allDoctors);
 
   const handleNext = () => {

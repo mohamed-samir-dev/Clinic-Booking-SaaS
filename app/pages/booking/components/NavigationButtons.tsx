@@ -33,7 +33,7 @@ export default function NavigationButtons({
               <span className="material-icons text-base sm:text-lg">{isRTL ? 'arrow_forward' : 'arrow_back'}</span>
               <span className="hidden sm:inline">{t.back}</span>
             </button>
-          ) : <div></div>}
+          ) : <div className="w-10 sm:w-20" />}
           
           <div className="flex-1 flex justify-center">
           

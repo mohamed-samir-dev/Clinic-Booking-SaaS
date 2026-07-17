@@ -513,6 +513,7 @@
     },
     "detailsForm": {
       "title": "Patient Information",
+      "stepDescription": "Step 4 of 4: Please provide your personal and medical information.",
       "basicInfo": {
         "title": "Basic Information",
         "fullName": "Full Name",
@@ -1025,6 +1026,111 @@
         "saturday": "Saturday"
       }
     }
+  },
+  "privacy": {
+    "hero": {
+      "badge": "Privacy Policy",
+      "title": "Your Privacy",
+      "titleHighlight": " Matters",
+      "lastUpdated": "Last updated: January 2026"
+    },
+    "intro": "At CareSync, we are committed to protecting your privacy and the security of your personal data. This policy explains how we collect, use, and protect your information.",
+    "sections": [
+      {
+        "title": "Information We Collect",
+        "content": "We collect information you provide directly when creating an account or booking an appointment, including your name, email, phone number, and medical information necessary to provide healthcare services."
+      },
+      {
+        "title": "How We Use Your Information",
+        "content": "We use your data to provide healthcare services, manage appointments, communicate with you about our services, and improve your experience on the platform. We will never sell your data to third parties."
+      },
+      {
+        "title": "Data Security",
+        "content": "We apply the highest security standards to protect your data, including encryption and advanced security protocols. Your data is stored on secure, protected servers."
+      },
+      {
+        "title": "Information Sharing",
+        "content": "We may share your medical information only with the doctors and healthcare professionals involved in your treatment. We will not share your data with any other party without your explicit consent."
+      },
+      {
+        "title": "Your Rights",
+        "content": "You have the right to access, correct, or request deletion of your personal data at any time. You can contact us through the contact page to exercise these rights."
+      },
+      {
+        "title": "Contact Us",
+        "content": "If you have any questions about our privacy policy, please contact us at: support@caresync.com"
+      }
+    ]
+  },
+  "terms": {
+    "hero": {
+      "badge": "Terms of Service",
+      "title": "Terms of",
+      "titleHighlight": " Use",
+      "lastUpdated": "Last updated: January 2026"
+    },
+    "intro": "By using the CareSync platform, you agree to be bound by these terms and conditions. Please read them carefully before using our services.",
+    "sections": [
+      {
+        "title": "Acceptance of Terms",
+        "content": "By using the CareSync platform, you acknowledge that you have read, understood, and agreed to be bound by these terms. If you do not agree to any of these terms, please do not use the platform."
+      },
+      {
+        "title": "Use of Service",
+        "content": "You are permitted to use the platform for personal, non-commercial purposes only. Use of the platform for any illegal purpose or in violation of the rights of others is strictly prohibited."
+      },
+      {
+        "title": "Appointment Booking",
+        "content": "When booking an appointment, you are responsible for providing accurate and correct information. Appointments must be cancelled at least 24 hours in advance to avoid any cancellation fees."
+      },
+      {
+        "title": "Medical Responsibility",
+        "content": "CareSync is an appointment booking platform and is not a direct healthcare provider. Medical responsibility lies with the licensed doctors and healthcare professionals."
+      },
+      {
+        "title": "Intellectual Property",
+        "content": "All content, designs, and trademarks on the platform are the exclusive property of CareSync and are protected by intellectual property laws."
+      },
+      {
+        "title": "Modification of Terms",
+        "content": "We reserve the right to modify these terms at any time. You will be notified of any material changes via email or a notice on the platform."
+      }
+    ]
+  },
+  "cookies": {
+    "hero": {
+      "badge": "Cookie Policy",
+      "title": "How We Use",
+      "titleHighlight": " Cookies",
+      "lastUpdated": "Last updated: January 2026"
+    },
+    "intro": "We use cookies to improve your experience on the CareSync platform. This policy explains the types of cookies we use and how to control them.",
+    "sections": [
+      {
+        "title": "What Are Cookies?",
+        "content": "Cookies are small text files stored on your device when you visit our website. They help us remember your preferences and improve site performance."
+      },
+      {
+        "title": "Essential Cookies",
+        "content": "These cookies are necessary for the website to function properly, such as maintaining your login session and remembering language preferences. They cannot be disabled."
+      },
+      {
+        "title": "Performance Cookies",
+        "content": "We use these cookies to analyze how visitors use the site, helping us improve performance and user experience. All data is anonymized."
+      },
+      {
+        "title": "Preference Cookies",
+        "content": "These cookies allow us to remember your choices such as language, timezone, and display settings to provide a personalized experience."
+      },
+      {
+        "title": "Managing Cookies",
+        "content": "You can control cookie settings through your browser settings. Please note that disabling some cookies may affect the functionality of the website."
+      },
+      {
+        "title": "Contact Us",
+        "content": "If you have any questions about our use of cookies, please contact us at: support@caresync.com"
+      }
+    ]
   },
   "notFound": {
     "title": "404",

@@ -34,6 +34,7 @@ export interface CreateAppointmentParams {
   selectedTime: string;
   selectedService: string;
   patientData: PatientFormData;
+  files?: File[];
   user: unknown;
   token: string | null;
   locale: 'en' | 'ar';

@@ -65,7 +65,7 @@ export default function DetailsForm({ selectedDoctor, selectedService, selectedD
           theme === 'dark' ? 'bg-gray-800' : 'bg-white'
         }`}>
           <h2 className={`text-xl sm:text-2xl font-bold mb-1 sm:mb-2 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{t.title}</h2>
-          <p className={`mb-4 sm:mb-6 text-sm sm:text-base ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>{locale === 'ar' ? 'الخطوة 4 من 4: يرجى تقديم معلوماتك الشخصية والطبية.' : 'Step 4 of 4: Please provide your personal and medical information.'}</p>
+          <p className={`mb-4 sm:mb-6 text-sm sm:text-base ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>{t.stepDescription}</p>
 
           <BasicInformation 
             fullName={fullName} 
@@ -98,7 +98,7 @@ export default function DetailsForm({ selectedDoctor, selectedService, selectedD
       <BookingSummary
         doctorObject={selectedDoctor || null}
         selectedService={selectedService}
-        consultationDuration={30}
+        consultationDuration={selectedDoctor?.consultationDuration || 30}
         selectedDate={selectedDate}
         selectedTime={selectedTime}
       />

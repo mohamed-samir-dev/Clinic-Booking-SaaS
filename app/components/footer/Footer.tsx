@@ -96,13 +96,13 @@ export default function Footer() {
           <div className="flex flex-col md:flex-row justify-between items-center gap-3 sm:gap-4 text-sm sm:text-base text-gray-400">
             <p className="font-medium text-center md:text-left">&copy; {t.copyright}</p>
             <div className="flex flex-wrap justify-center gap-4 sm:gap-6">
-              <Link href="/privacy" className="hover:text-teal-500 transition-colors font-medium">
+              <Link href="/pages/privacy" className="hover:text-teal-500 transition-colors font-medium">
                 {t.privacyPolicy}
               </Link>
-              <Link href="/terms" className="hover:text-teal-500 transition-colors font-medium">
+              <Link href="/pages/terms" className="hover:text-teal-500 transition-colors font-medium">
                 {t.termsOfService}
               </Link>
-              <Link href="/cookies" className="hover:text-teal-500 transition-colors font-medium">
+              <Link href="/pages/cookies" className="hover:text-teal-500 transition-colors font-medium">
                 {t.cookiePolicy}
               </Link>
             </div>

@@ -35,34 +35,34 @@ export const useBooking = ({ selectedDoctor, selectedService, selectedDate, sele
     setError(null);
     
     if (!agreeToPolicy) {
-      setError('Please agree to the privacy policy');
+      setError(locale === 'ar' ? 'يرجى الموافقة على سياسة الخصوصية' : 'Please agree to the privacy policy');
       return;
     }
 
     if (!fullName || !phone || !email || !dateOfBirth || !gender || !reason) {
-      setError('Please fill all required fields');
+      setError(locale === 'ar' ? 'يرجى ملء جميع الحقول المطلوبة' : 'Please fill all required fields');
       return;
     }
 
     if (phone.length !== 10) {
-      setError('Phone number must be exactly 10 digits');
+      setError(locale === 'ar' ? 'يجب أن يكون رقم الهاتف 10 أرقام بالضبط' : 'Phone number must be exactly 10 digits');
       return;
     }
 
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      setError('Please enter a valid email address');
+      setError(locale === 'ar' ? 'يرجى إدخال بريد إلكتروني صالح' : 'Please enter a valid email address');
       return;
     }
 
     const birthDate = new Date(dateOfBirth);
     const today = new Date();
     if (birthDate > today) {
-      setError('Date of birth cannot be in the future');
+      setError(locale === 'ar' ? 'لا يمكن أن يكون تاريخ الميلاد في المستقبل' : 'Date of birth cannot be in the future');
       return;
     }
 
     if (!selectedDoctor || !selectedDate || !selectedTime) {
-      setError('Please complete all booking steps');
+      setError(locale === 'ar' ? 'يرجى إكمال جميع خطوات الحجز' : 'Please complete all booking steps');
       return;
     }
 
@@ -75,6 +75,7 @@ export const useBooking = ({ selectedDoctor, selectedService, selectedDate, sele
         selectedTime,
         selectedService,
         patientData: { fullName, phone, email, dateOfBirth, gender, reason },
+        files,
         user,
         token,
         locale
@@ -83,7 +84,7 @@ export const useBooking = ({ selectedDoctor, selectedService, selectedDate, sele
       setBookingData(data);
       return true;
     } catch (error: unknown) {
-      const errorMessage = error instanceof Error ? error.message : 'Failed to create booking. Please try again.';
+      const errorMessage = error instanceof Error ? error.message : (locale === 'ar' ? 'فشل إنشاء الحجز. يرجى المحاولة مرة أخرى.' : 'Failed to create booking. Please try again.');
       setError(errorMessage);
       return false;
     } finally {

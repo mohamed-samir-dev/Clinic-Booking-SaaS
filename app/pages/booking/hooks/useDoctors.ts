@@ -22,10 +22,10 @@ export const useDoctors = (selectedService: string, currentStep: number, forceLo
         const doctorsData = Array.isArray(data) ? data : [];
         const filtered = doctorsData.filter((d: Doctor) => {
           const specialty = typeof d.specialty === 'object' ? d.specialty : { en: d.specialty, ar: d.specialty };
-          const specialtyEn = specialty?.en || '';
-          const specialtyAr = specialty?.ar || '';
-          const selectedLower = selectedService.toLowerCase();
-          return specialtyEn.toLowerCase() === selectedLower || specialtyAr.toLowerCase() === selectedLower;
+          const specialtyEn = (specialty?.en || '').toLowerCase().trim();
+          const specialtyAr = (specialty?.ar || '').toLowerCase().trim();
+          const selectedLower = selectedService.toLowerCase().trim();
+          return specialtyEn === selectedLower || specialtyAr === selectedLower;
         });
         setAllDoctors(filtered);
       } catch {

@@ -43,10 +43,10 @@ export default function DoctorCard({ doctor, selectedDoctor, onSelect }: DoctorC
             <div className="flex items-center gap-3 sm:gap-4 mb-2">
               <div className="flex items-center gap-1">
                 <span className="text-yellow-500 text-sm">★</span>
-                <span className={`text-xs sm:text-sm font-semibold ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>4.8</span>
+                <span className={`text-xs sm:text-sm font-semibold ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>{doctor.ratingAvg ? doctor.ratingAvg.toFixed(1) : 'N/A'}</span>
               </div>
               <div className="flex items-center gap-1">
-                <span className="text-teal-600 text-xs sm:text-sm font-semibold">{doctor.experienceYears} Years</span>
+                <span className="text-teal-600 text-xs sm:text-sm font-semibold">{doctor.experienceYears} {locale === 'ar' ? 'سنوات' : 'Years'}</span>
               </div>
             </div>
           </div>

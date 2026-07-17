@@ -7,7 +7,7 @@ export default function BasicInformation({ fullName, setFullName, phone, setPhon
   const { locale } = useLanguage();
   const t = translations[locale].booking.detailsForm.basicInfo;
   const isPhoneValid = phone.length === 10;
-  const isEmailValid = email.endsWith('@gmail.com') && email.length > 10;
+  const isEmailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
   return (
     <div className="mb-4 sm:mb-6">
@@ -44,7 +44,7 @@ export default function BasicInformation({ fullName, setFullName, phone, setPhon
                 if (value.length <= 10) setPhone(value);
               }}
               className={`flex-1 min-w-0 px-2 sm:px-3 md:px-4 py-2 sm:py-3 rounded-xl border-2 focus:outline-none text-sm sm:text-base ${
-                phone && !isPhoneValid ?  'text-black border-red-500 focus:border-red-500' : theme === 'dark' ? 'bg-gray-00 border-gray-600 text-white focus:border-teal-500' : 'bg-white text-black border-gray-200  focus:border-teal-500'
+                phone && !isPhoneValid ? 'text-black border-red-500 focus:border-red-500' : theme === 'dark' ? 'bg-gray-700 border-gray-600 text-white focus:border-teal-500' : 'bg-white text-black border-gray-200 focus:border-teal-500'
               }`}
               placeholder="1012345678"
               maxLength={10}
@@ -72,10 +72,10 @@ export default function BasicInformation({ fullName, setFullName, phone, setPhon
             placeholder="john.doe@gmail.com"
           />
           {email && !isEmailValid && (
-            <p className="text-[10px] sm:text-xs text-red-500 mt-1">{locale === 'ar' ? '⚠ يجب أن ينتهي البريد بـ @gmail.com' : '⚠ Email must end with @gmail.com'}</p>
+            <p className="text-[10px] sm:text-xs text-red-500 mt-1">{locale === 'ar' ? '⚠ يرجى إدخال بريد إلكتروني صالح' : '⚠ Please enter a valid email address'}</p>
           )}
           {(!email || isEmailValid) && (
-            <p className={`text-[10px] sm:text-xs mt-1 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>{locale === 'ar' ? 'يجب أن يكون عنوان Gmail صالح' : 'Must be a valid Gmail address'}</p>
+            <p className={`text-[10px] sm:text-xs mt-1 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>{locale === 'ar' ? 'مثال: name@example.com' : 'e.g. name@example.com'}</p>
           )}
         </div>
       </div>

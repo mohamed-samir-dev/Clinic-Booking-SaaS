@@ -7,6 +7,7 @@ export const createAppointment = async ({
   selectedTime,
   selectedService,
   patientData,
+  files,
   user,
   token,
   locale
@@ -45,18 +46,29 @@ export const createAppointment = async ({
     guestId
   };
 
-  const headers: Record<string, string> = {
-    'Content-Type': 'application/json'
-  };
+  const headers: Record<string, string> = {};
 
   if (token) {
     headers['Authorization'] = `Bearer ${token}`;
   }
 
+  let body: BodyInit;
+  let contentTypeHeader: Record<string, string> = {};
+
+  if (files && files.length > 0) {
+    const formData = new FormData();
+    formData.append('data', JSON.stringify(appointmentData));
+    files.forEach((file) => formData.append('files', file));
+    body = formData;
+  } else {
+    contentTypeHeader = { 'Content-Type': 'application/json' };
+    body = JSON.stringify(appointmentData);
+  }
+
   const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/appointments`, {
     method: 'POST',
-    headers,
-    body: JSON.stringify(appointmentData)
+    headers: { ...headers, ...contentTypeHeader },
+    body
   });
 
   const data = await response.json();
