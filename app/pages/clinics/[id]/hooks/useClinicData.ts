@@ -3,20 +3,16 @@ import { Clinic, Doctor } from '../types';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
-/**
- * Fetch clinic + doctors data, then returns doctors filtered by clinicId.
- * Best practice: ideally backend should expose /api/doctors?clinicId=... to avoid fetching all doctors.
- */
 export const useClinicData = (clinicId: string) => {
   const [clinic, setClinic] = useState<Clinic | null>(null);
-  const [allDoctors, setAllDoctors] = useState<Doctor[]>([]);
+  const [doctors, setDoctors] = useState<Doctor[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     if (!clinicId) {
       setClinic(null);
-      setAllDoctors([]);
+      setDoctors([]);
       setLoading(false);
       setError('Missing clinicId');
       return;
@@ -29,12 +25,9 @@ export const useClinicData = (clinicId: string) => {
         setLoading(true);
         setError(null);
 
-        const clinicUrl = `${API_URL}/api/clinics/${encodeURIComponent(clinicId)}`;
-        const doctorsUrl = `${API_URL}/api/doctors/all`;
-
         const [clinicRes, doctorsRes] = await Promise.all([
-          fetch(clinicUrl, { signal: controller.signal }),
-          fetch(doctorsUrl, { signal: controller.signal }),
+          fetch(`${API_URL}/api/clinics/${encodeURIComponent(clinicId)}`, { signal: controller.signal }),
+          fetch(`${API_URL}/api/doctors/by-clinic/${encodeURIComponent(clinicId)}`, { signal: controller.signal }),
         ]);
 
         if (!clinicRes.ok) throw new Error(`Failed to fetch clinic: ${clinicRes.status}`);
@@ -48,33 +41,19 @@ export const useClinicData = (clinicId: string) => {
         if (controller.signal.aborted) return;
 
         setClinic(clinicData ?? null);
-        setAllDoctors(Array.isArray(doctorsData) ? doctorsData : []);
+        setDoctors(Array.isArray(doctorsData) ? doctorsData : []);
       } catch (err) {
         if (controller.signal.aborted) return;
         setError(err instanceof Error ? err.message : 'Failed to fetch data');
         console.error('Failed to fetch data:', err);
       } finally {
-        if (!controller.signal.aborted) {
-          setLoading(false);
-        }
+        if (!controller.signal.aborted) setLoading(false);
       }
     };
 
     fetchData();
     return () => controller.abort();
   }, [clinicId]);
-
-  // Normalize clinicId from doctor (could be populated object or plain string)
-  const doctors = useMemo(() => {
-    return allDoctors.filter((doc) => {
-      const rawClinicId =
-        typeof doc.clinicId === 'object' && doc.clinicId !== null
-          ? (doc.clinicId as { _id?: string })._id
-          : (doc.clinicId as unknown as string);
-
-      return String(rawClinicId) === String(clinicId);
-    });
-  }, [allDoctors, clinicId]);
 
   return { clinic, doctors, loading, error };
 };
