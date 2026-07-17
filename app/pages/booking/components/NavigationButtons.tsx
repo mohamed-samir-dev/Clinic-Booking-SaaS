@@ -33,7 +33,10 @@ export default function NavigationButtons({
                 theme === 'dark' ? 'bg-gray-700 hover:bg-gray-600 text-gray-200' : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
               }`}
             >
-              <span className="material-icons text-base sm:text-lg">{isRTL ? 'arrow_forward' : 'arrow_back'}</span>
+              {isRTL
+                ? <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 sm:w-5 sm:h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                : <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 sm:w-5 sm:h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+              }
               <span className="hidden sm:inline">{t.back}</span>
             </button>
           ) : <div className="w-10 sm:w-20" />}
@@ -143,7 +146,9 @@ export default function NavigationButtons({
               </>
             ) : (
               <>
-                {currentStep === 4 && <span className="material-icons text-base sm:text-lg">check_circle</span>}
+                {currentStep === 4 && (
+                  <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 sm:w-5 sm:h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                )}
                 <span className="hidden sm:inline">{currentStep === 4 ? t.confirmFinish : t.continue}</span>
                 <span className="sm:hidden">{currentStep === 4 ? t.finish : t.next}</span>
               </>
