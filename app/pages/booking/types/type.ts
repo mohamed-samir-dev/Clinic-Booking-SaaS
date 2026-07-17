@@ -48,6 +48,7 @@ export interface FiltersSidebarProps {
     doctors: Doctor[];
     handleBack: () => void;
     handleNext: () => void;
+    missingFields?: string[];
   }
   
   export interface ServiceSelectionProps {
