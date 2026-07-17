@@ -3,6 +3,12 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Doctor } from '../types/types';
 import { isAvailable } from '../utils/utils';
+import { useLanguage } from '@/app/contexts/LanguageContext';
+
+const t = {
+  ar: { available: '✓ متاح', unavailable: '✗ غير متاح', na: 'غير متوفر', egp: 'جنيه' },
+  en: { available: '✓ Available', unavailable: '✗ Unavailable', na: 'N/A', egp: 'EGP' },
+};
 
 interface DoctorRowProps {
   doctor: Doctor;
@@ -10,6 +16,10 @@ interface DoctorRowProps {
 }
 
 export default function DoctorRow({ doctor, onDelete }: DoctorRowProps) {
+  const { locale } = useLanguage();
+  const tr = t[locale as 'ar' | 'en'] ?? t.en;
+  const isRtl = locale === 'ar';
+
   return (
     <tr className="hover:bg-gray-700">
       <td className="px-6 py-4 whitespace-nowrap">
@@ -30,9 +40,13 @@ export default function DoctorRow({ doctor, onDelete }: DoctorRowProps) {
             )}
           </div>
           <div>
-            <div className="font-medium text-white">{doctor.name?.en || doctor.name?.ar}</div>
+            <div className="font-medium text-white">
+              {isRtl ? (doctor.name?.ar || doctor.name?.en) : (doctor.name?.en || doctor.name?.ar)}
+            </div>
             {doctor.name?.ar && doctor.name?.en && (
-              <div className="text-xs text-gray-400">{doctor.name.ar}</div>
+              <div className="text-xs text-gray-400">
+                {isRtl ? doctor.name.en : doctor.name.ar}
+              </div>
             )}
           </div>
         </div>
@@ -41,13 +55,15 @@ export default function DoctorRow({ doctor, onDelete }: DoctorRowProps) {
         {doctor.email}
       </td>
       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-400">
-        {doctor.phone || 'N/A'}
+        {doctor.phone || tr.na}
       </td>
       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-400">
-        {doctor.specialty?.en || doctor.specialty?.ar || 'N/A'}
+        {isRtl
+          ? (doctor.specialty?.ar || doctor.specialty?.en || tr.na)
+          : (doctor.specialty?.en || doctor.specialty?.ar || tr.na)}
       </td>
       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-400">
-        {doctor.fees ? `${doctor.fees} EGP` : 'N/A'}
+        {doctor.fees ? `${doctor.fees} ${tr.egp}` : tr.na}
       </td>
       <td className="px-6 py-4 whitespace-nowrap">
         <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
@@ -55,13 +71,13 @@ export default function DoctorRow({ doctor, onDelete }: DoctorRowProps) {
             ? 'bg-green-900/30 text-green-400' 
             : 'bg-red-900/30 text-red-400'
         }`}>
-          {isAvailable(doctor) ? '✓ Available / متاح' : '✗ Unavailable / غير متاح'}
+          {isAvailable(doctor) ? tr.available : tr.unavailable}
         </span>
       </td>
-      <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+      <td className={`px-6 py-4 whitespace-nowrap ${isRtl ? 'text-left' : 'text-right'} text-sm font-medium`}>
         <Link 
           href={`/pages/owner/doctors/edit/${doctor._id}`}
-          className="text-teal-400 hover:text-teal-300 mr-4 inline-block"
+          className={`text-teal-400 hover:text-teal-300 ${isRtl ? 'ml-4' : 'mr-4'} inline-block`}
         >
           <Edit size={18} />
         </Link>

@@ -2,6 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import { ArrowLeft } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import { useClinics } from '../../../doctors/add/hooks/useClinics';
 import { useEditManager } from './hooks/useEditManager';
 import { PasswordChangeSection } from './components/PasswordChangeSection';
@@ -17,13 +18,14 @@ import {
 
 export default function EditManagerPage() {
   const router = useRouter();
+  const t = useTranslations('owner.managers');
   const { clinics } = useClinics();
   const { formData, setFormData, loading, error, handleSubmit, fetchLoading, password, setPassword } = useEditManager();
 
   if (fetchLoading) {
     return (
       <div className="min-h-screen bg-gray-900 flex items-center justify-center">
-        <div className="text-gray-400">Loading...</div>
+        <div className="text-gray-400">{t('edit.loading')}</div>
       </div>
     );
   }
@@ -36,11 +38,11 @@ export default function EditManagerPage() {
           className="flex items-center gap-2 text-teal-400 hover:text-teal-300 mb-4 font-medium transition-colors group"
         >
           <ArrowLeft size={20} className="group-hover:-translate-x-1 transition-transform" />
-          <span>Back</span>
+          <span>{t('edit.back')}</span>
         </button>
 
         <div className="bg-gray-800 rounded-2xl shadow-xl border border-gray-700 overflow-hidden">
-          <FormHeader title="Edit Manager" subtitle="Update manager information" />
+          <FormHeader title={t('edit.title')} subtitle={t('edit.subtitle')} />
 
           <div className="p-6">
             {error && <ErrorAlert message={error} />}
@@ -54,8 +56,8 @@ export default function EditManagerPage() {
               <FormActions 
                 loading={loading} 
                 onCancel={() => router.back()} 
-                submitText="Update Manager"
-                loadingText="Updating..."
+                submitText={t('edit.actions.update')}
+                loadingText={t('edit.actions.updating')}
               />
             </form>
           </div>

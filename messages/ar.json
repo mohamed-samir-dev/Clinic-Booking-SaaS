@@ -872,6 +872,49 @@
       }
     }
   },
+  "owner": {
+    "reports": {
+      "title": "التقارير والتحليلات",
+      "description": "نظرة شاملة على جميع المديرين والعيادات",
+      "stats": {
+        "totalClinics": "إجمالي العيادات",
+        "totalManagers": "إجمالي المديرين",
+        "totalDoctors": "إجمالي الأطباء"
+      },
+      "managersTable": {
+        "title": "جميع المديرين",
+        "total": "إجمالي",
+        "columns": {
+          "manager": "المدير",
+          "contact": "التواصل",
+          "clinic": "العيادة",
+          "assignedDate": "تاريخ التعيين",
+          "status": "الحالة"
+        },
+        "noManagers": "لا يوجد مديرون",
+        "notAvailable": "غير متاح"
+      },
+      "clinicsTable": {
+        "title": "جميع العيادات",
+        "total": "إجمالي",
+        "columns": {
+          "clinic": "العيادة",
+          "manager": "المدير",
+          "doctors": "الأطباء",
+          "patients": "المرضى",
+          "appointments": "المواعيد",
+          "revenue": "الإيرادات",
+          "status": "الحالة"
+        },
+        "noClinics": "لا توجد عيادات",
+        "notAssigned": "غير معين"
+      },
+      "status": {
+        "active": "نشط",
+        "inactive": "غير نشط"
+      }
+    }
+  },
   "manager": {
     "navbar": {
       "managing": "إدارة",
@@ -1139,6 +1182,97 @@
         "content": "إذا كان لديك أي استفسارات حول استخدامنا لملفات تعريف الارتباط، يرجى التواصل معنا على: support@caresync.com"
       }
     ]
+  },
+  "owner": {
+    "managers": {
+      "title": "إدارة المديرين",
+      "addManager": "إضافة مدير",
+      "searchPlaceholder": "البحث عن المديرين...",
+      "table": {
+        "manager": "المدير",
+        "email": "البريد الإلكتروني",
+        "phone": "الهاتف",
+        "clinic": "العيادة",
+        "status": "الحالة",
+        "lastLogin": "آخر تسجيل دخول",
+        "actions": "الإجراءات"
+      },
+      "status": {
+        "active": "نشط",
+        "disabled": "معطل"
+      },
+      "noClinic": "لا توجد عيادة مخصصة",
+      "never": "لم يسجل دخول",
+      "loading": "جاري التحميل...",
+      "noManagers": "لا يوجد مديرون",
+      "deleteConfirm": "هل أنت متأكد من حذف هذا المدير؟",
+      "na": "غير متوفر",
+      "add": {
+        "title": "إضافة مدير جديد",
+        "subtitle": "إنشاء حساب مدير عيادة جديد",
+        "back": "رجوع",
+        "basicInfo": {
+          "title": "المعلومات الأساسية",
+          "fullName": "الاسم الكامل",
+          "email": "البريد الإلكتروني",
+          "phone": "الهاتف",
+          "nationalId": "الرقم القومي / رقم الموظف",
+          "address": "العنوان",
+          "fullNamePlaceholder": "أحمد محمد",
+          "emailPlaceholder": "manager@clinic.com",
+          "phonePlaceholder": "+20123456789",
+          "nationalIdPlaceholder": "12345678901234",
+          "addressPlaceholder": "123 شارع رئيسي، القاهرة"
+        },
+        "security": {
+          "title": "الأمان",
+          "password": "كلمة المرور",
+          "passwordPlaceholder": "أدخل أو أنشئ كلمة مرور",
+          "generate": "إنشاء",
+          "requirePasswordChange": "طلب تغيير كلمة المرور عند أول تسجيل دخول"
+        },
+        "clinicAssignment": {
+          "title": "تخصيص العيادة",
+          "clinic": "العيادة",
+          "selectClinic": "-- اختر العيادة --"
+        },
+        "permissions": {
+          "title": "الصلاحيات",
+          "manageDoctors": "إدارة الأطباء",
+          "manageAppointments": "إدارة المواعيد",
+          "viewReports": "عرض التقارير",
+          "managePricesServices": "إدارة الأسعار والخدمات",
+          "managePayments": "إدارة المدفوعات"
+        },
+        "status": {
+          "title": "حالة الحساب",
+          "active": "حساب نشط"
+        },
+        "actions": {
+          "create": "إنشاء مدير",
+          "creating": "جاري الإنشاء...",
+          "cancel": "إلغاء"
+        }
+      },
+      "edit": {
+        "title": "تعديل المدير",
+        "subtitle": "تحديث معلومات المدير",
+        "back": "رجوع",
+        "loading": "جاري التحميل...",
+        "passwordChange": {
+          "title": "تغيير كلمة المرور",
+          "newPassword": "كلمة المرور الجديدة (اختياري)",
+          "placeholder": "اتركه فارغاً للإبقاء على كلمة المرور الحالية",
+          "generate": "إنشاء",
+          "hint": "اتركه فارغاً إذا لم تريد تغيير كلمة المرور"
+        },
+        "actions": {
+          "update": "تحديث المدير",
+          "updating": "جاري التحديث...",
+          "cancel": "إلغاء"
+        }
+      }
+    }
   },
   "notFound": {
     "title": "404",

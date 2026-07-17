@@ -2,6 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import { ArrowLeft } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import { useClinics } from '../../doctors/add/hooks/useClinics';
 import { useManagerForm } from './hooks/useManagerForm';
 import {
@@ -17,6 +18,7 @@ import {
 
 export default function AddManagerPage() {
   const router = useRouter();
+  const t = useTranslations('owner.managers');
   const { clinics } = useClinics();
   const { formData, setFormData, loading, error, handleSubmit } = useManagerForm();
 
@@ -28,11 +30,11 @@ export default function AddManagerPage() {
           className="flex items-center gap-2 text-teal-400 hover:text-teal-300 mb-4 font-medium transition-colors group"
         >
           <ArrowLeft size={20} className="group-hover:-translate-x-1 transition-transform" />
-          <span>Back</span>
+          <span>{t('add.back')}</span>
         </button>
 
         <div className="bg-gray-800 rounded-2xl shadow-xl border border-gray-700 overflow-hidden">
-          <FormHeader title="Add New Manager" subtitle="Create a new clinic manager account" />
+          <FormHeader title={t('add.title')} subtitle={t('add.subtitle')} />
 
           <div className="p-6">
             {error && <ErrorAlert message={error} />}

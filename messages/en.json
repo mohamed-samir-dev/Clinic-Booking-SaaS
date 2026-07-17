@@ -872,6 +872,49 @@
       }
     }
   },
+  "owner": {
+    "reports": {
+      "title": "Reports & Analytics",
+      "description": "Comprehensive overview of all managers and clinics",
+      "stats": {
+        "totalClinics": "Total Clinics",
+        "totalManagers": "Total Managers",
+        "totalDoctors": "Total Doctors"
+      },
+      "managersTable": {
+        "title": "All Managers",
+        "total": "Total",
+        "columns": {
+          "manager": "Manager",
+          "contact": "Contact",
+          "clinic": "Clinic",
+          "assignedDate": "Assigned Date",
+          "status": "Status"
+        },
+        "noManagers": "No managers found",
+        "notAvailable": "N/A"
+      },
+      "clinicsTable": {
+        "title": "All Clinics",
+        "total": "Total",
+        "columns": {
+          "clinic": "Clinic",
+          "manager": "Manager",
+          "doctors": "Doctors",
+          "patients": "Patients",
+          "appointments": "Appointments",
+          "revenue": "Revenue",
+          "status": "Status"
+        },
+        "noClinics": "No clinics found",
+        "notAssigned": "Not Assigned"
+      },
+      "status": {
+        "active": "Active",
+        "inactive": "Inactive"
+      }
+    }
+  },
   "manager": {
     "navbar": {
       "managing": "Managing",
@@ -1139,6 +1182,97 @@
         "content": "If you have any questions about our use of cookies, please contact us at: support@caresync.com"
       }
     ]
+  },
+  "owner": {
+    "managers": {
+      "title": "Manage Managers",
+      "addManager": "Add Manager",
+      "searchPlaceholder": "Search managers...",
+      "table": {
+        "manager": "Manager",
+        "email": "Email",
+        "phone": "Phone",
+        "clinic": "Clinic",
+        "status": "Status",
+        "lastLogin": "Last Login",
+        "actions": "Actions"
+      },
+      "status": {
+        "active": "Active",
+        "disabled": "Disabled"
+      },
+      "noClinic": "No clinic assigned",
+      "never": "Never",
+      "loading": "Loading...",
+      "noManagers": "No managers found",
+      "deleteConfirm": "Are you sure you want to delete this manager?",
+      "na": "N/A",
+      "add": {
+        "title": "Add New Manager",
+        "subtitle": "Create a new clinic manager account",
+        "back": "Back",
+        "basicInfo": {
+          "title": "Basic Information",
+          "fullName": "Full Name",
+          "email": "Email",
+          "phone": "Phone",
+          "nationalId": "National ID / Employee ID",
+          "address": "Address",
+          "fullNamePlaceholder": "John Doe",
+          "emailPlaceholder": "manager@clinic.com",
+          "phonePlaceholder": "+20123456789",
+          "nationalIdPlaceholder": "12345678901234",
+          "addressPlaceholder": "123 Main St, Cairo"
+        },
+        "security": {
+          "title": "Security",
+          "password": "Password",
+          "passwordPlaceholder": "Enter or generate password",
+          "generate": "Generate",
+          "requirePasswordChange": "Require password change on first login"
+        },
+        "clinicAssignment": {
+          "title": "Clinic Assignment",
+          "clinic": "Clinic",
+          "selectClinic": "-- Select Clinic --"
+        },
+        "permissions": {
+          "title": "Permissions",
+          "manageDoctors": "Manage Doctors",
+          "manageAppointments": "Manage Appointments",
+          "viewReports": "View Reports",
+          "managePricesServices": "Manage Prices/Services",
+          "managePayments": "Manage Payments"
+        },
+        "status": {
+          "title": "Account Status",
+          "active": "Active Account"
+        },
+        "actions": {
+          "create": "Create Manager",
+          "creating": "Creating...",
+          "cancel": "Cancel"
+        }
+      },
+      "edit": {
+        "title": "Edit Manager",
+        "subtitle": "Update manager information",
+        "back": "Back",
+        "loading": "Loading...",
+        "passwordChange": {
+          "title": "Change Password",
+          "newPassword": "New Password (optional)",
+          "placeholder": "Leave empty to keep current password",
+          "generate": "Generate",
+          "hint": "Leave empty if you don't want to change the password"
+        },
+        "actions": {
+          "update": "Update Manager",
+          "updating": "Updating...",
+          "cancel": "Cancel"
+        }
+      }
+    }
   },
   "notFound": {
     "title": "404",

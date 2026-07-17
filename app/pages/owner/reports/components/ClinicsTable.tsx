@@ -1,3 +1,6 @@
+'use client';
+
+import { useTranslations } from 'next-intl';
 import { Clinic } from '../hooks/useReportsData';
 import { Building2, MapPin, UserCog, Users, Stethoscope, Calendar, DollarSign } from 'lucide-react';
 
@@ -15,14 +18,16 @@ const getDisplayValue = (field: MultilingualField): string => {
 };
 
 export const ClinicsTable = ({ clinics }: ClinicsTableProps) => {
+  const t = useTranslations('owner.reports');
+
   return (
     <div className="bg-gray-800 rounded-xl border border-gray-700 overflow-hidden">
       <div className="p-6 border-b border-gray-700">
         <div className="flex items-center gap-3">
           <Building2 className="text-teal-400" size={24} />
-          <h2 className="text-xl font-bold text-white">All Clinics</h2>
+          <h2 className="text-xl font-bold text-white">{t('clinicsTable.title')}</h2>
           <span className="ml-auto bg-teal-600 text-white px-3 py-1 rounded-full text-sm font-medium">
-            {clinics.length} Total
+            {clinics.length} {t('clinicsTable.total')}
           </span>
         </div>
       </div>
@@ -32,25 +37,25 @@ export const ClinicsTable = ({ clinics }: ClinicsTableProps) => {
           <thead className="bg-gray-750">
             <tr>
               <th className="px-6 py-4 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">
-                Clinic
+                {t('clinicsTable.columns.clinic')}
               </th>
               <th className="px-6 py-4 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">
-                Manager
+                {t('clinicsTable.columns.manager')}
               </th>
               <th className="px-6 py-4 text-center text-xs font-semibold text-gray-400 uppercase tracking-wider">
-                Doctors
+                {t('clinicsTable.columns.doctors')}
               </th>
               <th className="px-6 py-4 text-center text-xs font-semibold text-gray-400 uppercase tracking-wider">
-                Patients
+                {t('clinicsTable.columns.patients')}
               </th>
               <th className="px-6 py-4 text-center text-xs font-semibold text-gray-400 uppercase tracking-wider">
-                Appointments
+                {t('clinicsTable.columns.appointments')}
               </th>
               <th className="px-6 py-4 text-right text-xs font-semibold text-gray-400 uppercase tracking-wider">
-                Revenue
+                {t('clinicsTable.columns.revenue')}
               </th>
               <th className="px-6 py-4 text-center text-xs font-semibold text-gray-400 uppercase tracking-wider">
-                Status
+                {t('clinicsTable.columns.status')}
               </th>
             </tr>
           </thead>
@@ -58,7 +63,7 @@ export const ClinicsTable = ({ clinics }: ClinicsTableProps) => {
             {clinics.length === 0 ? (
               <tr>
                 <td colSpan={7} className="px-6 py-8 text-center text-gray-400">
-                  No clinics found
+                  {t('clinicsTable.noClinics')}
                 </td>
               </tr>
             ) : (
@@ -83,7 +88,7 @@ export const ClinicsTable = ({ clinics }: ClinicsTableProps) => {
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-2">
                         <UserCog size={16} className="text-teal-400" />
-                        <span className="text-white">{getDisplayValue(clinic.manager as MultilingualField) || 'Not Assigned'}</span>
+                        <span className="text-white">{getDisplayValue(clinic.manager as MultilingualField) || t('clinicsTable.notAssigned')}</span>
                       </div>
                     </td>
                     <td className="px-6 py-4 text-center">
@@ -118,7 +123,7 @@ export const ClinicsTable = ({ clinics }: ClinicsTableProps) => {
                           ? 'bg-green-500/20 text-green-400'
                           : 'bg-gray-500/20 text-gray-400'
                       }`}>
-                        {clinic.status}
+                        {clinic.status === 'active' ? t('status.active') : t('status.inactive')}
                       </span>
                     </td>
                   </tr>
