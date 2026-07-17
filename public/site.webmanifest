@@ -5,12 +5,28 @@
   "start_url": "/",
   "scope": "/",
   "icons": [
-    { "src": "/android-chrome-192x192.png", "sizes": "192x192", "type": "image/png" },
-    { "src": "/android-chrome-512x512.png", "sizes": "512x512", "type": "image/png" }
+    { "src": "/android-chrome-192x192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/android-chrome-512x512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
   ],
   "theme_color": "#0d9488",
   "background_color": "#ffffff",
   "display": "standalone",
   "orientation": "portrait-primary",
-  "categories": ["health", "medical", "lifestyle"]
+  "categories": ["health", "medical", "lifestyle"],
+  "shortcuts": [
+    {
+      "name": "Book Appointment",
+      "short_name": "Book",
+      "description": "Book a new doctor appointment",
+      "url": "/pages/booking",
+      "icons": [{ "src": "/android-chrome-192x192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Browse Doctors",
+      "short_name": "Doctors",
+      "description": "Browse all available doctors",
+      "url": "/pages/doctors",
+      "icons": [{ "src": "/android-chrome-192x192.png", "sizes": "192x192" }]
+    }
+  ]
 }
