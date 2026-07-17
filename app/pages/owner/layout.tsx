@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Sidebar from './components/Sidebar';
 import Navbar from './components/Navbar';
+import { LanguageProvider } from '@/app/contexts/LanguageContext';
 
 export default function OwnerLayout({ children }: { children: React.ReactNode }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -39,12 +40,14 @@ export default function OwnerLayout({ children }: { children: React.ReactNode })
   if (!authorized) return null;
 
   return (
-    <div className="min-h-screen bg-gray-900">
-      <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
-      <Navbar onMenuClick={() => setSidebarOpen(true)} />
-      <main className="xl:ml-64 pt-16 bg-gray-900">
-        {children}
-      </main>
-    </div>
+    <LanguageProvider>
+      <div className="min-h-screen bg-gray-900">
+        <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+        <Navbar onMenuClick={() => setSidebarOpen(true)} />
+        <main className="xl:ml-64 pt-16 bg-gray-900">
+          {children}
+        </main>
+      </div>
+    </LanguageProvider>
   );
 }
