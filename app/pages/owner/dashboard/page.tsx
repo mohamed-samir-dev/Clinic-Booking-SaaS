@@ -16,6 +16,7 @@ const ClinicsTable = dynamic(() => import('./components/ClinicsTable').then(mod 
 const AlertsPanel = dynamic(() => import('./components/AlertsPanel').then(mod => ({ default: mod.AlertsPanel })), { ssr: false });
 const ActivityLog = dynamic(() => import('./components/ActivityLog').then(mod => ({ default: mod.ActivityLog })), { ssr: false, loading: () => <SectionSkeleton /> });
 const QuickActionsTiles = dynamic(() => import('./components/QuickActionsTiles').then(mod => ({ default: mod.QuickActionsTiles })), { ssr: false });
+const ClinicDetailsModal = dynamic(() => import('./components/ClinicDetailsModal').then(mod => ({ default: mod.ClinicDetailsModal })), { ssr: false });
 
 const ChartSkeleton = () => (
   <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 border border-gray-100 dark:border-gray-700 animate-pulse">
@@ -92,6 +93,7 @@ export default function OwnerDashboardPage() {
   const [data, setData] = useState<DashboardData | null>(() => getCachedData());
   const [loading, setLoading] = useState(!getCachedData());
   const [error, setError] = useState<string | null>(null);
+  const [selectedClinicId, setSelectedClinicId] = useState<string | null>(null);
   const dataRef = useRef(data);
   dataRef.current = data;
 
@@ -205,13 +207,19 @@ export default function OwnerDashboardPage() {
 
             <ClinicsTable
               clinics={data.revenueByClinic}
-              onViewClinic={(id) => router.push(`/pages/owner/clinics/${id}`)}
+              onViewClinic={(id) => setSelectedClinicId(id)}
               onAssignManager={(id) => router.push(`/pages/owner/managers/add?clinicId=${id}`)}
               onDisableManager={() => {
                 if (confirm('Are you sure you want to disable this manager?')) {
                   toast.success('Manager disabled successfully');
                 }
               }}
+            />
+
+            <ClinicDetailsModal
+              clinicId={selectedClinicId}
+              performanceData={selectedClinicId ? data.revenueByClinic.find(c => c.clinicId === selectedClinicId) : undefined}
+              onClose={() => setSelectedClinicId(null)}
             />
 
             <QuickActionsTiles

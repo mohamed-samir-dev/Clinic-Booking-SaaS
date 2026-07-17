@@ -170,12 +170,9 @@ export const ClinicsTable = ({ clinics, onViewClinic, onAssignManager, onDisable
             {paginatedClinics.map((clinic) => (
               <tr key={clinic.clinicId} className="hover:bg-gray-50 dark:hover:bg-gray-700">
                 <td className="px-6 py-4 whitespace-nowrap">
-                  <button
-                    onClick={() => onViewClinic(clinic.clinicId)}
-                    className="text-sm font-medium text-teal-600 hover:text-teal-700 dark:text-teal-400"
-                  >
+                  <span className="text-sm font-medium text-gray-900 dark:text-white">
                     {getClinicName(clinic.clinicName)}
-                  </button>
+                  </span>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   <div className="text-sm text-gray-900 dark:text-white">{clinic.managerName || 'N/A'}</div>
