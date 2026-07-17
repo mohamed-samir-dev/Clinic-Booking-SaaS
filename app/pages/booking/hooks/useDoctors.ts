@@ -7,6 +7,18 @@ interface DoctorsResponse {
   data?: Doctor[];
 }
 
+// map من الـ service key للـ specialty title في الداتابيز
+const SERVICE_KEY_TO_SPECIALTY: Record<string, string> = {
+  generalMedicine: 'General Medicine',
+  pediatrics:      'Pediatrics',
+  dermatology:     'Dermatology',
+  dentistry:       'Dentistry',
+  gynecology:      'Gynecology',
+  orthopedics:     'Orthopedics',
+  cardiology:      'Cardiology',
+  ent:             'ENT',
+};
+
 export const useDoctors = (selectedService: string, currentStep: number, forceLoad = false) => {
   const [allDoctors, setAllDoctors] = useState<Doctor[]>([]);
   const [loadingDoctors, setLoadingDoctors] = useState(false);
@@ -17,17 +29,12 @@ export const useDoctors = (selectedService: string, currentStep: number, forceLo
     const fetchDoctors = async () => {
       setLoadingDoctors(true);
       try {
-        const response = await api.doctors.getAll() as DoctorsResponse | Doctor[];
+        // حوّل الـ key لـ specialty title الحقيقي في الداتابيز
+        const specialtyTitle = SERVICE_KEY_TO_SPECIALTY[selectedService] || selectedService;
+
+        const response = await api.doctors.getAll({ specialty: specialtyTitle }) as DoctorsResponse | Doctor[];
         const data = (response as DoctorsResponse)?.doctors || (response as DoctorsResponse)?.data || response || [];
-        const doctorsData = Array.isArray(data) ? data : [];
-        const filtered = doctorsData.filter((d: Doctor) => {
-          const specialty = typeof d.specialty === 'object' ? d.specialty : { en: d.specialty, ar: d.specialty };
-          const specialtyEn = (specialty?.en || '').toLowerCase().trim();
-          const specialtyAr = (specialty?.ar || '').toLowerCase().trim();
-          const selectedLower = selectedService.toLowerCase().trim();
-          return specialtyEn === selectedLower || specialtyAr === selectedLower;
-        });
-        setAllDoctors(filtered);
+        setAllDoctors(Array.isArray(data) ? data : []);
       } catch {
         setAllDoctors([]);
       } finally {
