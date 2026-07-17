@@ -1,12 +1,15 @@
 import { useTheme } from '@/app/contexts/ThemeContext';
 import { useLanguage } from '@/app/contexts/LanguageContext';
 import translations from '@/messages/translations';
-import {BasicInformationProps}from '../types/types'
+import { BasicInformationProps } from '../types/types';
+import PhoneInput, { isValidPhoneNumber } from 'react-phone-number-input';
+import 'react-phone-number-input/style.css';
+
 export default function BasicInformation({ fullName, setFullName, phone, setPhone, email, setEmail }: BasicInformationProps) {
   const { theme } = useTheme();
   const { locale } = useLanguage();
   const t = translations[locale].booking.detailsForm.basicInfo;
-  const isPhoneValid = phone.length === 10;
+  const isPhoneValid = phone ? isValidPhoneNumber(phone) : true;
   const isEmailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
   return (
@@ -30,31 +33,20 @@ export default function BasicInformation({ fullName, setFullName, phone, setPhon
         </div>
         <div>
           <label className={`block text-xs sm:text-sm font-bold mb-1.5 sm:mb-2 ${theme === 'dark' ? 'text-gray-200' : 'text-gray-900'}`}>{t.phone}</label>
-          <div className="flex gap-1.5 sm:gap-2">
-            <div className={`px-2 sm:px-3 md:px-4 py-2 sm:py-3 rounded-xl border-2 text-xs sm:text-sm md:text-base font-semibold shrink-0 whitespace-nowrap ${
-              theme === 'dark' ? 'bg-gray-700 border-gray-600 text-white' : 'bg-gray-50 border-gray-200 text-gray-900'
-            }`}>
-              🇪🇬 +20
-            </div>
-            <input
-              type="tel"
-              value={phone}
-              onChange={(e) => {
-                const value = e.target.value.replace(/\D/g, '');
-                if (value.length <= 10) setPhone(value);
-              }}
-              className={`flex-1 min-w-0 px-2 sm:px-3 md:px-4 py-2 sm:py-3 rounded-xl border-2 focus:outline-none text-sm sm:text-base ${
-                phone && !isPhoneValid ? 'text-black border-red-500 focus:border-red-500' : theme === 'dark' ? 'bg-gray-700 border-gray-600 text-white focus:border-teal-500' : 'bg-white text-black border-gray-200 focus:border-teal-500'
-              }`}
-              placeholder="1012345678"
-              maxLength={10}
-            />
-          </div>
+          <PhoneInput
+            international
+            defaultCountry="EG"
+            value={phone}
+            onChange={(val) => setPhone(val || '')}
+            className={`phone-input-wrapper ${
+              phone && !isPhoneValid ? 'phone-input-error' : theme === 'dark' ? 'phone-input-dark' : 'phone-input-light'
+            }`}
+          />
           {phone && !isPhoneValid && (
-            <p className="text-[10px] sm:text-xs text-red-500 mt-1">{locale === 'ar' ? '⚠ يجب أن يكون رقم الهاتف 10 أرقام بالضبط' : '⚠ Phone number must be exactly 10 digits'}</p>
+            <p className="text-[10px] sm:text-xs text-red-500 mt-1">{locale === 'ar' ? '⚠ رقم الهاتف غير صالح لهذه الدولة' : '⚠ Invalid phone number for selected country'}</p>
           )}
           {(!phone || isPhoneValid) && (
-            <p className={`text-[10px] sm:text-xs mt-1 ${theme === 'dark' ? 'text-white' : 'text-black'}`}>{locale === 'ar' ? 'يرجى إدخال 10 أرقام فقط' : 'Please enter 10 digits only'}</p>
+            <p className={`text-[10px] sm:text-xs mt-1 ${theme === 'dark' ? 'text-white' : 'text-black'}`}>{locale === 'ar' ? 'اختر رمز الدولة وأدخل رقم هاتفك' : 'Select country code and enter your phone number'}</p>
           )}
         </div>
         <div>
