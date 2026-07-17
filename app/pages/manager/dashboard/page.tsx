@@ -1,12 +1,12 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { useState, useEffect } from 'react';
 import { Calendar, Clock, Users, DollarSign } from 'lucide-react';
 import { StatCard } from './components/StatCard';
 import { QuickActions } from './components/QuickActions';
 import { WeeklyChart } from './components/WeeklyChart';
 import { useDashboardData } from './hooks/useDashboardData';
+import { useLanguage } from '@/app/contexts/LanguageContext';
 
 type Language = 'ar' | 'en';
 
@@ -45,31 +45,14 @@ const translations = {
 
 export default function ManagerDashboardPage() {
   const router = useRouter();
-  const { data, loading } = useDashboardData();
-  const [language, setLanguage] = useState<Language>('ar');
-
-  useEffect(() => {
-    const savedLang = localStorage.getItem('locale') as Language;
-    if (savedLang) {
-      setLanguage(savedLang);
-    }
-
-    const handleLanguageChange = () => {
-      const newLang = localStorage.getItem('locale') as Language;
-      if (newLang) {
-        setLanguage(newLang);
-      }
-    };
-
-    window.addEventListener('languageChange', handleLanguageChange);
-    return () => window.removeEventListener('languageChange', handleLanguageChange);
-  }, []);
-
+  const { data, loading, error } = useDashboardData();
+  const { locale } = useLanguage();
+  const language = locale as Language;
   const t = translations[language];
 
   if (loading) {
     return (
-      <div dir="rtl" className="min-h-screen bg-gray-900 p-4 sm:p-6">
+      <div dir={language === 'ar' ? 'rtl' : 'ltr'} className="min-h-screen bg-gray-900 p-4 sm:p-6">
         <div className="animate-pulse space-y-6">
           <div className="h-8 bg-gray-800 rounded w-48 sm:w-64"></div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
@@ -82,12 +65,12 @@ export default function ManagerDashboardPage() {
     );
   }
 
-  if (!data) {
+  if (error || !data) {
     return (
       <div dir={language === 'ar' ? 'rtl' : 'ltr'} className="min-h-screen bg-gray-900 flex items-center justify-center p-4">
         <div className="text-center">
           <h2 className="text-xl sm:text-2xl font-bold text-white mb-4">{t.errorTitle}</h2>
-          <p className="text-gray-400">{t.errorMessage}</p>
+          <p className="text-gray-400">{error ?? t.errorMessage}</p>
         </div>
       </div>
     );

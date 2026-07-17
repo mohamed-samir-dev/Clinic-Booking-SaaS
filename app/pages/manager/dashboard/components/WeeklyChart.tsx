@@ -9,7 +9,7 @@ interface WeeklyChartProps {
 }
 
 export const WeeklyChart = ({ title, data, dataKey, color }: WeeklyChartProps) => {
-  const maxValue = Math.max(...data.map(d => d[dataKey]));
+  const maxValue = data.length > 0 ? Math.max(...data.map(d => d[dataKey])) : 0;
 
   return (
     <div className="bg-gray-800 rounded-xl border border-gray-700 p-6">
@@ -29,7 +29,7 @@ export const WeeklyChart = ({ title, data, dataKey, color }: WeeklyChartProps) =
             <div className="w-full bg-gray-700 rounded-full h-2">
               <div
                 className={`${color} h-2 rounded-full transition-all`}
-                style={{ width: `${(item[dataKey] / maxValue) * 100}%` }}
+                style={{ width: maxValue > 0 ? `${(item[dataKey] / maxValue) * 100}%` : '0%' }}
               />
             </div>
           </div>
