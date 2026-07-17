@@ -65,6 +65,7 @@ export const saveAuthData = (token: string, user: AuthResponse['user']) => {
   localStorage.setItem('token', token);
   localStorage.setItem('user', JSON.stringify(user));
   localStorage.setItem('userRole', user.role);
+  document.cookie = `token=${token}; path=/; max-age=${60 * 60 * 24 * 7}; SameSite=Lax`;
 };
 
 export const getRedirectRoute = (role: string): string => {
