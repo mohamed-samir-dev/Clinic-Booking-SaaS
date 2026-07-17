@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import { useState } from 'react';
 import { getDoctorName, getDoctorSpecialty } from '../utils/doctorHelpers';
 import {NavigationButtonsProps}from '../types/type'
 import { useTheme } from '@/app/contexts/ThemeContext';
@@ -8,13 +9,15 @@ import translations from '@/messages/translations';
 export default function NavigationButtons({
   currentStep, selectedService, setSelectedService,
   selectedDoctor, setSelectedDoctor, selectedTime,
-  doctors, handleBack, handleNext, onFinishBooking, isSubmitting, canSubmit
-}: NavigationButtonsProps & { onFinishBooking?: () => void; isSubmitting?: boolean; canSubmit?: boolean }) {
+  doctors, handleBack, handleNext, onFinishBooking, isSubmitting, canSubmit, missingFields = []
+}: NavigationButtonsProps & { onFinishBooking?: () => void; isSubmitting?: boolean; canSubmit?: boolean; missingFields?: string[] }) {
   const { theme } = useTheme();
   const { locale } = useLanguage();
   const t = translations[locale].booking.navigation;
   const services = translations[locale].services;
   const isRTL = locale === 'ar';
+  const [showTooltip, setShowTooltip] = useState(false);
+  const isStep4Disabled = currentStep === 4 && (!canSubmit || isSubmitting);
   return (
     <div className={`fixed bottom-0 left-0 right-0 border-t p-2 sm:p-4 shadow-lg z-40 ${
       theme === 'dark' ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'

@@ -21,7 +21,7 @@ interface DetailsFormProps {
   selectedService: string;
   selectedDate: Date | null;
   selectedTime: string;
-  onBookingSubmit?: (handler: () => void, isSubmitting: boolean, canSubmit: boolean) => void;
+  onBookingSubmit?: (handler: () => void, isSubmitting: boolean, canSubmit: boolean, missingFields: string[]) => void;
 }
 
 export default function DetailsForm({ selectedDoctor, selectedService, selectedDate, selectedTime, onBookingSubmit }: DetailsFormProps) {
@@ -43,6 +43,7 @@ export default function DetailsForm({ selectedDoctor, selectedService, selectedD
     bookingData,
     handleFinishBooking,
     canSubmit,
+    missingFields,
     error,
     setError
   } = useBooking({ selectedDoctor, selectedService, selectedDate, selectedTime });
@@ -54,9 +55,9 @@ export default function DetailsForm({ selectedDoctor, selectedService, selectedD
 
   useEffect(() => {
     if (onBookingSubmit) {
-      onBookingSubmit(onFinish, isSubmitting, canSubmit);
+      onBookingSubmit(onFinish, isSubmitting, canSubmit, missingFields);
     }
-  }, [onFinish, isSubmitting, canSubmit, onBookingSubmit]);
+  }, [onFinish, isSubmitting, canSubmit, missingFields, onBookingSubmit]);
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6" dir={locale === 'ar' ? 'rtl' : 'ltr'}>

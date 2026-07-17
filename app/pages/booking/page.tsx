@@ -37,6 +37,7 @@ function BookingPageContent() {
   const [bookingHandler, setBookingHandler] = useState<(() => void) | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [canSubmit, setCanSubmit] = useState(false);
+  const [missingFields, setMissingFields] = useState<string[]>([]);
 
   useEffect(() => {
     return () => {
@@ -99,10 +100,11 @@ function BookingPageContent() {
     }
   };
 
-  const handleBookingSubmit = (handler: () => void, submitting: boolean, canSubmitForm: boolean) => {
+  const handleBookingSubmit = (handler: () => void, submitting: boolean, canSubmitForm: boolean, fields: string[]) => {
     setBookingHandler(() => handler);
     setIsSubmitting(submitting);
     setCanSubmit(canSubmitForm);
+    setMissingFields(fields);
   };
 
   const { theme } = useTheme();
@@ -179,6 +181,7 @@ function BookingPageContent() {
           onFinishBooking={() => bookingHandler?.()}
           isSubmitting={isSubmitting}
           canSubmit={canSubmit}
+          missingFields={missingFields}
         />
       </div>
     </div>

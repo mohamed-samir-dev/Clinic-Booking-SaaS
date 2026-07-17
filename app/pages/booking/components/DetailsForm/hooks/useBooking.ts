@@ -105,6 +105,18 @@ export const useBooking = ({ selectedDoctor, selectedService, selectedDate, sele
 
   const canSubmit = agreeToPolicy && !!fullName && !!phone && isValidPhoneNumber(phone) && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) && !!dateOfBirth && !!gender && !!reason;
 
+  const missingFields = (() => {
+    const fields: string[] = [];
+    if (!fullName) fields.push(locale === 'ar' ? 'الاسم الكامل' : 'Full name');
+    if (!phone || !isValidPhoneNumber(phone)) fields.push(locale === 'ar' ? 'رقم الهاتف' : 'Phone number');
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) fields.push(locale === 'ar' ? 'البريد الإلكتروني' : 'Email');
+    if (!dateOfBirth) fields.push(locale === 'ar' ? 'تاريخ الميلاد' : 'Date of birth');
+    if (!gender) fields.push(locale === 'ar' ? 'الجنس' : 'Gender');
+    if (!reason) fields.push(locale === 'ar' ? 'سبب الزيارة' : 'Reason for visit');
+    if (!agreeToPolicy) fields.push(locale === 'ar' ? 'الموافقة على السياسات' : 'Policy agreement');
+    return fields;
+  })();
+
   return {
     fullName, setFullName,
     phone, setPhone,
@@ -118,6 +130,7 @@ export const useBooking = ({ selectedDoctor, selectedService, selectedDate, sele
     bookingData,
     handleFinishBooking,
     canSubmit,
+    missingFields,
     error,
     setError
   };
