@@ -110,8 +110,32 @@ export default function NavigationButtons({
               (currentStep === 3 && !selectedTime) ||
               (currentStep === 4 && (!canSubmit || isSubmitting))
             }
-            className="px-3 sm:px-6 py-2 sm:py-3 rounded-xl bg-linear-to-r from-teal-500 via-teal-600 to-cyan-600 hover:from-teal-600 hover:via-teal-700 hover:to-cyan-700 text-white font-semibold transition-all disabled:opacity-50 disabled:cursor-not-allowed text-xs sm:text-sm flex items-center gap-1 sm:gap-2 whitespace-nowrap"
+            onMouseEnter={() => isStep4Disabled && setShowTooltip(true)}
+            onMouseLeave={() => setShowTooltip(false)}
+            onFocus={() => isStep4Disabled && setShowTooltip(true)}
+            onBlur={() => setShowTooltip(false)}
+            className="relative px-3 sm:px-6 py-2 sm:py-3 rounded-xl bg-linear-to-r from-teal-500 via-teal-600 to-cyan-600 hover:from-teal-600 hover:via-teal-700 hover:to-cyan-700 text-white font-semibold transition-all disabled:opacity-50 disabled:cursor-not-allowed text-xs sm:text-sm flex items-center gap-1 sm:gap-2 whitespace-nowrap"
           >
+            {showTooltip && missingFields.length > 0 && (
+              <div className={`absolute bottom-full ${isRTL ? 'left-0' : 'right-0'} mb-2 w-56 rounded-xl shadow-xl border z-50 p-3 ${
+                theme === 'dark' ? 'bg-gray-800 border-gray-600' : 'bg-white border-gray-200'
+              }`}>
+                <p className={`text-xs font-bold mb-2 ${ theme === 'dark' ? 'text-gray-200' : 'text-gray-800'}`}>
+                  {locale === 'ar' ? 'يرجى إكمال الحقول التالية:' : 'Please complete the following:'}
+                </p>
+                <ul className="space-y-1">
+                  {missingFields.map((field, i) => (
+                    <li key={i} className="flex items-center gap-1.5 text-xs text-red-500">
+                      <span className="w-1.5 h-1.5 rounded-full bg-red-500 shrink-0" />
+                      {field}
+                    </li>
+                  ))}
+                </ul>
+                <div className={`absolute bottom-[-6px] ${isRTL ? 'left-4' : 'right-4'} w-3 h-3 rotate-45 border-b border-r ${
+                  theme === 'dark' ? 'bg-gray-800 border-gray-600' : 'bg-white border-gray-200'
+                }`} />
+              </div>
+            )}
             {currentStep === 4 && isSubmitting ? (
               <>
                 <div className="w-3 h-3 sm:w-4 sm:h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
