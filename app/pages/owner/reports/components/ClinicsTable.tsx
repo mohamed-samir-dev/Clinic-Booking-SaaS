@@ -6,19 +6,21 @@ import { Building2, MapPin, UserCog, Users, Stethoscope, Calendar, DollarSign } 
 
 interface ClinicsTableProps {
   clinics: Clinic[];
+  locale: string;
 }
 
 type MultilingualField = { en?: string; ar?: string } | string;
 
-const getDisplayValue = (field: MultilingualField): string => {
+const getDisplayValue = (field: MultilingualField, locale: string): string => {
   if (typeof field === 'object' && field !== null) {
-    return field.en || field.ar || '';
+    return locale === 'ar' ? (field.ar || field.en || '') : (field.en || field.ar || '');
   }
   return field || '';
 };
 
-export const ClinicsTable = ({ clinics }: ClinicsTableProps) => {
+export const ClinicsTable = ({ clinics, locale }: ClinicsTableProps) => {
   const t = useTranslations('owner.reports');
+  const isRtl = locale === 'ar';
 
   return (
     <div className="bg-gray-800 rounded-xl border border-gray-700 overflow-hidden">
@@ -26,20 +28,20 @@ export const ClinicsTable = ({ clinics }: ClinicsTableProps) => {
         <div className="flex items-center gap-3">
           <Building2 className="text-teal-400" size={24} />
           <h2 className="text-xl font-bold text-white">{t('clinicsTable.title')}</h2>
-          <span className="ml-auto bg-teal-600 text-white px-3 py-1 rounded-full text-sm font-medium">
+          <span className="ms-auto bg-teal-600 text-white px-3 py-1 rounded-full text-sm font-medium">
             {clinics.length} {t('clinicsTable.total')}
           </span>
         </div>
       </div>
-      
+
       <div className="overflow-x-auto">
         <table className="w-full">
           <thead className="bg-gray-750">
             <tr>
-              <th className="px-6 py-4 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">
+              <th className={`px-6 py-4 text-${isRtl ? 'right' : 'left'} text-xs font-semibold text-gray-400 uppercase tracking-wider`}>
                 {t('clinicsTable.columns.clinic')}
               </th>
-              <th className="px-6 py-4 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">
+              <th className={`px-6 py-4 text-${isRtl ? 'right' : 'left'} text-xs font-semibold text-gray-400 uppercase tracking-wider`}>
                 {t('clinicsTable.columns.manager')}
               </th>
               <th className="px-6 py-4 text-center text-xs font-semibold text-gray-400 uppercase tracking-wider">
@@ -51,7 +53,7 @@ export const ClinicsTable = ({ clinics }: ClinicsTableProps) => {
               <th className="px-6 py-4 text-center text-xs font-semibold text-gray-400 uppercase tracking-wider">
                 {t('clinicsTable.columns.appointments')}
               </th>
-              <th className="px-6 py-4 text-right text-xs font-semibold text-gray-400 uppercase tracking-wider">
+              <th className={`px-6 py-4 text-${isRtl ? 'left' : 'right'} text-xs font-semibold text-gray-400 uppercase tracking-wider`}>
                 {t('clinicsTable.columns.revenue')}
               </th>
               <th className="px-6 py-4 text-center text-xs font-semibold text-gray-400 uppercase tracking-wider">
@@ -77,10 +79,10 @@ export const ClinicsTable = ({ clinics }: ClinicsTableProps) => {
                           <Building2 size={24} className="text-white" />
                         </div>
                         <div>
-                          <p className="text-white font-semibold">{getDisplayValue(clinic.name as MultilingualField)}</p>
+                          <p className="text-white font-semibold">{getDisplayValue(clinic.name as MultilingualField, locale)}</p>
                           <div className="flex items-center gap-1 text-gray-400 text-sm mt-1">
                             <MapPin size={12} />
-                            {getDisplayValue(clinic.location as MultilingualField)}
+                            {getDisplayValue(clinic.location as MultilingualField, locale)}
                           </div>
                         </div>
                       </div>
@@ -88,7 +90,9 @@ export const ClinicsTable = ({ clinics }: ClinicsTableProps) => {
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-2">
                         <UserCog size={16} className="text-teal-400" />
-                        <span className="text-white">{getDisplayValue(clinic.manager as MultilingualField) || t('clinicsTable.notAssigned')}</span>
+                        <span className="text-white">
+                          {getDisplayValue(clinic.manager as MultilingualField, locale) || t('clinicsTable.notAssigned')}
+                        </span>
                       </div>
                     </td>
                     <td className="px-6 py-4 text-center">
@@ -109,8 +113,8 @@ export const ClinicsTable = ({ clinics }: ClinicsTableProps) => {
                         <span className="text-white font-medium">{clinic.appointments}</span>
                       </div>
                     </td>
-                    <td className="px-6 py-4 text-right">
-                      <div className="flex items-center justify-end gap-2">
+                    <td className={`px-6 py-4 text-${isRtl ? 'left' : 'right'}`}>
+                      <div className={`flex items-center justify-${isRtl ? 'start' : 'end'} gap-2`}>
                         <DollarSign size={16} className="text-green-400" />
                         <span className="text-white font-semibold">
                           ${revenue.toLocaleString()}

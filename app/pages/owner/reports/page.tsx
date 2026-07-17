@@ -6,10 +6,13 @@ import { ManagersTable } from './components/ManagersTable';
 import { ClinicsTable } from './components/ClinicsTable';
 import { StatCard } from './components/StatCard';
 import { Building2, UserCog, Users, FileText } from 'lucide-react';
+import { useLanguage } from '@/app/contexts/LanguageContext';
 
 export default function ReportsPage() {
   const { managers, clinics, loading } = useReportsData();
   const t = useTranslations('owner.reports');
+  const { locale } = useLanguage();
+  const isRtl = locale === 'ar';
 
   if (loading) {
     return (
@@ -22,7 +25,7 @@ export default function ReportsPage() {
   const totalDoctors = clinics.reduce((sum, clinic) => sum + (clinic.doctors || 0), 0);
 
   return (
-    <div className="min-h-screen bg-gray-900 p-6">
+    <div className="min-h-screen bg-gray-900 p-6" dir={isRtl ? 'rtl' : 'ltr'}>
       <div className="max-w-full">
         <div className="mb-8">
           <div className="flex items-center gap-3 mb-2">
@@ -57,8 +60,8 @@ export default function ReportsPage() {
         </div>
 
         <div className="space-y-6">
-          <ManagersTable managers={managers} />
-          <ClinicsTable clinics={clinics} />
+          <ManagersTable managers={managers} locale={locale} />
+          <ClinicsTable clinics={clinics} locale={locale} />
         </div>
       </div>
     </div>
