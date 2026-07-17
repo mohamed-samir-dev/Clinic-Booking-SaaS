@@ -1,10 +1,9 @@
 'use client';
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useTheme } from '@/app/contexts/ThemeContext';
 import { useLanguage } from '@/app/contexts/LanguageContext';
-import { useAppSelector } from '@/app/store/hooks';
 
 interface BookingConfirmationPopupProps {
   isOpen: boolean;
@@ -33,9 +32,9 @@ interface BookingConfirmationPopupProps {
 export default function BookingConfirmationPopup({ isOpen, onClose, bookingData }: BookingConfirmationPopupProps) {
   const { theme } = useTheme();
   const { locale } = useLanguage();
-  const { user } = useAppSelector((state) => state.auth);
   const router = useRouter();
   const printRef = useRef<HTMLDivElement>(null);
+  const [countdown, setCountdown] = useState(5);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -56,19 +55,27 @@ export default function BookingConfirmationPopup({ isOpen, onClose, bookingData 
     return () => { document.getElementById(styleId)?.remove(); };
   }, [isOpen]);
 
+  useEffect(() => {
+    if (!isOpen) return;
+    setCountdown(5);
+    const interval = setInterval(() => {
+      setCountdown((prev) => {
+        if (prev <= 1) {
+          clearInterval(interval);
+          onClose();
+          router.push('/');
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [isOpen, onClose, router]);
+
   if (!isOpen) return null;
 
   const handlePrint = () => {
     window.print();
-  };
-
-  const handleClose = () => {
-    if (user) {
-      router.push('/pages/patient/profile/appointments');
-    } else {
-      router.push('/');
-    }
-    onClose();
   };
 
   const handleAddToCalendar = () => {
@@ -203,10 +210,10 @@ export default function BookingConfirmationPopup({ isOpen, onClose, bookingData 
             {locale === 'ar' ? 'طباعة' : 'Print'}
           </button>
           <button
-            onClick={handleClose}
+            onClick={() => { onClose(); router.push('/'); }}
             className={`flex-1 py-2.5 px-4 border rounded-lg font-semibold transition-colors text-sm ${theme === 'dark' ? 'bg-gray-600 border-gray-500 text-gray-200 hover:bg-gray-500' : 'bg-white border-gray-300 text-gray-700 hover:bg-gray-50'}`}
           >
-            {locale === 'ar' ? (user ? 'عرض مواعيدي' : 'الصفحة الرئيسية') : (user ? 'My Appointments' : 'Go to Home')}
+            {locale === 'ar' ? `الصفحة الرئيسية (${countdown})` : `Go to Home (${countdown})`}
           </button>
         </div>
       </div>
