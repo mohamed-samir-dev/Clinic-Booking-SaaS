@@ -26,23 +26,12 @@ export const useBooking = ({ selectedDoctor, selectedService, selectedDate, sele
   const [dateOfBirth, setDateOfBirth] = useState('');
   const [gender, setGender] = useState('');
   const [reason, setReason] = useState('');
-  const [files, setFiles] = useState<File[]>([]);
   const [agreeToPolicy, setAgreeToPolicy] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [bookingData, setBookingData] = useState<BookingData | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) {
-      setFiles(prev => [...prev, ...Array.from(e.target.files!)]);
-    }
-  };
-
-  const handleFileRemove = (index: number) => {
-    setFiles(prev => prev.filter((_, i) => i !== index));
-  };
-
-  const handleFinishBooking = useCallback(async () => {
+const handleFinishBooking = useCallback(async () => {
     setError(null);
     
     if (!agreeToPolicy) {
@@ -86,7 +75,6 @@ export const useBooking = ({ selectedDoctor, selectedService, selectedDate, sele
         selectedTime,
         selectedService,
         patientData: { fullName, phone, email, dateOfBirth, gender, reason },
-        files,
         user,
         token,
         locale
@@ -124,7 +112,6 @@ export const useBooking = ({ selectedDoctor, selectedService, selectedDate, sele
     dateOfBirth, setDateOfBirth,
     gender, setGender,
     reason, setReason,
-    files, handleFileChange, handleFileRemove,
     agreeToPolicy, setAgreeToPolicy,
     isSubmitting,
     bookingData,

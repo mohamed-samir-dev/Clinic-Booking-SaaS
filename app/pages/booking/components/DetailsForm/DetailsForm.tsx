@@ -37,7 +37,6 @@ export default function DetailsForm({ selectedDoctor, selectedService, selectedD
     dateOfBirth, setDateOfBirth,
     gender, setGender,
     reason, setReason,
-    files, handleFileChange, handleFileRemove,
     agreeToPolicy, setAgreeToPolicy,
     isSubmitting,
     bookingData,
@@ -87,9 +86,6 @@ export default function DetailsForm({ selectedDoctor, selectedService, selectedD
           <MedicalContext 
             reason={reason}
             setReason={setReason}
-            files={files}
-            handleFileChange={handleFileChange}
-            handleFileRemove={handleFileRemove}
           />
 
           <PrivacyPolicy agreeToPolicy={agreeToPolicy} setAgreeToPolicy={setAgreeToPolicy} />

@@ -65,7 +65,7 @@ export default function BookingConfirmationPopup({ isOpen, onClose, bookingData 
   const handleClose = () => {
     onClose();
     if (user) {
-      router.push('/pages/patient');
+      router.push('/pages/patient/profile/appointments');
     } else {
       router.push('/');
     }

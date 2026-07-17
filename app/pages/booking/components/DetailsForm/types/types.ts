@@ -34,7 +34,6 @@ export interface CreateAppointmentParams {
   selectedTime: string;
   selectedService: string;
   patientData: PatientFormData;
-  files?: File[];
   user: unknown;
   token: string | null;
   locale: 'en' | 'ar';
@@ -52,9 +51,6 @@ export interface BasicInformationProps {
 export interface MedicalContextProps {
   reason: string;
   setReason: (value: string) => void;
-  files: File[];
-  handleFileChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  handleFileRemove: (index: number) => void;
 }
 export interface PatientDemographicsProps {
   dateOfBirth: string;
