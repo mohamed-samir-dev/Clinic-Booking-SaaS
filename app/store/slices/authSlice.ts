@@ -83,10 +83,8 @@ const authSlice = createSlice({
       if (typeof window !== 'undefined') {
         localStorage.setItem('user', JSON.stringify(action.payload.user));
         localStorage.setItem('token', action.payload.token);
-        // Set cookies for middleware route protection
-        const maxAge = 60 * 60 * 24 * 7; // 7 days
-        document.cookie = `token=${action.payload.token}; path=/; max-age=${maxAge}; SameSite=Strict`;
-        document.cookie = `user=${encodeURIComponent(JSON.stringify(action.payload.user))}; path=/; max-age=${maxAge}; SameSite=Strict`;
+        const maxAge = 60 * 60 * 24 * 7;
+        document.cookie = `token=${action.payload.token}; path=/; max-age=${maxAge}; SameSite=Lax`;
       }
     },
     logout: (state) => {
@@ -95,8 +93,7 @@ const authSlice = createSlice({
       if (typeof window !== 'undefined') {
         localStorage.removeItem('user');
         localStorage.removeItem('token');
-        document.cookie = 'token=; path=/; max-age=0';
-        document.cookie = 'user=; path=/; max-age=0';
+        document.cookie = 'token=; path=/; max-age=0; SameSite=Lax';
       }
     },
     loadUserFromStorage: (state) => {
@@ -106,12 +103,9 @@ const authSlice = createSlice({
         if (storedUser && storedToken) {
           state.user = JSON.parse(storedUser);
           state.token = storedToken;
-          // Sync cookies if missing
-          if (!document.cookie.includes('token=')) {
-            const maxAge = 60 * 60 * 24 * 7;
-            document.cookie = `token=${storedToken}; path=/; max-age=${maxAge}; SameSite=Strict`;
-            document.cookie = `user=${encodeURIComponent(storedUser)}; path=/; max-age=${maxAge}; SameSite=Strict`;
-          }
+          // Always sync cookie from localStorage to ensure middleware can read it
+          const maxAge = 60 * 60 * 24 * 7;
+          document.cookie = `token=${storedToken}; path=/; max-age=${maxAge}; SameSite=Lax`;
         }
       }
     },
