@@ -39,14 +39,17 @@ export default function BasicInformation({ fullName, setFullName, phone, setPhon
             value={phone}
             onChange={(val) => setPhone(val || '')}
             className={`phone-input-wrapper ${
-              phone && !isPhoneValid ? 'phone-input-error' : theme === 'dark' ? 'phone-input-dark' : 'phone-input-light'
+              phone && !isPhoneValid
+                ? 'phone-input-error'
+                : theme === 'dark'
+                ? 'phone-input-dark'
+                : 'phone-input-light'
             }`}
           />
-          {phone && !isPhoneValid && (
-            <p className="text-[10px] sm:text-xs text-red-500 mt-1">{locale === 'ar' ? '⚠ رقم الهاتف غير صالح لهذه الدولة' : '⚠ Invalid phone number for selected country'}</p>
-          )}
-          {(!phone || isPhoneValid) && (
-            <p className={`text-[10px] sm:text-xs mt-1 ${theme === 'dark' ? 'text-white' : 'text-black'}`}>{locale === 'ar' ? 'اختر رمز الدولة وأدخل رقم هاتفك' : 'Select country code and enter your phone number'}</p>
+          {phone && !isPhoneValid ? (
+            <p className="text-[10px] sm:text-xs text-red-500 mt-1.5">{locale === 'ar' ? '⚠ رقم الهاتف غير صالح لهذه الدولة' : '⚠ Invalid phone number for selected country'}</p>
+          ) : (
+            <p className={`text-[10px] sm:text-xs mt-1.5 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>{locale === 'ar' ? 'اختر رمز الدولة وأدخل رقم هاتفك' : 'Select country code and enter your phone number'}</p>
           )}
         </div>
         <div>
