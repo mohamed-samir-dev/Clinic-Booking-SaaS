@@ -32,8 +32,7 @@ export default function FeaturedClinics() {
         const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/clinics`);
         if (response.ok) {
           const data = await response.json();
-          const allClinics = Array.isArray(data) ? data : [];
-          setClinics(allClinics.filter((c: Clinic) => c._id !== '69a5a379e12ec0951afb560e'));
+          setClinics(Array.isArray(data) ? data : []);
         }
       } catch (error) {
         console.error('Failed to fetch clinics:', error);

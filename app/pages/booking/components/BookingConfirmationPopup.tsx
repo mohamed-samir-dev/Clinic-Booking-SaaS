@@ -1,8 +1,10 @@
 'use client';
 import { useRef, useEffect } from 'react';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import { useTheme } from '@/app/contexts/ThemeContext';
 import { useLanguage } from '@/app/contexts/LanguageContext';
+import { useAppSelector } from '@/app/store/hooks';
 
 interface BookingConfirmationPopupProps {
   isOpen: boolean;
@@ -31,6 +33,8 @@ interface BookingConfirmationPopupProps {
 export default function BookingConfirmationPopup({ isOpen, onClose, bookingData }: BookingConfirmationPopupProps) {
   const { theme } = useTheme();
   const { locale } = useLanguage();
+  const { user } = useAppSelector((state) => state.auth);
+  const router = useRouter();
   const printRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -56,6 +60,15 @@ export default function BookingConfirmationPopup({ isOpen, onClose, bookingData 
 
   const handlePrint = () => {
     window.print();
+  };
+
+  const handleClose = () => {
+    onClose();
+    if (user) {
+      router.push('/pages/patient');
+    } else {
+      router.push('/');
+    }
   };
 
   const handleAddToCalendar = () => {
@@ -190,10 +203,10 @@ export default function BookingConfirmationPopup({ isOpen, onClose, bookingData 
             {locale === 'ar' ? 'طباعة' : 'Print'}
           </button>
           <button
-            onClick={onClose}
+            onClick={handleClose}
             className={`flex-1 py-2.5 px-4 border rounded-lg font-semibold transition-colors text-sm ${theme === 'dark' ? 'bg-gray-600 border-gray-500 text-gray-200 hover:bg-gray-500' : 'bg-white border-gray-300 text-gray-700 hover:bg-gray-50'}`}
           >
-            {locale === 'ar' ? 'إغلاق' : 'Close'}
+            {locale === 'ar' ? (user ? 'عرض مواعيدي' : 'الصفحة الرئيسية') : (user ? 'My Appointments' : 'Go to Home')}
           </button>
         </div>
       </div>

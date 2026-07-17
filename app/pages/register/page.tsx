@@ -201,14 +201,14 @@ export default function RegisterPage() {
                         return;
                       }
 
-                      if (!res.ok) throw new Error(data.message || 'Google sign-up failed');
+                      if (!res.ok) throw new Error(data.message || t.googleSignUpFailed);
 
                       saveAuthData(data.token, data.user);
                       dispatch(setCredentials({ user: data.user, token: data.token }));
                       toast.success(t.success, { duration: 3000, position: 'top-center' });
                       setTimeout(() => router.push(getRedirectRoute(data.user.role)), 1500);
                     } catch (err) {
-                      toast.error(err instanceof Error ? err.message : 'Google sign-up failed', { duration: 3000, position: 'top-center' });
+                      toast.error(err instanceof Error ? err.message : t.googleSignUpFailed, { duration: 3000, position: 'top-center' });
                     } finally {
                       setGoogleLoading(false);
                     }

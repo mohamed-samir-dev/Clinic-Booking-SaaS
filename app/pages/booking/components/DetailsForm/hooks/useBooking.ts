@@ -2,13 +2,26 @@ import { useState, useCallback } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/app/store/store';
 import { useLanguage } from '@/app/contexts/LanguageContext';
-import { BookingData,UseBookingParams } from '../types/types';
+import { BookingData, UseBookingParams } from '../types/types';
 import { createAppointment } from '../services/api';
 
 export const useBooking = ({ selectedDoctor, selectedService, selectedDate, selectedTime }: UseBookingParams) => {
-  const [fullName, setFullName] = useState('');
-  const [phone, setPhone] = useState('');
-  const [email, setEmail] = useState('');
+  const { user, token } = useSelector((state: RootState) => state.auth);
+  const { locale } = useLanguage();
+
+  const getName = (name: unknown): string => {
+    if (!name) return '';
+    if (typeof name === 'string') return name;
+    if (typeof name === 'object' && name !== null) {
+      const n = name as { en?: string; ar?: string };
+      return n.en || n.ar || '';
+    }
+    return '';
+  };
+
+  const [fullName, setFullName] = useState(user?.role === 'patient' ? getName(user.name) : '');
+  const [phone, setPhone] = useState(user?.role === 'patient' && user.phone ? user.phone.replace(/^\+\d{1,3}/, '') : '');
+  const [email, setEmail] = useState(user?.role === 'patient' ? user.email : '');
   const [dateOfBirth, setDateOfBirth] = useState('');
   const [gender, setGender] = useState('');
   const [reason, setReason] = useState('');
@@ -17,9 +30,6 @@ export const useBooking = ({ selectedDoctor, selectedService, selectedDate, sele
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [bookingData, setBookingData] = useState<BookingData | null>(null);
   const [error, setError] = useState<string | null>(null);
-
-  const { user, token } = useSelector((state: RootState) => state.auth);
-  const { locale } = useLanguage();
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {

@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { useTheme } from '@/app/contexts/ThemeContext';
 import { useLanguage } from '@/app/contexts/LanguageContext';
 import translations from '@/messages/translations';
+import { useSocket } from '@/app/hooks/useSocket';
 
 interface Appointment {
   id: string;

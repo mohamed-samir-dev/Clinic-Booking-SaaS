@@ -571,7 +571,14 @@
       "signInWithGoogle": "Sign in with Google",
       "selectClinic": "Select Clinic",
       "errorIncorrect": "The email or password you entered is incorrect. Please try again.",
-      "errorConnection": "Connection error. Please try again."
+      "errorConnection": "Connection error. Please try again.",
+      "googleSignInFailed": "Google sign-in failed. Please try again.",
+      "googleSignUpFailed": "Google sign-up failed. Please try again.",
+      "accountDeactivated": "Your account has been deactivated. Please contact support.",
+      "authFailed": "Authentication failed. Please check your credentials and try again.",
+      "accountNotFound": "Account not found. Please verify your email address or sign up.",
+      "serverError": "Server error. Please try again later or contact support.",
+      "unableToSignIn": "Unable to sign in. Please try again."
     },
     "userTypes": {
       "patient": "Patient",

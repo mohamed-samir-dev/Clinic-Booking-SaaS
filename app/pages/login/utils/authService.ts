@@ -1,5 +1,15 @@
 import { UserType, LoginCredentials, AuthResponse } from '@/app/shared/types/auth.types';
 import { AUTH_ENDPOINTS, ROLE_ROUTES, ROLES_REQUIRING_BUSINESS_ID } from '@/app/shared/constants/auth.constants';
+import messages from '@/messages/en.json';
+import messagesAr from '@/messages/ar.json';
+
+const getLocale = () =>
+  typeof window !== 'undefined' ? localStorage.getItem('locale') || 'en' : 'en';
+
+const getLoginMessages = () => {
+  const locale = getLocale();
+  return locale === 'ar' ? messagesAr.auth.login : messages.auth.login;
+};
 
 export const loginUser = async (
   userType: UserType,
@@ -31,31 +41,24 @@ export const loginUser = async (
 };
 
 const getErrorMessage = (data: { code?: string; message?: string; messageAr?: string }, status: number): string => {
-  // Check for deactivated account
+  const t = getLoginMessages();
+  const locale = getLocale();
+
   if (data.code === 'ACCOUNT_DEACTIVATED' || status === 403) {
-    const locale = typeof window !== 'undefined' ? localStorage.getItem('locale') || 'en' : 'en';
-    return locale === 'ar' ? (data.messageAr || 'تم إلغاء تفعيل حسابك') : (data.message || 'Your account has been deactivated');
+    return locale === 'ar' ? (data.messageAr || t.accountDeactivated) : (data.message || t.accountDeactivated);
   }
-  
+
   const message = data.message || '';
-  
+
   if (message?.toLowerCase().includes('invalid credentials') || message?.toLowerCase().includes('incorrect')) {
-    return 'The email or password you entered is incorrect. Please try again.';
+    return t.errorIncorrect;
   }
-  
-  if (status === 401) {
-    return 'Authentication failed. Please check your credentials and try again.';
-  }
-  
-  if (status === 404) {
-    return 'Account not found. Please verify your email address or sign up.';
-  }
-  
-  if (status >= 500) {
-    return 'Server error. Please try again later or contact support.';
-  }
-  
-  return message || 'Unable to sign in. Please try again.';
+
+  if (status === 401) return t.authFailed;
+  if (status === 404) return t.accountNotFound;
+  if (status >= 500) return t.serverError;
+
+  return message || t.unableToSignIn;
 };
 
 export const saveAuthData = (token: string, user: AuthResponse['user']) => {

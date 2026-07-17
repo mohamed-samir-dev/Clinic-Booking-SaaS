@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { FaUserMd, FaCalendarCheck, FaCalendarTimes, FaBriefcase, FaClock, FaHospital, FaHeart } from 'react-icons/fa';
 import { useTheme } from '@/app/contexts/ThemeContext';
 import { useLanguage } from '@/app/contexts/LanguageContext';
@@ -13,81 +13,56 @@ import { saveQuickBookingData } from '../../pages/booking/utils/quickBooking';
 import { getServiceKeyFromSpecialty } from '../../pages/booking/utils/serviceHelpers';
 import { useFavorites } from '../../hooks/useFavorites';
 
-const checkIsAvailableNow = (availability?: Array<{ day: string; slots?: Array<{ from: string; to: string }>; workingHours?: { from: string; to: string } }>) => {
-  if (!availability || availability.length === 0) return false;
-  
-  const now = new Date();
-  const daysOrder = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
-  const currentDay = daysOrder[now.getDay()];
-  const currentTime = now.getHours() * 60 + now.getMinutes();
-  
-  const todaySchedule = availability.find(a => a.day === currentDay);
-  if (!todaySchedule) return false;
-  
-  let hours = todaySchedule.workingHours;
-  if (!hours && todaySchedule.slots && todaySchedule.slots.length > 0) {
-    const validSlot = todaySchedule.slots.find(slot => slot.from && slot.to);
-    if (validSlot) hours = validSlot;
-  }
-  
-  if (!hours || !hours.from || !hours.to) return false;
-  
-  const parseTime = (timeStr: string) => {
-    const [time, period] = timeStr.split(' ');
-    const [h, m] = time.split(':').map(Number);
-    let hrs = h;
-    if (period === 'PM' && hrs !== 12) hrs += 12;
-    if (period === 'AM' && hrs === 12) hrs = 0;
-    return hrs * 60 + m;
-  };
-  
-  const startTime = parseTime(hours.from);
-  const endTime = parseTime(hours.to);
-  
-  return currentTime >= startTime && currentTime <= endTime;
+type AvailabilitySlot = { day: string; slots?: Array<{ from: string; to: string }>; workingHours?: { from: string; to: string } };
+
+const parseTime = (timeStr: string) => {
+  const [time, period] = timeStr.split(' ');
+  const [h, m] = time.split(':').map(Number);
+  let hrs = h;
+  if (period === 'PM' && hrs !== 12) hrs += 12;
+  if (period === 'AM' && hrs === 12) hrs = 0;
+  return hrs * 60 + m;
 };
 
-const getNextAvailableDay = (availability?: Array<{ day: string; slots?: Array<{ from: string; to: string }>; workingHours?: { from: string; to: string } }>, locale: string = 'en') => {
-  if (!availability || availability.length === 0) return null;
-  
-  const daysOrder = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
-  const daysArabic: Record<string, string> = {
-    'sunday': 'الأحد',
-    'monday': 'الإثنين',
-    'tuesday': 'الثلاثاء',
-    'wednesday': 'الأربعاء',
-    'thursday': 'الخميس',
-    'friday': 'الجمعة',
-    'saturday': 'السبت'
-  };
+const DAYS_ORDER = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+const DAYS_ARABIC: Record<string, string> = {
+  sunday: 'الأحد', monday: 'الإثنين', tuesday: 'الثلاثاء',
+  wednesday: 'الأربعاء', thursday: 'الخميس', friday: 'الجمعة', saturday: 'السبت'
+};
+
+const getWorkingHours = (slot: AvailabilitySlot) => {
+  if (slot.workingHours) return slot.workingHours;
+  return slot.slots?.find(s => s.from && s.to) ?? null;
+};
+
+const checkIsAvailableNow = (availability?: AvailabilitySlot[]) => {
+  if (!availability?.length) return false;
+  const now = new Date();
+  const todaySchedule = availability.find(a => a.day === DAYS_ORDER[now.getDay()]);
+  if (!todaySchedule) return false;
+  const hours = getWorkingHours(todaySchedule);
+  if (!hours?.from || !hours?.to) return false;
+  const currentTime = now.getHours() * 60 + now.getMinutes();
+  return currentTime >= parseTime(hours.from) && currentTime <= parseTime(hours.to);
+};
+
+const getNextAvailableDay = (availability?: AvailabilitySlot[], locale = 'en') => {
+  if (!availability?.length) return null;
   const today = new Date().getDay();
-  
   for (let i = 0; i < 7; i++) {
-    const dayIndex = (today + i) % 7;
-    const dayName = daysOrder[dayIndex];
+    const dayName = DAYS_ORDER[(today + i) % 7];
     const daySchedule = availability.find(a => a.day === dayName);
-    
-    if (daySchedule) {
-      let hours = daySchedule.workingHours;
-      
-      if (!hours && daySchedule.slots && daySchedule.slots.length > 0) {
-        const validSlot = daySchedule.slots.find(slot => slot.from && slot.to);
-        if (validSlot) {
-          hours = validSlot;
-        }
-      }
-      
-      if (hours && hours.from && hours.to) {
-        return {
-          day: dayName,
-          dayDisplay: locale === 'ar' ? daysArabic[dayName] : dayName.charAt(0).toUpperCase() + dayName.slice(1),
-          isToday: i === 0,
-          workingHours: hours
-        };
-      }
+    if (!daySchedule) continue;
+    const hours = getWorkingHours(daySchedule);
+    if (hours?.from && hours?.to) {
+      return {
+        day: dayName,
+        dayDisplay: locale === 'ar' ? DAYS_ARABIC[dayName] : dayName.charAt(0).toUpperCase() + dayName.slice(1),
+        isToday: i === 0,
+        workingHours: hours,
+      };
     }
   }
-  
   return null;
 };
 
@@ -110,8 +85,8 @@ export default function DoctorCard({
   const [showMessage, setShowMessage] = useState(false);
   const [message, setMessage] = useState('');
   
-  const nextAvailable = getNextAvailableDay(availability, locale);
-  const isCurrentlyAvailable = checkIsAvailableNow(availability);
+  const nextAvailable = useMemo(() => getNextAvailableDay(availability, locale), [availability, locale]);
+  const isCurrentlyAvailable = useMemo(() => checkIsAvailableNow(availability), [availability]);
   const isFavorited = checkIsFavorite(id);
   
   const displayName = locale === 'ar' && name.ar ? name.ar : name.en;
@@ -169,7 +144,7 @@ export default function DoctorCard({
       </button>
       <div className="flex flex-col items-center">
         <div className="relative w-24 h-24 sm:w-28 sm:h-28 md:w-32 md:h-32 mb-4 sm:mb-5">
-          <div className="absolute inset-0 bg-linear-to-br from-teal-400 to-teal-600 rounded-full animate-pulse opacity-20"></div>
+          <div className="absolute inset-0 bg-linear-to-br from-teal-400 to-teal-600 rounded-full opacity-20"></div>
           <div className="relative w-full h-full rounded-full overflow-hidden border-3 sm:border-4 border-teal-500 shadow-lg group-hover:scale-110 transition-transform duration-300">
             <Image
               src={photoUrl || 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%2314b8a6"%3E%3Cpath d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/%3E%3C/svg%3E'}

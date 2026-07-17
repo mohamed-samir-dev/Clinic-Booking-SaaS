@@ -39,12 +39,13 @@ export default function TopDoctors() {
   if (loading) {
     return (
       <section className={`py-12 sm:py-16 md:py-20 ${theme === 'dark' ? 'bg-gray-800' : 'bg-gray-50'}`}>
-        <div className="w-full px-4 md:px-8">
-          <div className="text-center">
-            <div className="animate-pulse">
-              <div className={`h-8 rounded w-64 mx-auto mb-4 ${theme === 'dark' ? 'bg-gray-700' : 'bg-gray-200'}`}></div>
-              <div className={`h-4 rounded w-96 mx-auto ${theme === 'dark' ? 'bg-gray-700' : 'bg-gray-200'}`}></div>
-            </div>
+        <div className="w-full px-4 md:px-8 animate-pulse">
+          <div className={`h-8 rounded w-64 mx-auto mb-4 ${theme === 'dark' ? 'bg-gray-700' : 'bg-gray-200'}`} />
+          <div className={`h-4 rounded w-96 mx-auto mb-10 ${theme === 'dark' ? 'bg-gray-700' : 'bg-gray-200'}`} />
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {Array.from({ length: 4 }).map((_, i) => (
+              <div key={i} className={`h-80 rounded-2xl ${theme === 'dark' ? 'bg-gray-700' : 'bg-gray-200'}`} />
+            ))}
           </div>
         </div>
       </section>

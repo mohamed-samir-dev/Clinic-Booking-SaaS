@@ -88,13 +88,13 @@ export default function LoginPage() {
                         body: JSON.stringify({ accessToken }),
                       });
                       const data = await res.json();
-                      if (!res.ok) throw new Error(data.message || 'Google sign-in failed');
+                      if (!res.ok) throw new Error(data.message || t.googleSignInFailed);
                       saveAuthData(data.token, data.user);
                       dispatch(setCredentials({ user: data.user, token: data.token }));
                       dispatch(linkGuestAppointments({ token: data.token, user: data.user }));
                       router.push(getRedirectRoute(data.user.role));
                     } catch (err) {
-                      setError(err instanceof Error ? err.message : 'Google sign-in failed');
+                      setError(err instanceof Error ? err.message : t.googleSignInFailed);
                     } finally {
                       setGoogleLoading(false);
                     }

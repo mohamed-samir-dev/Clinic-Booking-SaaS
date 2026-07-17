@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { FaStar, FaQuoteLeft, FaPlus } from 'react-icons/fa';
 import { useTheme } from '@/app/contexts/ThemeContext';
 import { useLanguage } from '@/app/contexts/LanguageContext';
@@ -19,20 +19,19 @@ export default function PatientReviews() {
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     try {
       const [reviewsData, statsData] = await Promise.all([
         api.reviews.getAll(),
         api.reviews.getStats(),
       ]);
-
       setReviews((reviewsData as { data: Review[] }).data || []);
       setStats((statsData as { data: ReviewStats }).data || null);
     } catch {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
     fetchData();
