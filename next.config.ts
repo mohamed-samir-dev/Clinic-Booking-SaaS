@@ -31,6 +31,10 @@ const nextConfig: NextConfig = {
             key: 'Cross-Origin-Embedder-Policy',
             value: 'unsafe-none',
           },
+          {
+            key: 'Cross-Origin-Resource-Policy',
+            value: 'cross-origin',
+          },
         ],
       },
     ];

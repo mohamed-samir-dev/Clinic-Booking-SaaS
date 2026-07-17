@@ -19,6 +19,8 @@ export default function GoogleSignInButton({ onSuccess, onError, loading }: Goog
   const login = useGoogleLogin({
     onSuccess: (response) => onSuccess?.(response.access_token),
     onError: () => onError?.('Google sign-in failed'),
+    flow: 'implicit',
+    ux_mode: 'popup',
   });
 
   return (
