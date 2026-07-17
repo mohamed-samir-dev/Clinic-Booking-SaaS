@@ -45,8 +45,9 @@ export default function FacilitiesList({ formData, setFormData }: Props) {
                   type="text"
                   value={facility.name.en}
                   onChange={(e) => {
-                    const newFacilities = [...formData.facilities];
-                    newFacilities[index].name.en = e.target.value;
+                    const newFacilities = formData.facilities.map((f, i) =>
+                      i === index ? { ...f, name: { ...f.name, en: e.target.value } } : f
+                    );
                     setFormData({ ...formData, facilities: newFacilities });
                   }}
                   className="px-3 py-2 bg-gray-700 border-2 border-gray-600 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-all text-sm text-white font-medium"
@@ -56,8 +57,9 @@ export default function FacilitiesList({ formData, setFormData }: Props) {
                   type="text"
                   value={facility.name.ar}
                   onChange={(e) => {
-                    const newFacilities = [...formData.facilities];
-                    newFacilities[index].name.ar = e.target.value;
+                    const newFacilities = formData.facilities.map((f, i) =>
+                      i === index ? { ...f, name: { ...f.name, ar: e.target.value } } : f
+                    );
                     setFormData({ ...formData, facilities: newFacilities });
                   }}
                   className="px-3 py-2 bg-gray-700 border-2 border-gray-600 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-all text-sm text-white font-medium"
@@ -67,8 +69,9 @@ export default function FacilitiesList({ formData, setFormData }: Props) {
                   type="text"
                   value={facility.icon}
                   onChange={(e) => {
-                    const newFacilities = [...formData.facilities];
-                    newFacilities[index].icon = e.target.value;
+                    const newFacilities = formData.facilities.map((f, i) =>
+                      i === index ? { ...f, icon: e.target.value } : f
+                    );
                     setFormData({ ...formData, facilities: newFacilities });
                   }}
                   className="px-3 py-2 bg-gray-700 border-2 border-gray-600 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-all text-sm text-white font-medium"

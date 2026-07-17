@@ -1,8 +1,9 @@
 'use client';
 
 import { useRouter, useParams } from 'next/navigation';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, ArrowRight } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import { useLanguage } from '@/app/contexts/LanguageContext';
 import { ClinicFormData } from '../../types';
 import { INITIAL_CLINIC_DATA } from '../../utils/constants';
 import { fetchClinicById, updateClinic } from '../../utils/api';
@@ -16,13 +17,46 @@ import BookingSettings from '../../components/BookingSettings';
 import SocialMedia from '../../components/SocialMedia';
 import StatusSection from '../../components/StatusSection';
 
+const t = {
+  ar: {
+    back: 'رجوع',
+    title: 'تعديل العيادة',
+    subtitle: 'تعديل بيانات العيادة',
+    errorLabel: 'خطأ',
+    cancel: 'إلغاء',
+    submit: 'حفظ التعديلات',
+    submitting: 'جاري الحفظ...',
+    loading: 'جاري تحميل بيانات العيادة...',
+    validationName: 'اسم العيادة بالإنجليزي مطلوب',
+    validationNameAr: 'اسم العيادة بالعربي مطلوب',
+    validationEmail: 'البريد الإلكتروني غير صحيح',
+    validationPhone: 'رقم الهاتف غير صحيح',
+  },
+  en: {
+    back: 'Back',
+    title: 'Edit Clinic',
+    subtitle: 'Edit clinic details',
+    errorLabel: 'Error',
+    cancel: 'Cancel',
+    submit: 'Update Clinic',
+    submitting: 'Saving...',
+    loading: 'Loading clinic data...',
+    validationName: 'Clinic name in English is required',
+    validationNameAr: 'Clinic name in Arabic is required',
+    validationEmail: 'Invalid email address',
+    validationPhone: 'Invalid phone number',
+  },
+} as const;
+
 export default function EditClinicPage() {
   const router = useRouter();
   const params = useParams();
   const clinicId = params.id as string;
+  const { locale } = useLanguage();
+  const tr = t[locale as 'ar' | 'en'];
+  const BackIcon = locale === 'ar' ? ArrowRight : ArrowLeft;
 
   const [formData, setFormData] = useState<ClinicFormData>(INITIAL_CLINIC_DATA);
-
   const [loading, setLoading] = useState(false);
   const [fetchLoading, setFetchLoading] = useState(true);
   const [error, setError] = useState('');
@@ -62,11 +96,20 @@ export default function EditClinicPage() {
     fetchClinicData();
   }, [clinicId]);
 
+  const validate = (): string => {
+    if (!formData.name.en.trim()) return tr.validationName;
+    if (!formData.name.ar.trim()) return tr.validationNameAr;
+    if (formData.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) return tr.validationEmail;
+    if (formData.phone && !/^\+?[\d\s\-()]{7,20}$/.test(formData.phone)) return tr.validationPhone;
+    return '';
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    const validationError = validate();
+    if (validationError) { setError(validationError); return; }
     setLoading(true);
     setError('');
-
     try {
       await updateClinic(clinicId, formData);
       router.push('/pages/owner/clinics');
@@ -79,36 +122,36 @@ export default function EditClinicPage() {
 
   if (fetchLoading) {
     return (
-      <div className="p-8 flex justify-center items-center min-h-screen bg-gray-900">
+      <div dir={locale === 'ar' ? 'rtl' : 'ltr'} className="p-8 flex justify-center items-center min-h-screen bg-gray-900">
         <div className="text-center">
           <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-teal-600"></div>
-          <p className="mt-4 text-gray-400">Loading clinic data...</p>
+          <p className="mt-4 text-gray-400">{tr.loading}</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="p-8 min-h-screen bg-gray-900">
+    <div dir={locale === 'ar' ? 'rtl' : 'ltr'} className="p-8 min-h-screen bg-gray-900">
       <div className="mb-6">
         <button
           onClick={() => router.back()}
           className="flex items-center gap-2 text-teal-400 hover:text-teal-300"
         >
-          <ArrowLeft size={20} />
-          Back
+          <BackIcon size={20} />
+          {tr.back}
         </button>
       </div>
 
       <div className="bg-gray-800 rounded-2xl shadow-lg border border-gray-700 p-8 max-w-5xl mx-auto">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-white mb-2">تعديل العيادة</h1>
-          <p className="text-gray-400">Edit clinic details</p>
+          <h1 className="text-3xl font-bold text-white mb-2">{tr.title}</h1>
+          <p className="text-gray-400">{tr.subtitle}</p>
         </div>
 
         {error && (
           <div className="bg-red-900/50 border-l-4 border-red-500 text-red-200 px-6 py-4 rounded-lg mb-6">
-            <p className="font-medium">Error</p>
+            <p className="font-medium">{tr.errorLabel}</p>
             <p className="text-sm">{error}</p>
           </div>
         )}
@@ -130,14 +173,14 @@ export default function EditClinicPage() {
               onClick={() => router.back()}
               className="px-8 py-3 border-2 border-gray-600 rounded-xl text-gray-300 font-semibold hover:bg-gray-700 transition-all"
             >
-              Cancel
+              {tr.cancel}
             </button>
             <button
               type="submit"
               disabled={loading}
-              className="px-8 py-3 bg-linear-to-r from-teal-600 to-cyan-600 text-white font-semibold rounded-xl hover:from-teal-700 hover:to-cyan-700 disabled:from-gray-600 disabled:to-gray-700 transition-all shadow-lg"
+              className="px-8 py-3 bg-teal-600 text-white font-semibold rounded-xl hover:bg-teal-700 disabled:bg-gray-600 transition-all shadow-lg"
             >
-              {loading ? 'Saving...' : 'Update Clinic'}
+              {loading ? tr.submitting : tr.submit}
             </button>
           </div>
         </form>
