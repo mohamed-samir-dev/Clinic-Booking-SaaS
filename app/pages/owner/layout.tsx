@@ -23,7 +23,6 @@ function OwnerContent({ children }: { children: React.ReactNode }) {
 }
 
 export default function OwnerLayout({ children }: { children: React.ReactNode }) {
-  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [authorized, setAuthorized] = useState(false);
   const router = useRouter();
 
