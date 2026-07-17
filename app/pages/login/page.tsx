@@ -1,31 +1,42 @@
 'use client';
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useState, useEffect, Suspense } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { UserType } from '@/app/shared/types/auth.types';
 import UserTypeToggle from '@/app/shared/components/UserTypeToggle';
 import GoogleSignInButton from '@/app/shared/components/GoogleSignInButton';
 import LoginForm from './components/LoginForm';
 import { loginUser, saveAuthData, getRedirectRoute } from './utils/authService';
-import { useAppDispatch } from '@/app/store/hooks';
+import { useAppDispatch, useAppSelector } from '@/app/store/hooks';
 import { setCredentials, linkGuestAppointments } from '@/app/store/slices/authSlice';
 import { useTheme } from '@/app/contexts/ThemeContext';
 import { useLanguage } from '@/app/contexts/LanguageContext';
 import messages from '@/messages/en.json';
 import messagesAr from '@/messages/ar.json';
 
-export default function LoginPage() {
+function LoginContent() {
   const { theme } = useTheme();
   const { locale } = useLanguage();
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const redirectPath = searchParams.get('redirect') || null;
   const dispatch = useAppDispatch();
+  const authUser = useAppSelector((state) => state.auth.user);
   const [userType, setUserType] = useState<UserType>('patient');
   const [loading, setLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
   const [error, setError] = useState('');
 
   const t = locale === 'ar' ? messagesAr.auth.login : messages.auth.login;
+
+  useEffect(() => {
+    if (authUser) {
+      router.replace(redirectPath || getRedirectRoute(authUser.role));
+    }
+  }, [authUser, redirectPath, router]);
+
+  if (authUser) return null;
 
   const handleSubmit = async (email: string, password: string, businessId: string) => {
     setLoading(true);
@@ -36,7 +47,7 @@ export default function LoginPage() {
       saveAuthData(data.token, data.user);
       dispatch(setCredentials({ user: data.user, token: data.token }));
       dispatch(linkGuestAppointments({ token: data.token, user: data.user }));
-      router.push(getRedirectRoute(data.user.role));
+      router.push(redirectPath || getRedirectRoute(data.user.role));
     } catch (err) {
       if (err instanceof Error) {
         setError(err.message);
@@ -49,7 +60,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className={`min-h-screen flex items-center justify-center px-3 xs:px-4 sm:px-6 lg:px-8 py-6 xs:py-8 sm:py-12 ${theme === 'dark' ? 'bg-gray-900' : 'bg-linear-to-br from-teal-50 to-cyan-50'}`}>
+    <div suppressHydrationWarning className={`min-h-screen flex items-center justify-center px-3 xs:px-4 sm:px-6 lg:px-8 py-6 xs:py-8 sm:py-12 ${theme === 'dark' ? 'bg-gray-900' : 'bg-linear-to-br from-teal-50 to-cyan-50'}`}>
       <div className="w-full max-w-md sm:max-w-lg md:max-w-xl lg:max-w-2xl">
         <div className={`rounded-2xl sm:rounded-3xl shadow-xl sm:shadow-2xl overflow-hidden ${theme === 'dark' ? 'bg-gray-800' : 'bg-white'}`}>
           <div className="px-4 xs:px-6 sm:px-8 md:px-10 lg:px-12 py-6 xs:py-8 sm:py-10 md:py-12">
@@ -92,7 +103,7 @@ export default function LoginPage() {
                       saveAuthData(data.token, data.user);
                       dispatch(setCredentials({ user: data.user, token: data.token }));
                       dispatch(linkGuestAppointments({ token: data.token, user: data.user }));
-                      router.push(getRedirectRoute(data.user.role));
+                      router.push(redirectPath || getRedirectRoute(data.user.role));
                     } catch (err) {
                       setError(err instanceof Error ? err.message : t.googleSignInFailed);
                     } finally {
@@ -115,5 +126,13 @@ export default function LoginPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense>
+      <LoginContent />
+    </Suspense>
   );
 }

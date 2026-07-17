@@ -73,25 +73,23 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" dir="ltr">
+    <html lang="en" dir="ltr" suppressHydrationWarning>
       <head>
         <GoogleAnalytics />
         <link rel="preload" href="/bg-Alnoor.webp" as="image" type="image/webp" fetchPriority="high" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link
-          rel="preload"
-          href="https://fonts.googleapis.com/icon?family=Material+Icons"
-          as="style"
-        />
-        <link
           href="https://fonts.googleapis.com/icon?family=Material+Icons"
           rel="stylesheet"
-          media="print"
         />
-        <script dangerouslySetInnerHTML={{ __html: `window.addEventListener('load',function(){document.querySelector('link[media="print"]').media='all'})` }} />
       </head>
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`} suppressHydrationWarning>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var t=localStorage.getItem('theme');if(t==='dark')document.documentElement.setAttribute('data-theme','dark')}catch(e){}})()`,
+          }}
+        />
         <LayoutClient>{children}</LayoutClient>
       </body>
     </html>
