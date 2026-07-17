@@ -493,33 +493,7 @@ export default function DoctorPage() {
         </div>
       </div>
 
-      <style jsx global>{`
-        html {
-          scroll-behavior: smooth;
-        }
-        body {
-          overflow-y: scroll;
-        }
-        * {
-          scrollbar-width: thin;
-          scrollbar-color: #cbd5e1 #f1f1f1;
-        }
-        *::-webkit-scrollbar {
-          width: 8px;
-          height: 8px;
-        }
-        *::-webkit-scrollbar-track {
-          background: #f1f1f1;
-          border-radius: 10px;
-        }
-        *::-webkit-scrollbar-thumb {
-          background: #cbd5e1;
-          border-radius: 10px;
-        }
-        *::-webkit-scrollbar-thumb:hover {
-          background: #94a3b8;
-        }
-      `}</style>
+
     </div>
   );
 }

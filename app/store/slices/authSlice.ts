@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 
 interface User {
   name: string;
@@ -44,33 +44,34 @@ const initialState: AuthState = {
   token: null,
 };
 
-const linkGuestAppointments = async (token: string, user: User) => {
-  const guestId = localStorage.getItem('guestId');
-  if (!guestId || user.role !== 'patient') return;
+export const linkGuestAppointments = createAsyncThunk(
+  'auth/linkGuestAppointments',
+  async ({ token, user }: { token: string; user: User }) => {
+    const guestId = localStorage.getItem('guestId');
+    if (!guestId || user.role !== 'patient') return;
 
-  try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/appointments/link-guest`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
-      },
-      body: JSON.stringify({
-        guestId,
-        email: user.email,
-        phone: user.phone
-      })
-    });
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/appointments/link-guest`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          guestId,
+          email: user.email,
+          phone: user.phone
+        })
+      });
 
-    const result = await response.json();
-
-    if (response.ok) {
-      localStorage.removeItem('guestId');
+      if (response.ok) {
+        localStorage.removeItem('guestId');
+      }
+    } catch {
+      // Silent fail for guest linking
     }
-  } catch (error) {
-    // Silent fail for guest linking
   }
-};
+);
 
 const authSlice = createSlice({
   name: 'auth',
@@ -82,7 +83,6 @@ const authSlice = createSlice({
       if (typeof window !== 'undefined') {
         localStorage.setItem('user', JSON.stringify(action.payload.user));
         localStorage.setItem('token', action.payload.token);
-        linkGuestAppointments(action.payload.token, action.payload.user);
       }
     },
     logout: (state) => {

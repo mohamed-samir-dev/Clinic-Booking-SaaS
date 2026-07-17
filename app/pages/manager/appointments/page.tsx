@@ -1,6 +1,8 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/app/store/store';
 import { Calendar, Search, Plus, Clock, LayoutGrid, LayoutList } from 'lucide-react';
 import { AppointmentsTable } from './components/AppointmentsTable';
 import { AppointmentFilters } from './components/AppointmentFilters';
@@ -59,6 +61,7 @@ const translations = {
 };
 
 export default function AppointmentsPage() {
+  const token = useSelector((state: RootState) => state.auth.token);
   const [language, setLanguage] = useState<Language>('ar');
   const [appointments, setAppointments] = useState<Appointment[]>([]);
   const [loading, setLoading] = useState(true);
@@ -77,13 +80,13 @@ export default function AppointmentsPage() {
   const [totalItems, setTotalItems] = useState(0);
 
   useEffect(() => {
-    const savedLang = localStorage.getItem('managerLang') as Language;
+    const savedLang = localStorage.getItem('locale') as Language;
     if (savedLang) {
       setLanguage(savedLang);
     }
 
     const handleLanguageChange = () => {
-      const newLang = localStorage.getItem('managerLang') as Language;
+      const newLang = localStorage.getItem('locale') as Language;
       if (newLang) {
         setLanguage(newLang);
       }
@@ -97,7 +100,6 @@ export default function AppointmentsPage() {
 
   const fetchAppointments = useCallback(async () => {
     try {
-      const token = localStorage.getItem('token');
       const params = new URLSearchParams({
         filter,
         page: currentPage.toString(),
@@ -131,7 +133,6 @@ export default function AppointmentsPage() {
 
   const handleConfirm = async (id: string) => {
     try {
-      const token = localStorage.getItem('token');
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/manager/appointments/${id}/confirm`, {
         method: 'PATCH',
         headers: { Authorization: `Bearer ${token}` },
@@ -147,7 +148,6 @@ export default function AppointmentsPage() {
 
   const handleCancel = async (id: string) => {
     try {
-      const token = localStorage.getItem('token');
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/manager/appointments/${id}/cancel`, {
         method: 'PATCH',
         headers: { Authorization: `Bearer ${token}` },
@@ -168,7 +168,6 @@ export default function AppointmentsPage() {
 
   const handleNoShow = async (id: string) => {
     try {
-      const token = localStorage.getItem('token');
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/manager/appointments/${id}/no-show`, {
         method: 'PATCH',
         headers: { Authorization: `Bearer ${token}` },

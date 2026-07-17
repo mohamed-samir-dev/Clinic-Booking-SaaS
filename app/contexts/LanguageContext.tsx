@@ -18,7 +18,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   const [messages, setMessages] = useState<typeof defaultMessages>(defaultMessages);
 
   useEffect(() => {
-    const savedLocale = (localStorage.getItem('managerLang') || localStorage.getItem('locale') || 'en') as Locale;
+    const savedLocale = (localStorage.getItem('locale') || 'en') as Locale;
     if (savedLocale !== 'en') {
       setLocale(savedLocale);
       import(`../../messages/${savedLocale}.json`).then((msgs) => {
@@ -29,7 +29,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     document.documentElement.lang = savedLocale;
 
     const handleLanguageChange = () => {
-      const newLocale = (localStorage.getItem('managerLang') || localStorage.getItem('locale') || 'en') as Locale;
+      const newLocale = (localStorage.getItem('locale') || 'en') as Locale;
       setLocale(newLocale);
       document.documentElement.dir = newLocale === 'ar' ? 'rtl' : 'ltr';
       document.documentElement.lang = newLocale;
@@ -50,7 +50,6 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     const newLocale = locale === 'en' ? 'ar' : 'en';
     setLocale(newLocale);
     localStorage.setItem('locale', newLocale);
-    localStorage.setItem('managerLang', newLocale);
     document.documentElement.dir = newLocale === 'ar' ? 'rtl' : 'ltr';
     document.documentElement.lang = newLocale;
     if (newLocale === 'en') {

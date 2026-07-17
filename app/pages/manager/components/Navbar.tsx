@@ -43,7 +43,7 @@ export default function Navbar({ onMenuClick }: NavbarProps) {
   const router = useRouter();
 
   useEffect(() => {
-    const savedLang = localStorage.getItem('managerLang') as Language;
+    const savedLang = localStorage.getItem('locale') as Language;
     if (savedLang) setLanguage(savedLang);
     const fetchManagerData = async () => {
       try {

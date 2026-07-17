@@ -101,13 +101,13 @@ export default function ReviewsPage() {
     typeof name === 'string' ? name : name[language];
 
   useEffect(() => {
-    const savedLang = localStorage.getItem('managerLang') as 'ar' | 'en';
+    const savedLang = localStorage.getItem('locale') as 'ar' | 'en';
     if (savedLang) {
       setLanguage(savedLang);
     }
 
     const handleLanguageChange = () => {
-      const newLang = localStorage.getItem('managerLang') as 'ar' | 'en';
+      const newLang = localStorage.getItem('locale') as 'ar' | 'en';
       if (newLang) {
         setLanguage(newLang);
       }

@@ -35,7 +35,7 @@ export const createAppointment = async ({
     patientData: {
       fullName: patientData.fullName,
       email: patientData.email,
-      phone: `+20${patientData.phone}`,
+      phone: patientData.phone,
       dateOfBirth: patientData.dateOfBirth,
       gender: patientData.gender
     },
@@ -80,7 +80,7 @@ export const createAppointment = async ({
     patient: {
       fullName: patientData.fullName,
       email: patientData.email,
-      phone: `+20${patientData.phone}`
+      phone: patientData.phone
     },
     appointmentDate: selectedDate.toISOString(),
     startTime: selectedTime,

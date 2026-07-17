@@ -12,13 +12,13 @@ export default function ManagerLayout({ children }: { children: React.ReactNode 
   const [language, setLanguage] = useState<Language>('ar');
 
   useEffect(() => {
-    const savedLang = localStorage.getItem('managerLang') as Language;
+    const savedLang = localStorage.getItem('locale') as Language;
     if (savedLang) setLanguage(savedLang);
   }, []);
 
   useEffect(() => {
     const handleLanguageChange = () => {
-      const newLang = localStorage.getItem('managerLang') as Language;
+      const newLang = localStorage.getItem('locale') as Language;
       if (newLang) {
         setLanguage(newLang);
       }

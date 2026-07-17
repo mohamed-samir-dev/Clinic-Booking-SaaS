@@ -9,7 +9,7 @@ import GoogleSignInButton from '@/app/shared/components/GoogleSignInButton';
 import LoginForm from './components/LoginForm';
 import { loginUser, saveAuthData, getRedirectRoute } from './utils/authService';
 import { useAppDispatch } from '@/app/store/hooks';
-import { setCredentials } from '@/app/store/slices/authSlice';
+import { setCredentials, linkGuestAppointments } from '@/app/store/slices/authSlice';
 import { useTheme } from '@/app/contexts/ThemeContext';
 import { useLanguage } from '@/app/contexts/LanguageContext';
 import messages from '@/messages/en.json';
@@ -35,6 +35,7 @@ export default function LoginPage() {
       const data = await loginUser(userType, { email, password, businessId });
       saveAuthData(data.token, data.user);
       dispatch(setCredentials({ user: data.user, token: data.token }));
+      dispatch(linkGuestAppointments({ token: data.token, user: data.user }));
       router.push(getRedirectRoute(data.user.role));
     } catch (err) {
       if (err instanceof Error) {
@@ -90,6 +91,7 @@ export default function LoginPage() {
                       if (!res.ok) throw new Error(data.message || 'Google sign-in failed');
                       saveAuthData(data.token, data.user);
                       dispatch(setCredentials({ user: data.user, token: data.token }));
+                      dispatch(linkGuestAppointments({ token: data.token, user: data.user }));
                       router.push(getRedirectRoute(data.user.role));
                     } catch (err) {
                       setError(err instanceof Error ? err.message : 'Google sign-in failed');

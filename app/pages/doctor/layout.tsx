@@ -2,8 +2,7 @@
 
 import Sidebar from './components/Sidebar';
 import { useState } from 'react';
-import { ThemeProvider, useTheme } from '@/app/contexts/ThemeContext';
-import { LanguageProvider } from '@/app/contexts/LanguageContext';
+import { useTheme } from '@/app/contexts/ThemeContext';
 
 function LayoutContent({ 
   children, 
@@ -56,12 +55,8 @@ export default function DoctorLayout({
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
-    <LanguageProvider>
-      <ThemeProvider>
-        <LayoutContent sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen}>
-          {children}
-        </LayoutContent>
-      </ThemeProvider>
-    </LanguageProvider>
+    <LayoutContent sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen}>
+      {children}
+    </LayoutContent>
   );
 }

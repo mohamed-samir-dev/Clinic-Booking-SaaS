@@ -33,23 +33,17 @@ const SectionSkeleton = () => (
   </div>
 );
 
-const CACHE_KEY = 'owner_dashboard_cache';
+const CACHE_DURATION_MS = 5 * 60 * 1000;
+let memoryCache: { data: DashboardData; timestamp: number } | null = null;
 
 function getCachedData(): DashboardData | null {
-  if (typeof window === 'undefined') return null;
-  try {
-    const cached = localStorage.getItem(CACHE_KEY);
-    if (!cached) return null;
-    const { data, timestamp } = JSON.parse(cached);
-    if (Date.now() - timestamp > 5 * 60 * 1000) return null;
-    return data;
-  } catch { return null; }
+  if (!memoryCache) return null;
+  if (Date.now() - memoryCache.timestamp > CACHE_DURATION_MS) return null;
+  return memoryCache.data;
 }
 
 function setCachedData(data: DashboardData) {
-  try {
-    localStorage.setItem(CACHE_KEY, JSON.stringify({ data, timestamp: Date.now() }));
-  } catch { /* quota exceeded */ }
+  memoryCache = { data, timestamp: Date.now() };
 }
 
 import { KPIData } from './types';

@@ -72,13 +72,13 @@ export default function SettingsPage() {
   }, [language]);
 
   useEffect(() => {
-    const savedLang = localStorage.getItem('managerLang') as Language;
+    const savedLang = localStorage.getItem('locale') as Language;
     if (savedLang) {
       setLanguage(savedLang);
     }
 
     const handleLanguageChange = () => {
-      const newLang = localStorage.getItem('managerLang') as Language;
+      const newLang = localStorage.getItem('locale') as Language;
       if (newLang) {
         setLanguage(newLang);
       }

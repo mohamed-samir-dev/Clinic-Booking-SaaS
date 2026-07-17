@@ -49,8 +49,8 @@ export const useBooking = ({ selectedDoctor, selectedService, selectedDate, sele
       return;
     }
 
-    if (!email.endsWith('@gmail.com')) {
-      setError('Email must be a valid Gmail address (@gmail.com)');
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      setError('Please enter a valid email address');
       return;
     }
 
@@ -91,7 +91,7 @@ export const useBooking = ({ selectedDoctor, selectedService, selectedDate, sele
     }
   }, [agreeToPolicy, fullName, phone, email, dateOfBirth, gender, reason, selectedDoctor, selectedDate, selectedTime, selectedService, user, token, locale]);
 
-  const canSubmit = agreeToPolicy && !!fullName && phone.length === 10 && email.endsWith('@gmail.com') && !!dateOfBirth && !!gender && !!reason;
+  const canSubmit = agreeToPolicy && !!fullName && phone.length === 10 && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) && !!dateOfBirth && !!gender && !!reason;
 
   return {
     fullName, setFullName,

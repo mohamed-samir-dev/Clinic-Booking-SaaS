@@ -18,7 +18,7 @@ export default function LayoutClient({ children }: { children: React.ReactNode }
 
   return (
     <ReduxProvider>
-      <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || '497199433674-m9ueej20h6j64rhd4r5hc4i1k4748u00.apps.googleusercontent.com'}>
+      <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || ''}>
         <LanguageProvider>
           <ThemeProvider>
             <DynamicMetadata />

@@ -1,6 +1,6 @@
 'use client';
 import { useState, useEffect } from 'react';
-import { LogOut } from 'lucide-react';
+import { LogOut, Menu } from 'lucide-react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 
@@ -11,7 +11,7 @@ interface OwnerData {
 
 const PROFILE_CACHE_KEY = 'owner_profile_cache';
 
-export default function Navbar() {
+export default function Navbar({ onMenuClick }: { onMenuClick?: () => void }) {
   const [ownerData, setOwnerData] = useState<OwnerData>({ name: '', profileImage: null });
 
   useEffect(() => {
@@ -45,8 +45,14 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="bg-gray-800 h-16 fixed top-0 right-0 left-64 z-10">
-      <div className="h-full px-6 flex items-center justify-end">
+    <nav className="bg-gray-800 h-16 fixed top-0 right-0 left-0 xl:left-64 z-10">
+      <div className="h-full px-6 flex items-center justify-between xl:justify-end">
+        <button
+          onClick={onMenuClick}
+          className="xl:hidden p-2 text-gray-300 hover:bg-gray-700 rounded-lg transition-colors"
+        >
+          <Menu size={22} />
+        </button>
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-3">
             <div className="text-right">

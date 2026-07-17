@@ -13,7 +13,7 @@ export const useFavorites = () => {
     if (!token || user?.role !== 'patient') return;
 
     try {
-      const response = await fetch('http://localhost:5000/api/patients/favorites', {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/patients/favorites`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -21,7 +21,7 @@ export const useFavorites = () => {
 
       if (response.ok) {
         const result = await response.json();
-        const favoriteIds = result.data.map((doc: any) => doc._id);
+        const favoriteIds = result.data.map((doc: { _id: string }) => doc._id);
         setFavorites(favoriteIds);
       }
     } catch (error) {
@@ -43,7 +43,7 @@ export const useFavorites = () => {
 
     try {
       const response = await fetch(
-        `http://localhost:5000/api/patients/favorites/${doctorId}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/api/patients/favorites/${doctorId}`,
         {
           method: isFavorite ? 'DELETE' : 'POST',
           headers: {
