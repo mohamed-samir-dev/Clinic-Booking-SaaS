@@ -7,10 +7,12 @@ interface KPICardProps {
   change: number;
   icon: LucideIcon;
   tooltip?: string;
+  locale?: 'ar' | 'en';
 }
 
-export const KPICard = memo(function KPICard({ title, value, change, icon: Icon, tooltip }: KPICardProps) {
+export const KPICard = memo(function KPICard({ title, value, change, icon: Icon, tooltip, locale = 'en' }: KPICardProps) {
   const isPositive = change >= 0;
+  const vsText = locale === 'ar' ? 'مقارنة بالسابق' : 'vs previous';
 
   return (
     <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm hover:shadow-md transition-shadow p-6 border border-gray-100 dark:border-gray-700">
@@ -22,16 +24,10 @@ export const KPICard = memo(function KPICard({ title, value, change, icon: Icon,
           <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
             {value}
           </h3>
-          <div className={`flex items-center text-sm font-medium ${
-            isPositive ? 'text-green-600' : 'text-red-600'
-          }`}>
-            {isPositive ? (
-              <TrendingUp className="w-4 h-4 mr-1" />
-            ) : (
-              <TrendingDown className="w-4 h-4 mr-1" />
-            )}
+          <div className={`flex items-center gap-1 text-sm font-medium ${isPositive ? 'text-green-600' : 'text-red-600'}`}>
+            {isPositive ? <TrendingUp className="w-4 h-4" /> : <TrendingDown className="w-4 h-4" />}
             <span>{Math.abs(change)}%</span>
-            <span className="text-gray-500 dark:text-gray-400 ml-1 text-xs">vs previous</span>
+            <span className="text-gray-500 dark:text-gray-400 text-xs">{vsText}</span>
           </div>
         </div>
         <div className="bg-teal-50 dark:bg-teal-900/20 p-3 rounded-lg">

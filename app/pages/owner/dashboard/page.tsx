@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { useRouter } from 'next/navigation';
+import { useLanguage } from '@/app/contexts/LanguageContext';
 import { 
   Building2, Users, UserCog, Calendar, DollarSign, Star, Stethoscope, Wallet
 } from 'lucide-react';
@@ -65,16 +66,61 @@ import { KPIData } from './types';
 
 type KPIKey = keyof KPIData;
 
-const KPI_CONFIG: { title: string; key: KPIKey; changeKey: KPIKey | null; icon: typeof Building2; tooltip: string; format?: 'currency' | 'rating' }[] = [
-  { title: 'Total Clinics', key: 'totalClinics', changeKey: 'clinicsChange', icon: Building2, tooltip: 'Total number of registered clinics' },
-  { title: 'Total Managers', key: 'totalManagers', changeKey: 'managersChange', icon: UserCog, tooltip: 'Total number of clinic managers' },
-  { title: 'Total Doctors', key: 'totalDoctors', changeKey: 'doctorsChange', icon: Stethoscope, tooltip: 'Total number of doctors across all clinics' },
-  { title: 'Total Patients', key: 'totalPatients', changeKey: 'patientsChange', icon: Users, tooltip: 'Total registered patients' },
-  { title: 'Appointments', key: 'totalAppointments', changeKey: 'appointmentsChange', icon: Calendar, tooltip: 'Total appointments in selected period' },
-  { title: 'Total Revenue', key: 'totalRevenue', changeKey: 'revenueChange', icon: DollarSign, tooltip: 'Total revenue in selected period', format: 'currency' },
-  { title: 'CareSync Revenue', key: 'careSyncRevenue', changeKey: 'careSyncRevenueChange', icon: Wallet, tooltip: 'CareSync platform revenue', format: 'currency' },
-  { title: 'Avg Rating', key: 'avgClinicRating', changeKey: null, icon: Star, tooltip: 'Average clinic rating', format: 'rating' },
+const KPI_CONFIG_BASE: { key: KPIKey; changeKey: KPIKey | null; icon: typeof Building2; format?: 'currency' | 'rating'; titleKey: string; tooltipKey: string }[] = [
+  { key: 'totalClinics', changeKey: 'clinicsChange', icon: Building2, titleKey: 'totalClinics', tooltipKey: 'tooltipClinics' },
+  { key: 'totalManagers', changeKey: 'managersChange', icon: UserCog, titleKey: 'totalManagers', tooltipKey: 'tooltipManagers' },
+  { key: 'totalDoctors', changeKey: 'doctorsChange', icon: Stethoscope, titleKey: 'totalDoctors', tooltipKey: 'tooltipDoctors' },
+  { key: 'totalPatients', changeKey: 'patientsChange', icon: Users, titleKey: 'totalPatients', tooltipKey: 'tooltipPatients' },
+  { key: 'totalAppointments', changeKey: 'appointmentsChange', icon: Calendar, titleKey: 'appointments', tooltipKey: 'tooltipAppointments' },
+  { key: 'totalRevenue', changeKey: 'revenueChange', icon: DollarSign, titleKey: 'totalRevenue', tooltipKey: 'tooltipRevenue', format: 'currency' },
+  { key: 'careSyncRevenue', changeKey: 'careSyncRevenueChange', icon: Wallet, titleKey: 'careSyncRevenue', tooltipKey: 'tooltipCareSyncRevenue', format: 'currency' },
+  { key: 'avgClinicRating', changeKey: null, icon: Star, titleKey: 'avgRating', tooltipKey: 'tooltipRating', format: 'rating' },
 ];
+
+const t = {
+  ar: {
+    errorTitle: 'خطأ في تحميل لوحة التحكم',
+    retry: 'إعادة المحاولة',
+    totalClinics: 'إجمالي العيادات',
+    totalManagers: 'إجمالي المديرين',
+    totalDoctors: 'إجمالي الأطباء',
+    totalPatients: 'إجمالي المرضى',
+    appointments: 'المواعيد',
+    totalRevenue: 'إجمالي الإيرادات',
+    careSyncRevenue: 'إيرادات CareSync',
+    avgRating: 'متوسط التقييم',
+    tooltipClinics: 'إجمالي عدد العيادات المسجلة',
+    tooltipManagers: 'إجمالي عدد مديري العيادات',
+    tooltipDoctors: 'إجمالي عدد الأطباء في جميع العيادات',
+    tooltipPatients: 'إجمالي المرضى المسجلين',
+    tooltipAppointments: 'إجمالي المواعيد في الفترة المحددة',
+    tooltipRevenue: 'إجمالي الإيرادات في الفترة المحددة',
+    tooltipCareSyncRevenue: 'إيرادات منصة CareSync',
+    tooltipRating: 'متوسط تقييم العيادات',
+  },
+  en: {
+    errorTitle: 'Error Loading Dashboard',
+    retry: 'Retry',
+    totalClinics: 'Total Clinics',
+    totalManagers: 'Total Managers',
+    totalDoctors: 'Total Doctors',
+    totalPatients: 'Total Patients',
+    appointments: 'Appointments',
+    totalRevenue: 'Total Revenue',
+    careSyncRevenue: 'CareSync Revenue',
+    avgRating: 'Avg Rating',
+    tooltipClinics: 'Total number of registered clinics',
+    tooltipManagers: 'Total number of clinic managers',
+    tooltipDoctors: 'Total number of doctors across all clinics',
+    tooltipPatients: 'Total registered patients',
+    tooltipAppointments: 'Total appointments in selected period',
+    tooltipRevenue: 'Total revenue in selected period',
+    tooltipCareSyncRevenue: 'CareSync platform revenue',
+    tooltipRating: 'Average clinic rating',
+  },
+} as const;
+
+type TKeys = keyof typeof t.en;
 
 function formatKPIValue(value: number | undefined, format?: string): string | number {
   const v = value ?? 0;
@@ -85,6 +131,9 @@ function formatKPIValue(value: number | undefined, format?: string): string | nu
 
 export default function OwnerDashboardPage() {
   const router = useRouter();
+  const { locale } = useLanguage();
+  const lang = locale as 'ar' | 'en';
+  const tr = t[lang];
   const [dateRange, setDateRange] = useState<DateRange>({
     from: new Date().toISOString().split('T')[0],
     to: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
@@ -133,18 +182,17 @@ export default function OwnerDashboardPage() {
     }
   };
 
-  // Error state only when no cached data available
   if (error && !data) {
     return (
-      <div className="min-h-screen bg-gray-900 flex items-center justify-center">
+      <div dir={lang === 'ar' ? 'rtl' : 'ltr'} className="min-h-screen bg-gray-900 flex items-center justify-center">
         <div className="text-center">
-          <h2 className="text-2xl font-bold text-white mb-4">Error Loading Dashboard</h2>
+          <h2 className="text-2xl font-bold text-white mb-4">{tr.errorTitle}</h2>
           <p className="text-gray-400 mb-6">{error}</p>
           <button
             onClick={fetchDashboardData}
             className="px-6 py-3 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors"
           >
-            Retry
+            {tr.retry}
           </button>
         </div>
       </div>
@@ -152,8 +200,9 @@ export default function OwnerDashboardPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-900">
+    <div dir={lang === 'ar' ? 'rtl' : 'ltr'} className="min-h-screen bg-gray-900">
       <DashboardHeader
+        locale={lang}
         dateRange={dateRange}
         onDateRangeChange={setDateRange}
         onAddClinic={() => router.push('/pages/owner/clinics/add')}
@@ -166,19 +215,20 @@ export default function OwnerDashboardPage() {
         {/* KPI Cards - Always render immediately (cached or skeleton) */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {data ? (
-            KPI_CONFIG.map((kpi) => (
+            KPI_CONFIG_BASE.map((kpi) => (
               <KPICard
-                key={kpi.title}
-                title={kpi.title}
+                key={kpi.key}
+                title={tr[kpi.titleKey as TKeys]}
                 value={formatKPIValue(data.kpis[kpi.key], kpi.format)}
                 change={kpi.changeKey ? data.kpis[kpi.changeKey] ?? 0 : 0}
                 icon={kpi.icon}
-                tooltip={kpi.tooltip}
+                tooltip={tr[kpi.tooltipKey as TKeys]}
+                locale={lang}
               />
             ))
           ) : (
-            KPI_CONFIG.map((kpi) => (
-              <div key={kpi.title} className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 border border-gray-100 dark:border-gray-700 animate-pulse">
+            KPI_CONFIG_BASE.map((kpi) => (
+              <div key={kpi.key} className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 border border-gray-100 dark:border-gray-700 animate-pulse">
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
                     <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-24 mb-3" />
@@ -199,37 +249,41 @@ export default function OwnerDashboardPage() {
               timeline={data.revenueTimeline}
               byClinic={data.revenueByClinic}
               share={data.revenueShare}
+              locale={lang}
             />
 
             {data.alerts.length > 0 && (
-              <AlertsPanel alerts={data.alerts} onAlertAction={handleAlertAction} />
+              <AlertsPanel alerts={data.alerts} onAlertAction={handleAlertAction} locale={lang} />
             )}
 
             <ClinicsTable
               clinics={data.revenueByClinic}
+              locale={lang}
               onViewClinic={(id) => setSelectedClinicId(id)}
               onAssignManager={(id) => router.push(`/pages/owner/managers/add?clinicId=${id}`)}
               onDisableManager={() => {
-                if (confirm('Are you sure you want to disable this manager?')) {
-                  toast.success('Manager disabled successfully');
+                if (confirm(lang === 'ar' ? 'هل أنت متأكد من تعطيل هذا المدير؟' : 'Are you sure you want to disable this manager?')) {
+                  toast.success(lang === 'ar' ? 'تم تعطيل المدير بنجاح' : 'Manager disabled successfully');
                 }
               }}
             />
 
             <ClinicDetailsModal
               clinicId={selectedClinicId}
+              locale={lang}
               performanceData={selectedClinicId ? data.revenueByClinic.find(c => c.clinicId === selectedClinicId) : undefined}
               onClose={() => setSelectedClinicId(null)}
             />
 
             <QuickActionsTiles
+              locale={lang}
               onAddClinic={() => router.push('/pages/owner/clinics/add')}
               onAssignManager={() => router.push('/pages/owner/managers/add')}
               onViewClinics={() => router.push('/pages/owner/clinics')}
               onViewManagers={() => router.push('/pages/owner/managers')}
             />
 
-            <ActivityLog activities={data.recentActivity} />
+            <ActivityLog activities={data.recentActivity} locale={lang} />
           </>
         )}
 
