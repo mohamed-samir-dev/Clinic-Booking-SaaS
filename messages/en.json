@@ -636,7 +636,8 @@
         "passwordsNotMatch": "Passwords do not match"
       },
       "success": "Registration successful",
-      "error": "Registration failed. Please try again."
+      "error": "Registration failed. Please try again.",
+      "googleSignUpFailed": "Google sign-up failed. Please try again."
     }
   },
   "contact": {
