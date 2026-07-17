@@ -4,6 +4,7 @@ import { RootState } from '@/app/store/store';
 import { useLanguage } from '@/app/contexts/LanguageContext';
 import { BookingData, UseBookingParams } from '../types/types';
 import { createAppointment } from '../services/api';
+import { isValidPhoneNumber } from 'react-phone-number-input';
 
 export const useBooking = ({ selectedDoctor, selectedService, selectedDate, selectedTime }: UseBookingParams) => {
   const { user, token } = useSelector((state: RootState) => state.auth);
@@ -20,7 +21,7 @@ export const useBooking = ({ selectedDoctor, selectedService, selectedDate, sele
   };
 
   const [fullName, setFullName] = useState(user?.role === 'patient' ? getName(user.name) : '');
-  const [phone, setPhone] = useState(user?.role === 'patient' && user.phone ? user.phone.replace(/^\+\d{1,3}/, '') : '');
+  const [phone, setPhone] = useState(user?.role === 'patient' && user.phone ? user.phone : '');
   const [email, setEmail] = useState(user?.role === 'patient' ? user.email : '');
   const [dateOfBirth, setDateOfBirth] = useState('');
   const [gender, setGender] = useState('');
@@ -54,8 +55,8 @@ export const useBooking = ({ selectedDoctor, selectedService, selectedDate, sele
       return;
     }
 
-    if (phone.length !== 10) {
-      setError(locale === 'ar' ? 'يجب أن يكون رقم الهاتف 10 أرقام بالضبط' : 'Phone number must be exactly 10 digits');
+    if (!phone || !isValidPhoneNumber(phone)) {
+      setError(locale === 'ar' ? 'رقم الهاتف غير صالح لهذه الدولة' : 'Invalid phone number for selected country');
       return;
     }
 
@@ -102,7 +103,7 @@ export const useBooking = ({ selectedDoctor, selectedService, selectedDate, sele
     }
   }, [agreeToPolicy, fullName, phone, email, dateOfBirth, gender, reason, selectedDoctor, selectedDate, selectedTime, selectedService, user, token, locale]);
 
-  const canSubmit = agreeToPolicy && !!fullName && phone.length === 10 && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) && !!dateOfBirth && !!gender && !!reason;
+  const canSubmit = agreeToPolicy && !!fullName && !!phone && isValidPhoneNumber(phone) && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) && !!dateOfBirth && !!gender && !!reason;
 
   return {
     fullName, setFullName,

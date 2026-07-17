@@ -159,3 +159,78 @@ body {
 *::-webkit-scrollbar-thumb:hover {
   background: #94a3b8;
 }
+
+/* react-phone-number-input styles */
+.phone-input-wrapper .PhoneInput {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.phone-input-wrapper .PhoneInputCountry {
+  display: flex;
+  align-items: center;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 2px solid;
+  flex-shrink: 0;
+}
+
+.phone-input-wrapper .PhoneInputInput {
+  flex: 1;
+  padding: 10px 16px;
+  border-radius: 12px;
+  border: 2px solid;
+  outline: none;
+  font-size: 0.875rem;
+}
+
+.phone-input-wrapper .PhoneInputInput:focus {
+  border-color: #14b8a6;
+}
+
+/* Light theme */
+.phone-input-light .PhoneInputCountry {
+  background: #f9fafb;
+  border-color: #e5e7eb;
+  color: #111827;
+}
+
+.phone-input-light .PhoneInputInput {
+  background: #ffffff;
+  border-color: #e5e7eb;
+  color: #111827;
+}
+
+/* Dark theme */
+.phone-input-dark .PhoneInputCountry {
+  background: #374151;
+  border-color: #4b5563;
+  color: #ffffff;
+}
+
+.phone-input-dark .PhoneInputInput {
+  background: #374151;
+  border-color: #4b5563;
+  color: #ffffff;
+}
+
+/* Error state */
+.phone-input-error .PhoneInputCountry {
+  border-color: #ef4444;
+}
+
+.phone-input-error .PhoneInputInput {
+  border-color: #ef4444;
+  color: #000000;
+}
+
+.phone-input-error .PhoneInputInput:focus {
+  border-color: #ef4444;
+}
+
+/* Country select arrow */
+.PhoneInputCountrySelectArrow {
+  margin-left: 4px;
+  opacity: 0.6;
+}
