@@ -39,10 +39,23 @@ interface AuthState {
   token: string | null;
 }
 
-const initialState: AuthState = {
-  user: null,
-  token: null,
+const loadInitialState = (): AuthState => {
+  if (typeof window === 'undefined') return { user: null, token: null };
+  try {
+    const storedUser = localStorage.getItem('user');
+    const storedToken = localStorage.getItem('token');
+    if (storedUser && storedToken) {
+      const maxAge = 60 * 60 * 24 * 7;
+      document.cookie = `token=${storedToken}; path=/; max-age=${maxAge}; SameSite=Lax`;
+      return { user: JSON.parse(storedUser), token: storedToken };
+    }
+  } catch {
+    // ignore
+  }
+  return { user: null, token: null };
 };
+
+const initialState: AuthState = loadInitialState();
 
 export const linkGuestAppointments = createAsyncThunk(
   'auth/linkGuestAppointments',
