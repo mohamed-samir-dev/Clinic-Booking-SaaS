@@ -44,7 +44,7 @@ export default function Navbar({ onMenuClick }: { onMenuClick?: () => void }) {
 
   const handleLogout = () => {
     localStorage.removeItem('token');
-    router.push('/pages/login');
+    router.push('/');
   };
 
   return (

@@ -46,7 +46,7 @@ export default function Navbar({ onMenuClick }: NavbarProps) {
 
   const handleLogout = () => {
     localStorage.removeItem('token');
-    router.push('/pages/login');
+    router.push('/');
   };
 
   const getClinicName = () => {
