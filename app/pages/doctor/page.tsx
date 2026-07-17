@@ -1,7 +1,7 @@
 'use client';
 
 import { useSelector } from 'react-redux';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import Link from 'next/link';
 import { useTheme } from '@/app/contexts/ThemeContext';
 import { useLanguage } from '@/app/contexts/LanguageContext';
@@ -62,84 +62,76 @@ export default function DoctorPage() {
   const [showNotifications, setShowNotifications] = useState(false);
   const [pendingCount, setPendingCount] = useState(0);
 
+  const fetchStats = useCallback(async () => {
+    if (!token) return;
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/appointments/doctor-stats`, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      if (!response.ok) return;
+      const data = await response.json();
+      if (data.todayAppointments !== undefined) {
+        setStats([
+          { icon: 'event_available', label: t.todayAppointments, value: data.todayAppointments.toString(), color: 'from-blue-500 to-blue-600' },
+          { icon: 'pending_actions', label: t.pendingRequests, value: data.pendingRequests.toString(), color: 'from-orange-500 to-orange-600' },
+          { icon: 'calendar_month', label: t.totalAppointments, value: data.totalAppointments.toString(), color: 'from-purple-500 to-purple-600' },
+          { icon: 'payments', label: t.monthlyRevenue, value: `$${data.monthlyRevenue.toLocaleString()}`, color: 'from-green-500 to-green-600' },
+          { icon: 'star', label: t.averageRating, value: data.averageRating, color: 'from-yellow-500 to-yellow-600' },
+        ]);
+        setPendingCount(data.pendingRequests);
+      }
+    } catch (error) {
+      console.error('Error fetching stats:', error);
+    }
+  }, [token, t]);
+
+  const fetchTodayAppointments = useCallback(async () => {
+    if (!token) return;
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/appointments/doctor/today`, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      if (!response.ok) return;
+      const data = await response.json();
+      setTodayAppointments(data.appointments || []);
+    } catch (error) {
+      console.error('Error fetching appointments:', error);
+    }
+  }, [token]);
+
+  const fetchPendingRequests = useCallback(async () => {
+    if (!token) return;
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/appointments/doctor/pending`, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      if (!response.ok) return;
+      const data = await response.json();
+      setNewRequests((data.requests || []).slice(0, 3));
+    } catch (error) {
+      console.error('Error fetching pending requests:', error);
+    }
+  }, [token]);
+
   useEffect(() => {
     if (!token) return;
-
-    const fetchStats = async () => {
-      try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/appointments/doctor-stats`, {
-          headers: { 'Authorization': `Bearer ${token}` }
-        });
-        
-        if (!response.ok) return;
-        
-        const data = await response.json();
-        
-        if (data.todayAppointments !== undefined) {
-          setStats([
-            { icon: 'event_available', label: t.todayAppointments, value: data.todayAppointments.toString(), color: 'from-blue-500 to-blue-600' },
-            { icon: 'pending_actions', label: t.pendingRequests, value: data.pendingRequests.toString(), color: 'from-orange-500 to-orange-600' },
-            { icon: 'calendar_month', label: t.totalAppointments, value: data.totalAppointments.toString(), color: 'from-purple-500 to-purple-600' },
-            { icon: 'payments', label: t.monthlyRevenue, value: `$${data.monthlyRevenue.toLocaleString()}`, color: 'from-green-500 to-green-600' },
-            { icon: 'star', label: t.averageRating, value: data.averageRating, color: 'from-yellow-500 to-yellow-600' },
-          ]);
-          setPendingCount(data.pendingRequests);
-        }
-      } catch (error) {
-        console.error('Error fetching stats:', error);
-      }
-    };
-
-    const fetchTodayAppointments = async () => {
-      try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/appointments/doctor/today`, {
-          headers: { 'Authorization': `Bearer ${token}` }
-        });
-        
-        if (!response.ok) return;
-        
-        const data = await response.json();
-        setTodayAppointments(data.appointments || []);
-      } catch (error) {
-        console.error('Error fetching appointments:', error);
-      }
-    };
-
-    const fetchPendingRequests = async () => {
-      try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/appointments/doctor/pending`, {
-          headers: { 'Authorization': `Bearer ${token}` }
-        });
-        
-        if (!response.ok) {
-          if (response.status !== 429) {
-            console.error('Failed to fetch pending requests:', response.status);
-          }
-          return;
-        }
-        
-        const data = await response.json();
-        const requests = data.requests || [];
-        setNewRequests(requests.slice(0, 3));
-      } catch (error) {
-        console.error('Error fetching pending requests:', error);
-      }
-    };
-
     fetchStats();
     fetchTodayAppointments();
     fetchPendingRequests();
-
     const handleAppointmentUpdate = () => {
       fetchStats();
       fetchTodayAppointments();
       fetchPendingRequests();
     };
-
     window.addEventListener('appointmentUpdated', handleAppointmentUpdate);
     return () => window.removeEventListener('appointmentUpdated', handleAppointmentUpdate);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [token]);
+  }, [token, fetchStats, fetchTodayAppointments, fetchPendingRequests]);
+
+  // Real-time updates via Socket.IO
+  useSocket([
+    { event: 'appointmentUpdated',    handler: () => { fetchStats(); fetchTodayAppointments(); fetchPendingRequests(); } },
+    { event: 'newAppointmentRequest', handler: () => { fetchPendingRequests(); fetchStats(); } },
+  ]);
 
   return (
     <div className={`h-screen overflow-y-auto transition-colors duration-300 ${
