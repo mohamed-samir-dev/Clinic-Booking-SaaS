@@ -7,3 +7,5 @@ export const PERMISSION_ITEMS: PermissionItem[] = [
   { key: 'managePricesServices', label: 'Manage Prices/Services' },
   { key: 'managePayments', label: 'Manage Payments' },
 ];
+
+export const PERMISSION_KEYS = PERMISSION_ITEMS.map((p) => p.key);

@@ -2,6 +2,36 @@ import { useState } from 'react';
 import { Building2, Save, Edit2, X } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { ClinicData } from '../types';
+import { useLanguage } from '@/app/contexts/LanguageContext';
+
+const t = {
+  ar: {
+    title: 'معلومات العيادة الرئيسية',
+    edit: 'تعديل',
+    save: 'حفظ',
+    saving: 'جاري الحفظ...',
+    cancel: 'إلغاء',
+    clinicNameEn: 'اسم العيادة (إنجليزي)',
+    clinicNameAr: 'اسم العيادة (عربي)',
+    email: 'البريد الإلكتروني',
+    phone: 'رقم الهاتف',
+    updateSuccess: 'تم تحديث معلومات العيادة بنجاح',
+    updateError: 'فشل تحديث معلومات العيادة',
+  },
+  en: {
+    title: 'Main Clinic Information',
+    edit: 'Edit',
+    save: 'Save',
+    saving: 'Saving...',
+    cancel: 'Cancel',
+    clinicNameEn: 'Clinic Name (English)',
+    clinicNameAr: 'اسم العيادة (عربي)',
+    email: 'Email',
+    phone: 'Phone',
+    updateSuccess: 'Clinic information updated successfully',
+    updateError: 'Failed to update clinic information',
+  },
+} as const;
 
 interface ClinicInfoSectionProps {
   clinicData: ClinicData;
@@ -12,6 +42,8 @@ interface ClinicInfoSectionProps {
 export const ClinicInfoSection = ({ clinicData, setClinicData, fetchData }: ClinicInfoSectionProps) => {
   const [editingSection, setEditingSection] = useState(false);
   const [savingSection, setSavingSection] = useState(false);
+  const { locale } = useLanguage();
+  const tr = t[locale as 'ar' | 'en'];
 
   const handleSaveClinic = async () => {
     setSavingSection(true);
@@ -23,10 +55,10 @@ export const ClinicInfoSection = ({ clinicData, setClinicData, fetchData }: Clin
         body: JSON.stringify(clinicData),
       });
 
-      toast.success('Clinic information updated successfully');
+      toast.success(tr.updateSuccess);
       setEditingSection(false);
     } catch {
-      toast.error('Failed to update clinic information');
+      toast.error(tr.updateError);
     } finally {
       setSavingSection(false);
     }
@@ -37,7 +69,7 @@ export const ClinicInfoSection = ({ clinicData, setClinicData, fetchData }: Clin
       <div className="bg-linear-to-r from-teal-600 to-cyan-600 p-6 flex justify-between items-center">
         <div className="flex items-center gap-3">
           <Building2 size={28} className="text-white" />
-          <h3 className="text-xl font-semibold text-white">Main Clinic Information</h3>
+          <h3 className="text-xl font-semibold text-white">{tr.title}</h3>
         </div>
         {!editingSection ? (
           <button
@@ -45,7 +77,7 @@ export const ClinicInfoSection = ({ clinicData, setClinicData, fetchData }: Clin
             className="flex items-center gap-2 px-4 py-2 bg-white text-teal-600 rounded-lg hover:bg-gray-100 transition-colors font-medium"
           >
             <Edit2 size={18} />
-            Edit
+            {tr.edit}
           </button>
         ) : (
           <div className="flex gap-2">
@@ -55,7 +87,7 @@ export const ClinicInfoSection = ({ clinicData, setClinicData, fetchData }: Clin
               className="flex items-center gap-2 px-4 py-2 bg-white text-teal-600 rounded-lg hover:bg-gray-100 transition-colors font-medium disabled:opacity-50"
             >
               <Save size={18} />
-              {savingSection ? 'Saving...' : 'Save'}
+              {savingSection ? tr.saving : tr.save}
             </button>
             <button
               onClick={() => {
@@ -65,7 +97,7 @@ export const ClinicInfoSection = ({ clinicData, setClinicData, fetchData }: Clin
               className="flex items-center gap-2 px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-600 transition-colors font-medium"
             >
               <X size={18} />
-              Cancel
+              {tr.cancel}
             </button>
           </div>
         )}
@@ -73,7 +105,7 @@ export const ClinicInfoSection = ({ clinicData, setClinicData, fetchData }: Clin
       <div className="p-6 space-y-4">
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium text-gray-300 mb-2">Clinic Name (English)</label>
+            <label className="block text-sm font-medium text-gray-300 mb-2">{tr.clinicNameEn}</label>
             <input
               type="text"
               value={clinicData.name.en}
@@ -83,7 +115,7 @@ export const ClinicInfoSection = ({ clinicData, setClinicData, fetchData }: Clin
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-300 mb-2">اسم العيادة (عربي)</label>
+            <label className="block text-sm font-medium text-gray-300 mb-2">{tr.clinicNameAr}</label>
             <input
               type="text"
               value={clinicData.name.ar}
@@ -96,7 +128,7 @@ export const ClinicInfoSection = ({ clinicData, setClinicData, fetchData }: Clin
         </div>
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium text-gray-300 mb-2">Email</label>
+            <label className="block text-sm font-medium text-gray-300 mb-2">{tr.email}</label>
             <input
               type="email"
               value={clinicData.email}
@@ -106,7 +138,7 @@ export const ClinicInfoSection = ({ clinicData, setClinicData, fetchData }: Clin
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-300 mb-2">Phone</label>
+            <label className="block text-sm font-medium text-gray-300 mb-2">{tr.phone}</label>
             <input
               type="tel"
               value={clinicData.phone}
