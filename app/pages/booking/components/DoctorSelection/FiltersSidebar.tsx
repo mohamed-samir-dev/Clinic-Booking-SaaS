@@ -27,14 +27,14 @@ export default function FiltersSidebar({
       </div>
       
       <div className="mb-4 sm:mb-5">
-        <label className={`block text-xs sm:text-sm font-bold mb-2 ${theme === 'dark' ? 'text-gray-200' : 'text-black'}`}>{locale === 'ar' ? 'ابحث عن طبيب' : 'Search Doctor'}</label>
+        <label className={`block text-xs sm:text-sm font-bold mb-2 ${theme === 'dark' ? 'text-gray-200' : 'text-black'}`}>{t.searchDoctor}</label>
         <div className="relative">
           <FaSearch className={`absolute ${isRTL ? 'right-3 sm:right-4' : 'left-3 sm:left-4'} top-1/2 transform -translate-y-1/2 text-xs sm:text-sm ${
             theme === 'dark' ? 'text-gray-500' : 'text-gray-400'
           }`} />
           <input
             type="text"
-            placeholder={locale === 'ar' ? 'ابحث بالاسم...' : 'Search by name...'}
+            placeholder={t.searchByName}
             value={doctorSearchQuery}
             onChange={(e) => setDoctorSearchQuery(e.target.value)}
             className={`w-full ${isRTL ? 'pr-9 sm:pr-11 pl-3 sm:pl-4' : 'pl-9 sm:pl-11 pr-3 sm:pr-4'} py-2 sm:py-3 font-semibold border-2 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-all text-xs sm:text-sm ${
@@ -63,7 +63,7 @@ export default function FiltersSidebar({
       </div>
 
       <div className="mb-4 sm:mb-5">
-        <label className={`block text-xs sm:text-sm font-bold mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>{locale === 'ar' ? 'اللغة' : 'Language'}</label>
+        <label className={`block text-xs sm:text-sm font-bold mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>{t.language}</label>
         <select
           value={selectedLanguage}
           onChange={(e) => setSelectedLanguage(e.target.value)}
@@ -71,7 +71,7 @@ export default function FiltersSidebar({
             theme === 'dark' ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-200 text-black'
           }`}
         >
-          <option value="">{locale === 'ar' ? 'جميع اللغات' : 'All Languages'}</option>
+          <option value="">{t.allLanguages}</option>
           {filterOptions.languages?.map((language: string) => (
             <option key={language} value={language}>
               {language.charAt(0).toUpperCase() + language.slice(1)}
@@ -81,7 +81,7 @@ export default function FiltersSidebar({
       </div>
 
       <div className="mb-4">
-        <label className={`block text-xs sm:text-sm font-bold mb-3 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>{locale === 'ar' ? 'نطاق السعر' : 'Price Range'}</label>
+        <label className={`block text-xs sm:text-sm font-bold mb-3 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>{t.priceRange}</label>
         <div className={`rounded-xl p-3 sm:p-4 border ${
           theme === 'dark' ? 'bg-teal-900/30 border-teal-800' : 'bg-linear-to-br from-teal-50 to-cyan-50 border-teal-100'
         }`}>
@@ -97,7 +97,7 @@ export default function FiltersSidebar({
             <span className={`text-xs sm:text-sm font-bold px-2 sm:px-3 py-1 rounded-lg shadow-sm ${
               theme === 'dark' ? 'bg-gray-700 text-teal-400' : 'bg-white text-teal-700'
             }`}>${priceRange[0]}</span>
-            <span className={`text-[10px] sm:text-xs ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>{locale === 'ar' ? 'إلى' : 'to'}</span>
+            <span className={`text-[10px] sm:text-xs ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>{t.to}</span>
             <span className={`text-xs sm:text-sm font-bold px-2 sm:px-3 py-1 rounded-lg shadow-sm ${
               theme === 'dark' ? 'bg-gray-700 text-teal-400' : 'bg-white text-teal-700'
             }`}>${priceRange[1]}</span>

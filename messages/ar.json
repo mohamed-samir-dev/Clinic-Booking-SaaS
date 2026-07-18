@@ -477,7 +477,19 @@
         "title": "أفضل طبيب مقيّم",
         "description": "دعنا نوصي لك بأفضل طبيب لدينا",
         "button": "اختر الأفضل تقييماً"
-      }
+      },
+      "card": {
+        "years": "سنوات",
+        "selected": "مختار",
+        "select": "اختر",
+        "nextAvailable": "أقرب موعد متاح"
+      },
+      "searchDoctor": "ابحث عن طبيب",
+      "searchByName": "ابحث بالاسم...",
+      "language": "اللغة",
+      "allLanguages": "جميع اللغات",
+      "priceRange": "نطاق السعر",
+      "to": "إلى"
     },
     "timeSelection": {
       "title": "اختر التاريخ والوقت",
@@ -510,6 +522,26 @@
       "errors": {
         "alreadyBooked": "لديك بالفعل موعد مع هذا الطبيب في هذا اليوم."
       }
+    },
+    "confirmation": {
+      "title": "تم تأكيد الحجز!",
+      "bookingId": "رقم الحجز:",
+      "doctor": "الطبيب",
+      "patient": "المريض",
+      "appointmentDetails": "تفاصيل الموعد",
+      "service": "الخدمة:",
+      "fee": "الرسوم:",
+      "date": "التاريخ:",
+      "time": "الوقت:",
+      "status": "الحالة:",
+      "pending": "قيد الانتظار",
+      "importantInfo": "معلومات مهمة",
+      "arrive10Min": "احضر قبل 10 دقائق من الموعد",
+      "bringRecords": "أحضر السجلات الطبية إن وجدت",
+      "cancelPolicy": "الإلغاء/إعادة الجدولة قبل 24 ساعة",
+      "addToCalendar": "أضف للتقويم",
+      "print": "طباعة",
+      "goHome": "الصفحة الرئيسية"
     },
     "detailsForm": {
       "title": "معلومات المريض",

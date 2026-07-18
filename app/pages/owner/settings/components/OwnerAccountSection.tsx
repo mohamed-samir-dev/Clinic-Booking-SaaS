@@ -148,7 +148,7 @@ export const OwnerAccountSection = ({ ownerData, setOwnerData, fetchData }: Owne
             disabled={!editingSection}
           />
         </div>
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <label className="block text-sm font-medium text-gray-300 mb-2">{tr.ownerEmail}</label>
             <input
@@ -172,7 +172,7 @@ export const OwnerAccountSection = ({ ownerData, setOwnerData, fetchData }: Owne
         </div>
         <div className="border-t border-gray-600 pt-4 mt-4">
           <h4 className="text-lg font-medium text-white mb-3">{tr.changePassword}</h4>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-2">{tr.newPassword}</label>
               <div className="relative">

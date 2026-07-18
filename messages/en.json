@@ -477,7 +477,19 @@
         "title": "Top Rated Doctor",
         "description": "Let us recommend our highest-rated doctor for you",
         "button": "Select Top Rated"
-      }
+      },
+      "card": {
+        "years": "Years",
+        "selected": "Selected",
+        "select": "Select",
+        "nextAvailable": "Next Available"
+      },
+      "searchDoctor": "Search Doctor",
+      "searchByName": "Search by name...",
+      "language": "Language",
+      "allLanguages": "All Languages",
+      "priceRange": "Price Range",
+      "to": "to"
     },
     "timeSelection": {
       "title": "Select Date & Time",
@@ -510,6 +522,26 @@
       "errors": {
         "alreadyBooked": "You already have an appointment with this doctor on this day."
       }
+    },
+    "confirmation": {
+      "title": "Booking Confirmed!",
+      "bookingId": "ID:",
+      "doctor": "Doctor",
+      "patient": "Patient",
+      "appointmentDetails": "Appointment Details",
+      "service": "Service:",
+      "fee": "Fee:",
+      "date": "Date:",
+      "time": "Time:",
+      "status": "Status:",
+      "pending": "Pending",
+      "importantInfo": "Important Info",
+      "arrive10Min": "Arrive 10 minutes early",
+      "bringRecords": "Bring medical records if available",
+      "cancelPolicy": "Cancel/reschedule 24 hours in advance",
+      "addToCalendar": "Add to Calendar",
+      "print": "Print",
+      "goHome": "Go to Home"
     },
     "detailsForm": {
       "title": "Patient Information",

@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useTheme } from '@/app/contexts/ThemeContext';
 import { useLanguage } from '@/app/contexts/LanguageContext';
+import translations from '@/messages/translations';
 
 interface BookingConfirmationPopupProps {
   isOpen: boolean;
@@ -32,6 +33,7 @@ interface BookingConfirmationPopupProps {
 export default function BookingConfirmationPopup({ isOpen, onClose, bookingData }: BookingConfirmationPopupProps) {
   const { theme } = useTheme();
   const { locale } = useLanguage();
+  const t = translations[locale].booking.confirmation;
   const router = useRouter();
   const printRef = useRef<HTMLDivElement>(null);
   const [countdown, setCountdown] = useState(5);
@@ -104,17 +106,17 @@ export default function BookingConfirmationPopup({ isOpen, onClose, bookingData 
             <div className="w-14 h-14 bg-teal-500 rounded-full flex items-center justify-center mx-auto mb-2">
               <span className="material-icons text-white text-3xl">check_circle</span>
             </div>
-            <h1 className={`text-xl font-bold mb-1 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{locale === 'ar' ? 'تم تأكيد الحجز!' : 'Booking Confirmed!'}</h1>
-            <p className={`text-xs ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>{locale === 'ar' ? 'رقم الحجز:' : 'ID:'} <span className="font-semibold text-teal-600">{bookingData.appointmentId}</span></p>
+            <h1 className={`text-xl font-bold mb-1 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{t.title}</h1>
+            <p className={`text-xs ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>{t.bookingId} <span className="font-semibold text-teal-600">{bookingData.appointmentId}</span></p>
           </div>
 
           {/* Doctor & Patient in Row */}
-          <div className="grid grid-cols-2 gap-3 mb-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
             {/* Doctor Info */}
             <div className={`rounded-lg p-3 ${theme === 'dark' ? 'bg-gray-700' : 'bg-gray-50'}`}>
               <h2 className={`text-sm font-semibold flex items-center gap-1 mb-2 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
                 <span className="material-icons text-teal-600 text-lg">person</span>
-                {locale === 'ar' ? 'الطبيب' : 'Doctor'}
+                {t.doctor}
               </h2>
               <div className="flex items-center gap-2">
                 {bookingData.doctor.photoUrl ? (
@@ -135,7 +137,7 @@ export default function BookingConfirmationPopup({ isOpen, onClose, bookingData 
             <div className={`rounded-lg p-3 ${theme === 'dark' ? 'bg-gray-700' : 'bg-gray-50'}`}>
               <h2 className={`text-sm font-semibold flex items-center gap-1 mb-2 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
                 <span className="material-icons text-teal-600 text-lg">badge</span>
-                {locale === 'ar' ? 'المريض' : 'Patient'}
+                {t.patient}
               </h2>
               <div className="space-y-1 min-w-0">
                 <p className={`text-xs font-semibold ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{bookingData.patient.fullName}</p>
@@ -149,28 +151,28 @@ export default function BookingConfirmationPopup({ isOpen, onClose, bookingData 
           <div className={`rounded-lg p-3 mb-3 ${theme === 'dark' ? 'bg-gray-700' : 'bg-gray-50'}`}>
             <h2 className={`text-sm font-semibold flex items-center gap-1 mb-2 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
               <span className="material-icons text-teal-600 text-lg">event</span>
-              {locale === 'ar' ? 'تفاصيل الموعد' : 'Appointment Details'}
+              {t.appointmentDetails}
             </h2>
-            <div className="grid grid-cols-2 gap-x-4 gap-y-1.5">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-1.5">
               <div className="flex justify-between">
-                <span className={`text-xs ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>{locale === 'ar' ? 'الخدمة:' : 'Service:'}</span>
+                <span className={`text-xs ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>{t.service}</span>
                 <span className={`text-xs font-semibold ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{bookingData.service || (locale === 'ar' ? 'استشارة' : 'Consultation')}</span>
               </div>
               <div className="flex justify-between">
-                <span className={`text-xs ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>{locale === 'ar' ? 'الرسوم:' : 'Fee:'}</span>
+                <span className={`text-xs ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>{t.fee}</span>
                 <span className="text-sm font-bold text-teal-600">${bookingData.fee}</span>
               </div>
               <div className="flex justify-between">
-                <span className={`text-xs ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>{locale === 'ar' ? 'التاريخ:' : 'Date:'}</span>
+                <span className={`text-xs ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>{t.date}</span>
                 <span className={`text-xs font-semibold ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{new Date(bookingData.appointmentDate).toLocaleDateString(locale === 'ar' ? 'ar-EG' : 'en-US', { month: 'short', day: 'numeric' })}</span>
               </div>
               <div className="flex justify-between">
-                <span className={`text-xs ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>{locale === 'ar' ? 'الوقت:' : 'Time:'}</span>
+                <span className={`text-xs ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>{t.time}</span>
                 <span className={`text-xs font-semibold ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{bookingData.startTime}</span>
               </div>
-              <div className="flex justify-between col-span-2">
-                <span className={`text-xs ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>{locale === 'ar' ? 'الحالة:' : 'Status:'}</span>
-                <span className="px-2 py-0.5 bg-yellow-100 text-yellow-700 rounded-full text-xs font-semibold">{locale === 'ar' ? 'قيد الانتظار' : bookingData.status}</span>
+              <div className="flex justify-between sm:col-span-2">
+                <span className={`text-xs ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>{t.status}</span>
+                <span className="px-2 py-0.5 bg-yellow-100 text-yellow-700 rounded-full text-xs font-semibold">{t.pending}</span>
               </div>
             </div>
           </div>
@@ -179,46 +181,46 @@ export default function BookingConfirmationPopup({ isOpen, onClose, bookingData 
           <div className={`rounded-lg p-3 ${theme === 'dark' ? 'bg-blue-900/30 border border-blue-800' : 'bg-blue-50'}`}>
             <h3 className={`text-sm font-semibold flex items-center gap-1 mb-2 ${theme === 'dark' ? 'text-blue-400' : 'text-gray-900'}`}>
               <span className="material-icons text-blue-600 text-lg">info</span>
-              {locale === 'ar' ? 'معلومات مهمة' : 'Important Info'}
+              {t.importantInfo}
             </h3>
             <ul className={`text-xs space-y-1 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
               <li className="flex items-start gap-1.5">
                 <span className="text-blue-600 mt-0.5">•</span>
-                <span>{locale === 'ar' ? 'احضر قبل 10 دقائق من الموعد' : 'Arrive 10 minutes early'}</span>
+                <span>{t.arrive10Min}</span>
               </li>
               <li className="flex items-start gap-1.5">
                 <span className="text-blue-600 mt-0.5">•</span>
-                <span>{locale === 'ar' ? 'أحضر السجلات الطبية إن وجدت' : 'Bring medical records if available'}</span>
+                <span>{t.bringRecords}</span>
               </li>
               <li className="flex items-start gap-1.5">
                 <span className="text-blue-600 mt-0.5">•</span>
-                <span>{locale === 'ar' ? 'الإلغاء/إعادة الجدولة قبل 24 ساعة' : 'Cancel/reschedule 24 hours in advance'}</span>
+                <span>{t.cancelPolicy}</span>
               </li>
             </ul>
           </div>
         </div>
 
         {/* Action Buttons */}
-        <div className={`flex gap-3 p-4 border-t no-print ${theme === 'dark' ? 'bg-gray-700 border-gray-600' : 'bg-gray-50 border-gray-200'}`}>
+        <div className={`flex flex-col sm:flex-row gap-3 p-4 border-t no-print ${theme === 'dark' ? 'bg-gray-700 border-gray-600' : 'bg-gray-50 border-gray-200'}`}>
           <button
             onClick={handleAddToCalendar}
             className="flex-1 py-2.5 px-4 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition-colors flex items-center justify-center gap-2 text-sm"
           >
             <span className="material-icons text-lg">event</span>
-            {locale === 'ar' ? 'أضف للتقويم' : 'Add to Calendar'}
+            {t.addToCalendar}
           </button>
           <button
             onClick={handlePrint}
             className="flex-1 py-2.5 px-4 bg-teal-600 text-white rounded-lg font-semibold hover:bg-teal-700 transition-colors flex items-center justify-center gap-2 text-sm"
           >
             <span className="material-icons text-lg">print</span>
-            {locale === 'ar' ? 'طباعة' : 'Print'}
+            {t.print}
           </button>
           <button
             onClick={() => { onClose(); router.push('/'); }}
             className={`flex-1 py-2.5 px-4 border rounded-lg font-semibold transition-colors text-sm ${theme === 'dark' ? 'bg-gray-600 border-gray-500 text-gray-200 hover:bg-gray-500' : 'bg-white border-gray-300 text-gray-700 hover:bg-gray-50'}`}
           >
-            {locale === 'ar' ? `الصفحة الرئيسية (${countdown})` : `Go to Home (${countdown})`}
+            {`${t.goHome} (${countdown})`}
           </button>
         </div>
       </div>

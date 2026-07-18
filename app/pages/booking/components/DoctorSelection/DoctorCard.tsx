@@ -12,6 +12,7 @@ export default function DoctorCard({ doctor, selectedDoctor, onSelect }: DoctorC
   const { theme } = useTheme();
   const { locale } = useLanguage();
   const t = translations[locale].booking.doctorSelection;
+  const tc = t.card;
   const nextAvailable = getNextAvailableDay(doctor.availability || [], locale);
   const doctorName = getDoctorName(doctor.name, locale);
   const doctorSpecialty = getDoctorSpecialty(doctor.specialty, locale);
@@ -46,7 +47,7 @@ export default function DoctorCard({ doctor, selectedDoctor, onSelect }: DoctorC
                 <span className={`text-xs sm:text-sm font-semibold ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>{doctor.ratingAvg ? doctor.ratingAvg.toFixed(1) : 'N/A'}</span>
               </div>
               <div className="flex items-center gap-1">
-                <span className="text-teal-600 text-xs sm:text-sm font-semibold">{doctor.experienceYears} {locale === 'ar' ? 'سنوات' : 'Years'}</span>
+                <span className="text-teal-600 text-xs sm:text-sm font-semibold">{doctor.experienceYears} {tc.years}</span>
               </div>
             </div>
           </div>
@@ -54,7 +55,7 @@ export default function DoctorCard({ doctor, selectedDoctor, onSelect }: DoctorC
           <div className="space-y-2">
             {nextAvailable ? (
               <div className="bg-green-50 border border-green-200 rounded-lg px-2 sm:px-3 py-1.5 sm:py-2">
-                <p className="text-[10px] sm:text-xs text-gray-600 mb-0.5">{t.topRated.title}</p>
+                <p className="text-[10px] sm:text-xs text-gray-600 mb-0.5">{tc.nextAvailable}</p>
                 <p className="text-xs sm:text-sm font-semibold text-green-700 truncate">
                   {nextAvailable.isToday ? translations[locale].booking.timeSelection.calendar.today : nextAvailable.dayDisplay}
                   {' '}{nextAvailable.workingHours.from} - {nextAvailable.workingHours.to}
@@ -85,7 +86,7 @@ export default function DoctorCard({ doctor, selectedDoctor, onSelect }: DoctorC
                     : theme === 'dark' ? 'bg-gray-700 text-gray-200 hover:bg-teal-900/50 hover:text-teal-300' : 'bg-gray-100 text-gray-700 hover:bg-teal-50 hover:text-teal-600'
                 }`}
               >
-                {selectedDoctor === doctor._id ? (locale === 'ar' ? 'مختار' : 'Selected') : (locale === 'ar' ? 'اختر' : 'Select')}
+                {selectedDoctor === doctor._id ? tc.selected : tc.select}
               </button>
             </div>
           </div>
