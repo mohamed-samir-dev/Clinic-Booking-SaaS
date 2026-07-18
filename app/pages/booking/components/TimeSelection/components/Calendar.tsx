@@ -1,4 +1,5 @@
 import { Doctor } from '@/app/types/index';
+import { ChevronRight, ChevronLeft } from 'lucide-react';
 import { CalendarDay } from '../types';
 import { useMonthNames, useDayNames } from '../constants';
 import { useTheme } from '@/app/contexts/ThemeContext';
@@ -46,14 +47,14 @@ export default function Calendar({
             disabled={!canGoPrevious}
             className={`p-1.5 sm:p-2 rounded-lg ${canGoPrevious ? theme === 'dark' ? 'hover:bg-gray-700' : 'hover:bg-gray-100' : 'opacity-30 cursor-not-allowed'}`}
           >
-            <span className={`material-icons text-lg sm:text-xl ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>{locale === 'ar' ? 'chevron_right' : 'chevron_left'}</span>
+            {locale === 'ar' ? <ChevronRight className={theme === 'dark' ? 'text-gray-400' : 'text-gray-600'} size={20} /> : <ChevronLeft className={theme === 'dark' ? 'text-gray-400' : 'text-gray-600'} size={20} />}
           </button>
           <button 
             onClick={() => canGoNext && setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1))} 
             disabled={!canGoNext}
             className={`p-1.5 sm:p-2 rounded-lg ${canGoNext ? theme === 'dark' ? 'hover:bg-gray-700' : 'hover:bg-gray-100' : 'opacity-30 cursor-not-allowed'}`}
           >
-            <span className={`material-icons text-lg sm:text-xl ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>{locale === 'ar' ? 'chevron_left' : 'chevron_right'}</span>
+            {locale === 'ar' ? <ChevronLeft className={theme === 'dark' ? 'text-gray-400' : 'text-gray-600'} size={20} /> : <ChevronRight className={theme === 'dark' ? 'text-gray-400' : 'text-gray-600'} size={20} />}
           </button>
         </div>
       </div>

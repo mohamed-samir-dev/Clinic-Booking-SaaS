@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useMemo, useEffect } from 'react';
+import { Globe } from 'lucide-react';
 import { Doctor } from '@/app/types/index';
 import { useDoctorData } from './hooks/useDoctorData';
 import { generateTimeSlots, categorizeTimeSlots, getDaysInMonth } from './utils/timeUtils';
@@ -179,7 +180,7 @@ export default function TimeSelection({ selectedTime, setSelectedTime, selectedD
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-4 sm:mb-6 gap-2">
           <h2 className={`text-xl sm:text-2xl font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{t.title}</h2>
           <div className={`flex items-center gap-2 text-xs sm:text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>
-            <span className="material-icons text-base sm:text-lg">public</span>
+            <Globe size={18} />
             <span>{t.timezone}</span>
           </div>
         </div>
