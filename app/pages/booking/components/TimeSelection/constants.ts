@@ -1,5 +1,6 @@
 import { useLanguage } from '@/app/contexts/LanguageContext';
 import translations from '@/messages/translations';
+import { Sun, CloudSun, Moon } from 'lucide-react';
 
 export const useMonthNames = () => {
   const { locale } = useLanguage();
@@ -22,8 +23,8 @@ export const useTimePeriods = () => {
   const { locale } = useLanguage();
   const t = translations[locale].booking.timeSelection.timeSlots;
   return {
-    MORNING: { icon: 'light_mode', color: 'yellow-500', label: t.morning },
-    AFTERNOON: { icon: 'wb_sunny', color: 'orange-500', label: t.afternoon },
-    EVENING: { icon: 'dark_mode', color: 'indigo-500', label: t.evening }
+    MORNING: { icon: Sun, color: 'text-yellow-500', label: t.morning },
+    AFTERNOON: { icon: CloudSun, color: 'text-orange-500', label: t.afternoon },
+    EVENING: { icon: Moon, color: 'text-indigo-500', label: t.evening }
   };
 };

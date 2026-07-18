@@ -1,4 +1,4 @@
-import { Info, ChevronDown, ChevronUp } from 'lucide-react';
+import { Info, ChevronDown, ChevronUp, LucideIcon } from 'lucide-react';
 import { useTheme } from '@/app/contexts/ThemeContext';
 import { useLanguage } from '@/app/contexts/LanguageContext';
 import translations from '@/messages/translations';
@@ -6,7 +6,7 @@ import { isTimePassed } from '../utils/timeUtils';
 
 interface TimePeriodProps {
   title: string;
-  icon: string;
+  icon: LucideIcon;
   iconColor: string;
   slots: string[];
   displayedSlots: string[];
@@ -36,6 +36,7 @@ export default function TimePeriod({
   const { theme } = useTheme();
   const { locale } = useLanguage();
   const t = translations[locale].booking.timeSelection.timeSlots;
+  const Icon = icon;
   
   const isTimeBlocked = (time: string) => {
     const [timeStr, period] = time.split(' ');
@@ -90,7 +91,7 @@ export default function TimePeriod({
   return (
     <div>
       <div className="flex items-center gap-1.5 sm:gap-2 mb-2 sm:mb-3">
-        <span className={`material-icons text-${iconColor} text-base sm:text-lg`}>{icon}</span>
+        <Icon className={`${iconColor}`} size={20} />
         <h4 className={`font-semibold text-sm sm:text-base ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{title}</h4>
         {slots.length > 4 && (
           <span className={`text-[10px] sm:text-xs ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>({slots.length} {locale === 'ar' ? 'موعد' : 'slots'})</span>

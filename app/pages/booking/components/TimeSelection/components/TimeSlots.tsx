@@ -1,5 +1,5 @@
 import { Doctor } from '@/app/types/index';
-import { UserSearch, Calendar, CalendarX } from 'lucide-react';
+import { UserSearch, Calendar, CalendarX, LucideIcon } from 'lucide-react';
 import TimePeriod from './TimePeriod';
 import { useTimePeriods } from '../constants';
 import { useTheme } from '@/app/contexts/ThemeContext';
