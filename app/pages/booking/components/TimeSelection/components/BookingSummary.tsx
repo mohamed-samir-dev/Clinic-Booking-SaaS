@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import { Star, CalendarX, Info } from 'lucide-react';
 import { Doctor } from '@/app/types/index';
 import { useTheme } from '@/app/contexts/ThemeContext';
 import { useLanguage } from '@/app/contexts/LanguageContext';
@@ -49,7 +50,7 @@ export default function BookingSummary({
                   <h4 className={`font-semibold text-sm sm:text-base truncate ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{getDoctorName(doctorObject.name, locale)}</h4>
                   <p className={`text-xs sm:text-sm mb-1 truncate ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>{getDoctorSpecialty(doctorObject.specialty, locale)}</p>
                   <div className="flex items-center gap-1 sm:gap-2 text-xs sm:text-sm">
-                    <span className="material-icons text-yellow-500 text-sm sm:text-base">star</span>
+                    <Star className="text-yellow-500" size={16} fill="currentColor" />
                     <span className={`font-semibold ${theme === 'dark' ? 'text-gray-200' : 'text-gray-900'}`}>{doctorObject.ratingAvg?.toFixed(1) || '4.8'}</span>
                     <span className={theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}>({doctorObject.ratingCount || 0})</span>
                   </div>
@@ -91,7 +92,7 @@ export default function BookingSummary({
           <div className={`text-center py-6 sm:py-8 ${
             theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
           }`}>
-            <span className="material-icons text-3xl sm:text-4xl mb-2">event_busy</span>
+            <CalendarX className="mx-auto mb-2" size={40} />
             <p className="text-sm sm:text-base">{locale === 'ar' ? 'الرجاء اختيار طبيب أولاً' : 'Please select a doctor first'}</p>
           </div>
         )}
@@ -101,7 +102,7 @@ export default function BookingSummary({
         <div className={`flex items-start gap-2 sm:gap-3 p-3 sm:p-4 rounded-xl mt-3 sm:mt-4 border ${
           theme === 'dark' ? 'bg-blue-900/30 border-blue-800' : 'bg-linear-to-r from-blue-50 to-indigo-50 border-blue-100'
         }`}>
-          <span className="material-icons text-blue-500 text-base sm:text-lg mt-0.5 shrink-0">info</span>
+          <Info className="text-blue-500 mt-0.5 shrink-0" size={18} />
           <div className="flex-1 space-y-1.5 sm:space-y-2">
             <p className={`text-[10px] sm:text-xs font-semibold ${theme === 'dark' ? 'text-blue-400' : 'text-blue-700'}`}>{locale === 'ar' ? 'معلومات الحجز' : 'Booking Information'}</p>
             <p className={`text-[10px] sm:text-xs font-semibold leading-relaxed ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>

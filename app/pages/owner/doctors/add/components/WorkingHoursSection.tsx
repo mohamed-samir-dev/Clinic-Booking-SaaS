@@ -74,7 +74,7 @@ export default function WorkingHoursSection({ availability, onUpdate, language =
         </div>
         <h3 className="text-lg font-bold text-white">{t.title}</h3>
       </div>
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
         {days.map((day) => {
           const isSelected = availability.some(a => a.day === day);
           return (
