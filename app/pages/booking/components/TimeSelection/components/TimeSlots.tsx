@@ -1,4 +1,5 @@
 import { Doctor } from '@/app/types/index';
+import { UserSearch, Calendar, CalendarX } from 'lucide-react';
 import TimePeriod from './TimePeriod';
 import { useTimePeriods } from '../constants';
 import { useTheme } from '@/app/contexts/ThemeContext';
@@ -73,7 +74,7 @@ export default function TimeSlots({
         <div className={`text-center py-8 sm:py-12 ${
           theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
         }`}>
-          <span className="material-icons text-3xl sm:text-4xl mb-2">person_search</span>
+          <UserSearch className="mx-auto mb-2" size={40} />
           <p className="text-sm sm:text-base">{locale === 'ar' ? 'الرجاء اختيار طبيب أولاً' : 'Please select a doctor first'}</p>
         </div>
       </div>
@@ -88,7 +89,7 @@ export default function TimeSlots({
         <div className={`text-center py-8 sm:py-12 ${
           theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
         }`}>
-          <span className="material-icons text-3xl sm:text-4xl mb-2">event</span>
+          <Calendar className="mx-auto mb-2" size={40} />
           <p className="text-sm sm:text-base">{t.selectDate}</p>
         </div>
       </div>
@@ -105,7 +106,7 @@ export default function TimeSlots({
         <div className={`text-center py-8 sm:py-12 ${
           theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
         }`}>
-          <span className="material-icons text-3xl sm:text-4xl mb-2">event_busy</span>
+          <CalendarX className="mx-auto mb-2" size={40} />
           <p className="text-sm sm:text-base">{t.noSlots}</p>
         </div>
       </div>

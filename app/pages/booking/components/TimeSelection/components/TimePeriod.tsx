@@ -1,3 +1,4 @@
+import { Info, ChevronDown, ChevronUp } from 'lucide-react';
 import { useTheme } from '@/app/contexts/ThemeContext';
 import { useLanguage } from '@/app/contexts/LanguageContext';
 import translations from '@/messages/translations';
@@ -97,7 +98,7 @@ export default function TimePeriod({
       </div>
       {hasBlockedSlots && blockReason && (
         <div className={`mb-2 p-2 rounded-lg flex items-start gap-2 text-xs ${theme === 'dark' ? 'bg-amber-900/20 border border-amber-800' : 'bg-amber-50 border border-amber-200'}`}>
-          <span className="material-icons text-amber-600 text-sm mt-0.5">info</span>
+          <Info className="text-amber-600 mt-0.5 shrink-0" size={16} />
           <p className={theme === 'dark' ? 'text-amber-200' : 'text-amber-800'}>
             {locale === 'ar' ? 'بعض الأوقات غير متاحة لأن ' : 'Some times unavailable because '}{blockReason}
           </p>
@@ -134,7 +135,7 @@ export default function TimePeriod({
           className="w-full mt-1.5 sm:mt-2 py-1.5 sm:py-2 text-xs sm:text-sm text-teal-600 hover:text-teal-700 font-medium flex items-center justify-center gap-1"
         >
           <span>{showAll ? t.showLess : `${t.showMore} ${slots.length - 4}`}</span>
-          <span className="material-icons text-xs sm:text-sm">{showAll ? 'expand_less' : 'expand_more'}</span>
+          {showAll ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
         </button>
       )}
     </div>
