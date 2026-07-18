@@ -1,3 +1,4 @@
+import { Stethoscope } from 'lucide-react';
 import { useTheme } from '@/app/contexts/ThemeContext';
 import { useLanguage } from '@/app/contexts/LanguageContext';
 import translations from '@/messages/translations';
@@ -11,7 +12,7 @@ export default function MedicalContext({ reason, setReason }: MedicalContextProp
   return (
     <div className="mb-4 sm:mb-6">
       <div className="flex items-center gap-2 mb-3 sm:mb-4">
-        <span className="material-icons text-teal-600 text-lg sm:text-xl">medical_information</span>
+        <Stethoscope className="text-teal-600" size={20} />
         <h3 className={`text-base sm:text-lg font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{t.title}</h3>
       </div>
       <div className="space-y-3 sm:space-y-4">

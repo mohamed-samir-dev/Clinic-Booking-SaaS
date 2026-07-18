@@ -1,6 +1,7 @@
 'use client';
 import { useRef, useEffect, useState } from 'react';
 import Image from 'next/image';
+import { CheckCircle, User, BadgeCheck, Calendar, Info, Printer } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useTheme } from '@/app/contexts/ThemeContext';
 import { useLanguage } from '@/app/contexts/LanguageContext';
@@ -104,7 +105,7 @@ export default function BookingConfirmationPopup({ isOpen, onClose, bookingData 
           {/* Header */}
           <div className="text-center mb-5">
             <div className="w-14 h-14 bg-teal-500 rounded-full flex items-center justify-center mx-auto mb-2">
-              <span className="material-icons text-white text-3xl">check_circle</span>
+              <CheckCircle className="text-white" size={32} />
             </div>
             <h1 className={`text-xl font-bold mb-1 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{t.title}</h1>
             <p className={`text-xs ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>{t.bookingId} <span className="font-semibold text-teal-600">{bookingData.appointmentId}</span></p>
@@ -115,7 +116,7 @@ export default function BookingConfirmationPopup({ isOpen, onClose, bookingData 
             {/* Doctor Info */}
             <div className={`rounded-lg p-3 ${theme === 'dark' ? 'bg-gray-700' : 'bg-gray-50'}`}>
               <h2 className={`text-sm font-semibold flex items-center gap-1 mb-2 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
-                <span className="material-icons text-teal-600 text-lg">person</span>
+                <User className="text-teal-600" size={18} />
                 {t.doctor}
               </h2>
               <div className="flex items-center gap-2">
@@ -136,7 +137,7 @@ export default function BookingConfirmationPopup({ isOpen, onClose, bookingData 
             {/* Patient Info */}
             <div className={`rounded-lg p-3 ${theme === 'dark' ? 'bg-gray-700' : 'bg-gray-50'}`}>
               <h2 className={`text-sm font-semibold flex items-center gap-1 mb-2 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
-                <span className="material-icons text-teal-600 text-lg">badge</span>
+                <BadgeCheck className="text-teal-600" size={18} />
                 {t.patient}
               </h2>
               <div className="space-y-1 min-w-0">
@@ -150,7 +151,7 @@ export default function BookingConfirmationPopup({ isOpen, onClose, bookingData 
           {/* Appointment Details */}
           <div className={`rounded-lg p-3 mb-3 ${theme === 'dark' ? 'bg-gray-700' : 'bg-gray-50'}`}>
             <h2 className={`text-sm font-semibold flex items-center gap-1 mb-2 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
-              <span className="material-icons text-teal-600 text-lg">event</span>
+              <Calendar className="text-teal-600" size={18} />
               {t.appointmentDetails}
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-1.5">
@@ -180,7 +181,7 @@ export default function BookingConfirmationPopup({ isOpen, onClose, bookingData 
           {/* Important Notes */}
           <div className={`rounded-lg p-3 ${theme === 'dark' ? 'bg-blue-900/30 border border-blue-800' : 'bg-blue-50'}`}>
             <h3 className={`text-sm font-semibold flex items-center gap-1 mb-2 ${theme === 'dark' ? 'text-blue-400' : 'text-gray-900'}`}>
-              <span className="material-icons text-blue-600 text-lg">info</span>
+              <Info className="text-blue-600" size={18} />
               {t.importantInfo}
             </h3>
             <ul className={`text-xs space-y-1 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
@@ -206,14 +207,14 @@ export default function BookingConfirmationPopup({ isOpen, onClose, bookingData 
             onClick={handleAddToCalendar}
             className="flex-1 py-2.5 px-4 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition-colors flex items-center justify-center gap-2 text-sm"
           >
-            <span className="material-icons text-lg">event</span>
+            <Calendar size={18} />
             {t.addToCalendar}
           </button>
           <button
             onClick={handlePrint}
             className="flex-1 py-2.5 px-4 bg-teal-600 text-white rounded-lg font-semibold hover:bg-teal-700 transition-colors flex items-center justify-center gap-2 text-sm"
           >
-            <span className="material-icons text-lg">print</span>
+            <Printer size={18} />
             {t.print}
           </button>
           <button
