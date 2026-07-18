@@ -77,7 +77,8 @@ export interface Review {
     _id: string;
     rating: number;
     comment: string;
-    patientId: {
+    patientName?: string;
+    patientId?: {
       name: string;
     };
     createdAt: string;

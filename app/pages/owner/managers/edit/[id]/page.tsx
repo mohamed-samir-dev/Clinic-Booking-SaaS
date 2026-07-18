@@ -1,8 +1,9 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, ArrowRight } from 'lucide-react';
 import { useTranslations } from 'next-intl';
+import { useLanguage } from '@/app/contexts/LanguageContext';
 import { useClinics } from '../../../doctors/add/hooks/useClinics';
 import { useEditManager } from './hooks/useEditManager';
 import { PasswordChangeSection } from './components/PasswordChangeSection';
@@ -21,6 +22,9 @@ export default function EditManagerPage() {
   const t = useTranslations('owner.managers');
   const { clinics } = useClinics();
   const { formData, setFormData, loading, error, handleSubmit, fetchLoading, password, setPassword } = useEditManager();
+  const { locale } = useLanguage();
+  const isRtl = locale === 'ar';
+  const BackIcon = isRtl ? ArrowRight : ArrowLeft;
 
   if (fetchLoading) {
     return (
@@ -31,13 +35,13 @@ export default function EditManagerPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-900 p-6">
+    <div className="min-h-screen bg-gray-900 p-4 sm:p-6" dir={isRtl ? 'rtl' : 'ltr'}>
       <div className="max-w-4xl mx-auto">
         <button
           onClick={() => router.back()}
           className="flex items-center gap-2 text-teal-400 hover:text-teal-300 mb-4 font-medium transition-colors group"
         >
-          <ArrowLeft size={20} className="group-hover:-translate-x-1 transition-transform" />
+          <BackIcon size={20} className={`${isRtl ? 'group-hover:translate-x-1' : 'group-hover:-translate-x-1'} transition-transform`} />
           <span>{t('edit.back')}</span>
         </button>
 

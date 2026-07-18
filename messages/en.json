@@ -471,7 +471,13 @@
         "rating": "Rating",
         "availability": "Availability",
         "availableToday": "Available Today",
-        "clearAll": "Clear All"
+        "clearAll": "Clear All",
+        "searchDoctor": "Search Doctor",
+        "searchByName": "Search by name...",
+        "language": "Language",
+        "allLanguages": "All Languages",
+        "priceRange": "Price Range",
+        "to": "to"
       },
       "topRated": {
         "title": "Top Rated Doctor",
@@ -483,13 +489,7 @@
         "selected": "Selected",
         "select": "Select",
         "nextAvailable": "Next Available"
-      },
-      "searchDoctor": "Search Doctor",
-      "searchByName": "Search by name...",
-      "language": "Language",
-      "allLanguages": "All Languages",
-      "priceRange": "Price Range",
-      "to": "to"
+      }
     },
     "timeSelection": {
       "title": "Select Date & Time",
@@ -526,6 +526,7 @@
     "confirmation": {
       "title": "Booking Confirmed!",
       "bookingId": "ID:",
+      "consultation": "Consultation",
       "doctor": "Doctor",
       "patient": "Patient",
       "appointmentDetails": "Appointment Details",

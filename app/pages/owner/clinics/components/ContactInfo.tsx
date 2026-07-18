@@ -108,7 +108,7 @@ export default function ContactInfo({ formData, setFormData }: Props) {
           </button>
         </div>
         {geoError && <p className="text-red-400 text-xs mb-2">{geoError}</p>}
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <label className="block text-xs text-gray-400 mb-1">Longitude</label>
             <input

@@ -43,7 +43,7 @@ export default function AddClinicPage() {
   const BackIcon = locale === 'ar' ? ArrowRight : ArrowLeft;
 
   return (
-    <div dir={locale === 'ar' ? 'rtl' : 'ltr'} className="min-h-screen bg-gray-900 p-6">
+    <div dir={locale === 'ar' ? 'rtl' : 'ltr'} className="min-h-screen bg-gray-900 p-4 sm:p-6">
       <div className="mb-6">
         <button
           onClick={() => router.back()}

@@ -113,7 +113,7 @@ export const DashboardHeader = ({
             {showQuickActions && (
               <>
                 <div className="fixed inset-0 z-10" onClick={() => setShowQuickActions(false)} />
-                <div className={`absolute ${locale === 'ar' ? 'left-0' : 'right-0'} mt-2 w-56 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 z-20`}>
+                <div className={`absolute ${locale === 'ar' ? 'left-0' : 'right-0'} mt-2 w-56 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 z-20 max-w-[calc(100vw-2rem)]`}>
                   {quickActions.map((action, idx) => {
                     const Icon = action.icon;
                     return (

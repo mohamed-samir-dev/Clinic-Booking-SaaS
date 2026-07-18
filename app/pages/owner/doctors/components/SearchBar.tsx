@@ -14,8 +14,6 @@ interface SearchBarProps {
 export default function SearchBar({ searchTerm, onSearchChange }: SearchBarProps) {
   const { locale } = useLanguage();
   const tr = t[locale as 'ar' | 'en'] ?? t.en;
-
-  const { locale } = useLanguage();
   const isRtl = locale === 'ar';
 
   return (

@@ -12,7 +12,7 @@ export const FormActions = ({ loading, onCancel, submitText, loadingText }: Form
   const finalSubmitText = submitText ?? t('create');
   const finalLoadingText = loadingText ?? t('creating');
   return (
-    <div className="flex gap-4 pt-4">
+    <div className="flex flex-col sm:flex-row gap-4 pt-4">
       <button
         type="submit"
         disabled={loading}

@@ -156,7 +156,7 @@ export default function BookingConfirmationPopup({ isOpen, onClose, bookingData 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-1.5">
               <div className="flex justify-between">
                 <span className={`text-xs ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>{t.service}</span>
-                <span className={`text-xs font-semibold ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{bookingData.service || (locale === 'ar' ? 'استشارة' : 'Consultation')}</span>
+                <span className={`text-xs font-semibold ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{bookingData.service || translations[locale].booking.navigation.processing.replace('...','') || (locale === 'ar' ? 'استشارة' : 'Consultation')}</span>
               </div>
               <div className="flex justify-between">
                 <span className={`text-xs ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>{t.fee}</span>

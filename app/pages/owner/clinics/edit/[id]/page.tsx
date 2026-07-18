@@ -132,7 +132,7 @@ export default function EditClinicPage() {
   }
 
   return (
-    <div dir={locale === 'ar' ? 'rtl' : 'ltr'} className="p-8 min-h-screen bg-gray-900">
+    <div dir={locale === 'ar' ? 'rtl' : 'ltr'} className="p-4 sm:p-8 min-h-screen bg-gray-900">
       <div className="mb-6">
         <button
           onClick={() => router.back()}

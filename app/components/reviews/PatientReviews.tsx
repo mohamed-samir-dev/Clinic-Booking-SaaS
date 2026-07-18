@@ -152,13 +152,13 @@ export default function PatientReviews() {
                   <div className="flex items-start gap-3 sm:gap-4">
                     <div className="shrink-0">
                       <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-linear-to-br from-teal-400 to-teal-600 flex items-center justify-center text-white font-bold text-base sm:text-lg shadow-md">
-                        {review.patientId?.name?.charAt(0).toUpperCase() || 'A'}
+                        {(review.patientName || review.patientId?.name || 'A').charAt(0).toUpperCase()}
                       </div>
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center justify-between mb-2 gap-2">
                         <h3 className={`font-bold text-sm sm:text-base truncate ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
-                          {review.patientId?.name || 'Anonymous'}
+                          {review.patientName || review.patientId?.name || 'Anonymous'}
                         </h3>
                         <div className="flex gap-0.5 shrink-0">
                           {renderStars(review.rating)}

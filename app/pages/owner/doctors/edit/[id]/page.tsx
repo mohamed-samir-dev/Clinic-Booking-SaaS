@@ -1,10 +1,11 @@
 'use client';
 
 import { useRouter, useParams } from 'next/navigation';
-import { ArrowLeft, User } from 'lucide-react';
+import { ArrowLeft, ArrowRight, User } from 'lucide-react';
 import { useClinics } from '../../add/hooks/useClinics';
 import { useFetchDoctor } from './hooks/useFetchDoctor';
 import { useUpdateDoctor } from './hooks/useUpdateDoctor';
+import { useLanguage } from '@/app/contexts/LanguageContext';
 import ClinicSection from '../../add/components/ClinicSection';
 import PersonalInfoSection from '../../add/components/PersonalInfoSection';
 import PhotoSection from '../../add/components/PhotoSection';
@@ -24,6 +25,9 @@ export default function EditDoctorPage() {
   const { clinics } = useClinics();
   const { formData, setFormData, loading: fetchingData, error: fetchError } = useFetchDoctor(doctorId);
   const { updateDoctor, loading, error } = useUpdateDoctor(doctorId);
+  const { locale } = useLanguage();
+  const isRtl = locale === 'ar';
+  const BackIcon = isRtl ? ArrowRight : ArrowLeft;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -60,14 +64,14 @@ export default function EditDoctorPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-900 p-6">
+    <div className="min-h-screen bg-gray-900 p-4 sm:p-6" dir={isRtl ? 'rtl' : 'ltr'}>
       <div className="max-w-6xl mx-auto">
         <button
           onClick={() => router.back()}
           className="flex items-center gap-2 text-teal-400 hover:text-teal-300 mb-4 font-medium transition-colors group"
         >
-          <ArrowLeft size={20} className="group-hover:-translate-x-1 transition-transform" />
-          <span>Back</span>
+          <BackIcon size={20} className={`${isRtl ? 'group-hover:translate-x-1' : 'group-hover:-translate-x-1'} transition-transform`} />
+          <span>{isRtl ? 'رجوع' : 'Back'}</span>
         </button>
 
         <div className="bg-gray-800 rounded-2xl shadow-xl border border-gray-700 overflow-hidden">
@@ -149,20 +153,20 @@ export default function EditDoctorPage() {
                 onUpdate={(reviews) => setFormData({ ...formData, reviews })}
               />
 
-              <div className="flex gap-4 pt-4">
+              <div className="flex flex-col sm:flex-row gap-4 pt-4">
                 <button
                   type="submit"
                   disabled={loading}
                   className="flex-1 bg-linear-to-r from-teal-600 to-cyan-600 text-white px-8 py-3 rounded-xl hover:from-teal-700 hover:to-cyan-700 transition-all disabled:from-gray-600 disabled:to-gray-700 disabled:cursor-not-allowed font-bold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
                 >
-                  {loading ? 'Updating...' : 'Update Doctor'}
+                  {loading ? (isRtl ? 'جاري التحديث...' : 'Updating...') : (isRtl ? 'تحديث الطبيب' : 'Update Doctor')}
                 </button>
                 <button
                   type="button"
                   onClick={() => router.back()}
                   className="flex-1 bg-gray-700 text-gray-300 px-8 py-3 rounded-xl hover:bg-gray-600 transition-all font-bold"
                 >
-                  Cancel
+                  {isRtl ? 'إلغاء' : 'Cancel'}
                 </button>
               </div>
             </form>
